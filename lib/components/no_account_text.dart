@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/screens/sign_up/sign_up_screen.dart';
 import 'package:ecommerce_app/utils/constants.dart';
 import 'package:ecommerce_app/utils/size_config.dart';
 import 'package:flutter/material.dart';
