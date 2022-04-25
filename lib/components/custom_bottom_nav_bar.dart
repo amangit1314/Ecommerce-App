@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tokoto_ecommerce_app/screens/profile/profile_screen.dart';
-
+import 'package:get/get.dart';
 import '../screens/home/home_screen.dart';
 import '../utils/constatns.dart';
 import '../utils/enums.dart';
@@ -44,8 +44,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () =>
-                  Navigator.pushNamed(context, HomeScreen.routeName),
+              onPressed: () => Get.to(const HomeScreen()),
             ),
             IconButton(
               icon: SvgPicture.asset("assets/icons/Heart Icon.svg"),
@@ -62,8 +61,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () =>
-                  Navigator.pushNamed(context, ProfileScreen.routeName),
+              onPressed: () => Get.to(ProfileScreen()),
             ),
           ],
         ),

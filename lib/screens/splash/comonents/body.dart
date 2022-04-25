@@ -3,7 +3,7 @@ import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
 import 'package:tokoto_ecommerce_app/screens/splash/comonents/splash_content.dart';
 import 'package:tokoto_ecommerce_app/utils/constatns.dart';
 import 'package:tokoto_ecommerce_app/utils/size_config.dart';
-
+import 'package:get/get.dart';
 import '../../../components/default_button.dart';
 
 class Body extends StatefulWidget {
@@ -21,8 +21,7 @@ class _BodyState extends State<Body> {
       "image": "assets/images/splash_1.png"
     },
     {
-      "text":
-          "We help people conect with store \naround United State of America",
+      "text": "We help people conect with store \naround Rajasthan India",
       "image": "assets/images/splash_2.png"
     },
     {
@@ -37,6 +36,7 @@ class _BodyState extends State<Body> {
         width: double.infinity,
         child: Column(
           children: <Widget>[
+            const SizedBox(height: 40),
             Expanded(
               flex: 3,
               child: PageView.builder(
@@ -67,12 +67,20 @@ class _BodyState extends State<Body> {
                         (index) => buildDot(index: index),
                       ),
                     ),
-                    const Spacer(flex: 3),
-                    DefaultButton(
-                      text: "Continue",
-                      press: () {
-                        Navigator.pushNamed(context, SignInScreen.routeName);
-                      },
+                    const Spacer(flex: 1),
+                    Container(
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: DefaultButton(
+                        text: "Continue",
+                        txtColor: Colors.white,
+                        press: () {
+                          Get.to(const SignInScreen());
+                        },
+                      ),
                     ),
                     const Spacer(),
                   ],

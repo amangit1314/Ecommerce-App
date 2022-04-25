@@ -18,13 +18,14 @@ class SplashContent extends StatelessWidget {
       children: [
         const Spacer(),
         Text(
-          "TOKOTO",
+          "Raj MART",
           style: TextStyle(
             fontSize: getProportionateScreenWidth(36),
             color: kPrimaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
+        const SizedBox(height: 15),
         Text(
           text,
           textAlign: TextAlign.center,

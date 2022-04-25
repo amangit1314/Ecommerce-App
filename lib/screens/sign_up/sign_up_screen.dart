@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/sign_up/components/body.dart';
+
+import 'components/body.dart';
 
 class SignUpScreen extends StatelessWidget {
   static String routeName = "/sign_up";
-
-  const SignUpScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
         title: const Text("Sign Up"),
       ),
-      body: const Body(),
+      body: Body(),
     );
   }
 }

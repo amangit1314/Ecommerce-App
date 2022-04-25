@@ -1,0 +1,11 @@
+io/flutter/plugins/firebase/storage/FlutterFirebaseStorageTask.java
+ io.flutter.plugins.firebase.storage.FlutterFirebaseStorageTask
+ io.flutter.plugins.firebase.storage.FlutterFirebaseStorageTask$FlutterFirebaseStorageTaskType
+io/flutter/plugins/firebase/storage/FlutterFirebaseAppRegistrar.java
+ io.flutter.plugins.firebase.storage.FlutterFirebaseAppRegistrar
+io/flutter/plugins/firebase/storage/FlutterFirebaseStoragePlugin.java
+ io.flutter.plugins.firebase.storage.FlutterFirebaseStoragePlugin
+io/flutter/plugins/firebase/storage/FlutterFirebaseStorageException.java
+ io.flutter.plugins.firebase.storage.FlutterFirebaseStorageException
+io/flutter/plugins/firebase/storage/BuildConfig.java
+ io.flutter.plugins.firebase.storage.BuildConfig

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
@@ -58,7 +57,7 @@ class IconBtnWithCounter extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
         ],
       ),
     );

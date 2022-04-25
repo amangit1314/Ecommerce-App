@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/splash/comonents/body.dart';
+import 'package:tokoto_ecommerce_app/screens/sign_in/components/body.dart';
 
 class SignInScreen extends StatelessWidget {
   static const routeName = '/sign-in';
@@ -8,8 +8,12 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.white,
         title: const Text("Sign In"),
+        elevation: 0,
       ),
       body: Body(),
     );

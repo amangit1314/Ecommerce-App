@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+//import 'package:tokoto_ecommerce_app/screens/home/components/categories.dart';
 import 'package:tokoto_ecommerce_app/screens/home/components/section_tile.dart';
 import '../../../components/product_card.dart';
 import '../../../models/product_name.dart';
 import '../../../utils/size_config.dart';
 
 class PopularProducts extends StatelessWidget {
-  const PopularProducts({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,6 +22,7 @@ class PopularProducts extends StatelessWidget {
             children: [
               ...List.generate(
                 demoProducts.length,
+                //Categories.categories.length,
                 (index) {
                   if (demoProducts[index].isPopular) {
                     return ProductCard(product: demoProducts[index]);

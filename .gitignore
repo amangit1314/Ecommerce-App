@@ -8,6 +8,7 @@ node_modules
 .atom/
 .buildlog/
 .history
+
 .svn/
 
 # IntelliJ related
@@ -25,24 +26,24 @@ node_modules
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
-.idea/
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-.pub-cache/
-.pub/
-/build/
+# .idea/
+ .flutter-plugins
+ .flutter-plugins-dependencies
+# .packages
+ .pub-cache/
+ .pub/
+ build/
 
 # Web related
 lib/generated_plugin_registrant.dart
 
-# Symbolication related
+# # Symbolication related
 app.*.symbols
 
-# Obfuscation related
+# # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# # Android Studio will place build artifacts here
+ /android/app/debug
+ /android/app/profile
+ /android/app/release
