@@ -11,7 +11,7 @@ In the first part of our complete e-commerce app, we show you how you can create
 
 ### Video Preview of Final UI
 
-![Preview](/intro.gif)
+![Preview](/photos/intro.gif)
 
 ## Screens it contains:
 
@@ -40,10 +40,10 @@ In the first part of our complete e-commerce app, we show you how you can create
 Now it contains all the screen, thanks for your love and support 🙏 
 
 ## Photos
-![Preview](/1.png)
-![Preview](2.png)
-![Preview](3.png)
-![Preview](4.png)
-![Preview](5.png)
-![Preview](6.png)
-![Preview](7.png)
+![Preview](/photos/1.png)
+![Preview](/photos/2.png)
+![Preview](/photos/3.png)
+![Preview](/photos/4.png)
+![Preview](/photos/5.png)
+![Preview](/photos/6.png)
+![Preview](/photos/7.png)
