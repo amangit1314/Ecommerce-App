@@ -1,43 +1,44 @@
-# E-Commerce Complate App - Flutter UI 
+# E-Commerce Complete Application ->
 
-In the first part of our complete e-commerce app, we show you how you can create a nice clean onboarding screen for your e-commerce app that can run both Andriod and iOS devices because it builds with flutter. Then on the second episode, we build a Sign in, Forgot Password screen with a custom error indicator. The third Episode contains Sign Up and OTP screen. The fourth episode is the most exciting episode because we build our home page on this episode than on the fifth episode we work on our product page, last not least on the 6th episode we build an order screen which has some cool stuff like swipe to remove. At the end 7th episode we build a profile screen. 
+A complete ecommerce application with dual backend 😎 Node.js(Backend with TS) and Firebase backend. The frontend is built with Flutter and [provider + get] state mangement is their.
 
-## [Watch it on YouTube](https://youtube.com/playlist?list=PLxUBb2A_UUy8OlaNZpS2mfL8xpHcnd_Af)
+**Design Credits**
+Flutter Way {YT} - [E-Commerce Complete App - Flutter UI](https://github.com/abuanwar072/E-commerce-Complete-Flutter-UI) --  Give the author a :star2: ！  
 
 **Packages we are using:**
 
-- flutter_svg: [link](https://pub.dev/packages/flutter_svg)
-
+- [] flutter_svg: [link](https://pub.dev/packages/flutter_svg)
+- [] google_fonts: 
+- [] cupertino_icons:
+- [] provider:
+- [] uuid:
+- [] get:
+- [] shared_preferences:
+- [] cloud_firestore: ^3.1.10
+- [] cupertino_icons: ^1.0.2
+- [] firebase_auth: ^3.3.13
+- [] firebase_core: ^1.14.0
+- [] firebase_storage: ^10.2.11
 
 ### Video Preview of Final UI
-
 ![Preview](/intro.gif)
 
 ## Screens it contains:
+- [x] Onboarding
+- [x] Login
+- [x] Forgot Password
+- [x] Sign Up
+- [x] Complete Profile
+- [x] OTP Verification
+- [x] Home Page
+- [x] Product Details
+- [x] Order
+- [x] Profile (added)
+- [x] Bottom Navigation Bar (added)
 
-=> Onboarding
+## instructions
 
-=> Login
-
-=> Forgot Password
-
-=> Sign Up
-
-=> Complete Profile
-
-=> OTP Verification
-
-=> Home Page
-
-=> Product Details
-
-=> Order
-
-=> Profile (added)
-
-=> Bottom Navigation Bar (added)
-
-Now it contains all the screen, thanks for your love and support 🙏 
+This is achieved step by step according to the homework, if you are interested you can go directly to the source code.  
 
 ## Photos
 ![Preview](/1.png)
@@ -47,3 +48,5 @@ Now it contains all the screen, thanks for your love and support 🙏
 ![Preview](5.png)
 ![Preview](6.png)
 ![Preview](7.png)
+
+Now it contains all the screen, thanks for your love and support 🙏 

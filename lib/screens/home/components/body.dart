@@ -23,7 +23,7 @@ class Body extends StatelessWidget {
             const Categories(),
             const SpecialOffers(),
             SizedBox(height: getProportionateScreenWidth(30)),
-            PopularProducts(),
+            const PopularProducts(),
             SizedBox(height: getProportionateScreenWidth(30)),
           ],
         ),

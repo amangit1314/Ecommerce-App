@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tokoto_ecommerce_app/models/cart_model.dart';
 import 'package:tokoto_ecommerce_app/screens/cart/components/body.dart';
 import 'package:tokoto_ecommerce_app/screens/cart/components/check_out_cart.dart';
 
@@ -10,8 +11,8 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Body(),
-      bottomNavigationBar: CheckoutCard(),
+      body: const Body(),
+      bottomNavigationBar: const CheckoutCard(),
     );
   }
 
@@ -24,8 +25,7 @@ class CartScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black),
           ),
           Text(
-            '',
-            //"${demoCarts.length} items",
+            "${demoCarts.length} items",
             style: Theme.of(context).textTheme.caption,
           ),
         ],
