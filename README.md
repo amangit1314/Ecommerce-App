@@ -1,6 +1,6 @@
 
 # E-Commerce Complete Application ->
-A complete ecommerce application with dual backend 😎 Node.js(Backend with TS) and Firebase backend. The frontend is built with Flutter and [provider + get] state mangement is their.
+A complete ecommerce application with backend 😎 Node.js(Backend with TS) and Firebase integration too. The frontend is built with Flutter and [provider + get] state mangement is their. 
 
 **Design Credits**
 Flutter Way {YT} - [E-Commerce Complete App - Flutter UI](https://github.com/abuanwar072/E-commerce-Complete-Flutter-UI) --  Give the author a :star2: ！  
