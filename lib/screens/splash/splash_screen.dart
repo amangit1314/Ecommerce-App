@@ -17,3 +17,15 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
+
+/**
+ * 
+ * void initState(){
+ *    Timer(Duration(seconds: 2), () => Navigator.pushReplacement(
+ *      context, 
+ *      PageTransition(child: SignUpView, type: PageTransition.rightToLeft)  
+ *    );
+ *    super.initState();
+ *  )}
+ * 
+ */

@@ -350,3 +350,4 @@ int styleable SplitPlaceholderRule_splitLayoutDirection 1
 int styleable SplitPlaceholderRule_splitMinSmallestWidth 2
 int styleable SplitPlaceholderRule_splitMinWidth 3
 int styleable SplitPlaceholderRule_splitRatio 4
+int xml flutter_image_picker_file_paths 0x7f0c0000
