@@ -4,9 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfilePic extends StatelessWidget {
-  const ProfilePic({
+  ProfilePic({
     Key? key,
   }) : super(key: key);
+  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+    foregroundColor: const Color(0xFFF5F6F9),
+    minimumSize: const Size(88, 44),
+    padding: const EdgeInsets.all(20),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(50),
+      side: const BorderSide(color: Colors.white),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +35,7 @@ class ProfilePic extends StatelessWidget {
             child: SizedBox(
               height: 46,
               width: 46,
-              child: FlatButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  side: const BorderSide(color: Colors.white),
-                ),
-                color: const Color(0xFFF5F6F9),
+              child: TextButton(
                 onPressed: () {},
                 child: SvgPicture.asset("assets/icons/Camera Icon.svg"),
               ),

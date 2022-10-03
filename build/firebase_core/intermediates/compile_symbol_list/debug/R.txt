@@ -169,6 +169,7 @@ int layout notification_template_custom_big 0x0
 int layout notification_template_icon_group 0x0
 int layout notification_template_part_chronometer 0x0
 int layout notification_template_part_time 0x0
+int raw keep 0x0
 int string common_google_play_services_unknown_issue 0x0
 int string status_bar_notification_info_overflow 0x0
 int style TextAppearance_Compat_Notification 0x0

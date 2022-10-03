@@ -18,5 +18,9 @@
     <string name="common_open_on_phone">Telefonda açın</string>
     <string name="common_signin_button_text">Daxil olun</string>
     <string name="common_signin_button_text_long">Google ilə daxil olun</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Link buferə kopyalandı"</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Linki kopyalayın"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Brauzerdə açın"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Linki paylaşın"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

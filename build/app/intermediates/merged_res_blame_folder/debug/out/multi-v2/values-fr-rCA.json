@@ -38,7 +38,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\122df2e57d294d1a53db26bbc3b813c1\\core-1.6.0\\res\\values-fr-rCA\\values-fr-rCA.xml",
+                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\bcd58f4f8b0dea68667096f26243123a\\browser-1.4.0\\res\\values-fr-rCA\\values-fr-rCA.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,162,264,383",
+                        "endColumns": "106,101,118,104",
+                        "endOffsets": "157,259,378,483"
+                    },
+                    "to": {
+                        "startLines": "20,21,22,23",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2467,2574,2676,2795",
+                        "endColumns": "106,101,118,104",
+                        "endOffsets": "2569,2671,2790,2895"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\8e86e615f21ac3758e97e94e18045107\\core-1.8.0\\res\\values-fr-rCA\\values-fr-rCA.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -47,11 +64,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "20",
+                        "startLines": "24",
                         "startColumns": "4",
-                        "startOffsets": "2467",
+                        "startOffsets": "2900",
                         "endColumns": "100",
-                        "endOffsets": "2563"
+                        "endOffsets": "2996"
                     }
                 }
             ]

@@ -50,18 +50,21 @@ class _EcommerceAppState extends State<EcommerceApp> {
           ),
           primarySwatch: Colors.orange,
         ),
-        home: _isOnboarded
-            ? FutureBuilder(
-                future: autoLogin(),
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
-                    return const HomeScreen();
-                  } else {
-                    return const SignInScreen();
-                  }
-                },
-              )
-            : const SplashScreen(),
+        // home: _isOnboarded
+        //     ? FutureBuilder(
+        //         future: autoLogin(),
+        //         builder: (BuildContext context, snapshot) {
+        //           if (snapshot.hasData) {
+        //             return snapshot.hasData == true
+        //                 ? const HomeScreen()
+        //                 : const SignInScreen();
+        //           } else {
+        //             return const SignInScreen();
+        //           }
+        //         },
+        //       )
+        //     : const SplashScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

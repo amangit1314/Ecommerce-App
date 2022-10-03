@@ -21,7 +21,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\122df2e57d294d1a53db26bbc3b813c1\\core-1.6.0\\res\\values-de\\values-de.xml",
+                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\bcd58f4f8b0dea68667096f26243123a\\browser-1.4.0\\res\\values-de\\values-de.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,159,260,371",
+                        "endColumns": "103,100,110,99",
+                        "endOffsets": "154,255,366,466"
+                    },
+                    "to": {
+                        "startLines": "20,21,22,23",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2406,2510,2611,2722",
+                        "endColumns": "103,100,110,99",
+                        "endOffsets": "2505,2606,2717,2817"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\8e86e615f21ac3758e97e94e18045107\\core-1.8.0\\res\\values-de\\values-de.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -30,11 +47,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "20",
+                        "startLines": "24",
                         "startColumns": "4",
-                        "startOffsets": "2406",
+                        "startOffsets": "2822",
                         "endColumns": "100",
-                        "endOffsets": "2502"
+                        "endOffsets": "2918"
                     }
                 },
                 {

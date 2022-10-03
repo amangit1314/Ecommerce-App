@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tokoto_ecommerce_app/components/custom_surfix_icon.dart';
+import 'package:tokoto_ecommerce_app/components/form_error.dart';
 import 'package:tokoto_ecommerce_app/helper/keyboard.dart';
 import 'package:tokoto_ecommerce_app/screens/forgot_password/forgot_password_screen.dart';
-import 'package:get/get.dart';
+
 import '../../../components/default_button.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
-import 'package:tokoto_ecommerce_app/components/custom_surfix_icon.dart';
-import 'package:tokoto_ecommerce_app/components/default_button.dart';
-import 'package:tokoto_ecommerce_app/components/form_error.dart';
-import 'package:tokoto_ecommerce_app/utils/size_config.dart';
-
 import '../../login_success/login_success_screen.dart';
 
 class SignForm extends StatefulWidget {
+  const SignForm({Key? key}) : super(key: key);
+
   @override
   _SignFormState createState() => _SignFormState();
 }
@@ -71,7 +71,9 @@ class _SignFormState extends State<SignForm> {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: GestureDetector(
                   onTap: () => Navigator.pushNamed(
-                      context, ForgotPasswordScreen.routeName),
+                    context,
+                    ForgotPasswordScreen.routeName,
+                  ),
                   child: const Text(
                     "Forgot Password",
                     style: TextStyle(decoration: TextDecoration.underline),
@@ -109,9 +111,7 @@ class _SignFormState extends State<SignForm> {
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
-      style: TextStyle(
-        fontSize: getProportionateScreenWidth(12),
-      ),
+      style: TextStyle(fontSize: getProportionateScreenWidth(12)),
       onSaved: (newValue) => password = newValue!,
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -157,9 +157,7 @@ class _SignFormState extends State<SignForm> {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => email = newValue!,
-      style: TextStyle(
-        fontSize: getProportionateScreenWidth(12),
-      ),
+      style: TextStyle(fontSize: getProportionateScreenWidth(12)),
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);

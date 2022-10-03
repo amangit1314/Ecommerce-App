@@ -15,5 +15,26 @@ io/flutter/plugins/firebase/auth/BuildConfig.java
  io.flutter.plugins.firebase.auth.BuildConfig
 io/flutter/plugins/firebase/auth/AuthStateChannelStreamHandler.java
  io.flutter.plugins.firebase.auth.AuthStateChannelStreamHandler
+io/flutter/plugins/firebase/auth/GeneratedAndroidFirebaseAuth.java
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$1
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$GenerateInterfaces
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$GenerateInterfacesCodec
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactoResolverHostApi
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactoResolverHostApi$1
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactoResolverHostApiCodec
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactorUserHostApi
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactorUserHostApi$1
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactorUserHostApi$2
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactorUserHostApi$3
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactorUserHostApi$4
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$MultiFactorUserHostApiCodec
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonMultiFactorInfo
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonMultiFactorInfo$Builder
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonMultiFactorSession
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonMultiFactorSession$Builder
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonPhoneMultiFactorAssertion
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$PigeonPhoneMultiFactorAssertion$Builder
+ io.flutter.plugins.firebase.auth.GeneratedAndroidFirebaseAuth$Result
 io/flutter/plugins/firebase/auth/IdTokenChannelStreamHandler.java
  io.flutter.plugins.firebase.auth.IdTokenChannelStreamHandler

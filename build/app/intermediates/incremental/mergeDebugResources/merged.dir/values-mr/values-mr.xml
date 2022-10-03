@@ -18,5 +18,9 @@
     <string name="common_open_on_phone">फोनवर उघडा</string>
     <string name="common_signin_button_text">साइन इन करा</string>
     <string name="common_signin_button_text_long">Google सह साइन इन करा</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"लिंक क्लिपबोर्डवर कॉपी केली"</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"लिंक कॉपी करा"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"ब्राउझरमध्ये उघडा"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"लिंक शेअर करा"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"९९९+"</string>
 </resources>

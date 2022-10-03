@@ -6,6 +6,8 @@ import '../../../components/social_card.dart';
 import '../../../utils/size_config.dart';
 
 class Body extends StatelessWidget {
+  const Body({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,8 +31,8 @@ class Body extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: SizeConfig.screenHeight * 0.07),
-              Padding(
-                padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+              const Padding(
+                padding: EdgeInsets.only(left: 18.0, right: 18.0),
                 child: SignForm(),
               ),
               SizedBox(height: SizeConfig.screenHeight * 0.06),

@@ -7,7 +7,6 @@ attr buttonSize
 attr circleCrop
 attr clearTop
 attr colorScheme
-attr coordinatorLayoutStyle
 attr finishPrimaryWithSecondary
 attr finishSecondaryWithPrimary
 attr font
@@ -23,13 +22,7 @@ attr fontVariationSettings
 attr fontWeight
 attr imageAspectRatio
 attr imageAspectRatioAdjust
-attr keylines
-attr layout_anchor
-attr layout_anchorGravity
-attr layout_behavior
-attr layout_dodgeInsetEdges
-attr layout_insetEdge
-attr layout_keyline
+attr lStar
 attr nestedScrollViewStyle
 attr placeholderActivityName
 attr primaryActivityName
@@ -42,7 +35,6 @@ attr splitLayoutDirection
 attr splitMinSmallestWidth
 attr splitMinWidth
 attr splitRatio
-attr statusBarBackground
 attr ttcIndex
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
@@ -161,36 +153,24 @@ id action_text
 id actions
 id adjust_height
 id adjust_width
-id all
 id androidx_window_activity_scope
 id async
 id auto
 id blocking
-id bottom
 id browser_actions_header_text
 id browser_actions_menu_item_icon
 id browser_actions_menu_item_text
 id browser_actions_menu_items
 id browser_actions_menu_view
-id center
-id center_horizontal
-id center_vertical
 id chronometer
-id clip_horizontal
-id clip_vertical
 id dark
 id dialog_button
-id end
-id fill
-id fill_horizontal
-id fill_vertical
 id forever
 id icon
 id icon_group
 id icon_only
 id info
 id italic
-id left
 id light
 id line1
 id line3
@@ -201,12 +181,10 @@ id normal
 id notification_background
 id notification_main_column
 id notification_main_column_container
-id right
 id right_icon
 id right_side
 id rtl
 id standard
-id start
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
 id tag_accessibility_heading
@@ -224,7 +202,7 @@ id text
 id text2
 id time
 id title
-id top
+id view_tree_lifecycle_owner
 id wide
 integer google_play_services_version
 integer status_bar_notification_info_maxnum
@@ -238,6 +216,7 @@ layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
 mipmap ic_launcher
+raw keep
 string common_google_play_services_enable_button
 string common_google_play_services_enable_text
 string common_google_play_services_enable_title
@@ -256,6 +235,10 @@ string common_google_play_services_wear_update_text
 string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
+string copy_toast_msg
+string fallback_menu_item_copy_link
+string fallback_menu_item_open_in_browser
+string fallback_menu_item_share_link
 string status_bar_notification_info_overflow
 style LaunchTheme
 style NormalTheme
@@ -266,13 +249,10 @@ style TextAppearance_Compat_Notification_Time
 style TextAppearance_Compat_Notification_Title
 style Widget_Compat_NotificationActionContainer
 style Widget_Compat_NotificationActionText
-style Widget_Support_CoordinatorLayout
 styleable ActivityFilter activityAction activityName
 styleable ActivityRule alwaysExpand
 styleable Capability queryPatterns shortcutMatchRequired
-styleable ColorStateListItem android_color android_alpha alpha
-styleable CoordinatorLayout keylines statusBarBackground
-styleable CoordinatorLayout_Layout android_layout_gravity layout_anchor layout_anchorGravity layout_behavior layout_dodgeInsetEdges layout_insetEdge layout_keyline
+styleable ColorStateListItem android_color android_alpha android_lStar alpha lStar
 styleable FontFamily fontProviderAuthority fontProviderCerts fontProviderFetchStrategy fontProviderFetchTimeout fontProviderPackage fontProviderQuery fontProviderSystemFontFamily
 styleable FontFamilyFont android_font android_fontWeight android_fontStyle android_ttcIndex android_fontVariationSettings font fontStyle fontVariationSettings fontWeight ttcIndex
 styleable GradientColor android_startColor android_endColor android_type android_centerX android_centerY android_gradientRadius android_tileMode android_centerColor android_startX android_startY android_endX android_endY
@@ -283,3 +263,4 @@ styleable SplitPairFilter primaryActivityName secondaryActivityAction secondaryA
 styleable SplitPairRule clearTop finishPrimaryWithSecondary finishSecondaryWithPrimary splitLayoutDirection splitMinSmallestWidth splitMinWidth splitRatio
 styleable SplitPlaceholderRule placeholderActivityName splitLayoutDirection splitMinSmallestWidth splitMinWidth splitRatio
 xml flutter_image_picker_file_paths
+xml image_share_filepaths

@@ -21,6 +21,40 @@
                     }
                 },
                 {
+                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\bcd58f4f8b0dea68667096f26243123a\\browser-1.4.0\\res\\values-ko\\values-ko.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,141,234,337",
+                        "endColumns": "85,92,102,93",
+                        "endOffsets": "136,229,332,426"
+                    },
+                    "to": {
+                        "startLines": "20,21,22,23",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "2002,2088,2181,2284",
+                        "endColumns": "85,92,102,93",
+                        "endOffsets": "2083,2176,2279,2373"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\8e86e615f21ac3758e97e94e18045107\\core-1.8.0\\res\\values-ko\\values-ko.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "24",
+                        "startColumns": "4",
+                        "startOffsets": "2378",
+                        "endColumns": "100",
+                        "endOffsets": "2474"
+                    }
+                },
+                {
                     "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\65c8b9154009d1931a3db50d7627d9e4\\jetified-play-services-basement-18.0.0\\res\\values-ko\\values.xml",
                     "from": {
                         "startLines": "4",
@@ -35,23 +69,6 @@
                         "startOffsets": "950",
                         "endColumns": "120",
                         "endOffsets": "1066"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\gitam\\.gradle\\caches\\transforms-2\\files-2.1\\122df2e57d294d1a53db26bbc3b813c1\\core-1.6.0\\res\\values-ko\\values-ko.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "20",
-                        "startColumns": "4",
-                        "startOffsets": "2002",
-                        "endColumns": "100",
-                        "endOffsets": "2098"
                     }
                 }
             ]

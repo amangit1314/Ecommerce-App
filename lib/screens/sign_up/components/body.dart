@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
 
 import '../../../components/social_card.dart';
 import '../../../utils/constants.dart';
@@ -6,6 +8,8 @@ import '../../../utils/size_config.dart';
 import 'sign_up_form.dart';
 
 class Body extends StatelessWidget {
+  const Body({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,7 +36,17 @@ class Body extends StatelessWidget {
                   children: [
                     SocialCard(
                       icon: "assets/icons/google-icon.svg",
-                      press: () {},
+                      press: () {
+                        try {
+                          AuthMethods().signInWithGoogle;
+                          // Navigator.pushNamedAndRemoveUntil(context,
+                          //     Constants.homeNavigate, (route) => false);
+                        } catch (e) {
+                          if (e is FirebaseAuthException) {
+                            SnackBar(content: Text(e.message!));
+                          }
+                        }
+                      },
                     ),
                     SocialCard(
                       icon: "assets/icons/facebook-2.svg",

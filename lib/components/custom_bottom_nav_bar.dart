@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tokoto_ecommerce_app/screens/profile/profile_screen.dart';
 import 'package:get/get.dart';
+import 'package:tokoto_ecommerce_app/screens/profile/profile_screen.dart';
+
 import '../screens/home/home_screen.dart';
 import '../utils/constatns.dart';
 import '../utils/enums.dart';
@@ -47,11 +48,21 @@ class CustomBottomNavBar extends StatelessWidget {
               onPressed: () => Get.to(const HomeScreen()),
             ),
             IconButton(
-              icon: SvgPicture.asset("assets/icons/Heart Icon.svg"),
+              icon: SvgPicture.asset(
+                "assets/icons/Heart Icon.svg",
+                color: MenuState.profile == selectedMenu
+                    ? kPrimaryColor
+                    : inActiveIconColor,
+              ),
               onPressed: () {},
             ),
             IconButton(
-              icon: SvgPicture.asset("assets/icons/Chat bubble Icon.svg"),
+              icon: SvgPicture.asset(
+                "assets/icons/Chat bubble Icon.svg",
+                color: MenuState.profile == selectedMenu
+                    ? kPrimaryColor
+                    : inActiveIconColor,
+              ),
               onPressed: () {},
             ),
             IconButton(

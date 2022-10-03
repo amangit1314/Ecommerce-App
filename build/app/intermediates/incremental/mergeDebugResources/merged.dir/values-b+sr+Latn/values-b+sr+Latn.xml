@@ -18,5 +18,9 @@
     <string name="common_open_on_phone">Otvori na telefonu</string>
     <string name="common_signin_button_text">Prijavi me</string>
     <string name="common_signin_button_text_long">Prijavi me na Google</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Link je kopiran u privremenu memoriju"</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Kopiraj link"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Otvori u pregledaču"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Deli link"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

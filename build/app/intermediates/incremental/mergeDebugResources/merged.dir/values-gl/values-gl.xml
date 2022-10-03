@@ -18,5 +18,9 @@
     <string name="common_open_on_phone">Abrir no teléfono</string>
     <string name="common_signin_button_text">Iniciar sesión</string>
     <string name="common_signin_button_text_long">Iniciar sesión con Google</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"Copiouse a ligazón no portapapeis"</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Copiar ligazón"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Abrir no navegador"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Compartir ligazón"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">">999"</string>
 </resources>

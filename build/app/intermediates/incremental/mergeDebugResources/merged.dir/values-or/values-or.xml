@@ -18,5 +18,9 @@
     <string name="common_open_on_phone">ଫୋନ୍‌ରେ ଖୋଲନ୍ତୁ</string>
     <string name="common_signin_button_text">ସାଇନ୍‌-ଇନ୍ କରନ୍ତୁ</string>
     <string name="common_signin_button_text_long">Google ସହ ସାଇନ୍‌-ଇନ୍ କରନ୍ତୁ</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"ଲିଙ୍କକୁ କ୍ଲିପ୍‍‍ବୋର୍ଡରେ କପି କରାଯାଇଛି"</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"ଲିଙ୍କ୍ କପି କରନ୍ତୁ"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"ବ୍ରାଉଜର୍‌ରେ ଖୋଲନ୍ତୁ"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"ଲିଙ୍କ୍ ସେୟାର୍ କରନ୍ତୁ"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

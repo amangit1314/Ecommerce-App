@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "449429025133",
+    "project_id": "tokoto-ecommerce-app",
+    "storage_bucket": "tokoto-ecommerce-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449429025133:android:8d4df3ec747bbb6f1a2a64",
+        "android_client_info": {
+          "package_name": "com.example.tokoto_ecommerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449429025133-9fi0im2sae8b67udof4oopmepdqiibq0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALjnOalYLuutAA-IN05uBhHEqst_r85Xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449429025133-9fi0im2sae8b67udof4oopmepdqiibq0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

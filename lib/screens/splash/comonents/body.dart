@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
-import 'package:tokoto_ecommerce_app/screens/splash/comonents/splash_content.dart';
-import 'package:tokoto_ecommerce_app/utils/constatns.dart';
-import 'package:tokoto_ecommerce_app/utils/size_config.dart';
 import 'package:get/get.dart';
+import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
+import 'package:tokoto_ecommerce_app/screens/splash/comonents/dot_indicator.dart';
+import 'package:tokoto_ecommerce_app/screens/splash/comonents/splash_content.dart';
+import 'package:tokoto_ecommerce_app/utils/size_config.dart';
+
 import '../../../components/default_button.dart';
+import '../../../models/splash.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -15,19 +17,16 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   int currentPage = 0;
-  List<Map<String, String>> splashData = [
-    {
-      "text": "Welcome to Tokoto, Let’s shop!",
-      "image": "assets/images/splash_1.png"
-    },
-    {
-      "text": "We help people conect with store \naround Rajasthan India",
-      "image": "assets/images/splash_2.png"
-    },
-    {
-      "text": "We show the easy way to shop. \nJust stay at home with us",
-      "image": "assets/images/splash_3.png"
-    },
+  List<Splash> splashData = [
+    Splash(
+        text: "Welcome to Tokoto, Let’s shop!",
+        image: "assets/images/splash_1.png"),
+    Splash(
+        text: "We help people conect with store \naround Rajasthan India",
+        image: "assets/images/splash_2.png"),
+    Splash(
+        text: "We show the easy way to shop. \nJust stay at home with us",
+        image: "assets/images/splash_3.png"),
   ];
   @override
   Widget build(BuildContext context) {
@@ -47,8 +46,8 @@ class _BodyState extends State<Body> {
                 },
                 itemCount: splashData.length,
                 itemBuilder: (context, index) => SplashContent(
-                  image: splashData[index]["image"]!,
-                  text: splashData[index]['text']!,
+                  image: splashData[index].image,
+                  text: splashData[index].text,
                 ),
               ),
             ),
@@ -64,7 +63,10 @@ class _BodyState extends State<Body> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         splashData.length,
-                        (index) => buildDot(index: index),
+                        (index) => DotIndicator(
+                          currentPage: currentPage,
+                          index: index,
+                        ),
                       ),
                     ),
                     const Spacer(flex: 1),
@@ -89,19 +91,6 @@ class _BodyState extends State<Body> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  AnimatedContainer buildDot({int? index}) {
-    return AnimatedContainer(
-      duration: kAnimationDuration,
-      margin: const EdgeInsets.only(right: 5),
-      height: 6,
-      width: currentPage == index ? 20 : 6,
-      decoration: BoxDecoration(
-        color: currentPage == index ? kPrimaryColor : const Color(0xFFD8D8D8),
-        borderRadius: BorderRadius.circular(3),
       ),
     );
   }

@@ -215,6 +215,8 @@ int layout notification_template_custom_big 0x0
 int layout notification_template_icon_group 0x0
 int layout notification_template_part_chronometer 0x0
 int layout notification_template_part_time 0x0
+int raw firebase_common_keep 0x0
+int raw keep 0x0
 int string common_google_play_services_enable_button 0x0
 int string common_google_play_services_enable_text 0x0
 int string common_google_play_services_enable_title 0x0
