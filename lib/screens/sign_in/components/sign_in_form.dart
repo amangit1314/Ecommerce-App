@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tokoto_ecommerce_app/components/custom_surfix_icon.dart';
 import 'package:tokoto_ecommerce_app/components/form_error.dart';
 import 'package:tokoto_ecommerce_app/helper/keyboard.dart';
+import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
 import 'package:tokoto_ecommerce_app/screens/forgot_password/forgot_password_screen.dart';
 
 import '../../../components/default_button.dart';
@@ -21,6 +21,8 @@ class _SignFormState extends State<SignForm> {
   final _formKey = GlobalKey<FormState>();
   late String email;
   late String password;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool remember = false;
   final List<String> errors = [];
 
@@ -98,7 +100,16 @@ class _SignFormState extends State<SignForm> {
                   _formKey.currentState?.save();
                   // if all are valid then go to success screen
                   KeyboardUtil.hideKeyboard(context);
-                  Get.to(const LoginSuccessScreen());
+                  AuthMethods().loginUser(
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
+
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => const LoginSuccessScreen(),
+                    ),
+                  );
                 }
               },
             ),
@@ -112,7 +123,7 @@ class _SignFormState extends State<SignForm> {
     return TextFormField(
       obscureText: true,
       style: TextStyle(fontSize: getProportionateScreenWidth(12)),
-      onSaved: (newValue) => password = newValue!,
+      onSaved: (newValue) => passwordController.text = newValue!,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
@@ -156,7 +167,7 @@ class _SignFormState extends State<SignForm> {
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue!,
+      onSaved: (newValue) => emailController.text = newValue!,
       style: TextStyle(fontSize: getProportionateScreenWidth(12)),
       onChanged: (value) {
         if (value.isNotEmpty) {

@@ -16,8 +16,9 @@ class Body extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+          padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(20),
+          ),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -29,7 +30,7 @@ class Body extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.07),
-                SignUpForm(),
+                const SignUpForm(),
                 SizedBox(height: SizeConfig.screenHeight * 0.07),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

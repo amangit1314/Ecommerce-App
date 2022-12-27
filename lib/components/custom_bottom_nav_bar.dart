@@ -72,7 +72,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () => Get.to(ProfileScreen()),
+              onPressed: () => Get.to(const ProfileScreen()),
             ),
           ],
         ),

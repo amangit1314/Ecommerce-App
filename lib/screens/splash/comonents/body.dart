@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
 import 'package:tokoto_ecommerce_app/screens/splash/comonents/dot_indicator.dart';
 import 'package:tokoto_ecommerce_app/screens/splash/comonents/splash_content.dart';
@@ -55,7 +54,8 @@ class _BodyState extends State<Body> {
               flex: 2,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: getProportionateScreenWidth(20)),
+                  horizontal: getProportionateScreenWidth(20),
+                ),
                 child: Column(
                   children: <Widget>[
                     const Spacer(),
@@ -80,7 +80,11 @@ class _BodyState extends State<Body> {
                         text: "Continue",
                         txtColor: Colors.white,
                         press: () {
-                          Get.to(const SignInScreen());
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (_) => const SignInScreen(),
+                            ),
+                          );
                         },
                       ),
                     ),

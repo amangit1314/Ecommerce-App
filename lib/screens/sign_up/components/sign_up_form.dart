@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tokoto_ecommerce_app/components/custom_surfix_icon.dart';
-import 'package:tokoto_ecommerce_app/screens/profile/profile_screen.dart';
+import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
+import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
 
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
@@ -9,15 +10,21 @@ import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
 class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
+
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   late String email;
   late String password;
-  late String conform_password;
+  late String confirmPassword;
   bool remember = false;
   final List<String> errors = [];
 
@@ -62,8 +69,19 @@ class _SignUpFormState extends State<SignUpForm> {
               press: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  // if all are valid then go to success screen
-                  Get.to(ProfileScreen());
+                  AuthMethods().registerUser(
+                    email: emailController.text,
+                    password: passwordController.text,
+                    file: [] as Uint8List,
+                    username: '',
+                    bio: '',
+                  );
+                  // if all are valid then go to login screen
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => const SignInScreen(),
+                    ),
+                  );
                 }
               },
             ),
@@ -79,14 +97,15 @@ class _SignUpFormState extends State<SignUpForm> {
       style: TextStyle(
         fontSize: getProportionateScreenWidth(12),
       ),
-      onSaved: (newValue) => conform_password = newValue!,
+      onSaved: (newValue) => confirmPassword = newValue!,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.isNotEmpty && password == conform_password) {
+        } else if (value.isNotEmpty &&
+            passwordController.text == confirmPassword) {
           removeError(error: kMatchPassError);
         }
-        conform_password = value;
+        confirmPassword = value;
       },
       validator: (value) {
         if (value!.isEmpty) {
@@ -115,7 +134,7 @@ class _SignUpFormState extends State<SignUpForm> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
+        suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
       ),
     );
   }
@@ -126,14 +145,14 @@ class _SignUpFormState extends State<SignUpForm> {
       style: TextStyle(
         fontSize: getProportionateScreenWidth(12),
       ),
-      onSaved: (newValue) => password = newValue!,
+      onSaved: (newValue) => passwordController.text = newValue!,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
         } else if (value.length >= 8) {
           removeError(error: kShortPassError);
         }
-        password = value;
+        passwordController.text = value;
       },
       validator: (value) {
         if (value!.isEmpty) {
@@ -173,7 +192,7 @@ class _SignUpFormState extends State<SignUpForm> {
       style: TextStyle(
         fontSize: getProportionateScreenWidth(12),
       ),
-      onSaved: (newValue) => email = newValue!,
+      onSaved: (newValue) => emailController.text = newValue!,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);

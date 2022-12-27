@@ -32,12 +32,19 @@ class ProfilePic extends StatelessWidget {
           Positioned(
             right: -16,
             bottom: 0,
-            child: SizedBox(
-              height: 46,
-              width: 46,
-              child: TextButton(
-                onPressed: () {},
-                child: SvgPicture.asset("assets/icons/Camera Icon.svg"),
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 23,
+              child: CircleAvatar(
+                backgroundColor: Colors.grey[100],
+                radius: 21,
+                child: TextButton(
+                  onPressed: () {},
+                  child: SvgPicture.asset(
+                    "assets/icons/Camera Icon.svg",
+                    color: Colors.black87,
+                  ),
+                ),
               ),
             ),
           )

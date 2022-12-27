@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tokoto_ecommerce_app/providers/user_provider.dart';
 import 'package:tokoto_ecommerce_app/screens/home/home_screen.dart';
 import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
-import 'package:tokoto_ecommerce_app/screens/splash/splash_screen.dart';
+
+import 'screens/splash/splash_screen.dart';
 
 class EcommerceApp extends StatefulWidget {
   const EcommerceApp({Key? key}) : super(key: key);
@@ -16,12 +17,12 @@ class EcommerceApp extends StatefulWidget {
 }
 
 class _EcommerceAppState extends State<EcommerceApp> {
-  bool _isOnboarded = false;
+  late bool _isOnboarded;
 
   @override
   void initState() {
     super.initState();
-    _isOnboarded = true;
+    _isOnboarded = false;
   }
 
   autoLogin() async {
@@ -50,21 +51,20 @@ class _EcommerceAppState extends State<EcommerceApp> {
           ),
           primarySwatch: Colors.orange,
         ),
-        // home: _isOnboarded
-        //     ? FutureBuilder(
-        //         future: autoLogin(),
-        //         builder: (BuildContext context, snapshot) {
-        //           if (snapshot.hasData) {
-        //             return snapshot.hasData == true
-        //                 ? const HomeScreen()
-        //                 : const SignInScreen();
-        //           } else {
-        //             return const SignInScreen();
-        //           }
-        //         },
-        //       )
-        //     : const SplashScreen(),
-        home: const SplashScreen(),
+        home: _isOnboarded
+            ? FutureBuilder(
+                future: autoLogin(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.hasData == true
+                        ? const HomeScreen()
+                        : const SignInScreen();
+                  } else {
+                    return const SignInScreen();
+                  }
+                },
+              )
+            : const SplashScreen(),
       ),
     );
   }

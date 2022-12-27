@@ -30,6 +30,10 @@ lib/firebase_options.dart
 .pub-cache/
 .pub/
 /build/
+build/
+/build
+./build
+./build/
 
 
 # Web related

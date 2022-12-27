@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tokoto_ecommerce_app/components/no_account_text.dart';
+import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
 import 'package:tokoto_ecommerce_app/screens/sign_in/components/sign_in_form.dart';
 
 import '../../../components/social_card.dart';
@@ -41,7 +42,7 @@ class Body extends StatelessWidget {
                 children: [
                   SocialCard(
                     icon: "assets/icons/google-icon.svg",
-                    press: () {},
+                    press: () => AuthMethods().signInWithGoogle(),
                   ),
                   SocialCard(
                     icon: "assets/icons/facebook-2.svg",

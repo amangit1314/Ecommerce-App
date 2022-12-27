@@ -10,6 +10,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: buildAppBar(context),
       body: const Body(),
       bottomNavigationBar: const CheckoutCard(),
@@ -18,7 +19,10 @@ class CartScreen extends StatelessWidget {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
       title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text(
             "Your Cart",

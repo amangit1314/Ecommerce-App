@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tokoto_ecommerce_app/screens/home/components/icon_btn_with_counter.dart';
 import 'package:tokoto_ecommerce_app/screens/home/components/search_field.dart';
+import 'package:tokoto_ecommerce_app/screens/notification/notification_screen.dart';
+
 import '../../../utils/size_config.dart';
 import '../../cart/cart_screen.dart';
 
@@ -20,12 +22,26 @@ class HomeHeader extends StatelessWidget {
           const SearchField(),
           IconBtnWithCounter(
             svgSrc: "assets/icons/Cart Icon.svg",
-            press: () => Navigator.pushNamed(context, CartScreen.routeName),
+            press: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) {
+                  return const CartScreen();
+                },
+              ),
+            ),
           ),
           IconBtnWithCounter(
             svgSrc: "assets/icons/Bell.svg",
             numOfitem: 3,
-            press: () {},
+            press: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) {
+                  return const NotificationScreen();
+                },
+              ),
+            ),
           ),
         ],
       ),

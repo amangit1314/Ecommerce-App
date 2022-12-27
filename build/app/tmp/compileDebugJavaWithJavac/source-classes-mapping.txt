@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-com/example/tokoto_ecommerce_app/BuildConfig.java
- com.example.tokoto_ecommerce_app.BuildConfig
