@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
 import 'package:tokoto_ecommerce_app/screens/splash/comonents/dot_indicator.dart';
 import 'package:tokoto_ecommerce_app/screens/splash/comonents/splash_content.dart';
 import 'package:tokoto_ecommerce_app/utils/size_config.dart';
 
 import '../../../components/default_button.dart';
 import '../../../models/splash.dart';
+import '../../sign_in/sign_in_screen.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -34,7 +34,7 @@ class _BodyState extends State<Body> {
         width: double.infinity,
         child: Column(
           children: <Widget>[
-            const SizedBox(height: 40),
+            const SizedBox(height: 42),
             Expanded(
               flex: 3,
               child: PageView.builder(

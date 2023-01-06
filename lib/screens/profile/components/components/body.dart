@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
+import 'package:tokoto_ecommerce_app/screens/splash/splash_screen.dart';
 
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -44,10 +46,16 @@ class Body extends StatelessWidget {
                   press: () {},
                 ),
                 ProfileMenu(
-                  text: "Log Out",
-                  icon: "assets/icons/Log out.svg",
-                  press: () {},
-                ),
+                    text: "Log Out",
+                    icon: "assets/icons/Log out.svg",
+                    press: () {
+                      AuthMethods().signOut();
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const SplashScreen(),
+                          ),
+                          (route) => false);
+                    }),
               ],
             ),
           ],

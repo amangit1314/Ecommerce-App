@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "449429025133-qvcn696ts45fcab0m58709fp24hrqh66.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tokoto_ecommerce_app",
+            "certificate_hash": "bd4e945b4fd151975d6f0f16bff162e2e6745dfa"
+          }
+        },
+        {
           "client_id": "449429025133-9fi0im2sae8b67udof4oopmepdqiibq0.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "449429025133-9fi0im2sae8b67udof4oopmepdqiibq0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "449429025133-foaofopp3viv747hcm8j1vsahvikftbi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tokotoEcommerceApp"
+              }
             }
           ]
         }

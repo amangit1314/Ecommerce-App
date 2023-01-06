@@ -1,5 +1,7 @@
-import 'package:flutter/foundation.dart';
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tokoto_ecommerce_app/components/custom_surfix_icon.dart';
 import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
 import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
@@ -22,9 +24,9 @@ class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  late String email;
-  late String password;
-  late String confirmPassword;
+  // late String email;
+  // late String password;
+  // late String confirmPassword;
   bool remember = false;
   final List<String> errors = [];
 
@@ -40,6 +42,32 @@ class _SignUpFormState extends State<SignUpForm> {
     if (errors.contains(error)) {
       setState(() {
         errors.remove(error);
+      });
+    }
+  }
+
+  void register() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      AuthMethods()
+          .registerUser(
+        email: emailController.text,
+        password: passwordController.text,
+        username: emailController.text.trim(),
+      )
+          .then((result) {
+        if (result == 'success') {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const SignInScreen(),
+              ),
+              (route) => false);
+          const GetSnackBar(
+            message: "Registration is successful 🎉",
+            backgroundColor: Color.fromARGB(255, 120, 255, 125),
+          );
+        }
+        GetSnackBar(message: result.toString());
       });
     }
   }
@@ -66,24 +94,7 @@ class _SignUpFormState extends State<SignUpForm> {
             child: DefaultButton(
               txtColor: Colors.white,
               text: "Continue",
-              press: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  AuthMethods().registerUser(
-                    email: emailController.text,
-                    password: passwordController.text,
-                    file: [] as Uint8List,
-                    username: '',
-                    bio: '',
-                  );
-                  // if all are valid then go to login screen
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => const SignInScreen(),
-                    ),
-                  );
-                }
-              },
+              press: register,
             ),
           ),
         ],
@@ -97,21 +108,21 @@ class _SignUpFormState extends State<SignUpForm> {
       style: TextStyle(
         fontSize: getProportionateScreenWidth(12),
       ),
-      onSaved: (newValue) => confirmPassword = newValue!,
+      onSaved: (newValue) => confirmPasswordController.text = newValue!,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
         } else if (value.isNotEmpty &&
-            passwordController.text == confirmPassword) {
+            passwordController.text == confirmPasswordController.text) {
           removeError(error: kMatchPassError);
         }
-        confirmPassword = value;
+        confirmPasswordController.text = value;
       },
       validator: (value) {
         if (value!.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if ((password != value)) {
+        } else if ((passwordController.text != value)) {
           addError(error: kMatchPassError);
           return "";
         }

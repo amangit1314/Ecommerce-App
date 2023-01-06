@@ -19,6 +19,30 @@ class Product {
     required this.price,
     required this.description,
   });
+
+  static Product fromSnapshot(productData) {
+    return Product(
+      id: productData.id,
+      images: productData['images'],
+      colors: productData['colors'],
+      title: productData['title'],
+      price: productData['price'],
+      description: productData['description'],
+      rating: productData['rating'],
+      isFavourite: productData['isFavourite'],
+      isPopular: productData['isPopular'],
+    );
+  }
+
+  static getProductsByUser(String userId) {}
+
+  static getProductsByBrand(String brandName) {}
+
+  static getProductsByCategory(String categoryName) {}
+
+  static getProductsSearched(String productName) {}
+
+  static getProducts() {}
 }
 
 // Our demo Products

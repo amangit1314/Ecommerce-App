@@ -4,25 +4,25 @@ import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
 import 'package:tokoto_ecommerce_app/screens/sign_in/components/sign_in_form.dart';
 
 import '../../../components/social_card.dart';
-import '../../../utils/size_config.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: SizeConfig.screenHeight * 0.04),
-              Text(
+              SizedBox(height: screenHeight * 0.04),
+              const Text(
                 "Welcome Back",
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: getProportionateScreenWidth(28),
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -30,13 +30,14 @@ class Body extends StatelessWidget {
               const Text(
                 "Sign in with your email and password  \nor continue with social media",
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black54),
               ),
-              SizedBox(height: SizeConfig.screenHeight * 0.07),
+              SizedBox(height: screenHeight * 0.07),
               const Padding(
                 padding: EdgeInsets.only(left: 18.0, right: 18.0),
                 child: SignForm(),
               ),
-              SizedBox(height: SizeConfig.screenHeight * 0.06),
+              SizedBox(height: screenHeight * 0.06),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -54,7 +55,7 @@ class Body extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: getProportionateScreenHeight(20)),
+              const SizedBox(height: 20),
               const NoAccountText(),
             ],
           ),

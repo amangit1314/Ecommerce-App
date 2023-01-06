@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/utils/size_config.dart';
-
-import 'comonents/body.dart';
+import 'package:tokoto_ecommerce_app/screens/splash/comonents/body.dart';
 
 class SplashScreen extends StatelessWidget {
   static String routeName = "/splash";
@@ -10,10 +8,15 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // You have to call it on your starting screen
-    SizeConfig().init(context);
+    //SizeConfig().init(context);
     return const Scaffold(
       backgroundColor: Colors.white,
       body: Body(),
+      // body: Scaffold(
+      //   body: Center(
+      //       child: GestureDetector(
+      //           child: const Text("Splash Screen"), onTap: () {})),
+      // ),
     );
   }
 }

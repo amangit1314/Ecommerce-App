@@ -7,12 +7,8 @@ class LoginSuccessScreen extends StatelessWidget {
   const LoginSuccessScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const SizedBox(),
-        title: const Text("Login Success"),
-      ),
-      body: const Body(),
+    return const Scaffold(
+      body: Body(),
     );
   }
 }

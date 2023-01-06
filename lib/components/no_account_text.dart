@@ -12,9 +12,8 @@ class NoAccountText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 79.0),
+      padding: const EdgeInsets.symmetric(horizontal: 72.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             "Don't have an account?",
@@ -22,8 +21,9 @@ class NoAccountText extends StatelessWidget {
               fontSize: getProportionateScreenWidth(12),
             ),
           ),
+          const Spacer(),
           GestureDetector(
-            onTap: () => Get.to(SignUpScreen()),
+            onTap: () => Get.to(const SignUpScreen()),
             child: Text(
               "Sign Up",
               style: TextStyle(
