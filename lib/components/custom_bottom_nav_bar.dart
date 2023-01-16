@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:tokoto_ecommerce_app/screens/profile/profile_screen.dart';
+import 'package:soni_store_app/screens/profile/profile_screen.dart';
 
 import '../screens/home/home_screen.dart';
 import '../utils/constatns.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class ProductProvider with ChangeNotifier {
+class CartProvider with ChangeNotifier {
   String _name = '';
   String _price = '';
   String _description = '';

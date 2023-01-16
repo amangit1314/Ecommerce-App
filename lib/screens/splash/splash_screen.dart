@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/splash/comonents/body.dart';
+import 'package:soni_store_app/screens/splash/comonents/body.dart';
 
 class SplashScreen extends StatelessWidget {
   static String routeName = "/splash";

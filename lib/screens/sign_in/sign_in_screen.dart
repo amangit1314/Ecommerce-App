@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/sign_in/components/body.dart';
+import 'package:soni_store_app/screens/sign_in/components/body.dart';
 
 class SignInScreen extends StatelessWidget {
   static const routeName = '/sign-in';

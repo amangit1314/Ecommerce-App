@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/login_success/components/body.dart';
+import 'package:soni_store_app/screens/login_success/components/body.dart';
 
 class LoginSuccessScreen extends StatelessWidget {
   static String routeName = "/login_success";

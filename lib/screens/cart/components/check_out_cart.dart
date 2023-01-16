@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tokoto_ecommerce_app/utils/constants.dart';
+import 'package:soni_store_app/utils/constants.dart';
 
 import '../../../components/default_button.dart';
 import '../../../utils/size_config.dart';

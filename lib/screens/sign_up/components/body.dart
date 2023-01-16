@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
+import 'package:soni_store_app/resources/auth_methods.dart';
 
 import '../../../components/social_card.dart';
 import '../../../utils/constants.dart';

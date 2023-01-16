@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tokoto_ecommerce_app/utils/constatns.dart';
+import 'package:soni_store_app/utils/constatns.dart';
 
 ThemeData theme() {
   return ThemeData(

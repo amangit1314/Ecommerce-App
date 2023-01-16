@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tokoto_ecommerce_app/screens/cart/components/cart_card.dart';
-import 'package:tokoto_ecommerce_app/utils/size_config.dart';
+import 'package:soni_store_app/screens/cart/components/cart_card.dart';
+import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../models/cart_model.dart';
 

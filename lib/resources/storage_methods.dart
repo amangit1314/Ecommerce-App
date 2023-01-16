@@ -8,6 +8,53 @@ class StorageMethods {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // edit address to firebase firestore
+  Future<void> editAddress({
+    required String address,
+    required String city,
+    required String state,
+    required String pincode,
+  }) async {
+    await _storage
+        .ref()
+        .child('users')
+        .child(_auth.currentUser!.uid)
+        .child('address')
+        .child('address')
+        .putString(address);
+    await _storage
+        .ref()
+        .child('users')
+        .child(_auth.currentUser!.uid)
+        .child('address')
+        .child('city')
+        .putString(city);
+    await _storage
+        .ref()
+        .child('users')
+        .child(_auth.currentUser!.uid)
+        .child('address')
+        .child('state')
+        .putString(state);
+    await _storage
+        .ref()
+        .child('users')
+        .child(_auth.currentUser!.uid)
+        .child('address')
+        .child('pincode')
+        .putString(pincode);
+  }
+
+  // Edit number to firebase storage
+  Future<void> editNumber(String number) async {
+    await _storage
+        .ref()
+        .child('users')
+        .child(_auth.currentUser!.uid)
+        .child('number')
+        .putString(number);
+  }
+
   // adding file to firebase storage
   Future<String> uploadImageToStorage(
     String childName,

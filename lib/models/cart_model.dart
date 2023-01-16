@@ -1,4 +1,4 @@
-import 'package:tokoto_ecommerce_app/models/product_name.dart';
+import 'package:soni_store_app/models/product_name.dart';
 
 class Cart {
   final Product product;

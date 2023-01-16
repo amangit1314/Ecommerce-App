@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tokoto_ecommerce_app/utils/size_config.dart';
+import 'package:soni_store_app/utils/size_config.dart';
 
 class CustomSurffixIcon extends StatelessWidget {
   const CustomSurffixIcon({

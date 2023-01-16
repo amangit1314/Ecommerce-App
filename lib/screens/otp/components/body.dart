@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/otp/components/otp_form.dart';
+import 'package:soni_store_app/screens/otp/components/otp_form.dart';
+
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 

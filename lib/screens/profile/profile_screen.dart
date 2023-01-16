@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/profile/components/components/body.dart';
+import 'package:soni_store_app/screens/profile/components/components/body.dart';
 
 import '../../components/custom_bottom_nav_bar.dart';
 import '../../utils/enums.dart';

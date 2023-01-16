@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/utils/size_config.dart';
+import 'package:soni_store_app/utils/size_config.dart';
+
 import '../../../components/custom_surfix_icon.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';

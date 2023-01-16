@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/models/cart_model.dart';
-import 'package:tokoto_ecommerce_app/utils/size_config.dart';
+import 'package:soni_store_app/models/cart_model.dart';
+import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../utils/constatns.dart';
 

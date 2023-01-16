@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/components/default_button.dart';
+import 'package:soni_store_app/components/default_button.dart';
 
 import '../../home/home_screen.dart';
 

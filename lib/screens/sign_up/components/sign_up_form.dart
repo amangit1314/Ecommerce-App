@@ -1,10 +1,8 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tokoto_ecommerce_app/components/custom_surfix_icon.dart';
-import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
-import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
+import 'package:soni_store_app/components/custom_surfix_icon.dart';
+import 'package:soni_store_app/resources/auth_methods.dart';
+import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
@@ -15,7 +13,7 @@ class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  _SignUpFormState createState() => _SignUpFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
 class _SignUpFormState extends State<SignUpForm> {
@@ -24,9 +22,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  // late String email;
-  // late String password;
-  // late String confirmPassword;
+
   bool remember = false;
   final List<String> errors = [];
 
@@ -142,8 +138,6 @@ class _SignUpFormState extends State<SignUpForm> {
             width: 1.0,
           ),
         ),
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
       ),
@@ -189,8 +183,6 @@ class _SignUpFormState extends State<SignUpForm> {
             width: 1.0,
           ),
         ),
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
       ),
@@ -236,8 +228,6 @@ class _SignUpFormState extends State<SignUpForm> {
             width: 1.0,
           ),
         ),
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
       ),

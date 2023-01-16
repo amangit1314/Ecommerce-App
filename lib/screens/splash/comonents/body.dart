@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/splash/comonents/dot_indicator.dart';
-import 'package:tokoto_ecommerce_app/screens/splash/comonents/splash_content.dart';
-import 'package:tokoto_ecommerce_app/utils/size_config.dart';
+import 'package:soni_store_app/screens/splash/comonents/dot_indicator.dart';
+import 'package:soni_store_app/screens/splash/comonents/splash_content.dart';
+import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../components/default_button.dart';
 import '../../../models/splash.dart';
@@ -11,7 +11,7 @@ class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
 
   @override
-  _BodyState createState() => _BodyState();
+  State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {

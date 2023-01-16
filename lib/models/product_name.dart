@@ -20,6 +20,18 @@ class Product {
     required this.description,
   });
 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'images': images,
+        'colors': colors,
+        'title': title,
+        'price': price,
+        'description': description,
+        'rating': rating,
+        'isFavourite': isFavourite,
+        'isPopular': isPopular,
+      };
+
   static Product fromSnapshot(productData) {
     return Product(
       id: productData.id,
@@ -33,16 +45,6 @@ class Product {
       isPopular: productData['isPopular'],
     );
   }
-
-  static getProductsByUser(String userId) {}
-
-  static getProductsByBrand(String brandName) {}
-
-  static getProductsByCategory(String categoryName) {}
-
-  static getProductsSearched(String productName) {}
-
-  static getProducts() {}
 }
 
 // Our demo Products

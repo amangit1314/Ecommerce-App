@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/home/components/section_tile.dart';
+import 'package:soni_store_app/screens/home/components/section_tile.dart';
 
 import '../../../components/product_card.dart';
 import '../../../models/product_name.dart';

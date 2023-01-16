@@ -1,5 +1,5 @@
-name: tokoto_ecommerce_app
-description: Ecommere merchandise store.
+name: soni_store_app
+description: Ecommere merchandise for soni store.
 publish_to: "none"
 
 version: 1.0.0+1
@@ -15,6 +15,7 @@ dependencies:
   firebase_storage: ^11.0.9
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.11.0
   flutter_svg: ^1.0.3
   get: ^4.6.1
   google_fonts: ^3.0.1
@@ -22,8 +23,8 @@ dependencies:
   http: ^0.13.5
   image_picker: ^0.8.5
   provider: ^6.0.2
-
   shared_preferences: any
+  socket_io_client: ^2.0.1
   uuid: ^3.0.6
   web_socket_channel: any
 
@@ -31,6 +32,11 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo-color.png"
 
 flutter:
   uses-material-design: true

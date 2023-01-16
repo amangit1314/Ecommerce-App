@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/resources/auth_methods.dart';
-import 'package:tokoto_ecommerce_app/screens/splash/splash_screen.dart';
+import 'package:soni_store_app/resources/auth_methods.dart';
+import 'package:soni_store_app/screens/splash/splash_screen.dart';
 
 import 'profile_menu.dart';
 import 'profile_pic.dart';

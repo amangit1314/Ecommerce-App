@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/models/cart_model.dart';
-import 'package:tokoto_ecommerce_app/screens/cart/components/body.dart';
-import 'package:tokoto_ecommerce_app/screens/cart/components/check_out_cart.dart';
+import 'package:soni_store_app/models/cart_model.dart';
+import 'package:soni_store_app/screens/cart/components/body.dart';
+import 'package:soni_store_app/screens/cart/components/check_out_cart.dart';
 
 class CartScreen extends StatelessWidget {
   static String routeName = "/cart";

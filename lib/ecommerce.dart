@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:tokoto_ecommerce_app/providers/user_provider.dart';
-import 'package:tokoto_ecommerce_app/screens/login_success/login_success_screen.dart';
-import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
+import 'package:soni_store_app/providers/user_provider.dart';
+import 'package:soni_store_app/screens/home/home_screen.dart';
+import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
 class EcommerceApp extends StatefulWidget {
   const EcommerceApp({Key? key}) : super(key: key);
@@ -67,7 +67,7 @@ class _EcommerceAppState extends State<EcommerceApp> {
                   builder: (BuildContext context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.active) {
                       if (snapshot.hasData) {
-                        return const LoginSuccessScreen();
+                        return const HomeScreen();
                         // : const SignInScreen();
                       }
                       //return GetSnackBar(message: snapshot.hasError.toString());

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/home/components/icon_btn_with_counter.dart';
-import 'package:tokoto_ecommerce_app/screens/home/components/search_field.dart';
-import 'package:tokoto_ecommerce_app/screens/notification/notification_screen.dart';
+import 'package:soni_store_app/screens/home/components/icon_btn_with_counter.dart';
+import 'package:soni_store_app/screens/home/components/search_field.dart';
+import 'package:soni_store_app/screens/notification/notification_screen.dart';
 
 import '../../../utils/size_config.dart';
 import '../../cart/cart_screen.dart';

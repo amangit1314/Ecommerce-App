@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tokoto_ecommerce_app/screens/otp/components/body.dart';
+import 'package:soni_store_app/screens/otp/components/body.dart';
 
 import '../../utils/size_config.dart';
 

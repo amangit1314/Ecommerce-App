@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tokoto_ecommerce_app/screens/sign_in/sign_in_screen.dart';
+import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
 import '../models/user.dart' as model;
-
-//var authMethodsProvider = Provider(create: ((context) => AuthMethods()));
+import '../screens/login_success/login_success_screen.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -25,16 +25,20 @@ class AuthMethods {
     required String password,
     required String username,
   }) async {
+    //final navigator = Navigator.of(context!);
     String res = "Some error occured";
     try {
       if (email.isNotEmpty || password.isNotEmpty || username.isNotEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+          email: email,
+          password: password,
+        );
 
         model.User user = model.User(
           email: email,
           username: username,
           uid: cred.user!.uid,
+          password: password,
         );
 
         await _firestore
@@ -57,6 +61,13 @@ class AuthMethods {
       }
     } catch (err) {
       res = res.toString();
+      Get.snackbar(
+        'Error Message',
+        err.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
     return res;
   }
@@ -68,23 +79,37 @@ class AuthMethods {
     String res = "❓error occured";
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(
+        await _auth
+            .signInWithEmailAndPassword(
           email: email,
           password: password,
-        );
-
-        // //ignore: use_build_context_synchronously
-        // Navigator.of(context).pushReplacement(
-        //   MaterialPageRoute(
-        //     builder: (_) => const LoginSuccessScreen(),
-        //   ),
-        // );
+        )
+            .then((value) {
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(value.user!.uid)
+              .get()
+              .then((value) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => const LoginSuccessScreen(),
+              ),
+            );
+          });
+        });
         res = 'success';
       } else {
         res = '❗Please enter both email and password';
       }
     } catch (err) {
       res = res.toString();
+      Get.snackbar(
+        'Error Message',
+        err.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
     return res;
   }
