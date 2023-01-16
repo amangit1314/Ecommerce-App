@@ -18,7 +18,7 @@ class SplashContent extends StatelessWidget {
       children: [
         const Spacer(),
         Text(
-          "Raj MART",
+          "Soni Store",
           style: TextStyle(
             fontSize: getProportionateScreenWidth(36),
             color: kPrimaryColor,
