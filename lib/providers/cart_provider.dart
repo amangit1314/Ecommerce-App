@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:soni_store_app/models/cart_model.dart';
 
 class CartProvider with ChangeNotifier {
+  // list of getter cartItems responsible for all cart items
+  List<Cart> cartItems = [];
+
   String _name = '';
   String _price = '';
   String _description = '';
@@ -12,6 +16,7 @@ class CartProvider with ChangeNotifier {
   String get description => _description;
   String get category => _category;
   String get image => _image;
+  int get length => cartItems.length;
 
   changeName(String newName) {
     _name = newName;
@@ -35,6 +40,12 @@ class CartProvider with ChangeNotifier {
 
   changeImage(String newImage) {
     _image = newImage;
+    notifyListeners();
+  }
+
+  // add cart to cartItems
+  void addCart(Cart cart) {
+    cartItems.add(cart);
     notifyListeners();
   }
 }

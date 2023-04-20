@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:soni_store_app/screens/profile/profile_screen.dart';
+import 'package:soni_store_app/screens/recent/recents.dart';
+import 'package:soni_store_app/screens/shipment/shipment_screen.dart';
 
 import '../screens/home/home_screen.dart';
+import '../screens/profile/profile_screen.dart';
 import '../utils/constatns.dart';
 import '../utils/enums.dart';
 
@@ -48,26 +51,29 @@ class CustomBottomNavBar extends StatelessWidget {
               onPressed: () => Get.to(const HomeScreen()),
             ),
             IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/Heart Icon.svg",
-                color: MenuState.profile == selectedMenu
+              icon: FaIcon(
+                FontAwesomeIcons.truckFast,
+                // "assets/icons/Chat bubble Icon.svg",
+                color: MenuState.shipment == selectedMenu
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () {},
+              onPressed: () => Get.to(const ShipmentScreen()),
             ),
             IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/Chat bubble Icon.svg",
-                color: MenuState.profile == selectedMenu
+              icon: FaIcon(
+                FontAwesomeIcons.wallet,
+                // "assets/icons/Chat bubble Icon.svg",
+                color: MenuState.wallet == selectedMenu
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () {},
+              onPressed: () => Get.to(const RecentsScreen()),
             ),
             IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/User Icon.svg",
+              icon: FaIcon(
+                FontAwesomeIcons.circleUser,
+                // "assets/icons/Chat bubble Icon.svg",
                 color: MenuState.profile == selectedMenu
                     ? kPrimaryColor
                     : inActiveIconColor,

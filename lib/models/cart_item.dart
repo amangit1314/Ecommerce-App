@@ -6,7 +6,6 @@ class CartItem {
   final String productUrl;
   final String productName;
   final bool isInCart;
-  final String productDescription;
 
   const CartItem({
     this.isInCart = false,
@@ -14,14 +13,12 @@ class CartItem {
     required this.uid,
     required this.productUrl,
     required this.productName,
-    required this.productDescription,
   });
 
   Map<String, dynamic> toJson() => {
         'uid': uid,
         'productUrl': productUrl,
         'productName': productName,
-        'productDescription': productDescription,
         'isInCart': isInCart,
         'price': price,
       };
@@ -34,7 +31,6 @@ class CartItem {
       uid: snapshot['uid'] as String,
       productUrl: snapshot['productUrl'] as String,
       price: snapshot['price'] as String,
-      productDescription: snapshot['productDescription'] as String,
     );
   }
 }

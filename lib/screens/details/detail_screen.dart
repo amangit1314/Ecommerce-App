@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../models/product_name.dart';
+import 'components/body.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({Key? key}) : super(key: key);
+  final Product product;
+  const DetailsScreen({Key? key, required this.product}) : super(key: key);
   static String routeName = "/details";
 
   @override
@@ -14,10 +16,10 @@ class DetailsScreen extends StatelessWidget {
     //   //   message: args.message,
     //   // );
     // });
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
       // appBar: CustomAppBar(rating: agrs.product.rating),
-      // body: Body(product: agrs.product),
+      body: Body(product: product),
     );
   }
 }

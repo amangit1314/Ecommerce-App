@@ -1,4 +1,6 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/ecommerce.dart';
 import 'package:soni_store_app/firebase_options.dart';
@@ -9,5 +11,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const EcommerceApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => EcommerceApp(), // Wrap your app
+    ),
+  );
 }

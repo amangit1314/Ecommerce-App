@@ -25,7 +25,7 @@ class IconBtnWithCounter extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: EdgeInsets.all(getProportionateScreenWidth(12)),
+            padding: EdgeInsets.all(getProportionateScreenWidth(14)),
             height: getProportionateScreenWidth(46),
             width: getProportionateScreenWidth(46),
             decoration: BoxDecoration(
@@ -39,21 +39,25 @@ class IconBtnWithCounter extends StatelessWidget {
               top: -3,
               right: 0,
               child: Container(
-                height: getProportionateScreenWidth(16),
-                width: getProportionateScreenWidth(16),
+                padding: const EdgeInsets.all(2),
+                height: getProportionateScreenWidth(18),
+                width: getProportionateScreenWidth(18),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFF4848),
                   shape: BoxShape.circle,
                   border: Border.all(width: 1.5, color: Colors.white),
                 ),
-                child: Center(
-                  child: Text(
-                    "$numOfitem",
-                    style: TextStyle(
-                      fontSize: getProportionateScreenWidth(10),
-                      height: 1,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Center(
+                    child: Text(
+                      "$numOfitem",
+                      style: TextStyle(
+                        fontSize: getProportionateScreenWidth(10),
+                        height: 1,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
-const kPrimaryColor = Color(0xFFFF7643);
+// const kPrimaryColor = Color(0xFFFF7643);
+const kPrimaryColor = Colors.pinkAccent;
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,

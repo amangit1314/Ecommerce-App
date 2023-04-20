@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/details/detail_screen.dart';
 import 'package:soni_store_app/screens/home/components/section_tile.dart';
 
 import '../../../components/product_card.dart';
 import '../../../resources/data/static_data.dart';
 import '../../../utils/size_config.dart';
+import '../../details/detail_screen.dart';
 
-class PopularProducts extends StatelessWidget {
-  const PopularProducts({Key? key}) : super(key: key);
+class RecentlyViewed extends StatelessWidget {
+  const RecentlyViewed({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class PopularProducts extends StatelessWidget {
         Padding(
           padding:
               EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SectionTitle(title: "Popular Products", press: () {}),
+          child: SectionTitle(title: "Recently Viewed", press: () {}),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
         SingleChildScrollView(
@@ -40,8 +40,8 @@ class PopularProducts extends StatelessWidget {
                           );
                         },
                         child: ProductCard(
-                          productImage: demoProducts[index].images[0],
                           color: demoProducts[index].colors[1],
+                          productImage: demoProducts[index].images[0],
                         ),
                       );
                     }

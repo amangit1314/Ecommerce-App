@@ -41,7 +41,10 @@ class RoundedIconBtn extends StatelessWidget {
       child: TextButton(
         style: flatButtonStyle,
         onPressed: press,
-        child: Icon(icon),
+        child: Icon(
+          icon,
+          color: Colors.deepOrangeAccent,
+        ),
       ),
     );
   }

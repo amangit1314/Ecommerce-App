@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/cart_model.dart';
 import 'package:soni_store_app/screens/cart/components/body.dart';
 import 'package:soni_store_app/screens/cart/components/check_out_cart.dart';
+
+import '../../resources/data/static_data.dart';
 
 class CartScreen extends StatelessWidget {
   static String routeName = "/cart";
@@ -30,7 +31,7 @@ class CartScreen extends StatelessWidget {
           ),
           Text(
             "${demoCarts.length} items",
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),

@@ -29,14 +29,12 @@ class FirestoreMethods {
       // creates unique id based on time
       String productId = const Uuid().v1();
       CartItem cartItem = CartItem(
-        productDescription: description,
         uid: productId,
         productName: itemName,
         price: price,
-        // datePublished: DateTime.now(),
         productUrl: photoUrl,
       );
-      _firestore.collection('cart_items').doc(productId).set(cartItem.toJson());
+      _firestore.collection('user').doc(productId).set(cartItem.toJson());
       res = "success";
     } catch (err) {
       res = err.toString();
