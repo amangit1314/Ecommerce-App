@@ -79,9 +79,6 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
                         ),
                       ),
                     ),
-                    // Flexible(
-                    //   child: CustomScrollView(slivers: []),
-                    // ),
                   ],
                 ),
               ),

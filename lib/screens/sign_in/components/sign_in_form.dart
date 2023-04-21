@@ -42,10 +42,10 @@ class _SignFormState extends State<SignForm> {
     }
   }
 
-  void loginUser() {
+  void loginUser() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      AuthMethods()
+      await AuthMethods()
           .loginUser(
               context: context,
               email: emailController.text,

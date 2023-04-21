@@ -23,7 +23,9 @@ class Body extends StatelessWidget {
                 ProfileMenu(
                   text: "My Account",
                   icon: "assets/icons/User Icon.svg",
-                  press: () => {},
+                  press: () => {
+                    // to edit mobile and name
+                  },
                 ),
                 ProfileMenu(
                   text: "My Orders",
@@ -33,7 +35,9 @@ class Body extends StatelessWidget {
                 ProfileMenu(
                   text: "Notifications",
                   icon: "assets/icons/Bell.svg",
-                  press: () {},
+                  press: () {
+                    // navigate to notification screen
+                  },
                 ),
                 ProfileMenu(
                   text: "Settings",

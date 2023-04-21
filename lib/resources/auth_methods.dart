@@ -3,10 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
 import '../models/user.dart' as model;
-import '../screens/login_success/login_success_screen.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -45,13 +43,8 @@ class AuthMethods {
             .collection('users')
             .doc(cred.user!.uid)
             .set(user.toJson());
-        res = 'success';
 
-        Navigator.of(context!).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => const SignInScreen(),
-          ),
-        );
+        res = 'success';
       }
     } on FirebaseAuthException catch (err) {
       if (err.code == 'invalid-email') {
@@ -73,9 +66,7 @@ class AuthMethods {
   }
 
   Future<String> loginUser(
-      {required BuildContext context,
-      required email,
-      required password}) async {
+      {BuildContext? context, required email, required password}) async {
     String res = "❓error occured";
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
@@ -88,14 +79,7 @@ class AuthMethods {
           FirebaseFirestore.instance
               .collection('users')
               .doc(value.user!.uid)
-              .get()
-              .then((value) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (_) => const LoginSuccessScreen(),
-              ),
-            );
-          });
+              .get();
         });
         res = 'success';
       } else {

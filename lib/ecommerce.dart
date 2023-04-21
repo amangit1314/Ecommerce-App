@@ -1,10 +1,12 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
 import 'package:soni_store_app/screens/home/home_screen.dart';
+import 'package:soni_store_app/screens/splash/splash_screen.dart';
 
 class EcommerceApp extends StatefulWidget {
   const EcommerceApp({Key? key}) : super(key: key);
@@ -29,12 +31,27 @@ class _EcommerceAppState extends State<EcommerceApp> {
         useInheritedMediaQuery: true,
         locale: DevicePreview.locale(context),
         builder: DevicePreview.appBuilder,
+        // themeMode: ThemeMode.dark,
+        // darkTheme: ThemeData.dark(),
         theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
           primarySwatch: Colors.pink,
-          // fontFamily: 'Muli',
         ),
-        home: const HomeScreen(),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (BuildContext context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.hasData) {
+                return const HomeScreen();
+              }
+              return const SplashScreen();
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return const SplashScreen();
+          },
+        ),
       ),
     );
   }

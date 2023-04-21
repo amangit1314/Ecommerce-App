@@ -42,29 +42,32 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  void register() {
+  void register() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      AuthMethods()
+
+      await AuthMethods()
           .registerUser(
         email: emailController.text,
         password: passwordController.text,
-        username: emailController.text.trim(),
+        username: emailController.text.substring(6),
       )
-          .then((result) {
-        if (result == 'success') {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => const SignInScreen(),
-              ),
-              (route) => false);
-          const GetSnackBar(
-            message: "Registration is successful 🎉",
-            backgroundColor: Color.fromARGB(255, 120, 255, 125),
-          );
-        }
-        GetSnackBar(message: result.toString());
-      });
+          .then(
+        (result) {
+          if (result == 'success') {
+            const GetSnackBar(
+              message: "Registration is successful 🎉",
+              backgroundColor: Color.fromARGB(255, 120, 255, 125),
+            );
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const SignInScreen(),
+                ),
+                (route) => false);
+          }
+          GetSnackBar(message: result.toString());
+        },
+      );
     }
   }
 

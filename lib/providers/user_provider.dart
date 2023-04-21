@@ -13,4 +13,20 @@ class UserProvider with ChangeNotifier {
     _user = user;
     notifyListeners();
   }
+
+  // register user with email and password with optional mobile
+  Future registerUser(
+      {required String email, required String password, String? mobile}) async {
+    return await _authMethods.registerUser(
+      username: email.substring(5),
+      email: email,
+      password: password,
+    );
+  }
+
+  // authenticate with email and password
+  Future authenticateUser(
+      {required String email, required String password}) async {
+    return await _authMethods.loginUser(email: email, password: password);
+  }
 }
