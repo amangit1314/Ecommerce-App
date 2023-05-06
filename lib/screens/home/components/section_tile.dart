@@ -20,8 +20,9 @@ class SectionTitle extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: getProportionateScreenWidth(18),
+            fontSize: getProportionateScreenWidth(16),
             color: Colors.black,
+            fontWeight: FontWeight.w600,
           ),
         ),
         GestureDetector(

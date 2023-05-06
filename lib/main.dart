@@ -14,7 +14,7 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (context) => EcommerceApp(), // Wrap your app
+      builder: (context) => const EcommerceApp(), // Wrap your app
     ),
   );
 }

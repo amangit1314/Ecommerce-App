@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/screens/home/components/icon_btn_with_counter.dart';
-import 'package:soni_store_app/screens/home/components/search_field.dart';
+import 'package:soni_store_app/screens/home/home_screen.dart';
 import 'package:soni_store_app/screens/notification/notification_screen.dart';
 
+import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 import '../../cart/cart_screen.dart';
 
@@ -19,29 +20,55 @@ class HomeHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SearchField(),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/Cart Icon.svg",
-            press: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) {
-                  return const CartScreen();
-                },
-              ),
-            ),
+          Text(
+            "SnapCart",
+            style: TextStyle(
+                fontSize: getProportionateScreenWidth(18),
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold),
           ),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/Bell.svg",
-            numOfitem: 3,
-            press: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) {
-                  return const NotificationScreen();
-                },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              // const SearchField(),
+              IconBtnWithCounter(
+                svgSrc: "assets/icons/Search Icon.svg",
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      // return const CartScreen();
+                      return const HomeScreen();
+                    },
+                  ),
+                ),
               ),
-            ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              IconBtnWithCounter(
+                svgSrc: "assets/icons/Cart Icon.svg",
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const CartScreen();
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              IconBtnWithCounter(
+                svgSrc: "assets/icons/Bell.svg",
+                numOfitem: 3,
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const NotificationScreen();
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

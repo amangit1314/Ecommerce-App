@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:soni_store_app/screens/home/components/section_tile.dart';
 
+import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
 class Categories extends StatelessWidget {
@@ -17,17 +19,23 @@ class Categories extends StatelessWidget {
     ];
     return Padding(
       padding: EdgeInsets.all(getProportionateScreenWidth(20)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(
-          categories.length,
-          (index) => CategoryCard(
-            icon: categories[index]["icon"],
-            text: categories[index]["text"],
-            press: () {},
+      child: Column(
+        children: [
+          SectionTitle(title: 'Upcoming Features', press: () {}),
+          SizedBox(height: getProportionateScreenWidth(20)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(
+              categories.length,
+              (index) => CategoryCard(
+                icon: categories[index]["icon"],
+                text: categories[index]["text"],
+                press: () {},
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -58,7 +66,7 @@ class CategoryCard extends StatelessWidget {
               width: getProportionateScreenWidth(55),
               decoration: BoxDecoration(
                 // color: const Color(0xFFFFECDF),
-                color: Colors.deepPurpleAccent.withOpacity(.3),
+                color: kPrimaryColor.withOpacity(.3),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon),

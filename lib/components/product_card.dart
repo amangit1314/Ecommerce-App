@@ -23,11 +23,11 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8),
-      margin: EdgeInsets.only(right: 20),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
-        // color: kPrimaryColor.withOpacity(.1),
-        color: Colors.white,
+        color: kPrimaryColor.withOpacity(.1),
+        // color: Colors.white,
         borderRadius: BorderRadius.circular(15),
       ),
       width: width,
@@ -51,26 +51,26 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 productName,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
               // const SizedBox(width: 6),
-              Spacer(),
+              const Spacer(),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
                   height: 40,
                   width: 40,
                   color: kPrimaryColor.withOpacity(0.1),
-                  child: Icon(
+                  child: const Icon(
                     Icons.shopping_bag_outlined,
                     // addedToCart!
                     //     ? Icons.shopping_bag
@@ -86,7 +86,7 @@ class ProductCard extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
             child: Text(
               productDesc,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 color: kTextColor,
                 fontWeight: FontWeight.w400,
