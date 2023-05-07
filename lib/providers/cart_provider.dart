@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:soni_store_app/models/cart_model.dart';
+import 'package:soni_store_app/models/cart.dart';
 
 class CartProvider with ChangeNotifier {
   // list of getter cartItems responsible for all cart items

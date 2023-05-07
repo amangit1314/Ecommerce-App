@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:soni_store_app/models/category.dart';
 
 class Product {
   final int id;
@@ -9,8 +10,10 @@ class Product {
   final List<Color> colors;
   final double rating, price;
   final bool isFavourite, isPopular;
+  final List<Category> categories;
 
   Product({
+    required this.categories,
     required this.id,
     required this.images,
     required this.colors,
@@ -21,18 +24,6 @@ class Product {
     required this.price,
     required this.description,
   });
-
-  // Map<String, dynamic> toJson() => {
-  //       'id': id,
-  //       'images': images,
-  //       'colors': colors,
-  //       'title': title,
-  //       'price': price,
-  //       'description': description,
-  //       'rating': rating,
-  //       'isFavourite': isFavourite,
-  //       'isPopular': isPopular,
-  //     };
 
   static Product fromSnapshot(productData) {
     return Product(
@@ -45,6 +36,7 @@ class Product {
       rating: productData['rating'],
       isFavourite: productData['isFavourite'],
       isPopular: productData['isPopular'],
+      categories: productData['categories'],
     );
   }
 
@@ -56,11 +48,13 @@ class Product {
       'colors': colors.map((x) => x.value).toList(),
       'price': price,
       'isPopular': isPopular,
+      'categories': categories,
     };
   }
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
+      categories: map['categories']?.map((x) => Category.fromMap(x)).toList(),
       id: map['id']?.toInt() ?? 0,
       title: map['title']?.toString() ?? '',
       description: map['description']?.toString() ?? '',
@@ -76,5 +70,3 @@ class Product {
   factory Product.fromJson(String source) =>
       Product.fromMap(json.decode(source));
 }
-
-// Our demo Products

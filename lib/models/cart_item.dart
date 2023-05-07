@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
 class CartItem {
   final String price;
@@ -15,7 +15,7 @@ class CartItem {
     required this.productName,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'uid': uid,
         'productUrl': productUrl,
         'productName': productName,
@@ -23,14 +23,17 @@ class CartItem {
         'price': price,
       };
 
-  static CartItem fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+  static CartItem fromMap(Map<String, dynamic> map) {
     return CartItem(
-      isInCart: snapshot['isInCart'] as bool,
-      productName: snapshot['productName'] as String,
-      uid: snapshot['uid'] as String,
-      productUrl: snapshot['productUrl'] as String,
-      price: snapshot['price'] as String,
+      isInCart: map['isInCart'] as bool,
+      productName: map['productName'] as String,
+      uid: map['uid'] as String,
+      productUrl: map['productUrl'] as String,
+      price: map['price'] as String,
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  static CartItem fromJson(String source) => fromMap(json.decode(source));
 }

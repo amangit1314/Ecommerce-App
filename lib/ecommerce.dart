@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,9 +27,9 @@ class _EcommerceAppState extends State<EcommerceApp> {
       child: GetMaterialApp(
         title: 'SnapCart Ecommerce App',
         debugShowCheckedModeBanner: false,
-        useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
+        // useInheritedMediaQuery: true,
+        // locale: DevicePreview.locale(context),
+        // builder: DevicePreview.appBuilder,
         // themeMode: ThemeMode.dark,
         // darkTheme: ThemeData.dark(),
         theme: ThemeData(

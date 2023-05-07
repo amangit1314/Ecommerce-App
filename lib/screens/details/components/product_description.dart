@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../models/product_name.dart';
+import '../../../models/product.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
@@ -25,7 +25,7 @@ class ProductDescription extends StatelessWidget {
               EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
           child: Text(
             product.title,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         Align(

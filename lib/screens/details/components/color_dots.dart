@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/rounded_icon_button.dart';
-import '../../../models/product_name.dart';
+import '../../../models/product.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 

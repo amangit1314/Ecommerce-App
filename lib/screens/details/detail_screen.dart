@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/product_name.dart';
+import '../../models/product.dart';
 import 'components/body.dart';
 
 class DetailsScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class DetailsScreen extends StatelessWidget {
     //   // );
     // });
     return Scaffold(
-      backgroundColor: Color(0xFFF5F6F9),
+      backgroundColor: const Color(0xFFF5F6F9),
       // appBar: CustomAppBar(rating: agrs.product.rating),
       body: Body(product: product),
     );

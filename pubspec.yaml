@@ -16,7 +16,8 @@ dependencies:
   firebase_storage: ^11.0.9
   flutter:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_stripe: ^9.2.0
   flutter_svg: ^2.0.5
   font_awesome_flutter: ^10.4.0
   get: ^4.6.1
@@ -37,10 +38,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-flutter_icons:
+# flutter_icons:
+#   android: "launcher_icon"
+#   ios: true
+#   image_path: "assets/logo-color.png"
+
+flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/logo-color.png"
+  image_path: "assets/icons/white_new_logo.png"
+  min_sdk_android: 21
 
 flutter:
   uses-material-design: true

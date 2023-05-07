@@ -17,7 +17,12 @@ class Body extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: screenHeight * 0.04),
+              // show white_new_logo
+              SizedBox(
+                height: screenHeight * 0.08,
+                child: Image.asset("assets/icons/white_new_logo.png"),
+              ),
+              SizedBox(height: screenHeight * 0.02),
               const Text(
                 "Welcome Back",
                 style: TextStyle(
@@ -28,11 +33,12 @@ class Body extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const Text(
-                "Sign in with your email and password  \nor continue with social media",
+                "Sign in with your email and password",
+                // \nor continue with social media
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black54),
               ),
-              SizedBox(height: screenHeight * 0.07),
+              SizedBox(height: screenHeight * 0.05),
               const Padding(
                 padding: EdgeInsets.only(left: 18.0, right: 18.0),
                 child: SignForm(),

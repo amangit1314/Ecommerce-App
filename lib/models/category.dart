@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:soni_store_app/models/product_name.dart';
+import 'package:soni_store_app/models/product.dart';
 
 class Category {
   final int name;

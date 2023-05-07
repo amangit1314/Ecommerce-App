@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +8,9 @@ import 'package:get/get.dart';
 import 'package:soni_store_app/models/cart_item.dart';
 import 'package:soni_store_app/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
+
+import '../models/product.dart';
+import '../models/user.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -34,7 +39,7 @@ class FirestoreMethods {
         price: price,
         productUrl: photoUrl,
       );
-      _firestore.collection('user').doc(productId).set(cartItem.toJson());
+      _firestore.collection('user').doc(productId).set(cartItem.toMap());
       res = "success";
     } catch (err) {
       res = err.toString();
@@ -62,26 +67,40 @@ class FirestoreMethods {
   }
 
   // get product from firestore from users collection and cart_items sub collection
-  Future<List<CartItem>> getCartItems(String uid) async {
-    List<CartItem> cartItems = [];
+  Future<List<Product>> getProductsFromFirestore(String userId) async {
+    List<Product> products = [];
+
     try {
-      QuerySnapshot snapshot = await _firestore
-          .collection('cart_items')
-          .where('uid', isEqualTo: uid)
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
           .get();
-      for (var doc in snapshot.docs) {
-        cartItems.add(CartItem.fromSnap(doc));
+
+      User user = User.fromMap(userSnapshot);
+
+      QuerySnapshot cartItemsSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('cart_items')
+          .get();
+
+      List<CartItem> cartItems = cartItemsSnapshot.docs
+          .map((doc) => CartItem.fromMap(doc as Map<String, dynamic>))
+          .toList();
+
+      for (CartItem cartItem in cartItems) {
+        DocumentSnapshot<Map<String, dynamic>> productSnapshot =
+            await FirebaseFirestore.instance.doc(cartItem.productUrl).get();
+
+        Product product = Product.fromMap(productSnapshot.data()!);
+
+        products.add(product);
       }
-    } catch (err) {
-      Get.snackbar(
-        'Error Message',
-        err.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+    } catch (e) {
+      print('Error getting products from Firestore: $e');
     }
-    return cartItems;
+
+    return products;
   }
 
   // edit or addaddress to firebase firestore

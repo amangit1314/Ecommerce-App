@@ -291,6 +291,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.14"
+  flutter_stripe:
+    dependency: "direct main"
+    description:
+      name: flutter_stripe
+      sha256: "51c3ab5f7a705d864d719eb13882abbb3964c4f61983a13af6dc56607537b1e4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.2.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -794,6 +802,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  stripe_android:
+    dependency: transitive
+    description:
+      name: stripe_android
+      sha256: "89c6c9a9e6fbe6eea4b15b6c0eb012490155c37a6b4298851f77987fde4fee43"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.2.0"
+  stripe_ios:
+    dependency: transitive
+    description:
+      name: stripe_ios
+      sha256: "74f4871c2f5bc6585057f4311be98b6fcdde5b2b14069c7b556163d032a7521f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.2.0"
+  stripe_platform_interface:
+    dependency: transitive
+    description:
+      name: stripe_platform_interface
+      sha256: c1e90deb6e9939181f0fbc39b4f81c2e640b1b9fe4b3586ff84af7e8c46df2e4
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.2.0"
   term_glyph:
     dependency: transitive
     description:

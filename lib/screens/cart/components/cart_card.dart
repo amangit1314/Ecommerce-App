@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/cart_model.dart';
+import 'package:soni_store_app/models/cart.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../utils/constatns.dart';
@@ -26,7 +26,7 @@ class CartCard extends StatelessWidget {
                 color: const Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Image.asset(cart.product.images[0]),
+              child: Image.asset(cart.products.images[0]),
             ),
           ),
         ),
@@ -35,20 +35,20 @@ class CartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              cart.product.title,
+              cart.products.title,
               style: const TextStyle(color: Colors.black, fontSize: 16),
               maxLines: 2,
             ),
             const SizedBox(height: 10),
             Text.rich(
               TextSpan(
-                text: "\$${cart.product.price}",
+                text: "\$${cart.products.price}",
                 style: const TextStyle(
                     fontWeight: FontWeight.w600, color: kPrimaryColor),
                 children: [
                   TextSpan(
-                    text: " x${cart.numOfItem}",
-                    style: Theme.of(context).textTheme.bodyText1,
+                    text: " x${cart.numOfItems}",
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
               ),

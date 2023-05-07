@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/cart_model.dart';
-import '../../models/product_name.dart';
+import '../../models/cart.dart';
+import '../../models/product.dart';
+import '../../models/user.dart';
 
 List<Product> demoProducts = [
   Product(
@@ -18,6 +19,7 @@ List<Product> demoProducts = [
       const Color(0xFFDECB9C),
       Colors.white,
     ],
+    categories: [],
     title: "Wireless Controller for PS4™",
     price: 64.99,
     description: description,
@@ -36,6 +38,7 @@ List<Product> demoProducts = [
       const Color(0xFFDECB9C),
       Colors.white,
     ],
+    categories: [],
     title: "Nike Sport White - Man Pant",
     price: 50.5,
     description: description,
@@ -53,6 +56,7 @@ List<Product> demoProducts = [
       const Color(0xFFDECB9C),
       Colors.white,
     ],
+    categories: [],
     title: "Gloves XC Omega - Polygon",
     price: 36.55,
     description: description,
@@ -71,6 +75,7 @@ List<Product> demoProducts = [
       const Color(0xFFDECB9C),
       Colors.white,
     ],
+    categories: [],
     title: "Logitech Head",
     price: 20.20,
     description: description,
@@ -83,8 +88,44 @@ const String description =
     "Wireless Controller for PS4™ gives you what you want in your gaming from over precision control your games to sharing …";
 
 List<Cart> demoCarts = [
-  Cart(product: demoProducts[0], numOfItem: 2),
-  Cart(product: demoProducts[2], numOfItem: 1),
-  Cart(product: demoProducts[1], numOfItem: 1),
-  Cart(product: demoProducts[3], numOfItem: 1),
+  Cart(
+    id: 1,
+    products: demoProducts[2],
+    user: const User(
+      [],
+      username: 'John Doe',
+      email: '',
+    ), // Provide a User object here    products: demoProducts[0],
+    numOfItems: 2,
+  ),
+  Cart(
+    id: 2,
+    user: const User(
+      [],
+      username: 'John Doe',
+      email: '',
+    ),
+    products: demoProducts[2],
+    numOfItems: 1,
+  ),
+  Cart(
+    id: 3,
+    user: const User(
+      [],
+      username: 'John Doe',
+      email: '',
+    ), // Provide a User object here
+    products: demoProducts[1],
+    numOfItems: 1,
+  ),
+  Cart(
+    id: 4,
+    user: const User(
+      [],
+      username: 'John Doe',
+      email: '',
+    ), // Provide a User object here
+    products: demoProducts[3],
+    numOfItems: 1,
+  ),
 ];

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/product_name.dart';
+import '../../../models/product.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 import '../../splash/comonents/dot_indicator.dart';
@@ -75,8 +75,8 @@ class _ProductImagesState extends State<ProductImages> {
       },
       child: AnimatedContainer(
         duration: defaultDuration,
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.all(8),
+        margin: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.all(8),
         height: getProportionateScreenWidth(48),
         width: getProportionateScreenWidth(48),
         decoration: BoxDecoration(

@@ -5,7 +5,7 @@ import 'package:soni_store_app/screens/details/components/product_images.dart';
 import 'package:soni_store_app/screens/details/components/top_rounded_container.dart';
 
 import '../../../components/default_button.dart';
-import '../../../models/product_name.dart';
+import '../../../models/product.dart';
 import '../../../utils/size_config.dart';
 
 class Body extends StatelessWidget {

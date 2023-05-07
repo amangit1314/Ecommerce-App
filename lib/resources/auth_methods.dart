@@ -14,7 +14,7 @@ class AuthMethods {
     User currentUser = _auth.currentUser!;
     final DocumentSnapshot snap =
         await _firestore.collection('users').doc(currentUser.uid).get();
-    return model.User.fromSnap(snap);
+    return model.User.fromMap(snap);
   }
 
   Future<String> registerUser({
@@ -33,6 +33,7 @@ class AuthMethods {
         );
 
         model.User user = model.User(
+          [],
           email: email,
           username: username,
           uid: cred.user!.uid,
@@ -42,7 +43,7 @@ class AuthMethods {
         await _firestore
             .collection('users')
             .doc(cred.user!.uid)
-            .set(user.toJson());
+            .set(user.toMap());
 
         res = 'success';
       }
