@@ -116,4 +116,37 @@ class AuthMethods {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  // update displayName
+  Future updateUserDetails({required String displayName}) async {
+    User? currentUser = _auth.currentUser;
+    await currentUser!.updateDisplayName(displayName);
+  }
+
+  // update number
+  Future updateUserNumber({required String number}) async {
+    User? currentUser = _auth.currentUser;
+    await currentUser!.updatePhoneNumber(
+        PhoneAuthProvider.credential(verificationId: '', smsCode: number));
+  }
+
+  // update email
+  Future updateUserEmail({required String email}) async {
+    User? currentUser = _auth.currentUser;
+    await currentUser!.updateEmail(email);
+  }
+
+  // update password
+  Future updateUserPassword({required String password}) async {
+    User? currentUser = _auth.currentUser;
+    await currentUser!.updatePassword(password);
+  }
+
+  // change pic
+  Future updateUserPic({required String photoURL}) async {
+    User? currentUser = _auth.currentUser;
+    await currentUser!.updatePhotoURL(photoURL);
+  }
+
+  // update address
 }

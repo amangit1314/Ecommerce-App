@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/resources/auth_methods.dart';
+import 'package:soni_store_app/screens/profile/components/my_account.dart';
 import 'package:soni_store_app/screens/splash/splash_screen.dart';
 
 import 'profile_menu.dart';
-import 'profile_pic.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -24,14 +24,13 @@ class Body extends StatelessWidget {
                   text: "My Account",
                   icon: "assets/icons/User Icon.svg",
                   press: () => {
-                    // to edit mobile and name
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MyAccount(),
+                      ),
+                    ),
                   },
                 ),
-                // ProfileMenu(
-                //   text: "My Orders",
-                //   icon: "assets/icons/Shop Icon.svg",
-                //   press: () => {},
-                // ),
                 ProfileMenu(
                   text: "Notifications",
                   icon: "assets/icons/Bell.svg",
@@ -50,16 +49,18 @@ class Body extends StatelessWidget {
                   press: () {},
                 ),
                 ProfileMenu(
-                    text: "Log Out",
-                    icon: "assets/icons/Log out.svg",
-                    press: () {
-                      AuthMethods().signOut();
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const SplashScreen(),
-                          ),
-                          (route) => false);
-                    }),
+                  text: "Log Out",
+                  icon: "assets/icons/Log out.svg",
+                  press: () {
+                    AuthMethods().signOut();
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const SplashScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  },
+                ),
               ],
             ),
           ],
