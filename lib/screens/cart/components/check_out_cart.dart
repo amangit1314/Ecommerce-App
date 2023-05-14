@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:soni_store_app/providers/cart_provider.dart';
 import 'package:soni_store_app/utils/constants.dart';
 
 import '../../../components/default_button.dart';
@@ -60,29 +62,37 @@ class CheckoutCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text.rich(
-                  TextSpan(
-                    text: "Total:\n",
-                    children: [
-                      TextSpan(
-                        text: "\$337.15",
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                    ],
+            Consumer<CartProvider>(builder: (context, cartProvider, _) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      text: "Total:\n",
+                      children: [
+                        TextSpan(
+                          text: "\$ ${cartProvider.totalPrice}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: getProportionateScreenWidth(190),
-                  child: DefaultButton(
-                    text: "Check Out",
-                    press: () {},
+                  SizedBox(
+                    width: getProportionateScreenWidth(190),
+                    child: DefaultButton(
+                      btnColor: kPrimaryColor,
+                      txtColor: Colors.white,
+                      text: "Check Out",
+                      press: () {},
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            }),
           ],
         ),
       ),

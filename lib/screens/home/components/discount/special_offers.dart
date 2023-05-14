@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/home/components/section_tile.dart';
 
-import '../../../utils/size_config.dart';
+import '../../../../components/section_tile.dart';
+import '../../../../utils/size_config.dart';
 
 class SpecialOffers extends StatelessWidget {
   const SpecialOffers({

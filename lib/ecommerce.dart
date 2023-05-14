@@ -34,7 +34,7 @@ class _EcommerceAppState extends State<EcommerceApp> {
         // darkTheme: ThemeData.dark(),
         theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-          primarySwatch: Colors.pink,
+          primarySwatch: Colors.deepOrange,
         ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),

@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/home/components/section_tile.dart';
+import 'package:provider/provider.dart';
+import 'package:soni_store_app/providers/cart_provider.dart';
+import 'package:soni_store_app/screens/details/detail_screen.dart';
 
-import '../../../components/product_card.dart';
-import '../../../resources/data/static_data.dart';
-import '../../../utils/size_config.dart';
-import '../../details/detail_screen.dart';
+import '../../../../components/product_card.dart';
+import '../../../../components/section_tile.dart';
+import '../../../../resources/data/static_data.dart';
+import '../../../../utils/size_config.dart';
 
-class RecentlyViewed extends StatelessWidget {
-  const RecentlyViewed({super.key});
+class PopularProducts extends StatelessWidget {
+  const PopularProducts({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return Column(
       children: [
         Padding(
           padding:
               EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SectionTitle(title: "Recently Viewed", press: () {}),
+          child: SectionTitle(title: "Popular Products", press: () {}),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
         SingleChildScrollView(
@@ -40,8 +43,13 @@ class RecentlyViewed extends StatelessWidget {
                           );
                         },
                         child: ProductCard(
-                          color: demoProducts[index].colors[1],
+                          price: '',
+                          onTap: () {
+                            cartProvider.addItemCart(demoProducts[index]);
+                            cartProvider.changeIsInCart(true);
+                          },
                           productImage: demoProducts[index].images[0],
+                          color: demoProducts[index].colors[1],
                         ),
                       );
                     }

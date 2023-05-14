@@ -18,7 +18,7 @@ class _BodyState extends State<Body> {
   int currentPage = 0;
   List<Splash> splashData = [
     Splash(
-        text: "Welcome to Soni Store, Let’s shop!",
+        text: "Welcome to Snap Cart, Let’s shop!",
         image: "assets/images/splash_1.png"),
     Splash(
         text: "We help people conect with store \naround Rajasthan India",

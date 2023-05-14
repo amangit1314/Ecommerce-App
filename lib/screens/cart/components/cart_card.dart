@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/cart.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
+import '../../../models/product.dart';
 import '../../../utils/constatns.dart';
 
 class CartCard extends StatelessWidget {
@@ -10,7 +10,7 @@ class CartCard extends StatelessWidget {
     required this.cart,
   }) : super(key: key);
 
-  final Cart cart;
+  final Product cart;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class CartCard extends StatelessWidget {
                 color: const Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Image.asset(cart.products.images[0]),
+              child: Image.asset(cart.images[0]),
             ),
           ),
         ),
@@ -35,19 +35,20 @@ class CartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              cart.products.title,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
+              cart.title.substring(0, cart.title.length - 4),
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(color: Colors.black, fontSize: 14),
               maxLines: 2,
             ),
             const SizedBox(height: 10),
             Text.rich(
               TextSpan(
-                text: "\$${cart.products.price}",
+                text: "\$${cart.price}",
                 style: const TextStyle(
                     fontWeight: FontWeight.w600, color: kPrimaryColor),
                 children: [
                   TextSpan(
-                    text: " x${cart.numOfItems}",
+                    text: " x 2",
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],

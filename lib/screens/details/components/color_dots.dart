@@ -34,7 +34,9 @@ class ColorDots extends StatelessWidget {
             icon: Icons.remove,
             press: () {},
           ),
-          SizedBox(width: getProportionateScreenWidth(20)),
+          SizedBox(width: getProportionateScreenWidth(8)),
+          const Text('2'),
+          SizedBox(width: getProportionateScreenWidth(8)),
           RoundedIconBtn(
             icon: Icons.add,
             showShadow: true,
@@ -60,9 +62,9 @@ class ColorDot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(right: 2),
-      padding: EdgeInsets.all(getProportionateScreenWidth(8)),
-      height: getProportionateScreenWidth(40),
-      width: getProportionateScreenWidth(40),
+      padding: EdgeInsets.all(getProportionateScreenWidth(4)),
+      height: getProportionateScreenWidth(30),
+      width: getProportionateScreenWidth(30),
       decoration: BoxDecoration(
         color: Colors.transparent,
         border:
