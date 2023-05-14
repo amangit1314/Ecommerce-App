@@ -6,7 +6,7 @@ class UserProvider with ChangeNotifier {
   User? _user;
   final AuthMethods _authMethods = AuthMethods();
 
-  User get getUser => _user!;
+  User? get getUser => _user;
 
   Future<void> refreshUser() async {
     User user = (await _authMethods.getUserDetails()) as User;
@@ -28,5 +28,25 @@ class UserProvider with ChangeNotifier {
   Future authenticateUser(
       {required String email, required String password}) async {
     return await _authMethods.loginUser(email: email, password: password);
+  }
+
+  // update displayName
+  Future updateUserDetails({required String displayName}) async {
+    return await _authMethods.updateUserDetails(displayName: displayName);
+  }
+
+  // update email
+  Future updateUserEmail({required String email}) async {
+    return await _authMethods.updateUserEmail(email: email);
+  }
+
+  // update number
+  Future updateUserNumber({required String number}) async {
+    return await _authMethods.updateUserNumber(number: number);
+  }
+
+  // update password
+  Future updateUserPassword({required String password}) async {
+    return await _authMethods.updateUserPassword(password: password);
   }
 }
