@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:soni_store_app/providers/cart_provider.dart';
 import 'package:soni_store_app/screens/cart/components/body.dart';
 import 'package:soni_store_app/screens/cart/components/check_out_cart.dart';
-
-import '../../resources/data/static_data.dart';
+import 'package:soni_store_app/utils/constants.dart';
 
 class CartScreen extends StatelessWidget {
   static String routeName = "/cart";
@@ -10,6 +11,7 @@ class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildAppBar(context),
@@ -22,16 +24,30 @@ class CartScreen extends StatelessWidget {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(
+          Icons.arrow_back_ios_new,
+          color: kPrimaryColor,
+        ),
+      ),
       title: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             "Your Cart",
             style: TextStyle(color: Colors.black),
           ),
-          Text(
-            "${demoCarts.length} items",
-            style: Theme.of(context).textTheme.bodySmall,
+          Consumer<CartProvider>(
+            builder: (context, cartProvider, index) {
+              return Text(
+                "${cartProvider.length} items",
+                style: Theme.of(context).textTheme.bodySmall,
+              );
+            },
           ),
         ],
       ),

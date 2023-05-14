@@ -4,6 +4,9 @@ import '../../models/cart.dart';
 import '../../models/product.dart';
 import '../../models/user.dart';
 
+const String description =
+    "Wireless Controller for PS4™ gives you what you want in your gaming from over precision control your games to sharing …";
+
 List<Product> demoProducts = [
   Product(
     id: 1,
@@ -21,9 +24,9 @@ List<Product> demoProducts = [
     ],
     categories: [],
     title: "Wireless Controller for PS4™",
-    price: 64.99,
+    price: 64,
     description: description,
-    rating: 4.8,
+    rating: 4,
     isFavourite: true,
     isPopular: true,
   ),
@@ -40,9 +43,9 @@ List<Product> demoProducts = [
     ],
     categories: [],
     title: "Nike Sport White - Man Pant",
-    price: 50.5,
+    price: 50,
     description: description,
-    rating: 4.1,
+    rating: 4,
     isPopular: true,
   ),
   Product(
@@ -58,9 +61,9 @@ List<Product> demoProducts = [
     ],
     categories: [],
     title: "Gloves XC Omega - Polygon",
-    price: 36.55,
+    price: 365,
     description: description,
-    rating: 4.1,
+    rating: 4,
     isFavourite: true,
     isPopular: true,
   ),
@@ -77,15 +80,12 @@ List<Product> demoProducts = [
     ],
     categories: [],
     title: "Logitech Head",
-    price: 20.20,
+    price: 200,
     description: description,
-    rating: 4.1,
+    rating: 4,
     isFavourite: true,
   ),
 ];
-
-const String description =
-    "Wireless Controller for PS4™ gives you what you want in your gaming from over precision control your games to sharing …";
 
 List<Cart> demoCarts = [
   Cart(
@@ -128,4 +128,36 @@ List<Cart> demoCarts = [
     products: demoProducts[3],
     numOfItems: 1,
   ),
+];
+
+List generes = [
+  'assets/images/tshirt.png',
+  'assets/images/tshirt.png',
+  'assets/images/tshirt.png',
+  'assets/images/tshirt.png',
+];
+
+List tshirts = [
+  'assets/images/tshirt_w.jpg',
+  'assets/images/black.jpg',
+  'assets/images/lav.jpg',
+  'assets/images/tshirt.png',
+];
+
+List tshirtName = ['Sports Amber', 'Polo White', 'Olive Green', 'Yellow V'];
+
+List pants = [
+  'assets/images/download.jpg',
+  'assets/images/images.jpg',
+  'assets/images/images-_1_.jpg',
+  'assets/images/images-_2_.jpg',
+];
+
+List shoes = [
+  'assets/images/sneak_pink.jpg',
+  'assets/images/sneakers.jpg',
+  'assets/images/1.jpg',
+  'assets/images/2.jpg',
+  'assets/images/3.jpg',
+  'assets/images/4.jpg',
 ];

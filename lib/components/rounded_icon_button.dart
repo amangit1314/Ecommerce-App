@@ -29,12 +29,13 @@ class RoundedIconBtn extends StatelessWidget {
       width: getProportionateScreenWidth(40),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
+        color: Colors.white,
         boxShadow: [
           if (showShadow)
             BoxShadow(
               offset: const Offset(0, 6),
               blurRadius: 10,
-              color: const Color(0xFFB0B0B0).withOpacity(0.2),
+              color: const Color.fromARGB(255, 146, 144, 144).withOpacity(0.2),
             ),
         ],
       ),

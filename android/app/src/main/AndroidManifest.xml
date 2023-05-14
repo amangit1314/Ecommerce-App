@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.amanSoniChuru.snap_cart.snap_cart">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="snap_cart"
         android:name="${applicationName}"

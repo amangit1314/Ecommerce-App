@@ -1,23 +1,23 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/category.dart';
 
 class Product {
   final int id;
   final String title, description;
   final List<String> images;
   final List<Color> colors;
-  final double rating, price;
-  final bool isFavourite, isPopular;
-  final List<Category> categories;
+  final int price;
+  final double rating;
+  bool isFavourite, isPopular;
+  final List<String> categories;
 
   Product({
     required this.categories,
     required this.id,
     required this.images,
-    required this.colors,
-    this.rating = 0.0,
+    this.colors = const [Colors.white],
+    this.rating = 0,
     this.isFavourite = false,
     this.isPopular = false,
     required this.title,
@@ -29,7 +29,7 @@ class Product {
     return Product(
       id: productData.id,
       images: productData['images'],
-      colors: productData['colors'],
+      // colors: productData['colors'],
       title: productData['title'],
       price: productData['price'],
       description: productData['description'],
@@ -45,7 +45,7 @@ class Product {
       'id': id,
       'description': description,
       'images': images,
-      'colors': colors.map((x) => x.value).toList(),
+      // 'colors': colors.map((x) => x.value).toList(),
       'price': price,
       'isPopular': isPopular,
       'categories': categories,
@@ -54,14 +54,15 @@ class Product {
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      categories: map['categories']?.map((x) => Category.fromMap(x)).toList(),
-      id: map['id']?.toInt() ?? 0,
-      title: map['title']?.toString() ?? '',
-      description: map['description']?.toString() ?? '',
-      images: List<String>.from(map['images']),
-      colors: List<Color>.from(map['colors']?.map((x) => Color(x))),
-      price: map['price']?.toDouble() ?? 0.0,
-      rating: map['rating']?.toDouble() ?? 0.0,
+      categories: List<String>.from(map['categories'] ?? []),
+      id: map['id'] as int? ?? 0,
+      title: map['title'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      images: List<String>.from(map['images'] ?? []),
+      price: map['price'] ?? 0,
+      rating: map['rating'] ?? 0,
+      isFavourite: map['isFavourite'] as bool? ?? false,
+      isPopular: map['isPopular'] as bool? ?? false,
     );
   }
 

@@ -5,9 +5,10 @@ import 'package:soni_store_app/screens/home/components/body.dart';
 import '../../utils/enums.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   static String routeName = "/home";
 
-  const HomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

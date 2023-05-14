@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:soni_store_app/screens/products/products_search_screen.dart';
 import 'package:soni_store_app/screens/recent/recents.dart';
-import 'package:soni_store_app/screens/shipment/shipment_screen.dart';
 
 import '../screens/home/home_screen.dart';
 import '../screens/profile/profile_screen.dart';
@@ -51,18 +51,18 @@ class CustomBottomNavBar extends StatelessWidget {
               onPressed: () => Get.to(const HomeScreen()),
             ),
             IconButton(
-              icon: FaIcon(
-                FontAwesomeIcons.truckFast,
+              icon: Icon(
+                Icons.category_outlined,
                 // "assets/icons/Chat bubble Icon.svg",
                 color: MenuState.shipment == selectedMenu
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () => Get.to(const ShipmentScreen()),
+              onPressed: () => Get.to(const ProductSearchPage()),
             ),
             IconButton(
               icon: FaIcon(
-                FontAwesomeIcons.wallet,
+                FontAwesomeIcons.moneyBills,
                 // "assets/icons/Chat bubble Icon.svg",
                 color: MenuState.wallet == selectedMenu
                     ? kPrimaryColor
