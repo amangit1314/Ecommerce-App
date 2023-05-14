@@ -27,11 +27,11 @@ class Body extends StatelessWidget {
                     // to edit mobile and name
                   },
                 ),
-                ProfileMenu(
-                  text: "My Orders",
-                  icon: "assets/icons/Shop Icon.svg",
-                  press: () => {},
-                ),
+                // ProfileMenu(
+                //   text: "My Orders",
+                //   icon: "assets/icons/Shop Icon.svg",
+                //   press: () => {},
+                // ),
                 ProfileMenu(
                   text: "Notifications",
                   icon: "assets/icons/Bell.svg",

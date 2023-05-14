@@ -10,6 +10,7 @@ import '../../../models/product.dart';
 import '../../../resources/data/static_data.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
+import '../../cart/cart_screen.dart';
 import '../detail_screen.dart';
 
 class Body extends StatefulWidget {
@@ -403,7 +404,14 @@ class _BodyState extends State<Body> with SingleTickerProviderStateMixin {
                                   "Buy Now",
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const CartScreen(),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ],
