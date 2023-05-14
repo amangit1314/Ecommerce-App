@@ -251,7 +251,7 @@ class _ShoesSectionState extends State<ShoesSection> {
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                itemCount: products.length,
+                itemCount: 1,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
