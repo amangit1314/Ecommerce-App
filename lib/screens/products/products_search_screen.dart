@@ -5,7 +5,6 @@ import 'package:soni_store_app/models/product.dart';
 
 import '../../components/custom_bottom_nav_bar.dart';
 import '../../components/section_tile.dart';
-import '../../resources/data/static_data.dart';
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
 import '../../utils/size_config.dart';
@@ -292,10 +291,34 @@ class _ShoesSectionState extends State<ShoesSection> {
   }
 }
 
-class PantsSections extends StatelessWidget {
+class PantsSections extends StatefulWidget {
   const PantsSections({
     super.key,
   });
+
+  @override
+  State<PantsSections> createState() => _PantsSectionsState();
+}
+
+class _PantsSectionsState extends State<PantsSections> {
+  final CollectionReference _refProducts =
+      FirebaseFirestore.instance.collection('products');
+  late Stream<QuerySnapshot> _streamProducts;
+
+  @override
+  void initState() {
+    super.initState();
+    _streamProducts = _refProducts.snapshots();
+  }
+
+  Future<List<Product>> fetchProductsFromFirestore() async {
+    final List<Product> products = [];
+    final QuerySnapshot snapshot = await _refProducts.get();
+    for (var element in snapshot.docs) {
+      products.add(Product.fromMap(element.data() as Map<String, dynamic>));
+    }
+    return products;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -305,28 +328,61 @@ class PantsSections extends StatelessWidget {
         SizedBox(height: getProportionateScreenHeight(10)),
         SizedBox(
           height: 190,
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: pants.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => DetailsScreen(
-                        product: demoProducts[index],
-                      ),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: _streamProducts,
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Something went wrong'),
+                );
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              final List<Product> products = snapshot.data!.docs
+                  .map((e) => Product.fromMap(e.data() as Map<String, dynamic>))
+                  .toList();
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DetailsScreen(
+                            product: products[index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: ProductSearchScreenItemCard(
+                      width: 170,
+                      productName: products[index].title,
+                      productImage: products[index].images.isNotEmpty
+                          ? products[index].images[index]
+                          : '',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DetailsScreen(
+                              product: products[index],
+                            ),
+                          ),
+                        );
+                      },
+                      // productDesc: '\$${products[index].price}',
+                      price: '\$${products[index].price}',
                     ),
                   );
                 },
-                child: ProductSearchScreenItemCard2(
-                  width: 170,
-                  productImage: pants[index],
-                  price: '\$9.99',
-                  productName: 'Pants',
-                ),
               );
             },
           ),
@@ -336,42 +392,98 @@ class PantsSections extends StatelessWidget {
   }
 }
 
-class TshirtsSection extends StatelessWidget {
+class TshirtsSection extends StatefulWidget {
   const TshirtsSection({
     super.key,
   });
 
   @override
+  State<TshirtsSection> createState() => _TshirtsSectionState();
+}
+
+class _TshirtsSectionState extends State<TshirtsSection> {
+  final CollectionReference _refProducts =
+      FirebaseFirestore.instance.collection('products');
+  late Stream<QuerySnapshot> _streamProducts;
+
+  @override
+  void initState() {
+    super.initState();
+    _streamProducts = _refProducts.snapshots();
+  }
+
+  Future<List<Product>> fetchProductsFromFirestore() async {
+    final List<Product> products = [];
+    final QuerySnapshot snapshot = await _refProducts.get();
+    for (var element in snapshot.docs) {
+      products.add(Product.fromMap(element.data() as Map<String, dynamic>));
+    }
+    return products;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SectionTitle(title: 'Tshirt\'s', press: () {}),
+        SectionTitle(title: 'Shoe\'s', press: () {}),
         SizedBox(height: getProportionateScreenHeight(10)),
         SizedBox(
           height: 190,
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: tshirts.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => DetailsScreen(
-                        product: demoProducts[index],
-                      ),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: _streamProducts,
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Something went wrong'),
+                );
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              final List<Product> products = snapshot.data!.docs
+                  .map((e) => Product.fromMap(e.data() as Map<String, dynamic>))
+                  .toList();
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DetailsScreen(
+                            product: products[index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: ProductSearchScreenItemCard(
+                      width: 170,
+                      productName: products[index].title,
+                      productImage: products[index].images.isNotEmpty
+                          ? products[index].images[index]
+                          : '',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DetailsScreen(
+                              product: products[index],
+                            ),
+                          ),
+                        );
+                      },
+                      // productDesc: '\$${products[index].price}',
+                      price: '\$${products[index].price}',
                     ),
                   );
                 },
-                child: ProductSearchScreenItemCard2(
-                  width: 170,
-                  productImage: tshirts[index],
-                  productName: 'Tshirts',
-                  price: '\$9.99',
-                  //price: '',
-                ),
               );
             },
           ),

@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -27,11 +25,11 @@ class ProfilePic extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           const CircleAvatar(
-            backgroundImage: AssetImage("assets/images/2.jpg"),
+            backgroundImage: AssetImage("assets/images/1.jpg"),
           ),
           Positioned(
-            right: -16,
-            bottom: 0,
+            right: 100,
+            bottom: -6,
             child: CircleAvatar(
               backgroundColor: Colors.white,
               radius: 23,

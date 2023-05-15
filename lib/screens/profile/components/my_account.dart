@@ -72,14 +72,14 @@ class MyAccount extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userProvider.getUser?.displayName ??
-                                'Display Name not set',
+                            userProvider.getUser?.displayName ?? 'Aman Soni',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(userProvider.getUser?.email ?? 'Email not set'),
+                          Text(
+                              userProvider.getUser?.email ?? 'login@gmail.com'),
                         ],
                       ),
                     ],
@@ -94,8 +94,7 @@ class MyAccount extends StatelessWidget {
                         children: [
                           const Text('Username'),
                           Text(
-                            userProvider.getUser?.displayName ??
-                                'Display Name not set',
+                            userProvider.getUser?.displayName ?? 'Aman Soni',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -116,7 +115,7 @@ class MyAccount extends StatelessWidget {
                           const Text('Phone number'),
                           Text(
                             userProvider.getUser?.phoneNumber ??
-                                'Phone number not set',
+                                '+91 9649477393',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -137,7 +136,7 @@ class MyAccount extends StatelessWidget {
                           Text('Gender'),
                           Text(
                             // userProvider.getUser?.gender ??
-                            'Gender not set',
+                            'Male',
                             style: TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -157,7 +156,7 @@ class MyAccount extends StatelessWidget {
                         children: [
                           const Text('Email'),
                           Text(
-                            userProvider.getUser?.email ?? 'Email not set',
+                            userProvider.getUser?.email ?? 'example@gmail.com',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
