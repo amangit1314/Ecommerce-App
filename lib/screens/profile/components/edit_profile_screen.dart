@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/user_provider.dart';
@@ -43,10 +44,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     if (userProvider.getUser != null) {
-      _nameController.text = userProvider.getUser!.displayName ?? 'John';
-      _emailController.text = userProvider.getUser!.email ?? 'john@gmail.com';
-      _numberController.text =
-          userProvider.getUser!.phoneNumber ?? '7023953453';
+      _nameController.text = userProvider.getUser!.username ?? 'John';
+      _emailController.text = userProvider.getUser!.email;
+      _numberController.text = userProvider.getUser!.number ?? '7023953453';
     }
 
     return Scaffold(
@@ -73,7 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          ProfilePic(),
+          const ProfilePic(),
           Form(
             key: _formKey,
             child: Column(
@@ -101,7 +101,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             width: double.infinity,
             height: getProportionateScreenHeight(70),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  userProvider.updateUserDetails(
+                    displayName: _nameController.text,
+                  );
+                  userProvider.updateUserEmail(email: _emailController.text);
+                  // userProvider.updateUserNumber(number: _numberController.text);
+                  //userProvider.updateUserProfileImage(profileImage: profileImage)
+                  Navigator.pop(context);
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPrimaryColor,
                 shape: RoundedRectangleBorder(
@@ -185,7 +196,14 @@ class _EditBoxState extends State<EditBox> {
                 onSaved: (newValue) {
                   widget.controller.text = newValue!;
                   userProvider.updateUserDetails(
-                      displayName: widget.controller.text);
+                    displayName: widget.controller.text,
+                  );
+                },
+                onChanged: (newValue) {
+                  widget.controller.text = newValue;
+                  userProvider.updateUserDetails(
+                    displayName: widget.controller.text,
+                  );
                 },
                 controller: widget.controller,
                 style: TextStyle(
@@ -273,6 +291,12 @@ class _EditBoxEmailState extends State<EditBoxEmail> {
                   widget.controller.text = newValue!;
                   userProvider.updateUserEmail(email: widget.controller.text);
                 },
+                onChanged: (newValue) {
+                  widget.controller.text = newValue;
+                  userProvider.updateUserEmail(
+                    email: widget.controller.text,
+                  );
+                },
                 controller: widget.controller,
                 style: TextStyle(
                   fontSize: getProportionateScreenWidth(14),
@@ -355,9 +379,15 @@ class _EditBoxPhoneState extends State<EditBoxPhone> {
               child: TextFormField(
                 onSaved: (newValue) {
                   widget.controller.text = newValue!;
-                  userProvider.updateUserNumber(
-                    number: widget.controller.text,
-                  );
+                  // userProvider.updateUserNumber(
+                  //   number: widget.controller.text,
+                  // );
+                },
+                onChanged: (newValue) {
+                  widget.controller.text = newValue;
+                  // userProvider.updateUserNumber(
+                  //   number: widget.controller.text,
+                  // );
                 },
                 controller: widget.controller,
                 style: TextStyle(
@@ -382,10 +412,39 @@ class _EditBoxPhoneState extends State<EditBoxPhone> {
   }
 }
 
-class ProfilePic extends StatelessWidget {
-  ProfilePic({
+class ProfilePic extends StatefulWidget {
+  final String? profImage;
+
+  const ProfilePic({
+    this.profImage,
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ProfilePic> createState() => _ProfilePicState();
+}
+
+class _ProfilePicState extends State<ProfilePic> {
+  XFile? imageXFile;
+  ImagePicker imagePicker = ImagePicker();
+
+  Future<void> getImageFromGallery() async {
+    try {
+      final pickedFile =
+          await imagePicker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          imageXFile = pickedFile;
+        });
+        print(imageXFile!.path);
+      } else {
+        print('No image selected');
+      }
+    } catch (e) {
+      print('Error selecting image: $e');
+    }
+  }
+
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
     foregroundColor: const Color(0xFFF5F6F9),
     minimumSize: const Size(88, 44),
@@ -401,34 +460,46 @@ class ProfilePic extends StatelessWidget {
     return SizedBox(
       height: 115,
       width: 115,
-      child: Stack(
-        clipBehavior: Clip.none,
-        fit: StackFit.expand,
-        children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage("assets/images/1.jpg"),
-          ),
-          Positioned(
-            right: 100,
-            bottom: -6,
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 23,
+      child: Consumer<UserProvider>(builder: (context, userProvider, _) {
+        return Stack(
+          clipBehavior: Clip.none,
+          fit: StackFit.expand,
+          children: [
+            const CircleAvatar(
+              // fetch and deisplay the updated image here as Network image, if no image then show assetimage
+              backgroundImage: AssetImage("assets/images/1.jpg"),
+            ),
+            Positioned(
+              right: 100,
+              bottom: -6,
               child: CircleAvatar(
-                backgroundColor: Colors.grey[100],
-                radius: 21,
-                child: TextButton(
-                  onPressed: () {},
-                  child: SvgPicture.asset(
-                    "assets/icons/Camera Icon.svg",
-                    color: Colors.black87,
+                backgroundColor: Colors.white,
+                radius: 23,
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey[100],
+                  radius: 21,
+                  child: TextButton(
+                    onPressed: () async {
+                      await getImageFromGallery();
+                      if (imageXFile != null) {
+                        userProvider.updateUserProfileImage(
+                          profileImage: imageXFile!.path,
+                        );
+                      } else {
+                        print('No image selected');
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      "assets/icons/Camera Icon.svg",
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
-      ),
+            )
+          ],
+        );
+      }),
     );
   }
 }

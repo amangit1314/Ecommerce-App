@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:soni_store_app/screens/details/components/color_dots.dart';
 import 'package:soni_store_app/screens/details/components/product_description.dart';
 import 'package:soni_store_app/screens/details/components/product_images.dart';
 import 'package:soni_store_app/screens/details/components/top_rounded_container.dart';
@@ -10,7 +9,6 @@ import '../../../models/product.dart';
 import '../../../resources/data/static_data.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
-import '../../cart/cart_screen.dart';
 import '../detail_screen.dart';
 
 class Body extends StatefulWidget {
@@ -276,151 +274,225 @@ class _BodyState extends State<Body> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: TopRoundedContainer(
-                  color: const Color(0xFFF6F7F9),
-                  child: Column(
-                    children: [
-                      ColorDots(product: widget.product),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15.0, top: 15.0),
-                        child: Divider(
-                          color: Colors.grey.shade300,
-                          height: 5,
-                          thickness: 1,
+              Container(
+                height: getProportionateScreenWidth(65),
+                margin: const EdgeInsets.only(
+                    top: 15, left: 15, right: 15, bottom: 25),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: getProportionateScreenWidth(width * .4),
+                      height: getProportionateScreenWidth(65),
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '\$ 25.00',
-                              style: Theme.of(context).textTheme.titleLarge,
+                      padding: EdgeInsets.only(
+                        left: SizeConfig.screenWidth * 0.05,
+                        right: SizeConfig.screenWidth * 0.05,
+                        bottom: getProportionateScreenHeight(9),
+                        top: getProportionateScreenHeight(9),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "\$ 12.5",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 20),
-                              padding: const EdgeInsets.all(7),
-                              width: SizeConfig.screenWidth * 0.6,
-                              decoration: BoxDecoration(
-                                color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Add to cart',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                  ),
-                                  IconButton(
-                                    icon: const FaIcon(
-                                      FontAwesomeIcons.bagShopping,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                ],
-                              ),
+                          ),
+                          Text(
+                            "Unit price",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: getProportionateScreenWidth(65),
+                      width: getProportionateScreenWidth(width * .3),
+                      padding: EdgeInsets.only(
+                        bottom: getProportionateScreenHeight(2),
+                        top: getProportionateScreenHeight(2),
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Colors.deepOrange,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
                         ),
                       ),
-                      Container(
-                        height: getProportionateScreenWidth(65),
-                        margin: const EdgeInsets.only(
-                            left: 15, right: 15, bottom: 25),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(15),
+                      child: TextButton(
+                        child: const Text(
+                          "Buy Now",
+                          style: TextStyle(color: Colors.white),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: getProportionateScreenWidth(width * .4),
-                              height: getProportionateScreenWidth(65),
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                              ),
-                              padding: EdgeInsets.only(
-                                left: SizeConfig.screenWidth * 0.05,
-                                right: SizeConfig.screenWidth * 0.05,
-                                bottom: getProportionateScreenHeight(9),
-                                top: getProportionateScreenHeight(9),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    "\$ 12.5",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Unit price",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: getProportionateScreenWidth(65),
-                              width: getProportionateScreenWidth(width * .3),
-                              padding: EdgeInsets.only(
-                                bottom: getProportionateScreenHeight(2),
-                                top: getProportionateScreenHeight(2),
-                              ),
-                              decoration: const BoxDecoration(
-                                color: Colors.deepOrange,
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                ),
-                              ),
-                              child: TextButton(
-                                child: const Text(
-                                  "Buy Now",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const CartScreen(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                        onPressed: () {},
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+
+              // Positioned(
+              //   bottom: 0,
+              //   left: 0,
+              //   right: 0,
+              //   child: TopRoundedContainer(
+              //     color: const Color(0xFFF6F7F9),
+              //     child: Column(
+              //       children: [
+              //         ColorDots(product: widget.product),
+              //         Padding(
+              //           padding: const EdgeInsets.only(
+              //               left: 15.0, right: 15.0, top: 15.0),
+              //           child: Divider(
+              //             color: Colors.grey.shade300,
+              //             height: 5,
+              //             thickness: 1,
+              //           ),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsets.all(15.0),
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Text(
+              //                 '\$ 25.00',
+              //                 style: Theme.of(context).textTheme.titleLarge,
+              //               ),
+              //               Container(
+              //                 margin: const EdgeInsets.only(left: 20),
+              //                 padding: const EdgeInsets.all(7),
+              //                 width: SizeConfig.screenWidth * 0.6,
+              //                 decoration: BoxDecoration(
+              //                   color: kPrimaryColor,
+              //                   borderRadius: BorderRadius.circular(30),
+              //                 ),
+              //                 child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.center,
+              //                   children: [
+              //                     Text(
+              //                       'Add to cart',
+              //                       style: Theme.of(context)
+              //                           .textTheme
+              //                           .bodyMedium!
+              //                           .copyWith(
+              //                             fontWeight: FontWeight.bold,
+              //                             color: Colors.white,
+              //                           ),
+              //                     ),
+              //                     IconButton(
+              //                       icon: const FaIcon(
+              //                         FontAwesomeIcons.bagShopping,
+              //                         color: Colors.white,
+              //                       ),
+              //                       onPressed: () {},
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //         Container(
+              //           height: getProportionateScreenWidth(65),
+              //           margin: const EdgeInsets.only(
+              //               left: 15, right: 15, bottom: 25),
+              //           decoration: BoxDecoration(
+              //             color: Colors.black,
+              //             borderRadius: BorderRadius.circular(15),
+              //           ),
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Container(
+              //                 width: getProportionateScreenWidth(width * .4),
+              //                 height: getProportionateScreenWidth(65),
+              //                 decoration: const BoxDecoration(
+              //                   color: Colors.black,
+              //                   borderRadius: BorderRadius.only(
+              //                     topLeft: Radius.circular(15),
+              //                     bottomLeft: Radius.circular(15),
+              //                   ),
+              //                 ),
+              //                 padding: EdgeInsets.only(
+              //                   left: SizeConfig.screenWidth * 0.05,
+              //                   right: SizeConfig.screenWidth * 0.05,
+              //                   bottom: getProportionateScreenHeight(9),
+              //                   top: getProportionateScreenHeight(9),
+              //                 ),
+              //                 child: Column(
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: const [
+              //                     Text(
+              //                       "\$ 12.5",
+              //                       style: TextStyle(
+              //                         color: Colors.white,
+              //                         fontWeight: FontWeight.w600,
+              //                         fontSize: 16,
+              //                       ),
+              //                     ),
+              //                     Text(
+              //                       "Unit price",
+              //                       style: TextStyle(
+              //                         color: Colors.white,
+              //                         fontSize: 12,
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //               Container(
+              //                 height: getProportionateScreenWidth(65),
+              //                 width: getProportionateScreenWidth(width * .3),
+              //                 padding: EdgeInsets.only(
+              //                   bottom: getProportionateScreenHeight(2),
+              //                   top: getProportionateScreenHeight(2),
+              //                 ),
+              //                 decoration: const BoxDecoration(
+              //                   color: Colors.deepOrange,
+              //                   borderRadius: BorderRadius.only(
+              //                     topRight: Radius.circular(15),
+              //                     bottomRight: Radius.circular(15),
+              //                   ),
+              //                 ),
+              //                 child: TextButton(
+              //                   child: const Text(
+              //                     "Buy Now",
+              //                     style: TextStyle(color: Colors.white),
+              //                   ),
+              //                   onPressed: () {
+              //                     Navigator.push(
+              //                       context,
+              //                       MaterialPageRoute(
+              //                         builder: (context) => const CartScreen(),
+              //                       ),
+              //                     );
+              //                   },
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -811,11 +883,16 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
           color: Colors.white,
           child: Column(
             children: [
+              // * product description
               ProductDescription(
                 product: widget.product,
                 pressOnSeeMore: () {},
               ),
+
+              // * reviews rating tile
               const RatingTile(),
+
+              // * reviews
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: getProportionateScreenWidth(20),
@@ -889,6 +966,8 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
                   ),
                 ),
               ),
+
+              // * similar items
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1010,144 +1089,220 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
                   ),
                 ],
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: TopRoundedContainer(
-                  color: const Color(0xFFF6F7F9),
-                  child: Column(
-                    children: [
-                      ColorDots(product: widget.product),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15.0, top: 15.0),
-                        child: Divider(
-                          color: Colors.grey.shade300,
-                          height: 5,
-                          thickness: 1,
+
+              // * button
+              Container(
+                height: getProportionateScreenWidth(65),
+                margin: const EdgeInsets.only(left: 15, right: 15, bottom: 25),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: getProportionateScreenWidth(width * .4),
+                      height: getProportionateScreenWidth(65),
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '\$ 25.00',
-                              style: Theme.of(context).textTheme.titleLarge,
+                      padding: EdgeInsets.only(
+                        left: SizeConfig.screenWidth * 0.05,
+                        right: SizeConfig.screenWidth * 0.05,
+                        bottom: getProportionateScreenHeight(9),
+                        top: getProportionateScreenHeight(9),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "\$ 12.5",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 20),
-                              padding: const EdgeInsets.all(7),
-                              width: SizeConfig.screenWidth * 0.6,
-                              decoration: BoxDecoration(
-                                color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Add to cart',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                  ),
-                                  IconButton(
-                                    icon: const FaIcon(
-                                      FontAwesomeIcons.bagShopping,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                ],
-                              ),
+                          ),
+                          Text(
+                            "Unit price",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: getProportionateScreenWidth(65),
+                      width: getProportionateScreenWidth(width * .3),
+                      padding: EdgeInsets.only(
+                        bottom: getProportionateScreenHeight(2),
+                        top: getProportionateScreenHeight(2),
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Colors.deepOrange,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
                         ),
                       ),
-                      Container(
-                        height: getProportionateScreenWidth(65),
-                        margin: const EdgeInsets.only(
-                            left: 15, right: 15, bottom: 25),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(15),
+                      child: TextButton(
+                        child: const Text(
+                          "Buy Now",
+                          style: TextStyle(color: Colors.white),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: getProportionateScreenWidth(width * .4),
-                              height: getProportionateScreenWidth(65),
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                              ),
-                              padding: EdgeInsets.only(
-                                left: SizeConfig.screenWidth * 0.05,
-                                right: SizeConfig.screenWidth * 0.05,
-                                bottom: getProportionateScreenHeight(9),
-                                top: getProportionateScreenHeight(9),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    "\$ 12.5",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Unit price",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: getProportionateScreenWidth(65),
-                              width: getProportionateScreenWidth(width * .3),
-                              padding: EdgeInsets.only(
-                                bottom: getProportionateScreenHeight(2),
-                                top: getProportionateScreenHeight(2),
-                              ),
-                              decoration: const BoxDecoration(
-                                color: Colors.deepOrange,
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                ),
-                              ),
-                              child: TextButton(
-                                child: const Text(
-                                  "Buy Now",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: () {},
-                              ),
-                            ),
-                          ],
-                        ),
+                        onPressed: () {},
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+
+              // Positioned(
+              //   bottom: 0,
+              //   left: 0,
+              //   right: 0,
+              //   child: TopRoundedContainer(
+              //     color: const Color(0xFFF6F7F9),
+              //     child: Column(
+              //       children: [
+              //         ColorDots(product: widget.product),
+              //         Padding(
+              //           padding: const EdgeInsets.only(
+              //               left: 15.0, right: 15.0, top: 15.0),
+              //           child: Divider(
+              //             color: Colors.grey.shade300,
+              //             height: 5,
+              //             thickness: 1,
+              //           ),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsets.all(15.0),
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Text(
+              //                 '\$ 25.00',
+              //                 style: Theme.of(context).textTheme.titleLarge,
+              //               ),
+              //               Container(
+              //                 margin: const EdgeInsets.only(left: 20),
+              //                 padding: const EdgeInsets.all(7),
+              //                 width: SizeConfig.screenWidth * 0.6,
+              //                 decoration: BoxDecoration(
+              //                   color: kPrimaryColor,
+              //                   borderRadius: BorderRadius.circular(30),
+              //                 ),
+              //                 child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.center,
+              //                   children: [
+              //                     Text(
+              //                       'Add to cart',
+              //                       style: Theme.of(context)
+              //                           .textTheme
+              //                           .bodyMedium!
+              //                           .copyWith(
+              //                             fontWeight: FontWeight.bold,
+              //                             color: Colors.white,
+              //                           ),
+              //                     ),
+              //                     IconButton(
+              //                       icon: const FaIcon(
+              //                         FontAwesomeIcons.bagShopping,
+              //                         color: Colors.white,
+              //                       ),
+              //                       onPressed: () {},
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+
+              //         Container(
+              //           height: getProportionateScreenWidth(65),
+              //           margin: const EdgeInsets.only(
+              //               left: 15, right: 15, bottom: 25),
+              //           decoration: BoxDecoration(
+              //             color: Colors.black,
+              //             borderRadius: BorderRadius.circular(15),
+              //           ),
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Container(
+              //                 width: getProportionateScreenWidth(width * .4),
+              //                 height: getProportionateScreenWidth(65),
+              //                 decoration: const BoxDecoration(
+              //                   color: Colors.black,
+              //                   borderRadius: BorderRadius.only(
+              //                     topLeft: Radius.circular(15),
+              //                     bottomLeft: Radius.circular(15),
+              //                   ),
+              //                 ),
+              //                 padding: EdgeInsets.only(
+              //                   left: SizeConfig.screenWidth * 0.05,
+              //                   right: SizeConfig.screenWidth * 0.05,
+              //                   bottom: getProportionateScreenHeight(9),
+              //                   top: getProportionateScreenHeight(9),
+              //                 ),
+              //                 child: Column(
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: const [
+              //                     Text(
+              //                       "\$ 12.5",
+              //                       style: TextStyle(
+              //                         color: Colors.white,
+              //                         fontWeight: FontWeight.w600,
+              //                         fontSize: 16,
+              //                       ),
+              //                     ),
+              //                     Text(
+              //                       "Unit price",
+              //                       style: TextStyle(
+              //                         color: Colors.white,
+              //                         fontSize: 12,
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //               Container(
+              //                 height: getProportionateScreenWidth(65),
+              //                 width: getProportionateScreenWidth(width * .3),
+              //                 padding: EdgeInsets.only(
+              //                   bottom: getProportionateScreenHeight(2),
+              //                   top: getProportionateScreenHeight(2),
+              //                 ),
+              //                 decoration: const BoxDecoration(
+              //                   color: Colors.deepOrange,
+              //                   borderRadius: BorderRadius.only(
+              //                     topRight: Radius.circular(15),
+              //                     bottomRight: Radius.circular(15),
+              //                   ),
+              //                 ),
+              //                 child: TextButton(
+              //                   child: const Text(
+              //                     "Buy Now",
+              //                     style: TextStyle(color: Colors.white),
+              //                   ),
+              //                   onPressed: () {},
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

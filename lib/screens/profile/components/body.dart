@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:soni_store_app/resources/auth_methods.dart';
+import 'package:soni_store_app/screens/notification/notification_screen.dart';
 import 'package:soni_store_app/screens/profile/components/my_account.dart';
+import 'package:soni_store_app/screens/profile/settings.dart';
 import 'package:soni_store_app/screens/splash/splash_screen.dart';
 
-import '../../../utils/size_config.dart';
+import '../help_center.dart';
 import 'profile_menu.dart';
+import 'profile_pic.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -33,7 +35,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
       children: [
         Column(
           children: [
-            ProfilePic(),
+            const ProfilePic(),
             const SizedBox(height: 20),
             Column(
               children: [
@@ -54,163 +56,32 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                   icon: "assets/icons/Bell.svg",
                   press: () {
                     // navigate to notification screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationScreen(),
+                      ),
+                    );
                   },
                 ),
                 ProfileMenu(
                   text: "Settings",
                   icon: "assets/icons/Settings.svg",
-                  press: () {},
+                  press: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const Settings(),
+                      ),
+                    );
+                  },
                 ),
                 ProfileMenu(
                   text: "Help Center",
                   icon: "assets/icons/Question mark.svg",
                   press: () {
-                    showBottomSheet(
-                      enableDrag: false,
-                      context: context,
-                      builder: (index) {
-                        return BottomSheet(
-                          animationController: bottomSheetAnimationController,
-                          backgroundColor: Colors.white,
-                          onClosing: () {},
-                          builder: (index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: getProportionateScreenHeight(10),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Help Center',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge,
-                                      ),
-                                      const Spacer(),
-                                      IconButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        icon: const FaIcon(
-                                          FontAwesomeIcons.circleXmark,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: getProportionateScreenHeight(10),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Story',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      const Text(
-                                        'widget.product.description',
-                                        maxLines: 3,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: getProportionateScreenHeight(10),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Details',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Row(
-                                            children: const [
-                                              Text('• '),
-                                              Text(' PS4 Gaming Control'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: const [
-                                              Text('• '),
-                                              Text(' PS4 Gaming Control'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: const [
-                                              Text('• '),
-                                              Text(' PS4 Gaming Control'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: const [
-                                              Text('• '),
-                                              Text(' PS4 Gaming Control'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: const [
-                                              Text('• '),
-                                              Text(' PS4 Gaming Control'),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: getProportionateScreenHeight(10),
-                                  ),
-                                  Text(
-                                    'Style',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: getProportionateScreenHeight(10),
-                                  ),
-                                  Text(
-                                    'Design',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: getProportionateScreenHeight(10),
-                                  ),
-                                  Text(
-                                    'Fabric',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const HelpCenter(),
+                      ),
                     );
                   },
                 ),

@@ -33,7 +33,6 @@ class AuthMethods {
         );
 
         model.User user = model.User(
-          [],
           email: email,
           username: username,
           uid: cred.user!.uid,
@@ -124,11 +123,11 @@ class AuthMethods {
   }
 
   // update number
-  Future updateUserNumber({required String number}) async {
-    User? currentUser = _auth.currentUser;
-    await currentUser!.updatePhoneNumber(
-        PhoneAuthProvider.credential(verificationId: '', smsCode: number));
-  }
+  // Future updateUserNumber({required String number}) async {
+  //   User? currentUser = _auth.currentUser;
+  //   await currentUser!.updatePhoneNumber(
+  //       PhoneAuthProvider.credential(verificationId: '', smsCode: number));
+  // }
 
   // update email
   Future updateUserEmail({required String email}) async {
@@ -148,5 +147,8 @@ class AuthMethods {
     await currentUser!.updatePhotoURL(photoURL);
   }
 
-  // update address
+  // reset password
+  Future resetPassword({required String email}) async {
+    await _auth.sendPasswordResetEmail(email: email);
+  }
 }

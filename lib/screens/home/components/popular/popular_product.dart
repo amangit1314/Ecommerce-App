@@ -4,7 +4,6 @@ import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
-// import '../../../../utils/constants.dart';
 import '../../../../utils/constatns.dart';
 import '../../../details/detail_screen.dart';
 
@@ -40,9 +39,13 @@ class _PopularProductsState extends State<PopularProducts> {
     return Column(
       children: [
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SectionTitle(title: "Sports Collection", press: () {}),
+          padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(20),
+          ),
+          child: SectionTitle(
+            title: "Popular Products",
+            press: () {},
+          ),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
         Container(
@@ -71,7 +74,7 @@ class _PopularProductsState extends State<PopularProducts> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 1,
                 itemBuilder: (context, index) {
-                  return SportsCard(
+                  return PopularProductCard(
                     image: products[index].images.isNotEmpty
                         ? products[index].images[index]
                         : '',
@@ -90,11 +93,12 @@ class _PopularProductsState extends State<PopularProducts> {
   }
 }
 
-class SportsCard extends StatelessWidget {
+class PopularProductCard extends StatelessWidget {
   final Product product;
   final String? image;
   final String? category;
-  const SportsCard({
+
+  const PopularProductCard({
     super.key,
     required this.product,
     this.image,
@@ -107,7 +111,7 @@ class SportsCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => DetailsScreen(
+            builder: (_) => DetailsScreenFirebase(
               product: product,
             ),
           ),

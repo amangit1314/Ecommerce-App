@@ -425,7 +425,7 @@ class _TshirtsSectionState extends State<TshirtsSection> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SectionTitle(title: 'Shoe\'s', press: () {}),
+        SectionTitle(title: 'Tshirt\'s', press: () {}),
         SizedBox(height: getProportionateScreenHeight(10)),
         SizedBox(
           height: 190,
@@ -458,7 +458,7 @@ class _TshirtsSectionState extends State<TshirtsSection> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => DetailsScreen(
+                          builder: (_) => DetailsScreenFirebase(
                             product: products[index],
                           ),
                         ),
@@ -473,7 +473,7 @@ class _TshirtsSectionState extends State<TshirtsSection> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => DetailsScreen(
+                            builder: (_) => DetailsScreenFirebase(
                               product: products[index],
                             ),
                           ),
