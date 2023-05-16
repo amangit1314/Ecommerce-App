@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/rounded_icon_button.dart';
 import '../../../models/product.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
@@ -30,18 +29,6 @@ class ColorDots extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          RoundedIconBtn(
-            icon: Icons.remove,
-            press: () {},
-          ),
-          SizedBox(width: getProportionateScreenWidth(8)),
-          const Text('2'),
-          SizedBox(width: getProportionateScreenWidth(8)),
-          RoundedIconBtn(
-            icon: Icons.add,
-            showShadow: true,
-            press: () {},
-          ),
         ],
       ),
     );
@@ -67,8 +54,10 @@ class ColorDot extends StatelessWidget {
       width: getProportionateScreenWidth(30),
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border:
-            Border.all(color: isSelected ? kPrimaryColor : Colors.transparent),
+        border: Border.all(
+          color: isSelected ? kPrimaryColor : Colors.red,
+          width: 3,
+        ),
         shape: BoxShape.circle,
       ),
       child: DecoratedBox(

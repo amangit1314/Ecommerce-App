@@ -57,6 +57,7 @@ flutter:
     - assets/images/3.jpg
     - assets/images/4.jpg
     - assets/images/ringing_bell.png
+    - assets/images/shopping.png
   # fonts:
   #   - family: Muli
   #     fonts:

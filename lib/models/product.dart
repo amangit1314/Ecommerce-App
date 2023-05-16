@@ -13,12 +13,14 @@ class Product {
   bool isFavourite, isPopular;
   final List<String> categories;
   final List<Review> reviews;
+  final List? sizes;
 
   Product({
     required this.categories,
     required this.id,
     required this.images,
     this.colors = const [Colors.white],
+    this.sizes = const ['M', 'L', 'XL', 'XXL'],
     this.reviews = const [],
     this.rating = 0,
     this.isFavourite = false,
