@@ -39,9 +39,13 @@ class _FashionableState extends State<Fashionable> {
     return Column(
       children: [
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SectionTitle(title: "Fashion Collection", press: () {}),
+          padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(20),
+          ),
+          child: SectionTitle(
+            title: "Fashion Collection",
+            press: () {},
+          ),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
         Container(
@@ -106,7 +110,7 @@ class FashionsCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => DetailsScreen(
+            builder: (_) => DetailsScreenFirebase(
               product: product,
             ),
           ),

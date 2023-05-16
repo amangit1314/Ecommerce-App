@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/screens/profile/components/profile_pic.dart';
 
 import '../../../providers/user_provider.dart';
 import '../../../utils/constants.dart';
@@ -43,10 +44,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     if (userProvider.getUser != null) {
-      _nameController.text = userProvider.getUser!.displayName ?? 'John';
-      _emailController.text = userProvider.getUser!.email ?? 'john@gmail.com';
-      _numberController.text =
-          userProvider.getUser!.phoneNumber ?? '7023953453';
+      _nameController.text = userProvider.getUser!.username ?? 'John';
+      _emailController.text = userProvider.getUser!.email;
+      _numberController.text = userProvider.getUser!.number ?? '7023953453';
     }
 
     return Scaffold(
@@ -70,60 +70,65 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: SizedBox(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              ProfilePic(),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 40),
-                    EditBox(
-                      controller: _nameController,
-                      icon: FontAwesomeIcons.user,
-                    ),
-                    const SizedBox(height: 10),
-                    EditBoxEmail(
-                      controller: _emailController,
-                      icon: FontAwesomeIcons.envelope,
-                    ),
-                    const SizedBox(height: 10),
-                    EditBoxPhone(
-                      controller: _numberController,
-                      icon: FontAwesomeIcons.phone,
-                    ),
-                  ],
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          const ProfilePic(),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                const SizedBox(height: 40),
+                EditBox(
+                  controller: _nameController,
+                  icon: FontAwesomeIcons.user,
                 ),
-              ),
-              // done default btn
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: getProportionateScreenHeight(65),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: kPrimaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: const Text(
-                    "Done",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
+                const SizedBox(height: 10),
+                EditBoxEmail(
+                  controller: _emailController,
+                  icon: FontAwesomeIcons.envelope,
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                EditBoxPhone(
+                  controller: _numberController,
+                  icon: FontAwesomeIcons.phone,
+                ),
+              ],
+            ),
           ),
-        ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: getProportionateScreenHeight(70),
+            child: ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  userProvider.updateUserDetails(
+                    displayName: _nameController.text,
+                  );
+                  userProvider.updateUserEmail(email: _emailController.text);
+                  // userProvider.updateUserNumber(number: _numberController.text);
+                  //userProvider.updateUserProfileImage(profileImage: profileImage)
+                  Navigator.pop(context);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              child: const Text(
+                "Done",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -163,6 +168,7 @@ class _EditBoxState extends State<EditBox> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(10),
+      height: getProportionateScreenHeight(70),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -190,7 +196,14 @@ class _EditBoxState extends State<EditBox> {
                 onSaved: (newValue) {
                   widget.controller.text = newValue!;
                   userProvider.updateUserDetails(
-                      displayName: widget.controller.text);
+                    displayName: widget.controller.text,
+                  );
+                },
+                onChanged: (newValue) {
+                  widget.controller.text = newValue;
+                  userProvider.updateUserDetails(
+                    displayName: widget.controller.text,
+                  );
                 },
                 controller: widget.controller,
                 style: TextStyle(
@@ -199,7 +212,7 @@ class _EditBoxState extends State<EditBox> {
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(5),
+                  // contentPadding: const EdgeInsets.all(5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide.none,
@@ -249,6 +262,7 @@ class _EditBoxEmailState extends State<EditBoxEmail> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(10),
+      height: getProportionateScreenHeight(70),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -277,6 +291,12 @@ class _EditBoxEmailState extends State<EditBoxEmail> {
                   widget.controller.text = newValue!;
                   userProvider.updateUserEmail(email: widget.controller.text);
                 },
+                onChanged: (newValue) {
+                  widget.controller.text = newValue;
+                  userProvider.updateUserEmail(
+                    email: widget.controller.text,
+                  );
+                },
                 controller: widget.controller,
                 style: TextStyle(
                   fontSize: getProportionateScreenWidth(14),
@@ -284,7 +304,7 @@ class _EditBoxEmailState extends State<EditBoxEmail> {
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(5),
+                  // contentPadding: const EdgeInsets.all(5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide.none,
@@ -317,6 +337,7 @@ class _EditBoxPhoneState extends State<EditBoxPhone> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(10),
+      height: getProportionateScreenHeight(70),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -358,9 +379,15 @@ class _EditBoxPhoneState extends State<EditBoxPhone> {
               child: TextFormField(
                 onSaved: (newValue) {
                   widget.controller.text = newValue!;
-                  userProvider.updateUserNumber(
-                    number: widget.controller.text,
-                  );
+                  // userProvider.updateUserNumber(
+                  //   number: widget.controller.text,
+                  // );
+                },
+                onChanged: (newValue) {
+                  widget.controller.text = newValue;
+                  // userProvider.updateUserNumber(
+                  //   number: widget.controller.text,
+                  // );
                 },
                 controller: widget.controller,
                 style: TextStyle(
@@ -369,7 +396,7 @@ class _EditBoxPhoneState extends State<EditBoxPhone> {
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(5),
+                  // contentPadding: const EdgeInsets.all(5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide.none,
@@ -381,6 +408,98 @@ class _EditBoxPhoneState extends State<EditBoxPhone> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ProfilePic extends StatefulWidget {
+  final String? profImage;
+
+  const ProfilePic({
+    this.profImage,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ProfilePic> createState() => _ProfilePicState();
+}
+
+class _ProfilePicState extends State<ProfilePic> {
+  XFile? imageXFile;
+  ImagePicker imagePicker = ImagePicker();
+
+  Future<void> getImageFromGallery() async {
+    try {
+      final pickedFile =
+          await imagePicker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          imageXFile = pickedFile;
+        });
+        print(imageXFile!.path);
+      } else {
+        print('No image selected');
+      }
+    } catch (e) {
+      print('Error selecting image: $e');
+    }
+  }
+
+  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+    foregroundColor: const Color(0xFFF5F6F9),
+    minimumSize: const Size(88, 44),
+    padding: const EdgeInsets.all(20),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(50),
+      side: const BorderSide(color: Colors.white),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 115,
+      width: 115,
+      child: Consumer<UserProvider>(builder: (context, userProvider, _) {
+        return Stack(
+          clipBehavior: Clip.none,
+          fit: StackFit.expand,
+          children: [
+            const CircleAvatar(
+              // fetch and deisplay the updated image here as Network image, if no image then show assetimage
+              backgroundImage: AssetImage("assets/images/1.jpg"),
+            ),
+            Positioned(
+              right: 100,
+              bottom: -6,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 23,
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey[100],
+                  radius: 21,
+                  child: TextButton(
+                    onPressed: () async {
+                      await getImageFromGallery();
+                      if (imageXFile != null) {
+                        userProvider.updateUserProfileImage(
+                          profileImage: imageXFile!.path,
+                        );
+                      } else {
+                        print('No image selected');
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      "assets/icons/Camera Icon.svg",
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      }),
     );
   }
 }

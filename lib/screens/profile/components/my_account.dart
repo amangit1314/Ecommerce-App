@@ -5,22 +5,27 @@ import 'package:soni_store_app/providers/providers.dart';
 import '../../../../utils/constants.dart';
 import 'edit_profile_screen.dart';
 
-class MyAccount extends StatelessWidget {
+class MyAccount extends StatefulWidget {
   const MyAccount({super.key});
 
   @override
+  State<MyAccount> createState() => _MyAccountState();
+}
+
+class _MyAccountState extends State<MyAccount> {
+  @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    // int selectedImage = 0;
 
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController numberController = TextEditingController();
+    // final CollectionReference productsRef =
+    //     FirebaseFirestore.instance.collection('products');
+    // late Stream<QuerySnapshot> productsStream;
 
-    if (userProvider.getUser != null) {
-      nameController.text = userProvider.getUser!.displayName ?? 'John';
-      emailController.text = userProvider.getUser!.email ?? 'john@gmail.com';
-      numberController.text = userProvider.getUser!.phoneNumber ?? '7023953453';
-    }
+    // @override
+    // void initState() {
+    //   super.initState();
+    //   productsStream = productsRef.snapshots();
+    // }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -52,34 +57,41 @@ class MyAccount extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
       ),
-      body: Consumer<UserProvider>(
-        builder: (context, userProvider, _) {
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Consumer<UserProvider>(
+          builder: (context, userProvider, _) {
+            return Column(
               children: [
                 Container(
                   padding: const EdgeInsets.only(top: 5, bottom: 15),
                   child: Row(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 30,
-                        backgroundImage:
-                            AssetImage("assets/images/Profile Image.png"),
+                        // if userprovider.getUser.prhotoURL is not null then only show network images otherwise show assetimage
+                        backgroundImage: NetworkImage(
+                          userProvider.getUser?.profImage ??
+                              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                        ),
+
+                        // backgroundImage:
+                        //      AssetImage("assets/images/Profile Image.png"),
                       ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userProvider.getUser?.displayName ??
-                                'Display Name not set',
+                            userProvider.getUser?.username ?? 'Aman Soni',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(userProvider.getUser?.email ?? 'Email not set'),
+                          Text(
+                            userProvider.getUser?.email ?? 'login@gmail.com',
+                          ),
                         ],
                       ),
                     ],
@@ -94,8 +106,7 @@ class MyAccount extends StatelessWidget {
                         children: [
                           const Text('Username'),
                           Text(
-                            userProvider.getUser?.displayName ??
-                                'Display Name not set',
+                            userProvider.getUser?.username ?? 'Aman Soni',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -115,8 +126,7 @@ class MyAccount extends StatelessWidget {
                         children: [
                           const Text('Phone number'),
                           Text(
-                            userProvider.getUser?.phoneNumber ??
-                                'Phone number not set',
+                            userProvider.getUser?.number ?? '+91 9649477393',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -133,12 +143,11 @@ class MyAccount extends StatelessWidget {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text('Gender'),
+                        children: [
+                          const Text('Gender'),
                           Text(
-                            // userProvider.getUser?.gender ??
-                            'Gender not set',
-                            style: TextStyle(
+                            userProvider.getUser?.gender ?? 'Male',
+                            style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
                             ),
@@ -157,7 +166,7 @@ class MyAccount extends StatelessWidget {
                         children: [
                           const Text('Email'),
                           Text(
-                            userProvider.getUser?.email ?? 'Email not set',
+                            userProvider.getUser?.email ?? 'example@gmail.com',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -177,7 +186,13 @@ class MyAccount extends StatelessWidget {
                         children: [
                           const Text('Password'),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              // use reset -password method of userProvider
+                              userProvider.resetPassword(
+                                email: userProvider.getUser?.email ??
+                                    'gitaman8481@gmail.com',
+                              );
+                            },
                             child: const Text(
                               'Change password',
                               style: TextStyle(
@@ -191,35 +206,10 @@ class MyAccount extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
-    );
-  }
-}
-
-// ignore_for_file: deprecated_member_use
-
-class ProfilePic extends StatelessWidget {
-  ProfilePic({
-    Key? key,
-  }) : super(key: key);
-  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-    foregroundColor: const Color(0xFFF5F6F9),
-    minimumSize: const Size(88, 44),
-    padding: const EdgeInsets.all(20),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(50),
-      side: const BorderSide(color: Colors.white),
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return const CircleAvatar(
-      radius: 30,
-      backgroundImage: AssetImage("assets/images/Profile Image.png"),
     );
   }
 }

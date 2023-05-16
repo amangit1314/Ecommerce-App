@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/resources/auth_methods.dart';
+import 'package:soni_store_app/screens/notification/notification_screen.dart';
 import 'package:soni_store_app/screens/profile/components/my_account.dart';
+import 'package:soni_store_app/screens/profile/settings.dart';
 import 'package:soni_store_app/screens/splash/splash_screen.dart';
 
+import '../help_center.dart';
 import 'profile_menu.dart';
+import 'profile_pic.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> with TickerProviderStateMixin {
+  late AnimationController bottomSheetAnimationController;
+
+  @override
+  void initState() {
+    super.initState();
+    bottomSheetAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +35,7 @@ class Body extends StatelessWidget {
       children: [
         Column(
           children: [
-            ProfilePic(),
+            const ProfilePic(),
             const SizedBox(height: 20),
             Column(
               children: [
@@ -36,17 +56,34 @@ class Body extends StatelessWidget {
                   icon: "assets/icons/Bell.svg",
                   press: () {
                     // navigate to notification screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationScreen(),
+                      ),
+                    );
                   },
                 ),
                 ProfileMenu(
                   text: "Settings",
                   icon: "assets/icons/Settings.svg",
-                  press: () {},
+                  press: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const Settings(),
+                      ),
+                    );
+                  },
                 ),
                 ProfileMenu(
                   text: "Help Center",
                   icon: "assets/icons/Question mark.svg",
-                  press: () {},
+                  press: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const HelpCenter(),
+                      ),
+                    );
+                  },
                 ),
                 ProfileMenu(
                   text: "Log Out",

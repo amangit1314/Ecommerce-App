@@ -11,29 +11,24 @@ dependencies:
   cached_network_image: ^3.2.3
   cloud_firestore: ^4.3.0
   cupertino_icons: ^1.0.2
-  device_preview: ^1.1.0
   firebase_auth: ^4.2.3
   firebase_core: ^2.4.0
   firebase_storage: ^11.0.9
+  firebase_messaging: ^14.6.0
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
-  flutter_staggered_grid_view: ^0.6.2
   flutter_stripe: ^9.2.0
   flutter_svg: ^2.0.5
   font_awesome_flutter: ^10.4.0
   get: ^4.6.1
   google_fonts: ^4.0.3
-  google_maps_flutter: ^2.2.5
   google_sign_in: ^6.1.0
   http: ^0.13.5
   image_picker: ^0.8.5
   provider: ^6.0.2
   shared_preferences: any
-  socket_io_client: ^2.0.1
   uuid: ^3.0.6
-  vertical_stepper: ^0.0.1
-  web_socket_channel: any
 
 dev_dependencies:
   flutter_lints: ^2.0.1
@@ -61,6 +56,7 @@ flutter:
     - assets/images/2.jpg
     - assets/images/3.jpg
     - assets/images/4.jpg
+    - assets/images/ringing_bell.png
   # fonts:
   #   - family: Muli
   #     fonts:

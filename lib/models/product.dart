@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:soni_store_app/models/review.dart';
 
 class Product {
   final int id;
@@ -11,12 +12,14 @@ class Product {
   final double rating;
   bool isFavourite, isPopular;
   final List<String> categories;
+  final List<Review> reviews;
 
   Product({
     required this.categories,
     required this.id,
     required this.images,
     this.colors = const [Colors.white],
+    this.reviews = const [],
     this.rating = 0,
     this.isFavourite = false,
     this.isPopular = false,

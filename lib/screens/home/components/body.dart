@@ -44,7 +44,7 @@ class Body extends StatelessWidget {
               child: Fashion(),
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
-            const RecentlyViewed(),
+            const RecentlyViewd(),
             SizedBox(height: getProportionateScreenHeight(10)),
             const Commercials(),
           ],
