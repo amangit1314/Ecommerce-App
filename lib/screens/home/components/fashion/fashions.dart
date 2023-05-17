@@ -72,7 +72,7 @@ class _FashionableState extends State<Fashionable> {
 
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 1,
+                itemCount: products.length,
                 itemBuilder: (context, index) {
                   return FashionsCard(
                     image: products[index].images.isNotEmpty

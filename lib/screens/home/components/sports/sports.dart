@@ -68,7 +68,7 @@ class _SportsState extends State<Sports> {
 
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 1,
+                itemCount: products.length,
                 itemBuilder: (context, index) {
                   return SportsCard(
                     image: products[index].images.isNotEmpty

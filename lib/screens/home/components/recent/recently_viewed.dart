@@ -68,7 +68,7 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
 
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 1,
+                itemCount: products.length,
                 itemBuilder: (context, index) {
                   return RecentlyViewdCard(
                     image: products[index].images.isNotEmpty

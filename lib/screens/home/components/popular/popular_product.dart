@@ -72,7 +72,7 @@ class _PopularProductsState extends State<PopularProducts> {
 
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 1,
+                itemCount: products.length,
                 itemBuilder: (context, index) {
                   return PopularProductCard(
                     image: products[index].images.isNotEmpty

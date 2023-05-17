@@ -1113,9 +1113,9 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                         // show model sheet with a image and two button of continue shopping and checkout
                         showModalBottomSheet(
                           context: context,
-                          builder: (context) =>  AddedWidget(
-                            widget: widget,
-                            width: MediaQuery.of(context).size.width;,
+                          builder: (context) => AddedWidget(
+                            // widget: widget,
+                            width: MediaQuery.of(context).size.width,
                           ),
                         );
                       },
