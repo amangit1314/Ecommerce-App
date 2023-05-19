@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +22,59 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? paymentIntent;
+  String? mtoken = " ";
+
+  @override
+  void initState() {
+    super.initState();
+    requestPermission();
+    getToken();
+  }
+
+  void requestPermission() async {
+    // permision for firebase notification
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    // check for authorization state
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then(
+      (token) {
+        setState(() {
+          mtoken = token;
+        });
+        saveToken(token!);
+        return null;
+      },
+    );
+  }
+
+  void saveToken(String token) async {
+    // get uid of current user
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    // save token to database
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'token': token,
+    });
+  }
 
   makePayment() async {
     try {

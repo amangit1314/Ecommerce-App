@@ -27,6 +27,67 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addToCart(Product product) {
+    // Find the index of the product in the cartItems list
+    int index = cartItems.indexWhere(
+      (item) => item.product.title == product.title,
+    );
+
+    if (index != -1) {
+      // If the product is already in the cart, increment its quantity
+      cartItems[index].quantity++;
+    } else {
+      // Otherwise, add a new cart item to the list
+      cartItems.add(
+        Product(
+          categories: [],
+          description: product.description,
+          id: product.id,
+          images: product.images,
+          title: product.title,
+          quantity: 1,
+          price: product.price,
+        ),
+      );
+    }
+
+    notifyListeners();
+  }
+
+  int getProductQuantity(String productName) {
+    // Find the index of the product in the cartItems list
+    int index =
+        cartItems.indexWhere((item) => item.product.name == productName);
+
+    if (index != -1) {
+      // If the product is found, return its quantity
+      return cartItems[index].quantity;
+    } else {
+      // If the product is not found, return 0
+      return 0;
+    }
+  }
+
+  int updateAddProductQuantity(int index) {
+    if (index >= 0 && index < cartItems.length) {
+      cartItems[index].quantity = cartItems[index].quantity + 1;
+
+      notifyListeners();
+    }
+    return cartItems[index].quantity;
+  }
+
+  int updateSubtractProductQuantity(int index) {
+    if (index >= 0 && index < cartItems.length) {
+      if (cartItems[index].quantity >= 1) {
+        cartItems[index].quantity = cartItems[index].quantity - 1;
+      }
+      cartItems[index].quantity = cartItems[index].quantity;
+      notifyListeners();
+    }
+    return cartItems[index].quantity;
+  }
+
   // if in cart notify if not then add
   changeIsInCart(bool newIsInCart) {
     _isInCart = newIsInCart;
@@ -66,5 +127,13 @@ class CartProvider with ChangeNotifier {
   addItemCart(Product cart) {
     _cartItems.add(cart);
     notifyListeners();
+  }
+
+  void updateItemQuantity(Product product, {int quantity = 1}) {
+    final int index = _cartItems.indexOf(product);
+    if (index != -1) {
+      _cartItems[index].quantity = quantity;
+      notifyListeners();
+    }
   }
 }

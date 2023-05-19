@@ -13,15 +13,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^4.2.3
   firebase_core: ^2.4.0
-  firebase_storage: ^11.0.9
   firebase_messaging: ^14.6.0
+  firebase_storage: ^11.0.9
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
+  flutter_local_notifications: any
   flutter_stripe: ^9.2.0
   flutter_svg: ^2.0.5
   font_awesome_flutter: ^10.4.0
   get: ^4.6.1
+  get_it: ^7.6.0
   google_fonts: ^4.0.3
   google_sign_in: ^6.1.0
   http: ^0.13.5
@@ -35,15 +37,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# flutter_icons:
-#   android: "launcher_icon"
-#   ios: true
-#   image_path: "assets/logo-color.png"
-flutter_launcher_icons:
+flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icons/white_new_logo.png"
-  min_sdk_android: 21
+  image_path: "assets/launcher.png"
 
 flutter:
   uses-material-design: true

@@ -1,25 +1,25 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/review.dart';
 
 class Product {
   final int id;
   final String title, description;
   final List<String> images;
-  final List<Color> colors;
+  final List<String> colors;
   final int price;
   final double rating;
   bool isFavourite, isPopular;
   final List<String> categories;
   final List<Review> reviews;
   final List? sizes;
+  int quantity;
 
   Product({
     required this.categories,
     required this.id,
     required this.images,
-    this.colors = const [Colors.white],
+    this.colors = const ["#000000"],
     this.sizes = const ['M', 'L', 'XL', 'XXL'],
     this.reviews = const [],
     this.rating = 0,
@@ -28,13 +28,14 @@ class Product {
     required this.title,
     required this.price,
     required this.description,
+    this.quantity = 0, // Initialize quantity to 0
   });
 
   static Product fromSnapshot(productData) {
     return Product(
       id: productData.id,
       images: productData['images'],
-      // colors: productData['colors'],
+      colors: productData['colors'],
       title: productData['title'],
       price: productData['price'],
       description: productData['description'],
@@ -50,7 +51,7 @@ class Product {
       'id': id,
       'description': description,
       'images': images,
-      // 'colors': colors.map((x) => x.value).toList(),
+      'colors': colors.map((x) => x).toList(),
       'price': price,
       'isPopular': isPopular,
       'categories': categories,
@@ -68,6 +69,7 @@ class Product {
       rating: map['rating'] ?? 0,
       isFavourite: map['isFavourite'] as bool? ?? false,
       isPopular: map['isPopular'] as bool? ?? false,
+      colors: List<String>.from(map['colors'] ?? []),
     );
   }
 

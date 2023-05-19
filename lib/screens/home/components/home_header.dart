@@ -4,6 +4,7 @@ import '../../../components/icon_btn_with_counter.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 import '../../cart/cart_screen.dart';
+import '../../notification/notification_screen.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
@@ -28,20 +29,19 @@ class HomeHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // const SearchField(),
-              // IconBtnWithCounter(
-              //   svgSrc: "assets/icons/Search Icon.svg",
-              //   press: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (_) {
-              //         // return const CartScreen();
-              //         return const HomeScreen();
-              //       },
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(width: getProportionateScreenWidth(8)),
+              IconBtnWithCounter(
+                svgSrc: "assets/icons/Bell.svg",
+                numOfitem: 3,
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const NotificationScreen();
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
               IconBtnWithCounter(
                 svgSrc: "assets/icons/Cart Icon.svg",
                 press: () => Navigator.push(
@@ -53,24 +53,6 @@ class HomeHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: getProportionateScreenWidth(8)),
-              // IconBtnWithCounter(
-              //   svgSrc: "assets/icons/Bell.svg",
-              //   numOfitem: 3,
-              //   press: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (_) {
-              //         return const NotificationScreen();
-              //       },
-              //     ),
-              //   ),
-              // ),
-
-              const CircleAvatar(
-                radius: 22,
-                backgroundImage: AssetImage('assets/images/character.png'),
-              )
             ],
           ),
         ],

@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soni_store_app/models/payment.dart';
 import 'package:soni_store_app/models/product.dart';
 
-import 'cart_item.dart';
-
 class User {
   final String email;
   final String uid;
@@ -50,18 +48,20 @@ class User {
   static User fromMap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return User(
-      profImage: snapshot['profImage'] as String,
-      number: snapshot['number'] as String,
-      gender: snapshot['gender'] as String,
+      number: snapshot['number'] as String?,
+      gender: snapshot['gender'] as String?,
       addresses: snapshot['addresses']?.cast<String>(),
-      cartItems:
-          snapshot['cartItems']?.map((e) => CartItem.fromMap(e)).toList(),
-      email: snapshot['email'] as String,
-      uid: snapshot['uid'] as String,
+      cartItems: (snapshot['cartItems'] as List<dynamic>?)
+              ?.map((item) => Product.fromMap(item))
+              .toList() ??
+          [],
+      uid: snapshot['uid'] as String? ?? '',
+      email: snapshot['email'] as String? ?? '',
+      username: snapshot['username'] as String? ?? '',
+      profImage: snapshot['profImage'] as String? ?? '',
       orders: snapshot['orders']?.cast<Order>(),
       payments: snapshot['payments'],
-      username: snapshot['username'] as String,
-      password: snapshot['password'] as String,
+      password: snapshot['password'] as String?,
     );
   }
 

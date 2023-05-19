@@ -1,8 +1,12 @@
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
 
 import '../../../../utils/constants.dart';
+import '../../../providers/user_provider.dart';
 import 'edit_profile_screen.dart';
 
 class MyAccount extends StatefulWidget {
@@ -13,20 +17,43 @@ class MyAccount extends StatefulWidget {
 }
 
 class _MyAccountState extends State<MyAccount> {
+  pickImage(ImageSource source) async {
+    final ImagePicker imagePicker = ImagePicker();
+    XFile? file = await imagePicker.pickImage(source: source);
+    if (file != null) {
+      return await file.readAsBytes();
+    }
+    debugPrint('No Image Selected');
+  }
+
+  Uint8List? _image;
+
+  XFile? selectedImage;
+
+  selectImage(userProvider) async {
+    Uint8List imageBytes = await pickImage(ImageSource.gallery) ?? Uint8List(0);
+    if (imageBytes.isEmpty) return;
+
+    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('profile_images').child(imageName);
+
+    UploadTask uploadTask = storageReference.putData(imageBytes);
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+
+    String profileImage = await taskSnapshot.ref.getDownloadURL();
+
+    setState(() {
+      _image = imageBytes;
+    });
+
+    if (profileImage.isNotEmpty) {
+      await userProvider.updateUserProfileImage(profileImage: profileImage);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // int selectedImage = 0;
-
-    // final CollectionReference productsRef =
-    //     FirebaseFirestore.instance.collection('products');
-    // late Stream<QuerySnapshot> productsStream;
-
-    // @override
-    // void initState() {
-    //   super.initState();
-    //   productsStream = productsRef.snapshots();
-    // }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -37,9 +64,14 @@ class _MyAccountState extends State<MyAccount> {
               ),
         ),
         backgroundColor: Colors.white,
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: kPrimaryColor,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: kPrimaryColor,
+          ),
         ),
         actions: [
           TextButton(
@@ -67,17 +99,18 @@ class _MyAccountState extends State<MyAccount> {
                   padding: const EdgeInsets.only(top: 5, bottom: 15),
                   child: Row(
                     children: [
-                      CircleAvatar(
-                        radius: 30,
-                        // if userprovider.getUser.prhotoURL is not null then only show network images otherwise show assetimage
-                        backgroundImage: NetworkImage(
-                          userProvider.getUser?.profImage ??
-                              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                        ),
-
-                        // backgroundImage:
-                        //      AssetImage("assets/images/Profile Image.png"),
-                      ),
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 60,
+                              backgroundImage: MemoryImage(_image!),
+                              backgroundColor: Colors.red,
+                            )
+                          : const CircleAvatar(
+                              radius: 60,
+                              backgroundImage: NetworkImage(
+                                  'https://i.stack.imgur.com/l60Hf.png'),
+                              backgroundColor: Colors.red,
+                            ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

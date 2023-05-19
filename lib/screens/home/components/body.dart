@@ -21,7 +21,7 @@ class Body extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: getProportionateScreenHeight(20)),
+            SizedBox(height: getProportionateScreenHeight(10)),
             const HomeHeader(),
             SizedBox(height: getProportionateScreenHeight(10)),
             const DiscountBanner(),
@@ -40,7 +40,7 @@ class Body extends StatelessWidget {
             ),
             SizedBox(height: getProportionateScreenHeight(10)),
             const Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.only(top: 20.0, bottom: 20, left: 20),
               child: Fashion(),
             ),
             SizedBox(height: getProportionateScreenHeight(20)),

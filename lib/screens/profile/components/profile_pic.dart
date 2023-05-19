@@ -1,3 +1,5 @@
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,21 +25,43 @@ class _ProfilePicState extends State<ProfilePic> {
     ),
   );
 
-  XFile? imageXFile;
+  pickImage(ImageSource source) async {
+    final ImagePicker imagePicker = ImagePicker();
+    XFile? file = await imagePicker.pickImage(source: source);
+    if (file != null) {
+      return await file.readAsBytes();
+    }
+    debugPrint('No Image Selected');
+  }
 
-  ImagePicker imagePicker = ImagePicker();
+  Uint8List? _image;
 
-  getImageFromGalary() async {
-    imageXFile = await imagePicker.pickImage(source: ImageSource.gallery);
-    print(imageXFile!.path);
+  XFile? selectedImage;
+
+  selectImage(userProvider) async {
+    Uint8List imageBytes = await pickImage(ImageSource.gallery) ?? Uint8List(0);
+    if (imageBytes.isEmpty) return;
+
+    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('profile_images').child(imageName);
+
+    UploadTask uploadTask = storageReference.putData(imageBytes);
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+
+    String profileImage = await taskSnapshot.ref.getDownloadURL();
+
     setState(() {
-      imageXFile = imageXFile;
+      _image = imageBytes;
     });
+
+    if (profileImage.isNotEmpty) {
+      await userProvider.updateUserProfileImage(profileImage: profileImage);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // user provider isntance
     final userProvider = Provider.of<UserProvider>(context);
     return SizedBox(
       height: 115,
@@ -46,12 +70,18 @@ class _ProfilePicState extends State<ProfilePic> {
         clipBehavior: Clip.none,
         fit: StackFit.expand,
         children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(
-              userProvider.getUser?.profImage ??
-                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-            ),
-          ),
+          _image != null
+              ? CircleAvatar(
+                  radius: 60,
+                  backgroundImage: MemoryImage(_image!),
+                  backgroundColor: Colors.red,
+                )
+              : const CircleAvatar(
+                  radius: 60,
+                  backgroundImage:
+                      NetworkImage('https://i.stack.imgur.com/l60Hf.png'),
+                  backgroundColor: Colors.red,
+                ),
           Positioned(
             right: 70,
             bottom: -6,
@@ -62,11 +92,8 @@ class _ProfilePicState extends State<ProfilePic> {
                 backgroundColor: Colors.grey[100],
                 radius: 21,
                 child: TextButton(
-                  onPressed: () {
-                    getImageFromGalary;
-                    userProvider.updateUserProfileImage(
-                      profileImage: getImageFromGalary().imageXFile!.path(),
-                    );
+                  onPressed: () async {
+                    await selectImage(userProvider);
                   },
                   child: SvgPicture.asset(
                     "assets/icons/Camera Icon.svg",

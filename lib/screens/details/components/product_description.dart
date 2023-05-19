@@ -52,9 +52,10 @@ class _ProductDescriptionState extends State<ProductDescription>
         children: [
           //* Product title
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: getProportionateScreenWidth(20),
-              vertical: getProportionateScreenHeight(15),
+            padding: EdgeInsets.only(
+              right: getProportionateScreenWidth(20),
+              left: getProportionateScreenWidth(20),
+              bottom: getProportionateScreenHeight(15),
             ),
             child: Text(
               widget.product.title,
@@ -108,6 +109,10 @@ class _ProductDescriptionState extends State<ProductDescription>
                         setState(() {
                           widget.product.isFavourite =
                               !widget.product.isFavourite;
+                          cartProvider.updateAddProductQuantity(
+                            cartProvider
+                                .getProductQuantity(widget.product.title),
+                          );
                         });
                         // add this product to cart using provider
                         cartProvider.addItemCart(widget.product);

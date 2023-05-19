@@ -27,11 +27,6 @@ class _EcommerceAppState extends State<EcommerceApp> {
       child: GetMaterialApp(
         title: 'SnapCart Ecommerce App',
         debugShowCheckedModeBanner: false,
-        // useInheritedMediaQuery: true,
-        // locale: DevicePreview.locale(context),
-        // builder: DevicePreview.appBuilder,
-        // themeMode: ThemeMode.dark,
-        // darkTheme: ThemeData.dark(),
         theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
           primarySwatch: Colors.deepOrange,

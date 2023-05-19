@@ -1,89 +1,89 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-import '../../models/product.dart';
+// import '../../models/product.dart';
 
-const String description =
-    "Wireless Controller for PS4™ gives you what you want in your gaming from over precision control your games to sharing …";
+// const String description =
+//     "Wireless Controller for PS4™ gives you what you want in your gaming from over precision control your games to sharing …";
 
-List<Product> demoProducts = [
-  Product(
-    id: 1,
-    images: [
-      "assets/images/ps4_console_white_1.png",
-      "assets/images/ps4_console_white_2.png",
-      "assets/images/ps4_console_white_3.png",
-      "assets/images/ps4_console_white_4.png",
-    ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    categories: [],
-    title: "Wireless Controller for PS4™",
-    price: 64,
-    description: description,
-    rating: 4,
-    isFavourite: true,
-    isPopular: true,
-  ),
-  Product(
-    id: 2,
-    images: [
-      "assets/images/Image Popular Product 2.png",
-    ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    categories: [],
-    title: "Nike Sport White - Man Pant",
-    price: 50,
-    description: description,
-    rating: 4,
-    isPopular: true,
-  ),
-  Product(
-    id: 3,
-    images: [
-      "assets/images/glap.png",
-    ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    categories: [],
-    title: "Gloves XC Omega - Polygon",
-    price: 365,
-    description: description,
-    rating: 4,
-    isFavourite: true,
-    isPopular: true,
-  ),
-  Product(
-    id: 4,
-    images: [
-      "assets/images/wireless headset.png",
-    ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    categories: [],
-    title: "Logitech Head",
-    price: 200,
-    description: description,
-    rating: 4,
-    isFavourite: true,
-  ),
-];
+// List<Product> demoProducts = [
+//   Product(
+//     id: 1,
+//     images: [
+//       "assets/images/ps4_console_white_1.png",
+//       "assets/images/ps4_console_white_2.png",
+//       "assets/images/ps4_console_white_3.png",
+//       "assets/images/ps4_console_white_4.png",
+//     ],
+//     colors: [
+//       const Color(0xFFF6625E),
+//       const Color(0xFF836DB8),
+//       const Color(0xFFDECB9C),
+//       Colors.white,
+//     ],
+//     categories: [],
+//     title: "Wireless Controller for PS4™",
+//     price: 64,
+//     description: description,
+//     rating: 4,
+//     isFavourite: true,
+//     isPopular: true,
+//   ),
+//   Product(
+//     id: 2,
+//     images: [
+//       "assets/images/Image Popular Product 2.png",
+//     ],
+//     colors: [
+//       const Color(0xFFF6625E),
+//       const Color(0xFF836DB8),
+//       const Color(0xFFDECB9C),
+//       Colors.white,
+//     ],
+//     categories: [],
+//     title: "Nike Sport White - Man Pant",
+//     price: 50,
+//     description: description,
+//     rating: 4,
+//     isPopular: true,
+//   ),
+//   Product(
+//     id: 3,
+//     images: [
+//       "assets/images/glap.png",
+//     ],
+//     colors: [
+//       const Color(0xFFF6625E),
+//       const Color(0xFF836DB8),
+//       const Color(0xFFDECB9C),
+//       Colors.white,
+//     ],
+//     categories: [],
+//     title: "Gloves XC Omega - Polygon",
+//     price: 365,
+//     description: description,
+//     rating: 4,
+//     isFavourite: true,
+//     isPopular: true,
+//   ),
+//   Product(
+//     id: 4,
+//     images: [
+//       "assets/images/wireless headset.png",
+//     ],
+//     colors: [
+//       const Color(0xFFF6625E),
+//       const Color(0xFF836DB8),
+//       const Color(0xFFDECB9C),
+//       Colors.white,
+//     ],
+//     categories: [],
+//     title: "Logitech Head",
+//     price: 200,
+//     description: description,
+//     rating: 4,
+//     isFavourite: true,
+//   ),
+// ];
 
 List generes = [
   'assets/images/tshirt.png',
@@ -99,7 +99,7 @@ List tshirts = [
   'assets/images/tshirt.png',
 ];
 
-List tshirtName = ['Sports Amber', 'Polo White', 'Olive Green', 'Yellow V'];
+// List tshirtName = ['Sports Amber', 'Polo White', 'Olive Green', 'Yellow V'];
 
 List pants = [
   'assets/images/download.jpg',

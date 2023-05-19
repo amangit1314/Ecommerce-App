@@ -14,6 +14,7 @@ class Fashion extends StatelessWidget {
         SectionTitle(title: 'Fashion', press: () {}),
         SizedBox(height: getProportionateScreenHeight(20)),
         Container(
+          margin: const EdgeInsets.only(right: 10),
           decoration: const BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.only(
