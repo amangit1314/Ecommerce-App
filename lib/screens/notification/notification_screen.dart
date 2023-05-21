@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
 import '../../utils/constants.dart';
@@ -84,6 +86,7 @@ class NotificationsDisabledVIew extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
           height: 300,
@@ -116,7 +119,7 @@ class NotificationsDisabledVIew extends StatelessWidget {
                 // textstyle color kPrimaryColor
                 style: TextStyle(
                   color: kPrimaryColor,
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -138,7 +141,7 @@ class NotificationsDisabledVIew extends StatelessWidget {
             ),
             // enable notification button
             Padding(
-              padding: const EdgeInsets.only(top: 60.0),
+              padding: const EdgeInsets.only(top: 40.0, bottom: 30),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: 50,
@@ -146,6 +149,53 @@ class NotificationsDisabledVIew extends StatelessWidget {
                   // border radius
 
                   onPressed: () {},
+
+                  // onPressed: () async {
+                  //   // Check if notification permission is granted
+                  //   PermissionStatus status =
+                  //       await Permission.notification.status;
+
+                  //   if (status.isDenied) {
+                  //     // If notification permission is off, show an AlertDialog
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (context) => AlertDialog(
+                  //         title: const Text('Notifications are turned off'),
+                  //         content: const Text(
+                  //             'Please turn on notifications from settings'),
+                  //         actions: [
+                  //           TextButton(
+                  //             onPressed: () {
+                  //               // Close the dialog when 'Cancel' is pressed
+                  //               Navigator.of(context).pop();
+                  //             },
+                  //             child: const Text('Cancel'),
+                  //           ),
+                  //           TextButton(
+                  //             onPressed: () async {
+                  //               // Open app settings
+                  //               await openAppSettings();
+
+                  //               // Close the dialog
+                  //               Navigator.of(context).pop();
+                  //             },
+                  //             child: const Text('Settings'),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     );
+                  //   } else {
+                  //     // If notification permission is granted, navigate to NotificationsEnabledView
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             const NotificationsEnabledView(),
+                  //       ),
+                  //     );
+                  //   }
+                  // },
+
                   // button color kPrimaryColor
                   style: ElevatedButton.styleFrom(
                     elevation: 0,

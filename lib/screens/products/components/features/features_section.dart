@@ -8,6 +8,7 @@ class FeaturesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Column(
       children: [
         SectionTitle(title: 'Feature\'s', press: () {}),
@@ -17,7 +18,7 @@ class FeaturesSection extends StatelessWidget {
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(15),
           ),
-          height: 330,
+          height: 325,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -26,11 +27,13 @@ class FeaturesSection extends StatelessWidget {
                 children: [
                   Container(
                     height: 160,
-                    width: 160,
+                    width: getProportionateScreenWidth(width * .45),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.deepPurpleAccent.withOpacity(.3),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                      ),
                       image: const DecorationImage(
                         image: AssetImage('assets/images/tshirt_w.jpg'),
                         fit: BoxFit.cover,
@@ -39,11 +42,13 @@ class FeaturesSection extends StatelessWidget {
                   ),
                   Container(
                     height: 160,
-                    width: 160,
+                    width: getProportionateScreenWidth(width * .45),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.indigoAccent.withOpacity(.3),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(15),
+                      ),
                       image: const DecorationImage(
                         image: AssetImage('assets/images/images.jpg'),
                         fit: BoxFit.cover,
@@ -57,11 +62,13 @@ class FeaturesSection extends StatelessWidget {
                 children: [
                   Container(
                     height: 160,
-                    width: 160,
+                    width: getProportionateScreenWidth(width * .45),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.amber.shade900.withOpacity(.3),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                      ),
                       image: const DecorationImage(
                         image: AssetImage('assets/images/sneak_pink.jpg'),
                         fit: BoxFit.cover,
@@ -70,11 +77,14 @@ class FeaturesSection extends StatelessWidget {
                   ),
                   Container(
                     height: 160,
-                    width: 160,
+                    width: getProportionateScreenWidth(width * .45),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.greenAccent.withOpacity(.3),
-                      borderRadius: BorderRadius.circular(15),
+                      // border radius on only left top
+                      borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(15),
+                      ),
                       image: const DecorationImage(
                         image: AssetImage('assets/images/sneakers.jpg'),
                         fit: BoxFit.cover,

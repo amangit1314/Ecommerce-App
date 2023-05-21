@@ -376,7 +376,7 @@ class SportsCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
               child: Text(
-                '\$ ${product.price}',
+                '₹ ${product.price}',
                 style: const TextStyle(
                   fontSize: 12,
                   color: kPrimaryColor,

@@ -2,16 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:soni_store_app/models/product.dart';
 
 class CartProvider with ChangeNotifier {
-  // list of getter cartItems responsible for all cart items
   final List<Product> _cartItems = [];
-  // getter cartItemsCount responsible for count of cart items
+
   List get cartItems => _cartItems;
 
   String _name = '';
-  String _price = '';
-  String _description = '';
-  String _category = '';
-  String _image = '';
+  final String _price = '';
+  final String _description = '';
+  final String _category = '';
+  final String _image = '';
   bool _isInCart = false;
 
   String get name => _name;
@@ -28,16 +27,13 @@ class CartProvider with ChangeNotifier {
   }
 
   void addToCart(Product product) {
-    // Find the index of the product in the cartItems list
     int index = cartItems.indexWhere(
       (item) => item.product.title == product.title,
     );
 
     if (index != -1) {
-      // If the product is already in the cart, increment its quantity
       cartItems[index].quantity++;
     } else {
-      // Otherwise, add a new cart item to the list
       cartItems.add(
         Product(
           categories: [],
@@ -55,15 +51,12 @@ class CartProvider with ChangeNotifier {
   }
 
   int getProductQuantity(String productName) {
-    // Find the index of the product in the cartItems list
     int index =
         cartItems.indexWhere((item) => item.product.name == productName);
 
     if (index != -1) {
-      // If the product is found, return its quantity
       return cartItems[index].quantity;
     } else {
-      // If the product is not found, return 0
       return 0;
     }
   }
@@ -88,33 +81,11 @@ class CartProvider with ChangeNotifier {
     return cartItems[index].quantity;
   }
 
-  // if in cart notify if not then add
   changeIsInCart(bool newIsInCart) {
     _isInCart = newIsInCart;
     notifyListeners();
   }
 
-  changePrice(String newPrice) {
-    _price = newPrice;
-    notifyListeners();
-  }
-
-  changeDescription(String newDescription) {
-    _description = newDescription;
-    notifyListeners();
-  }
-
-  changeCategory(String newCategory) {
-    _category = newCategory;
-    notifyListeners();
-  }
-
-  changeImage(String newImage) {
-    _image = newImage;
-    notifyListeners();
-  }
-
-  // calculate total price and notify
   double get totalPrice {
     double total = 0;
     for (var element in _cartItems) {
@@ -123,7 +94,6 @@ class CartProvider with ChangeNotifier {
     return total;
   }
 
-  // add cart to cartItems
   addItemCart(Product cart) {
     _cartItems.add(cart);
     notifyListeners();

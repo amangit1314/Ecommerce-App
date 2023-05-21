@@ -40,6 +40,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
             Column(
               children: [
                 const SizedBox(height: 20),
+                // * My Account
                 ProfileMenu(
                   text: "My Account",
                   icon: "assets/icons/User Icon.svg",
@@ -51,6 +52,8 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                     ),
                   },
                 ),
+
+                // * Notifications
                 ProfileMenu(
                   text: "Notifications",
                   icon: "assets/icons/Bell.svg",
@@ -63,6 +66,8 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                     );
                   },
                 ),
+
+                // * Settings
                 ProfileMenu(
                   text: "Settings",
                   icon: "assets/icons/Settings.svg",
@@ -74,6 +79,8 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                     );
                   },
                 ),
+
+                // * Help Center
                 ProfileMenu(
                   text: "Help Center",
                   icon: "assets/icons/Question mark.svg",
@@ -85,6 +92,8 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                     );
                   },
                 ),
+
+                // * Log Out
                 ProfileMenu(
                   text: "Log Out",
                   icon: "assets/icons/Log out.svg",

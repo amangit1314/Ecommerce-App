@@ -4,6 +4,7 @@ import 'package:soni_store_app/screens/details/components/rating_tile.dart';
 
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
+import 'add_review_screen.dart';
 
 class ReviewsSheet extends StatelessWidget {
   const ReviewsSheet({
@@ -92,24 +93,34 @@ class ReviewsSheet extends StatelessWidget {
                           ),
 
                           // * add review tile
-                          const ListTile(
-                            contentPadding: EdgeInsets.all(15),
-                            leading: FaIcon(
-                              FontAwesomeIcons.comments,
-                              size: 20,
-                              color: kPrimaryColor,
-                            ),
-                            title: Text(
-                              "Add a review",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
+                          GestureDetector(
+                            onTap: () {
+                              // navigate to add review screen
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const AddReviewScreen(),
+                                ),
+                              );
+                            },
+                            child: const ListTile(
+                              contentPadding: EdgeInsets.all(15),
+                              leading: FaIcon(
+                                FontAwesomeIcons.comments,
+                                size: 20,
                                 color: kPrimaryColor,
                               ),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 20,
-                              color: kPrimaryColor,
+                              title: Text(
+                                "Add a review",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                              trailing: Icon(
+                                Icons.arrow_forward_ios,
+                                size: 20,
+                                color: kPrimaryColor,
+                              ),
                             ),
                           ),
 
@@ -126,7 +137,7 @@ class ReviewsSheet extends StatelessWidget {
                             ),
                           ),
 
-                          // * reviews list section heade
+                          // * reviews list section header
                           const Padding(
                             padding: EdgeInsets.all(15.0),
                             child: Text(
@@ -213,7 +224,7 @@ class ReviewItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(5.0),
-      height: 180,
+      height: 165,
       decoration: BoxDecoration(
         color: Colors.grey.shade800,
         borderRadius: BorderRadius.circular(15),
@@ -226,13 +237,12 @@ class ReviewItemTile extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.grey.shade600,
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
-                ),
+                    radius: 20,
+                    backgroundColor: Colors.grey.shade600,
+                    child: const CircleAvatar(
+                      radius: 18,
+                      backgroundImage: AssetImage('assets/images/1.jpg'),
+                    )),
                 const SizedBox(width: 10),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -241,7 +251,7 @@ class ReviewItemTile extends StatelessWidget {
                     Text(
                       "John Doe",
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -252,7 +262,7 @@ class ReviewItemTile extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.white,
-                        fontSize: 8,
+                        fontSize: 10,
                       ),
                     ),
                   ],
@@ -262,27 +272,27 @@ class ReviewItemTile extends StatelessWidget {
                   children: [
                     FaIcon(
                       FontAwesomeIcons.star,
-                      size: 12,
+                      size: 15,
                       color: Colors.yellow.shade500,
                     ),
                     FaIcon(
                       FontAwesomeIcons.star,
-                      size: 12,
+                      size: 15,
                       color: Colors.yellow.shade500,
                     ),
                     FaIcon(
                       FontAwesomeIcons.star,
-                      size: 12,
+                      size: 15,
                       color: Colors.yellow.shade500,
                     ),
                     FaIcon(
                       FontAwesomeIcons.star,
-                      size: 12,
+                      size: 15,
                       color: Colors.yellow.shade500,
                     ),
                     FaIcon(
                       FontAwesomeIcons.star,
-                      size: 12,
+                      size: 15,
                       color: Colors.yellow.shade500,
                     ),
                   ],
@@ -293,13 +303,13 @@ class ReviewItemTile extends StatelessWidget {
 
           // quoted text 4 line
           const Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0),
             child: Text(
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae nisi eget nunc ultricies aliquet. Sed vitae nisi eget nunc ultricies aliquet.",
               style: TextStyle(
                 fontWeight: FontWeight.normal,
-                color: Colors.white,
-                fontSize: 10,
+                color: Colors.grey,
+                fontSize: 12,
               ),
             ),
           ),

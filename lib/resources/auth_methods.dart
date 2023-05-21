@@ -113,15 +113,42 @@ class AuthMethods {
     await _auth.signOut();
   }
 
-  Future<void> updateUserDetails({required String displayName}) async {
+  Future<void> addProfileImage({required String photoURL}) async {
     User? currentUser = _auth.currentUser;
-    await currentUser!.updateDisplayName(displayName);
+    try {
+      await _firestore
+          .collection('users')
+          .doc(currentUser!.uid)
+          .update({'photoURL': photoURL});
+    } catch (err) {
+      throw Exception(err);
+    }
   }
 
-  Future<void> updateUserEmail({required String email}) async {
+  Future<void> addPhoneNumber({required String phoneNumber}) async {
     User? currentUser = _auth.currentUser;
-    await currentUser!.updateEmail(email);
+    try {
+      await _firestore
+          .collection('users')
+          .doc(currentUser!.uid)
+          .update({'phoneNumber': phoneNumber});
+    } catch (err) {
+      throw Exception(err);
+    }
   }
+
+  Future<void> updateUserDetailsFromProvider(model.User user) async {
+    try {
+      await _firestore.collection('users').doc(user.uid).update(user.toMap());
+    } catch (err) {
+      throw Exception(err);
+    }
+  }
+}
+
+class UserDetailsMethods {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> addProfileImage({required String photoURL}) async {
     User? currentUser = _auth.currentUser;
@@ -147,62 +174,18 @@ class AuthMethods {
     }
   }
 
-  Future<void> updateUsername({required String username}) async {
-    User? currentUser = _auth.currentUser;
+  Future<void> updateUserDetailsFromProvider(model.User user) async {
     try {
-      await _firestore
-          .collection('users')
-          .doc(currentUser!.uid)
-          .update({'username': username});
+      await _firestore.collection('users').doc(user.uid).update(user.toMap());
     } catch (err) {
       throw Exception(err);
     }
   }
 
-  Future<void> updateEmail({required String email}) async {
+  Future<model.User> getUserDetails() async {
     User? currentUser = _auth.currentUser;
-    try {
-      await currentUser!.updateEmail(email);
-      await _firestore
-          .collection('users')
-          .doc(currentUser.uid)
-          .update({'email': email});
-    } catch (err) {
-      throw Exception(err);
-    }
-  }
-
-  Future<void> updatePassword({required String password}) async {
-    User? currentUser = _auth.currentUser;
-    try {
-      await currentUser!.updatePassword(password);
-    } catch (err) {
-      throw Exception(err);
-    }
-  }
-
-  Future<void> updatePhoneNumber({required String phoneNumber}) async {
-    User? currentUser = _auth.currentUser;
-    try {
-      await _firestore
-          .collection('users')
-          .doc(currentUser!.uid)
-          .update({'phoneNumber': phoneNumber});
-    } catch (err) {
-      throw Exception(err);
-    }
-  }
-
-  Future<void> updateUserPic({required String photoURL}) async {
-    User? currentUser = _auth.currentUser;
-    try {
-      await currentUser!.updatePhotoURL(photoURL);
-    } catch (err) {
-      throw Exception(err);
-    }
-  }
-
-  Future resetPassword({required String email}) async {
-    await _auth.sendPasswordResetEmail(email: email);
+    final DocumentSnapshot<Map<String, dynamic>> snap =
+        await _firestore.collection('users').doc(currentUser!.uid).get();
+    return model.User.fromMap(snap);
   }
 }

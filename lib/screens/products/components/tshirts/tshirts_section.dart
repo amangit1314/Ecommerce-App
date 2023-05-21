@@ -191,7 +191,7 @@ class _TshirtsSectionState extends State<TshirtsSection> {
                         );
                       },
                       // productDesc: '\$${products[index].price}',
-                      price: '\$${products[index].price}',
+                      price: '₹ ${products[index].price}',
                       product: products[index],
                     ),
                   );

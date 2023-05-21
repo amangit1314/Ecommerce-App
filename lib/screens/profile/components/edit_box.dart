@@ -6,112 +6,59 @@ import '../../../providers/user_provider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
-class EditBox extends StatefulWidget {
-  const EditBox({
-    Key? key, // Updated
-    required this.controller,
-    required this.label,
-    required this.onSaved,
-  }) : super(key: key); // Updated
+class EditBox extends StatelessWidget {
+  EditBox(
+      {Key? key,
+      required this.controller,
+      required this.onChanged,
+      required this.addError})
+      : super(key: key);
 
   final TextEditingController controller;
-  final String label;
-  final Function(String) onSaved;
-
-  @override
-  State<EditBox> createState() => _EditBoxState();
-}
-
-class _EditBoxState extends State<EditBox> {
+  final void addError;
+  final Function(String) onChanged;
   final List<String> errors = [];
   bool isEditing = false;
-  IconData currentIcon = FontAwesomeIcons.user; // Updated
-  String currentText = ''; // Updated
-
-  void addError({String? error}) {
-    if (!errors.contains(error)) {
-      setState(() {
-        errors.add(error!);
-      });
-    }
-  }
-
-  void removeError({String? error}) {
-    if (errors.contains(error)) {
-      setState(() {
-        errors.remove(error);
-      });
-    }
-  }
+  IconData currentIcon = FontAwesomeIcons.user;
+  String currentText = '';
 
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    currentText = userProvider.getUser!.username ?? 'Aman'; // Updated
-
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(10),
-      height: getProportionateScreenHeight(70),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.grey,
+    if (userProvider.getUser != null) {
+      currentText = userProvider.getUser!.username ?? 'Aman';
+    }
+    return TextFormField(
+      keyboardType: TextInputType.name,
+      onSaved: (newValue) => controller.text = newValue!,
+      style: TextStyle(fontSize: getProportionateScreenWidth(12)),
+      onChanged: onChanged,
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError;
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Username",
+        hintText: userProvider.getUser?.email,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: const BorderSide(
+            color: kPrimaryColor,
+            width: 1.0,
+          ),
         ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            // Added GestureDetector
-            onTap: () {
-              setState(() {
-                isEditing = !isEditing;
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: FaIcon(
-                currentIcon,
-                color: kPrimaryColor,
-                size: 20,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: InputDecorator(
-              decoration: const InputDecoration(border: InputBorder.none),
-              child: TextFormField(
-                enabled: isEditing,
-                onSaved: (newValue) => widget.onSaved(newValue!),
-                onChanged: (newValue) {
-                  userProvider.updateUserDetails(
-                    displayName: newValue,
-                  );
-                  setState(() {
-                    widget.controller.text = newValue;
-                    currentText = newValue; // Updated
-                  });
-                },
-                controller: widget.controller,
-                style: TextStyle(
-                  fontSize: getProportionateScreenWidth(14),
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: BorderSide.none,
-                  ),
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  labelText: currentText, // Updated
-                ),
-              ),
-            ),
-          ),
-        ],
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 2,
+          horizontal: 16,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        prefixIcon: const FaIcon(
+          FontAwesomeIcons.circleUser,
+          color: kPrimaryColor,
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../../../components/custom_surfix_icon.dart';
 import '../../../providers/user_provider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
@@ -9,14 +9,14 @@ import '../../../utils/size_config.dart';
 class EditBoxEmail extends StatefulWidget {
   const EditBoxEmail({
     Key? key, // Updated
-    required this.controller,
+    required this.emailController,
     required this.keyboardType,
     this.icon,
     this.label,
     required this.onSaved,
   }) : super(key: key); // Updated
 
-  final TextEditingController controller;
+  final TextEditingController emailController;
   final TextInputType keyboardType;
   final IconData? icon;
   final String? label;
@@ -48,63 +48,44 @@ class _EditBoxEmailState extends State<EditBoxEmail> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(10),
-      height: getProportionateScreenHeight(70),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.grey,
+    return TextFormField(
+      keyboardType: TextInputType.name,
+      onSaved: (newValue) => widget.emailController.text = newValue!,
+      style: TextStyle(fontSize: getProportionateScreenWidth(12)),
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kEmailNullError);
+        } else if (emailValidatorRegExp.hasMatch(value)) {
+          removeError(error: kInvalidEmailError);
+        }
+        return;
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError(error: kEmailNullError);
+          return "";
+        } else if (!emailValidatorRegExp.hasMatch(value)) {
+          addError(error: kInvalidEmailError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Email",
+        hintText: userProvider.getUser?.email,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: const BorderSide(
+            color: Colors.orange,
+            width: 1.0,
+          ),
         ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: FaIcon(
-              widget.icon,
-              color: kPrimaryColor,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: InputDecorator(
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-              ),
-              child: TextFormField(
-                keyboardType: widget.keyboardType,
-                onSaved: (newValue) => widget.onSaved(newValue!),
-                onChanged: (newValue) {
-                  setState(() {
-                    if (newValue.isNotEmpty) {
-                      widget.controller.text = newValue;
-                    }
-                  });
-
-                  userProvider.updateUserEmail(email: widget.controller.text);
-                },
-                controller: widget.controller,
-                style: TextStyle(
-                  fontSize: getProportionateScreenWidth(14),
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-                decoration: InputDecoration(
-                  labelText: widget.label, // Use 'labelText' instead of 'label'
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: BorderSide.none,
-                  ),
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                ),
-              ),
-            ),
-          ),
-        ],
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 2,
+          horizontal: 16,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
       ),
     );
   }

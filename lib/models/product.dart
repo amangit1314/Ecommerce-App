@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:soni_store_app/models/review.dart';
 
 class Product {
-  final int id;
+  final id;
   final String title, description;
   final List<String> images;
   final List<String> colors;
@@ -16,7 +16,7 @@ class Product {
   int quantity;
 
   Product({
-    required this.categories,
+    this.categories = const [],
     required this.id,
     required this.images,
     this.colors = const ["#000000"],
@@ -27,7 +27,7 @@ class Product {
     this.isPopular = false,
     required this.title,
     required this.price,
-    required this.description,
+    this.description = 'Default Description string lorem34',
     this.quantity = 0, // Initialize quantity to 0
   });
 

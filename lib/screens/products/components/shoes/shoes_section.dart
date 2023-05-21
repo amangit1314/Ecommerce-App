@@ -183,7 +183,7 @@ class _ShoesSectionState extends State<ShoesSection> {
                         );
                       },
                       // productDesc: '\$${products[index].price}',
-                      price: '\$${products[index].price}',
+                      price: '₹ ${products[index].price}',
                       product: products[index],
                     ),
                   );

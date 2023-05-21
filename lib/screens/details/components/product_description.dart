@@ -190,25 +190,11 @@ class ShippingAddressSheet extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          showBottomSheet(
-            enableDrag: false,
-            context: context,
-            builder: (index) {
-              return BottomSheet(
-                animationController: bottomSheetAnimationController,
-                backgroundColor: Colors.grey[200],
-                onClosing: () {},
-                builder: (index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [],
-                    ),
-                  );
-                },
-              );
-            },
+          // navigate to shipping address
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ShippingAddress(),
+            ),
           );
         },
         child: Container(
@@ -278,7 +264,7 @@ class ProductDetailsSheet extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          showBottomSheet(
+          showModalBottomSheet(
             enableDrag: false,
             context: context,
             builder: (index) {
@@ -438,6 +424,181 @@ class ProductDetailsSheet extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ShippingAddress extends StatelessWidget {
+  const ShippingAddress({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      // appbar with button to add the address and text shipping address
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Shipping Address',
+          style: TextStyle(
+            color: kPrimaryColor,
+            fontSize: 16,
+          )
+          // style k primary color
+          ,
+          // style: TextStyle(color: kPrimaryColor),
+        ),
+        // leading ios
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
+            color: kPrimaryColor,
+          ),
+        ),
+      ),
+
+      // body which will contain list of addresstile widg, which will be dynamic
+      body: Column(
+        children: [
+          // list tile with location icon
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddShippingAddress(),
+                ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(
+                  top: 15, bottom: 15, right: 15, left: 15),
+              // decoration radius 12 and color purple
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.deepPurpleAccent.shade400,
+                // border
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const FaIcon(
+                    FontAwesomeIcons.locationCrosshairs,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: getProportionateScreenWidth(10)),
+                  const Text(
+                    'Add Location',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Expanded(
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return const AddressTile(
+                  isSelected: true,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AddShippingAddress extends StatelessWidget {
+  const AddShippingAddress({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class AddressTile extends StatelessWidget {
+  final bool isSelected;
+  const AddressTile({super.key, this.isSelected = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 15, right: 15, left: 15),
+      // decoration radius 12 and color purple
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.transparent,
+        // border
+        border: Border.all(
+          color: isSelected ? Colors.deepPurpleAccent.shade400 : Colors.grey,
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.deepPurpleAccent.shade400,
+                radius: 18,
+                child: const Center(
+                  child: FaIcon(
+                    FontAwesomeIcons.addressCard,
+                    size: 12,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(width: getProportionateScreenWidth(15)),
+              Text(
+                "My Address",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.deepPurpleAccent.shade400,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Gudri Bajar, Mochiwara, Churu',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            '+91 9649477393',
+
+            // style font 12,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }

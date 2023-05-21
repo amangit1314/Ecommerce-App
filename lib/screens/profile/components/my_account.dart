@@ -76,7 +76,6 @@ class _MyAccountState extends State<MyAccount> {
         actions: [
           TextButton(
             onPressed: () {
-              // Navigator.pushNamed(context, '/edit-profile');
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const EditProfileScreen(),
@@ -95,18 +94,19 @@ class _MyAccountState extends State<MyAccount> {
           builder: (context, userProvider, _) {
             return Column(
               children: [
+                // * header tile
                 Container(
                   padding: const EdgeInsets.only(top: 5, bottom: 15),
                   child: Row(
                     children: [
                       _image != null
                           ? CircleAvatar(
-                              radius: 60,
+                              radius: 30,
                               backgroundImage: MemoryImage(_image!),
                               backgroundColor: Colors.red,
                             )
                           : const CircleAvatar(
-                              radius: 60,
+                              radius: 30,
                               backgroundImage: NetworkImage(
                                   'https://i.stack.imgur.com/l60Hf.png'),
                               backgroundColor: Colors.red,
@@ -122,14 +122,14 @@ class _MyAccountState extends State<MyAccount> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            userProvider.getUser?.email ?? 'login@gmail.com',
-                          ),
+                          Text(userProvider.getUser?.email ??
+                              'gitaman8481@gmail.com'),
                         ],
                       ),
                     ],
                   ),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.only(top: 40.0),
                   child: Column(
@@ -220,10 +220,38 @@ class _MyAccountState extends State<MyAccount> {
                           const Text('Password'),
                           TextButton(
                             onPressed: () {
-                              // use reset -password method of userProvider
-                              userProvider.resetPassword(
-                                email: userProvider.getUser?.email ??
-                                    'gitaman8481@gmail.com',
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Change Password'),
+                                    content: TextFormField(
+                                        obscureText: true,
+                                        decoration: const InputDecoration(
+                                          hintText: 'Enter new password',
+                                        ),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            userProvider.updateAllFields(
+                                                password: value);
+                                          });
+                                        }),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Change'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },
                             child: const Text(

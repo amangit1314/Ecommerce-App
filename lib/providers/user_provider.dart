@@ -1,16 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/user.dart' as model;
+import 'package:soni_store_app/models/models.dart' as models;
 import 'package:soni_store_app/resources/auth_methods.dart';
 
+import '../models/order.dart';
+
 class UserProvider with ChangeNotifier {
-  model.User? _user;
+  models.User? _user;
   final AuthMethods _authMethods = AuthMethods();
 
-  model.User? get getUser => _user;
+  models.User? get getUser => _user;
+  List<Order>? get orders => _user?.orders;
 
+  // ? <------------------ Authentication Methods ------------------->
   Future<void> refreshUser() async {
-    model.User? user = await _authMethods.getUserDetails();
-    _user = model.User(
+    models.User? user = await _authMethods.getUserDetails();
+    _user = models.User(
       uid: user.uid,
       email: user.email,
       username: user.username,
@@ -39,40 +45,58 @@ class UserProvider with ChangeNotifier {
     return await _authMethods.loginUser(email: email, password: password);
   }
 
-  Future updateUserDetails({required String displayName}) async {
-    return await _authMethods.updateUserDetails(displayName: displayName);
-  }
-
-  Future updateUserEmail({required String email}) async {
-    if (email.isNotEmpty) {
-      return await _authMethods.updateEmail(email: email);
-    } else {
-      throw Exception("Invalid email");
-    }
-  }
-
-  Future updateUserPassword({required String password}) async {
-    return await _authMethods.updatePassword(password: password);
-  }
-
-  Future<void> updateUserProfileImage({required String profileImage}) async {
-    await _authMethods.updateUserPic(photoURL: profileImage);
-    final userData = await _authMethods.getUserDetails();
-    _user = model.User(
-      uid: userData.uid,
-      email: userData.email,
-      username: userData.username,
-      profImage: userData.profImage,
-      number: userData.number,
-    );
-    notifyListeners();
-  }
-
-  Future resetPassword({required String email}) async {
-    return await _authMethods.resetPassword(email: email);
-  }
-
   Future signOut() async {
     return await _authMethods.signOut();
   }
+  // ? <--------------------------------------------------------------->
+
+  // ! <----------------------- User Details ------------------------>
+  Future<void> updateAllFields({
+    String? username,
+    String? password,
+    String? email,
+    String? mobile,
+    String? profImage,
+    String? number,
+    String? gender,
+    List<String?>? addresses,
+    List<models.Order>? orders,
+    List<models.Payment>? payments,
+    List<models.Product>? cartItems,
+  }) async {
+    if (_user == null) {
+      throw Exception('User is not available');
+    }
+
+    final updatedUser = models.User(
+      uid: _user!.uid,
+      email: email ?? _user!.email,
+      username: username ?? _user!.username,
+      password: password ?? _user!.password,
+      number: number ?? _user!.number,
+      profImage: profImage ?? _user!.profImage,
+      gender: gender ?? _user!.gender,
+      addresses: addresses ?? _user!.addresses,
+      orders: orders ?? _user!.orders,
+      payments: payments ?? _user!.payments,
+      cartItems: cartItems ?? _user!.cartItems,
+    );
+
+    // Call a method to update the user details in the backend
+    await _authMethods.updateUserDetailsFromProvider(updatedUser);
+
+    _user = updatedUser;
+    notifyListeners();
+  }
+  // ! <------------------------------------------------------------->
+
+  // * <----------------------- Payments ---------------------->
+  Future<void> addPayment(models.Payment payment) async {
+    if (_user == null) {
+      throw Exception('User is not available');
+    }
+    _user!.payments!.add(payment);
+    notifyListeners();
+  }
+  // * <------------------------------------------------------->
 }

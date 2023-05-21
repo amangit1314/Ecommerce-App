@@ -29,9 +29,9 @@ class Body extends StatelessWidget {
             const Categories(),
             SizedBox(height: getProportionateScreenHeight(10)),
             const PopularProducts(),
-            SizedBox(height: getProportionateScreenHeight(10)),
+            SizedBox(height: getProportionateScreenHeight(20)),
             const Fashionable(),
-            SizedBox(height: getProportionateScreenHeight(10)),
+            SizedBox(height: getProportionateScreenHeight(20)),
             const Sports(),
             SizedBox(height: getProportionateScreenHeight(10)),
             const Padding(

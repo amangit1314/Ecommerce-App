@@ -208,7 +208,7 @@ class PopularProducts extends StatefulWidget {
   const PopularProducts({Key? key}) : super(key: key);
 
   @override
-  _PopularProductsState createState() => _PopularProductsState();
+  State<PopularProducts> createState() => _PopularProductsState();
 }
 
 class _PopularProductsState extends State<PopularProducts> {
@@ -380,7 +380,7 @@ class FashionsCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
               child: Text(
-                '\$ ${product.price}',
+                '₹ ${product.price}',
                 style: const TextStyle(
                   fontSize: 12,
                   color: kPrimaryColor,

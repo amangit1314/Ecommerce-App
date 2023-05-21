@@ -1,14 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/user_provider.dart';
 import 'package:soni_store_app/screens/profile/components/profile_pic.dart';
 import 'package:soni_store_app/utils/constants.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
+import '../../../providers/profile_controller_provider.dart';
 import 'edit_box.dart';
-import 'edit_email_box.dart';
-import 'edit_number_box.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -18,75 +18,47 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  late UserProvider userProvider;
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _numberController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      userProvider = Provider.of<UserProvider>(context, listen: false);
-      _fetchCurrentUserDetails();
-    });
+  final List<String> errors = [];
+
+  void addError({String? error}) {
+    if (!errors.contains(error)) {
+      setState(() {
+        errors.add(error!);
+      });
+    }
   }
 
-  void _fetchCurrentUserDetails() {
-    if (userProvider.getUser != null) {
+  void removeError({String? error}) {
+    if (errors.contains(error)) {
       setState(() {
-        _nameController.text = userProvider.getUser!.username ?? 'Aman';
-        _emailController.text = userProvider.getUser!.email;
-        _numberController.text = userProvider.getUser!.number ?? '7023953453';
+        errors.remove(error);
       });
     }
   }
 
   @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _numberController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (userProvider.getUser != null) {
-      _nameController.text = userProvider.getUser!.username ?? 'Aman';
-      _emailController.text = userProvider.getUser!.email;
-      _numberController.text = userProvider.getUser!.number ?? '7023953453';
-    }
-
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileControllerProvider>(context, listen: false);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Edit Profile",
-          style: TextStyle(color: kPrimaryColor),
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold,
+              ),
         ),
         backgroundColor: Colors.white,
         leading: const Icon(
           Icons.arrow_back_ios,
           color: Colors.black,
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                userProvider.updateUserDetails(
-                  displayName: _nameController.text,
-                );
-                userProvider.updateUserEmail(email: _emailController.text);
-                Navigator.pop(context);
-              }
-            },
-            child: const Text('Save'),
-          ),
-        ],
         elevation: 0,
         centerTitle: true,
       ),
@@ -99,65 +71,58 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             key: _formKey,
             child: Column(
               children: [
-                EditBox(
-                  controller: _nameController,
-                  label: 'Name',
-                  onSaved: (newValue) {
-                    userProvider.updateUserDetails(displayName: newValue);
+                GestureDetector(
+                  onTap: () {
+                    profileProvider.showUsernameDialogAlert(
+                        context,
+                        FirebaseAuth.instance.currentUser!.email!
+                            .substring(0, 8));
                   },
+                  child: EditBox(
+                    controller: profileProvider.nameController,
+                    onChanged: (value) {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                      }
+                    },
+                    addError: addError(error: kNamelNullError),
+                  ),
                 ),
                 const SizedBox(height: 10),
-                EditBoxEmail(
-                  controller: _emailController,
-                  icon: FontAwesomeIcons.envelope,
-                  label: 'Email',
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (newValue) {
-                    userProvider.updateUserEmail(email: newValue);
-                  },
-                ),
+                // buildEditEmailFormField(),
                 const SizedBox(height: 10),
-                EditBoxPhone(
-                  controller: _numberController,
-                  icon: FontAwesomeIcons.mobile,
-                  keyboardType: TextInputType.number,
-                  label: 'Phone Number',
-                  onSaved: (newValue) {
-                    // Uncomment the lines below if you want to perform any action on saving the value
-                    // userProvider.updateUserNumber(number: newValue);
-                  },
-                ),
+                // buildEditNumberFormField(),
               ],
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            height: getProportionateScreenHeight(70),
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  userProvider.updateUserDetails(
-                    displayName: _nameController.text,
-                  );
-                  userProvider.updateUserEmail(email: _emailController.text);
-
-                  Navigator.pop(context);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: kPrimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
+          GestureDetector(
+            onTap: () async {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                await userProvider
+                    .updateAllFields(
+                      username: profileProvider.nameController.text,
+                      email: profileProvider.emailController.text,
+                      number: profileProvider.numberController.text,
+                    )
+                    .then((value) => Navigator.pop(context))
+                    .catchError((e) => GetSnackBar(message: e.toString()));
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              height: getProportionateScreenHeight(60),
+              decoration: BoxDecoration(
+                color: kPrimaryColor,
+                borderRadius: BorderRadius.circular(15),
               ),
-              child: const Text(
+              child: Text(
                 "Done",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
           ),
@@ -165,4 +130,127 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
+
+  // TextFormField buildEditUsernameFormField() {
+  //   return TextFormField(
+  //     keyboardType: TextInputType.name,
+  //     onSaved: (newValue) => _numberController.text = newValue!,
+  //     style: TextStyle(fontSize: getProportionateScreenWidth(12)),
+  //     onChanged: (value) {
+  //       if (value.isNotEmpty) {
+  //         removeError(error: kEmailNullError);
+  //       } else if (emailValidatorRegExp.hasMatch(value)) {
+  //         removeError(error: kInvalidEmailError);
+  //       }
+  //       return;
+  //     },
+  //     decoration: InputDecoration(
+  //       labelText: "Username",
+  //       hintText: userProvider.getUser?.email,
+  //       border: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(15),
+  //         borderSide: const BorderSide(
+  //           color: Colors.orange,
+  //           width: 1.0,
+  //         ),
+  //       ),
+  //       contentPadding: const EdgeInsets.symmetric(
+  //         vertical: 2,
+  //         horizontal: 16,
+  //       ),
+  //       floatingLabelBehavior: FloatingLabelBehavior.always,
+  //       suffixIcon:
+  //           const CustomSurffixIcon(svgIcon: "assets/icons/User Icon.svg"),
+  //     ),
+  //   );
+  // }
+
+  // TextFormField buildEditEmailFormField() {
+  //   return TextFormField(
+  //     keyboardType: TextInputType.name,
+  //     onSaved: (newValue) => _emailController.text = newValue!,
+  //     style: TextStyle(fontSize: getProportionateScreenWidth(12)),
+  //     onChanged: (value) {
+  //       if (value.isNotEmpty) {
+  //         removeError(error: kEmailNullError);
+  //       } else if (emailValidatorRegExp.hasMatch(value)) {
+  //         removeError(error: kInvalidEmailError);
+  //       }
+  //       return;
+  //     },
+  //     validator: (value) {
+  //       if (value!.isEmpty) {
+  //         addError(error: kEmailNullError);
+  //         return "";
+  //       } else if (!emailValidatorRegExp.hasMatch(value)) {
+  //         addError(error: kInvalidEmailError);
+  //         return "";
+  //       }
+  //       return null;
+  //     },
+  //     decoration: InputDecoration(
+  //       labelText: "Email",
+  //       hintText: userProvider.getUser?.email,
+  //       border: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(15),
+  //         borderSide: const BorderSide(
+  //           color: Colors.orange,
+  //           width: 1.0,
+  //         ),
+  //       ),
+  //       contentPadding: const EdgeInsets.symmetric(
+  //         vertical: 2,
+  //         horizontal: 16,
+  //       ),
+  //       floatingLabelBehavior: FloatingLabelBehavior.always,
+  //       suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
+  //     ),
+  //   );
+  // }
+
+  // TextFormField buildEditNumberFormField() {
+  //   return TextFormField(
+  //     keyboardType: TextInputType.phone,
+  //     obscureText: false,
+  //     style: TextStyle(fontSize: getProportionateScreenWidth(12)),
+  //     onSaved: (newValue) => _numberController.text = newValue!,
+  //     onChanged: (value) {
+  //       if (value.isNotEmpty) {
+  //         removeError(error: kPassNullError);
+  //       } else if (value.length >= 8) {
+  //         removeError(error: kShortPassError);
+  //       }
+  //       return;
+  //     },
+  //     validator: (value) {
+  //       if (value!.isEmpty) {
+  //         addError(error: kPassNullError);
+  //         return "";
+  //       } else if (value.length < 8) {
+  //         addError(error: kShortPassError);
+  //         return "";
+  //       }
+  //       return null;
+  //     },
+  //     decoration: InputDecoration(
+  //       labelText: "Number",
+  //       hintText: "Enter your number",
+  //       border: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(15),
+  //         borderSide: const BorderSide(
+  //           color: Colors.orange,
+  //           width: 1.0,
+  //         ),
+  //       ),
+  //       contentPadding: const EdgeInsets.symmetric(
+  //         vertical: 2,
+  //         horizontal: 16,
+  //       ),
+  //       // If  you are using latest version of flutter then lable text and hint text shown like this
+  //       // if you r using flutter less then 1.20.* then maybe this is not working properly
+  //       floatingLabelBehavior: FloatingLabelBehavior.always,
+  //       suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
+  //     ),
+  //   );
+  // }
 }

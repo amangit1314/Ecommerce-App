@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:soni_store_app/models/cart_item.dart';
 import 'package:soni_store_app/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,6 +13,26 @@ import '../models/user.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // upload image
+  Future<String> uploadImageToStorage(
+    String folderName,
+    Uint8List file,
+    bool isCart,
+  ) async {
+    String res = "Some error occurred";
+    try {
+      String photoUrl = await StorageMethods().uploadImageToStorage(
+        folderName,
+        file,
+        isCart,
+      );
+      res = photoUrl;
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 
   Future<String> addItemToCart(
     String description,
@@ -33,11 +52,11 @@ class FirestoreMethods {
       );
       // creates unique id based on time
       String productId = const Uuid().v1();
-      CartItem cartItem = CartItem(
-        uid: productId,
-        productName: itemName,
-        price: price,
-        productUrl: photoUrl,
+      Product cartItem = Product(
+        id: productId,
+        title: itemName,
+        price: int.parse(price),
+        images: [photoUrl],
       );
       _firestore.collection('user').doc(productId).set(cartItem.toMap());
       res = "success";
@@ -84,13 +103,16 @@ class FirestoreMethods {
           .collection('cart_items')
           .get();
 
-      List<CartItem> cartItems = cartItemsSnapshot.docs
-          .map((doc) => CartItem.fromMap(doc as Map<String, dynamic>))
+      List cartItems = cartItemsSnapshot.docs
+          .map((doc) => Product.fromMap(doc as Map<String, dynamic>))
           .toList();
 
-      for (CartItem cartItem in cartItems) {
+      for (Product cartItem in cartItems) {
         DocumentSnapshot<Map<String, dynamic>> productSnapshot =
-            await FirebaseFirestore.instance.doc(cartItem.productUrl).get();
+            // ! -----------
+            await FirebaseFirestore.instance
+                .doc(cartItem.images[cartItem.id])
+                .get();
 
         Product product = Product.fromMap(productSnapshot.data()!);
 
@@ -101,32 +123,6 @@ class FirestoreMethods {
     }
 
     return products;
-  }
-
-  // edit or addaddress to firebase firestore
-  Future<void> editAddress({
-    required String address,
-    required String city,
-    required String state,
-    required String pincode,
-  }) async {
-    await _firestore
-        .collection('users')
-        .doc(_firestore.collection('users').doc().id)
-        .set({
-      'address': address,
-      'city': city,
-      'state': state,
-      'pincode': pincode,
-    });
-  }
-
-  // add number or edit number in firestore
-  Future<void> editNumber(String number) async {
-    await _firestore
-        .collection('users')
-        .doc(_firestore.collection('users').doc().id)
-        .set({'number': number});
   }
 
   // flutter notifications

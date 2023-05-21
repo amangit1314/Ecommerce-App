@@ -28,6 +28,7 @@ dependencies:
   google_sign_in: ^6.1.0
   http: ^0.13.5
   image_picker: ^0.8.5
+  permission_handler: ^10.2.0
   provider: ^6.0.2
   shared_preferences: any
   uuid: ^3.0.6
