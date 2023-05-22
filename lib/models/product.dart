@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:soni_store_app/models/review.dart';
 
 class Product {
-  final id;
+  final String id;
   final String title, description;
   final List<String> images;
   final List<String> colors;
@@ -28,7 +28,7 @@ class Product {
     required this.title,
     required this.price,
     this.description = 'Default Description string lorem34',
-    this.quantity = 0, // Initialize quantity to 0
+    this.quantity = 1, // Initialize quantity to 0
   });
 
   static Product fromSnapshot(productData) {
@@ -61,7 +61,7 @@ class Product {
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
       categories: List<String>.from(map['categories'] ?? []),
-      id: map['id'] as int? ?? 0,
+      id: map['id'] as String? ?? '',
       title: map['title'] as String? ?? '',
       description: map['description'] as String? ?? '',
       images: List<String>.from(map['images'] ?? []),

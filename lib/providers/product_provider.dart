@@ -5,56 +5,61 @@ import 'package:soni_store_app/models/product.dart';
 
 class ProductProvider with ChangeNotifier {
   final List<Product> _products = [];
-  final bool _isLoading = false;
-
-  late Product _product;
-  Product get product => _product;
-
   List<Product> get products => _products;
-  bool get isLoading => _isLoading;
 
-  final CollectionReference _refProducts =
-      FirebaseFirestore.instance.collection('products');
+  final String _title = '';
+  final int _price = 0;
+  final String _description = '';
+  final List<String> _categories = const [];
+  final List<String> _images = const [];
+  final bool _isFavourite = false;
+  final bool _isPopular = false;
+  final int _quantity = 1;
+  int _totalPrice = 0;
 
-  Future<List<Product>> fetchProductsFromFirestore() async {
-    final List<Product> products = [];
-    final QuerySnapshot snapshot = await _refProducts.get();
+  String get title => _title;
+  int get price => _price;
+  String get description => _description;
+  List<String> get categories => _categories;
+  List<String> get images => _images;
+  bool get isFavourite => _isFavourite;
+  bool get isPopular => _isPopular;
+  int get quantity => _quantity;
+  int get totalPrice => _totalPrice;
+
+  Future<List<Product>> fetchProductsFromFirestore(
+      CollectionReference productsRef) async {
+    final QuerySnapshot snapshot = await productsRef.get();
     for (var element in snapshot.docs) {
       products.add(Product.fromMap(element.data() as Map<String, dynamic>));
     }
     return products;
   }
 
-  int getProductQuantity(String productName) {
-    // Find the index of the product in the cartItems list
-    int index = products.indexWhere((item) => item.title == productName);
-
-    if (index != -1) {
-      // If the product is found, return its quantity
-      return products[index].quantity;
-    } else {
-      // If the product is not found, return 0
-      return 0;
-    }
-  }
-
-  int updateAddProductQuantity(int index) {
-    if (index >= 0 && index < products.length) {
-      products[index].quantity = products[index].quantity + 1;
-
+  int inceaseQuantity(int quantity) {
+    if (quantity == 1) {
+      quantity = quantity + 1;
       notifyListeners();
     }
-    return products[index].quantity;
+
+    return quantity;
   }
 
-  int updateSubtractProductQuantity(int index) {
-    if (index >= 0 && index < products.length) {
-      if (products[index].quantity >= 1) {
-        products[index].quantity = products[index].quantity - 1;
-      }
-      products[index].quantity = products[index].quantity;
+  int decreaseQuantity(int quantity) {
+    if (quantity > 1) {
+      quantity = quantity - 1;
       notifyListeners();
     }
-    return products[index].quantity;
+
+    return quantity;
+  }
+
+  int updateTotalPrice(int price, int quantity) {
+    if (price > 0) {
+      _totalPrice = price * quantity;
+      notifyListeners();
+    }
+
+    return _totalPrice;
   }
 }

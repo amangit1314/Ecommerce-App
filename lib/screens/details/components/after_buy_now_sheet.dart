@@ -6,8 +6,7 @@ import 'package:soni_store_app/screens/details/components/color_dots.dart';
 import 'package:soni_store_app/screens/details/components/size_dots.dart';
 
 import '../../../components/rounded_icon_button.dart';
-import '../../../models/order.dart';
-import '../../../models/product.dart';
+import '../../../models/models.dart';
 import '../../../utils/size_config.dart';
 
 class AfterBuyNowButtonSheet extends StatefulWidget {
@@ -29,21 +28,6 @@ class AfterBuyNowButtonSheet extends StatefulWidget {
 }
 
 class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
-  int quantity = 1;
-
-  // function to calculate total price
-  int calculateTotalPrice(String price) {
-    int totalPrice = 0;
-    totalPrice = int.parse(price) * quantity;
-    return totalPrice;
-  }
-
-  int totalPrice(int price) {
-    int totalPrice = 0;
-    totalPrice = price * quantity;
-    return totalPrice;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Builder(
@@ -52,11 +36,17 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
           builder: (context, productProvider, _) {
             return Column(
               children: [
+                // * Select Quantity
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 30, left: 15.0, right: 15.0, bottom: 15.0),
+                    top: 30,
+                    left: 15.0,
+                    right: 15.0,
+                    bottom: 15.0,
+                  ),
                   child: Row(
                     children: [
+                      // * Column ( unit price text and price )
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,9 +56,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
-                                .copyWith(
-                                  fontSize: 12,
-                                ),
+                                .copyWith(fontSize: 12),
                           ),
                           Text(
                             '₹ ${widget.product.price}',
@@ -77,6 +65,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                         ],
                       ),
                       const Spacer(),
+                      // * Column ( quantity text and Row ( + quantity - ) )
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,40 +75,35 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
-                                .copyWith(
-                                  fontSize: 12,
-                                ),
+                                .copyWith(fontSize: 12),
                           ),
                           Row(
                             children: [
+                              // * decrement icon
                               RoundedIconBtn(
                                 icon: Icons.remove,
                                 press: () {
-                                  if (quantity > 1) {
-                                    // Decrease the quantity
-                                    setState(() {
-                                      quantity--;
-                                    });
-                                  }
+                                  productProvider.decreaseQuantity(
+                                      widget.product.quantity);
                                 },
                               ),
                               SizedBox(width: getProportionateScreenWidth(8)),
+                              // * quantity
                               Text(
-                                quantity.toString(),
+                                productProvider.quantity.toString(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               SizedBox(width: getProportionateScreenWidth(8)),
+                              // * increment icon
                               RoundedIconBtn(
                                 icon: Icons.add,
                                 showShadow: true,
                                 press: () {
-                                  // Increase the quantity
-                                  setState(() {
-                                    quantity++;
-                                  });
+                                  productProvider
+                                      .inceaseQuantity(widget.product.quantity);
                                 },
                               ),
                             ],
@@ -130,7 +114,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                   ),
                 ),
 
-                // *
+                // * divider
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0, right: 15.0),
                   child: Divider(
@@ -143,7 +127,10 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 // * select color
                 Padding(
                   padding: const EdgeInsets.only(
-                      bottom: 15.0, right: 15.0, top: 15.0),
+                    bottom: 15.0,
+                    right: 15.0,
+                    top: 15.0,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,10 +139,10 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                         padding: const EdgeInsets.only(left: 15.0),
                         child: Text(
                           "Select Color",
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontSize: 12,
-                                  ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(fontSize: 12),
                         ),
                       ),
                       Padding(
@@ -169,7 +156,10 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 // * select size
                 Padding(
                   padding: const EdgeInsets.only(
-                      bottom: 15.0, right: 15.0, top: 10.0),
+                    bottom: 15.0,
+                    right: 15.0,
+                    top: 10.0,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,10 +168,10 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                         padding: const EdgeInsets.only(left: 15.0),
                         child: Text(
                           "Select Size",
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontSize: 12,
-                                  ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(fontSize: 12),
                         ),
                       ),
                       Padding(
@@ -193,109 +183,109 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 ),
 
                 // * button
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: getProportionateScreenWidth(65),
-                    margin: const EdgeInsets.only(
-                        left: 15, top: 10, right: 15, bottom: 25),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: getProportionateScreenWidth(widget.width * .4),
-                          height: getProportionateScreenWidth(65),
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
-                            ),
-                          ),
-                          padding: EdgeInsets.only(
-                            left: SizeConfig.screenWidth * 0.05,
-                            right: SizeConfig.screenWidth * 0.05,
-                            bottom: getProportionateScreenHeight(9),
-                            top: getProportionateScreenHeight(9),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "₹ ${totalPrice(widget.product.price).toString()}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const Text(
-                                "Total price",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
+                Container(
+                  height: getProportionateScreenWidth(65),
+                  margin: const EdgeInsets.only(
+                    left: 18,
+                    top: 23,
+                    right: 18,
+                    bottom: 23,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: getProportionateScreenWidth(widget.width * .4),
+                        height: getProportionateScreenWidth(65),
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
                           ),
                         ),
-                        Container(
-                          height: getProportionateScreenWidth(65),
-                          width: getProportionateScreenWidth(widget.width * .3),
-                          padding: EdgeInsets.only(
-                            bottom: getProportionateScreenHeight(2),
-                            top: getProportionateScreenHeight(2),
-                          ),
-                          decoration: const BoxDecoration(
-                            color: Colors.deepOrange,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
+                        padding: EdgeInsets.only(
+                          left: SizeConfig.screenWidth * 0.05,
+                          right: SizeConfig.screenWidth * 0.05,
+                          bottom: getProportionateScreenHeight(9),
+                          top: getProportionateScreenHeight(9),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "₹ ${productProvider.updateTotalPrice(widget.product.price, widget.product.quantity)}",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          child: TextButton(
-                            child: const Text(
-                              "Checkout",
-                              style: TextStyle(color: Colors.white),
+                            const Text(
+                              "Total price",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
                             ),
-                            onPressed: () {
-                              // show model sheet with a image and two button of continue shopping and checkout
-                              showModalBottomSheet(
-                                context: context,
-                                backgroundColor: const Color(0xFFF6F7F9),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(40),
-                                    topLeft: Radius.circular(40),
-                                  ),
-                                ),
-                                builder: (context) => DraggableScrollableSheet(
-                                  expand: false,
-                                  initialChildSize: 0.5,
-                                  maxChildSize: 0.9,
-                                  builder: (context, scrollController) {
-                                    return SingleChildScrollView(
-                                      controller: scrollController,
-                                      child: AddedWidget(
-                                        order: widget.order,
-                                        price: totalPrice(widget.product.price)
-                                            .toString(),
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: getProportionateScreenWidth(65),
+                        width: getProportionateScreenWidth(widget.width * .3),
+                        padding: EdgeInsets.only(
+                          bottom: getProportionateScreenHeight(2),
+                          top: getProportionateScreenHeight(2),
+                        ),
+                        decoration: const BoxDecoration(
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
                           ),
                         ),
-                      ],
-                    ),
+                        child: TextButton(
+                          child: const Text(
+                            "Checkout",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: const Color(0xFFF6F7F9),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(40),
+                                  topLeft: Radius.circular(40),
+                                ),
+                              ),
+                              builder: (context) => DraggableScrollableSheet(
+                                expand: false,
+                                initialChildSize: 0.5,
+                                maxChildSize: 0.9,
+                                builder: (context, scrollController) {
+                                  return SingleChildScrollView(
+                                    controller: scrollController,
+                                    child: AddedWidget(
+                                      product: widget.product,
+                                      order: widget.order,
+                                      price:
+                                          productProvider.totalPrice.toString(),
+                                      width: MediaQuery.of(context).size.width,
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

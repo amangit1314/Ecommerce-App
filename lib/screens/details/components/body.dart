@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
@@ -13,6 +11,7 @@ import '../../../helper/stripe_helper.dart';
 import '../../../models/order.dart';
 import '../../../models/payment.dart';
 import '../../../models/product.dart';
+import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 import '../../cart/cart_screen.dart';
 import '../../home/home_screen.dart';
@@ -301,23 +300,22 @@ class BuyNowButton extends StatelessWidget {
 class AddedWidget extends StatelessWidget {
   const AddedWidget({
     super.key,
-    // required this.widget,
     required this.width,
     required this.price,
     this.order,
+    required this.product,
   });
 
-  // final DetailFirebaseBody widget;
   final double width;
   final String price;
   final Order? order;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
         return Column(
-          // primary button with text continue shopping
           children: [
             Container(
               width: double.infinity,
@@ -328,7 +326,7 @@ class AddedWidget extends StatelessWidget {
                 right: 15,
               ),
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: kPrimaryColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Container(
@@ -375,7 +373,7 @@ class AddedWidget extends StatelessWidget {
                 bottom: 25,
               ),
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: kPrimaryColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Container(
@@ -398,9 +396,7 @@ class AddedWidget extends StatelessWidget {
                     ),
                   ),
                   onPressed: () async {
-                    await showPaymentDialog(context);
-                    await StripeHelper.instance
-                        .makePayment(price, context, order!);
+                    await showPaymentDialog(context, product);
                   },
                 ),
               ),
@@ -411,21 +407,34 @@ class AddedWidget extends StatelessWidget {
     );
   }
 
-  Future<void> showPaymentDialog(BuildContext context) async {
+  Future<void> showPaymentDialog(BuildContext context, Product product) async {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
+    CartProvider cartProvider =
+        Provider.of<CartProvider>(context, listen: false);
 
-    // Show initial payment method dialog
-    final PaymentMethod? selectedMethod = await showDialog<PaymentMethod>(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Payment Method'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Center(
+            child: Text(
+              'Payment Method',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                  ),
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ElevatedButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () async {
                   userProvider.addPayment(
                     Payment(
                       id: 'payment_id',
@@ -436,90 +445,126 @@ class AddedWidget extends StatelessWidget {
                       amount: 0,
                     ),
                   );
-                  Navigator.of(context).pop(PaymentMethod.cash);
+                  await StripeHelper.instance
+                      .makePayment(price, context, order!);
                 },
-                child: const Text('Cash'),
+                child: Container(
+                  width: double.infinity,
+                  height: getProportionateScreenHeight(50),
+                  margin: const EdgeInsets.only(
+                    top: 15,
+                    left: 15,
+                    right: 15,
+                  ),
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Cash',
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                    ),
+                  ),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(PaymentMethod.online);
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
                 },
-                child: const Text('Online Payment'),
+                child: Container(
+                  width: double.infinity,
+                  height: getProportionateScreenHeight(50),
+                  margin: const EdgeInsets.only(
+                    top: 15,
+                    left: 15,
+                    right: 15,
+                  ),
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Online Payment',
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                    ),
+                  ),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(PaymentMethod.cancel);
+              GestureDetector(
+                onTap: () {
+                  cartProvider.addToCart(product);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const CartScreen(),
+                    ),
+                  );
                 },
-                child: const Text('Cancel'),
+                child: Container(
+                  width: double.infinity,
+                  height: getProportionateScreenHeight(50),
+                  margin: const EdgeInsets.only(
+                    top: 15,
+                    left: 15,
+                    right: 15,
+                  ),
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Go to Cart',
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                    ),
+                  ),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(PaymentMethod.goToCart);
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
                 },
-                child: const Text('Go to Cart'),
+                child: Container(
+                  width: double.infinity,
+                  height: getProportionateScreenHeight(50),
+                  margin: const EdgeInsets.only(
+                    top: 15,
+                    left: 15,
+                    right: 15,
+                  ),
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Cancel',
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
         );
       },
     );
-
-    if (selectedMethod == PaymentMethod.cash) {
-      // Show confirmation dialogs
-      for (int i = 1; i <= 4; i++) {
-        final bool confirmed = await showConfirmationDialog(context, i);
-        if (!confirmed) {
-          return; // User canceled
-        }
-      }
-
-      // Make the payment using Stripe
-      await StripeHelper.instance.makePayment(price, context, order!);
-    } else if (selectedMethod == PaymentMethod.online) {
-      // Implement online payment logic
-      // ...
-    } else if (selectedMethod == PaymentMethod.cancel) {
-      // User canceled, do nothing
-    } else if (selectedMethod == PaymentMethod.goToCart) {
-      // Navigate to the cart screen
-
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const CartScreen()),
-      );
-    }
   }
-
-  Future<bool> showConfirmationDialog(BuildContext context, int step) async {
-    return await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Confirmation'),
-              content: Text('Step $step: Confirm payment?'),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false); // User canceled
-                  },
-                  child: const Text('No'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true); // User confirmed
-                  },
-                  child: const Text('Yes'),
-                ),
-              ],
-            );
-          },
-        ) ??
-        false; // Default to false if dialog is dismissed
-  }
-}
-
-enum PaymentMethod {
-  cash,
-  online,
-  cancel,
-  goToCart,
 }

@@ -20,18 +20,18 @@ class _BodyState extends State<Body> {
         horizontal: getProportionateScreenWidth(20),
       ),
       child: Consumer<CartProvider>(
-        builder: (context, cart, child) {
+        builder: (context, cartProvider, child) {
           return ListView.builder(
-            itemCount: cart.length,
+            itemCount: cartProvider.length,
             itemBuilder: (context, index) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               // display every cart item from cartProvider
               child: Dismissible(
-                key: Key(cart.name),
+                key: Key(cartProvider.name),
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) {
                   setState(() {
-                    cart.cartItems.removeAt(index);
+                    cartProvider.cartItems.removeAt(index);
                   });
                 },
                 background: Container(
@@ -50,7 +50,7 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 child: CartCard(
-                  cart: cart.cartItems[index],
+                  cart: cartProvider.cartItems[index],
                 ),
               ),
             ),

@@ -109,13 +109,12 @@ class _ProductDescriptionState extends State<ProductDescription>
                         setState(() {
                           widget.product.isFavourite =
                               !widget.product.isFavourite;
-                          cartProvider.updateAddProductQuantity(
-                            cartProvider
-                                .getProductQuantity(widget.product.title),
-                          );
                         });
                         // add this product to cart using provider
-                        cartProvider.addItemCart(widget.product);
+                        cartProvider.addToCart(widget.product);
+                        cartProvider.updateItemQuantity(widget.product
+                            // cartProvider.getProductQuantity(widget.product.title),
+                            );
                       },
                       child: Container(
                         padding:

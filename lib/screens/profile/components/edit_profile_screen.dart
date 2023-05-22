@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +7,6 @@ import 'package:soni_store_app/utils/constants.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../providers/profile_controller_provider.dart';
-import 'edit_box.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -70,27 +68,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Form(
             key: _formKey,
             child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    profileProvider.showUsernameDialogAlert(
-                        context,
-                        FirebaseAuth.instance.currentUser!.email!
-                            .substring(0, 8));
-                  },
-                  child: EditBox(
-                    controller: profileProvider.nameController,
-                    onChanged: (value) {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                      }
-                    },
-                    addError: addError(error: kNamelNullError),
-                  ),
-                ),
-                const SizedBox(height: 10),
+              children: const [
+                // GestureDetector(
+                //   onTap: () {
+                //     profileProvider.showUsernameDialogAlert(
+                //         context,
+                //         FirebaseAuth.instance.currentUser!.email!
+                //             .substring(0, 8));
+                //   },
+                //   child: EditBox(
+                //     controller: profileProvider.nameController,
+                //     onChanged: (value) {
+                //       if (_formKey.currentState!.validate()) {
+                //         _formKey.currentState!.save();
+                //       }
+                //     },
+
+                //   ),
+                // ),
+
+                SizedBox(height: 10),
                 // buildEditEmailFormField(),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 // buildEditNumberFormField(),
               ],
             ),
