@@ -15,13 +15,11 @@ class AfterBuyNowButtonSheet extends StatefulWidget {
     required this.widget,
     required this.width,
     required this.order,
-    required this.product,
   }) : super(key: key);
 
   final DetailFirebaseBody widget;
   final double width;
   final Order order;
-  final Product product;
 
   @override
   State<AfterBuyNowButtonSheet> createState() => _AfterBuyNowButtonSheetState();
@@ -29,11 +27,24 @@ class AfterBuyNowButtonSheet extends StatefulWidget {
 
 class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        final productProvider =
+            Provider.of<ProductProvider>(context, listen: false);
+        productProvider.setProduct(widget.widget.product);
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
         return Consumer<ProductProvider>(
           builder: (context, productProvider, _) {
+            final int totalAmount = productProvider.totalPrice;
             return Column(
               children: [
                 // * Select Quantity
@@ -59,7 +70,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                                 .copyWith(fontSize: 12),
                           ),
                           Text(
-                            '₹ ${widget.product.price}',
+                            '₹ ${widget.widget.product.price}',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
@@ -83,8 +94,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                               RoundedIconBtn(
                                 icon: Icons.remove,
                                 press: () {
-                                  productProvider.decreaseQuantity(
-                                      widget.product.quantity);
+                                  productProvider.decreaseQuantity();
                                 },
                               ),
                               SizedBox(width: getProportionateScreenWidth(8)),
@@ -102,8 +112,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                                 icon: Icons.add,
                                 showShadow: true,
                                 press: () {
-                                  productProvider
-                                      .inceaseQuantity(widget.product.quantity);
+                                  productProvider.increaseQuantity();
                                 },
                               ),
                             ],
@@ -218,7 +227,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "₹ ${productProvider.updateTotalPrice(widget.product.price, widget.product.quantity)}",
+                              "₹ $totalAmount",
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -272,7 +281,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                                   return SingleChildScrollView(
                                     controller: scrollController,
                                     child: AddedWidget(
-                                      product: widget.product,
+                                      product: widget.widget.product,
                                       order: widget.order,
                                       price:
                                           productProvider.totalPrice.toString(),

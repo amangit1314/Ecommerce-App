@@ -78,7 +78,7 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
                   ),
 
                   // * similar items
-                  // SimilarProducts(widget: widget),
+                  // SimilarProducts(product: widget.product),
                 ],
               ),
             ),
@@ -101,77 +101,14 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
   }
 }
 
-// class SimilarProducts extends StatelessWidget {
-//   const SimilarProducts({
-//     super.key,
-//     required this.widget,
-//   });
-//   final DetailFirebaseBody widget;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         const SizedBox(height: 10),
-//         Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 20),
-//           child: SectionTitle(
-//             title: 'Similar Products',
-//             press: () {},
-//           ),
-//         ),
-//         SizedBox(height: getProportionateScreenHeight(15)),
-//         Container(
-//           height: 250,
-//           padding: const EdgeInsets.only(left: 20.0),
-//           child: ListView.builder(
-//             scrollDirection: Axis.horizontal,
-//             itemCount: 6,
-//             itemBuilder: (context, index) {
-//               return GestureDetector(
-//                 // onTap: () {
-//                 //   Navigator.of(context).push(
-//                 //     MaterialPageRoute(
-//                 //       builder: (_) => DetailsScreen(
-//                 //         product: demoProducts[index],
-//                 //       ),
-//                 //     ),
-//                 //   );
-//                 // },
-//                 child: Container(
-//                   width: 170,
-//                   margin: const EdgeInsets.only(right: 10),
-//                   padding: const EdgeInsets.only(
-//                     top: 8,
-//                     left: 8,
-//                     right: 8,
-//                   ),
-//                   decoration: BoxDecoration(
-//                     color: Colors.white,
-//                     borderRadius: BorderRadius.circular(15),
-//                     border: Border.all(
-//                       color: kPrimaryColor.withOpacity(.2),
-//                     ),
-//                   ),
-//                   child: FashionsCard(product: widget.product),
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
 class BuyNowButton extends StatelessWidget {
   const BuyNowButton({
-    super.key,
+    Key? key,
     required this.width,
     required this.price,
     required this.widget,
     required this.product,
-  });
+  }) : super(key: key);
 
   final double width;
   final DetailFirebaseBody widget;
@@ -270,7 +207,7 @@ class BuyNowButton extends StatelessWidget {
                     productImage: product.images.first,
                     orderStatus: 'Not Ordered',
                   );
-                  // * show bottom sheet
+                  // Show bottom sheet
                   showModalBottomSheet(
                     backgroundColor: const Color(0xFFF6F7F9),
                     context: context,
@@ -281,7 +218,7 @@ class BuyNowButton extends StatelessWidget {
                       ),
                     ),
                     builder: (context) => AfterBuyNowButtonSheet(
-                      product: product,
+                      // product: product,
                       widget: widget,
                       width: width,
                       order: order,
@@ -339,28 +276,23 @@ class AddedWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.deepOrange,
                   borderRadius: BorderRadius.circular(15),
-                  //   bottomRight: Radius.circular(15),
-                  // ),
                 ),
                 child: TextButton(
-                    child: const Text(
-                      "Continue Shopping",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                  child: const Text(
+                    "Continue Shopping",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
                       ),
-                    ),
-                    onPressed: () {
-                      //  navigate to home with .push
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
-                        ),
-                      );
-                    }
-                    // product: product,
-                    // widget: widget
-                    ),
+                    );
+                  },
+                ),
               ),
             ),
             Container(
@@ -474,7 +406,13 @@ class AddedWidget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pop();
+                  // Add your logic for online payment here
+                  // For example, you can navigate to a payment screen
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => OnlinePaymentScreen(),
+                  //   ),
+                  // );
                 },
                 child: Container(
                   width: double.infinity,
@@ -568,3 +506,66 @@ class AddedWidget extends StatelessWidget {
     );
   }
 }
+
+// class SimilarProducts extends StatelessWidget {
+//   const SimilarProducts({
+//     super.key,
+//     required this.widget,
+//   });
+//   final DetailFirebaseBody widget;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         const SizedBox(height: 10),
+//         Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 20),
+//           child: SectionTitle(
+//             title: 'Similar Products',
+//             press: () {},
+//           ),
+//         ),
+//         SizedBox(height: getProportionateScreenHeight(15)),
+//         Container(
+//           height: 250,
+//           padding: const EdgeInsets.only(left: 20.0),
+//           child: ListView.builder(
+//             scrollDirection: Axis.horizontal,
+//             itemCount: 6,
+//             itemBuilder: (context, index) {
+//               return GestureDetector(
+//                 // onTap: () {
+//                 //   Navigator.of(context).push(
+//                 //     MaterialPageRoute(
+//                 //       builder: (_) => DetailsScreen(
+//                 //         product: demoProducts[index],
+//                 //       ),
+//                 //     ),
+//                 //   );
+//                 // },
+//                 child: Container(
+//                   width: 170,
+//                   margin: const EdgeInsets.only(right: 10),
+//                   padding: const EdgeInsets.only(
+//                     top: 8,
+//                     left: 8,
+//                     right: 8,
+//                   ),
+//                   decoration: BoxDecoration(
+//                     color: Colors.white,
+//                     borderRadius: BorderRadius.circular(15),
+//                     border: Border.all(
+//                       color: kPrimaryColor.withOpacity(.2),
+//                     ),
+//                   ),
+//                   child: FashionsCard(product: widget.product),
+//                 ),
+//               );
+//             },
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
