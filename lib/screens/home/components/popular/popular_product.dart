@@ -210,7 +210,9 @@ class _PopularProductsState extends State<PopularProducts> {
 
   Future<List<Product>> fetchProductsFromFirestore() async {
     final List<Product> products = [];
-    final QuerySnapshot snapshot = await _refProducts.get();
+    // filtering if isPopular
+    final QuerySnapshot snapshot =
+        await _refProducts.where('isPopular', isEqualTo: true).get();
     for (var element in snapshot.docs) {
       products.add(Product.fromMap(element.data() as Map<String, dynamic>));
     }

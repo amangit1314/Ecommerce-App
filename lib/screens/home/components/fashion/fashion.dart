@@ -1,11 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/resources/data/static_data.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../../components/section_tile.dart';
+import '../../../../models/product.dart';
+import '../../../details/detail_screen.dart';
 
-class Fashion extends StatelessWidget {
-  const Fashion({super.key});
+class Fashion extends StatefulWidget {
+  const Fashion({Key? key}) : super(key: key);
+
+  @override
+  State<Fashion> createState() => _FashionState();
+}
+
+class _FashionState extends State<Fashion> {
+  late Stream<List<Product>> _streamProducts;
+
+  @override
+  void initState() {
+    super.initState();
+    _streamProducts = fetchFashionProducts();
+  }
+
+  Stream<List<Product>> fetchFashionProducts() {
+    final CollectionReference productsRef =
+        FirebaseFirestore.instance.collection('products');
+
+    return productsRef
+        .where('categories', arrayContains: 'Fashion')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Product.fromMap(doc.data() as Map<String, dynamic>))
+            .toList());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,43 +69,78 @@ class Fashion extends StatelessWidget {
             ),
           ),
           height: 180,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                tshirts.length,
-                (index) => Container(
-                  height: 180,
-                  width: 153,
-                  padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent.withOpacity(.3),
-                    borderRadius: index != tshirts.length - 1
-                        ? (index == 0
-                            ? const BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                topRight: Radius.circular(5),
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(5),
-                              )
-                            : BorderRadius.circular(5))
-                        : const BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(5),
-                            bottomLeft: Radius.circular(5),
-                            bottomRight: Radius.circular(15),
+          child: StreamBuilder<List<Product>>(
+            stream: _streamProducts,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Something went wrong'),
+                );
+              }
+
+              final List<Product> products = snapshot.data ?? [];
+
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                    products.length,
+                    (index) => GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DetailsScreenFirebase(
+                              product: products[index],
+                            ),
                           ),
-                    image: DecorationImage(
-                      image: AssetImage(tshirts[index]),
-                      fit: BoxFit.cover,
+                        );
+                      },
+                      child: Container(
+                        height: 180,
+                        width: 153,
+                        padding:
+                            const EdgeInsets.only(top: 8, bottom: 8, left: 8),
+                        margin: const EdgeInsets.only(right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurpleAccent.withOpacity(.3),
+                          borderRadius: index != products.length - 1
+                              ? (index == 0
+                                  ? const BorderRadius.only(
+                                      topLeft: Radius.circular(5),
+                                      topRight: Radius.circular(5),
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(5),
+                                    )
+                                  : BorderRadius.circular(5))
+                              : const BorderRadius.only(
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5),
+                                  bottomLeft: Radius.circular(5),
+                                  bottomRight: Radius.circular(15),
+                                ),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              products[index].images.isNotEmpty
+                                  ? products[index].images[0]
+                                  : '',
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ],

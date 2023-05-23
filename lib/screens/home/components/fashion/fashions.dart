@@ -223,9 +223,16 @@ class _FashionableState extends State<Fashionable> {
   Future<List<Product>> fetchProductsFromFirestore() async {
     final List<Product> products = [];
     final QuerySnapshot snapshot = await _refProducts.get();
+
     for (var element in snapshot.docs) {
-      products.add(Product.fromMap(element.data() as Map<String, dynamic>));
+      final productData = element.data() as Map<String, dynamic>;
+      final productCategories = List<String>.from(productData['categories']);
+
+      if (productCategories.contains('Fashion')) {
+        products.add(Product.fromMap(productData));
+      }
     }
+
     return products;
   }
 

@@ -220,7 +220,11 @@ class _SportsState extends State<Sports> {
     final List<Product> products = [];
     final QuerySnapshot snapshot = await _refProducts.get();
     for (var element in snapshot.docs) {
-      products.add(Product.fromMap(element.data() as Map<String, dynamic>));
+      final productData = element.data() as Map<String, dynamic>;
+      final List<dynamic> categories = productData['categories'];
+      if (categories.contains('Sports')) {
+        products.add(Product.fromMap(productData));
+      }
     }
     return products;
   }
