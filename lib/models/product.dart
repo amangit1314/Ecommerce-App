@@ -12,7 +12,7 @@ class Product {
   bool isFavourite, isPopular;
   final List<String> categories;
   final List<Review> reviews;
-  final List? sizes;
+  final List<String>? sizes;
   int quantity;
 
   Product({
@@ -43,6 +43,7 @@ class Product {
       isFavourite: productData['isFavourite'],
       isPopular: productData['isPopular'],
       categories: productData['categories'],
+      sizes: productData['sizes'],
     );
   }
 
@@ -55,6 +56,7 @@ class Product {
       'price': price,
       'isPopular': isPopular,
       'categories': categories,
+      'sizes': sizes,
     };
   }
 
@@ -70,6 +72,7 @@ class Product {
       isFavourite: map['isFavourite'] as bool? ?? false,
       isPopular: map['isPopular'] as bool? ?? false,
       colors: List<String>.from(map['colors'] ?? []),
+      sizes: List<String>.from(map['sizes'] ?? []),
     );
   }
 

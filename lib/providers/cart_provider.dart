@@ -11,7 +11,9 @@ class CartProvider with ChangeNotifier {
   final String _category = '';
   final String _image = '';
   final bool _isInCart = false;
+  int _cartItemQuantity = 1;
 
+  int get cartItemQuantity => _cartItemQuantity;
   String get name => _name;
   String get price => _price;
   String get image => _image;
@@ -46,16 +48,22 @@ class CartProvider with ChangeNotifier {
       );
     }
 
+    _cartItemQuantity++; // Increment cartItemQuantity
     notifyListeners();
   }
 
-  int updateItemQuantity(Product product, {int quantity = 1}) {
-    final int index = _cartItems.indexOf(product);
+  // delete From Cart
+  void deleteFromCart(Product product) {
+    int index = cartItems.indexWhere(
+      (item) => item.title == product.title,
+    );
+
     if (index != -1) {
-      _cartItems[index].quantity = quantity;
-      notifyListeners();
+      cartItems.removeAt(index);
+      _cartItemQuantity--; // Decrement cartItemQuantity
     }
-    return _cartItems[index].quantity;
+
+    notifyListeners();
   }
 
   double get totalPrice {

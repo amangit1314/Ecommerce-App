@@ -23,7 +23,7 @@ class _SizeDotsState extends State<SizeDots> {
 
   @override
   Widget build(BuildContext context) {
-    List? productSizes = widget.product.sizes;
+    List<String>? productSizes = widget.product.sizes;
 
     return Padding(
       padding: const EdgeInsets.only(left: 15.0),
@@ -73,6 +73,9 @@ class _SizeDotsState extends State<SizeDots> {
                       (size) => GestureDetector(
                         onTap: () {
                           // Handle size selection
+                          setState(() {
+                            selectedSize = sizes.indexOf(size);
+                          });
                         },
                         child: Container(
                           margin: const EdgeInsets.only(right: 10),

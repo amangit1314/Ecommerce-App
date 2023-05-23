@@ -110,11 +110,8 @@ class _ProductDescriptionState extends State<ProductDescription>
                           widget.product.isFavourite =
                               !widget.product.isFavourite;
                         });
-                        // add this product to cart using provider
+
                         cartProvider.addToCart(widget.product);
-                        cartProvider.updateItemQuantity(widget.product
-                            // cartProvider.getProductQuantity(widget.product.title),
-                            );
                       },
                       child: Container(
                         padding:

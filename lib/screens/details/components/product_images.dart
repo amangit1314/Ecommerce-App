@@ -218,8 +218,18 @@ class _ProductImagesFirebaseState extends State<ProductImagesFirebase> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
+          // shadow
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 4),
+              blurRadius: 4,
+              color: Colors.black.withOpacity(0.25),
+            ),
+          ],
           border: Border.all(
-              color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
+            width: selectedImage == index ? 2 : 0,
+            color: Colors.white.withOpacity(selectedImage == index ? 1 : 0),
+          ),
           image: DecorationImage(
             image: CachedNetworkImageProvider(
                 widget.product.images[selectedImage]),

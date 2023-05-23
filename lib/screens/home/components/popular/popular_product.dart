@@ -1,32 +1,26 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
-
 // import '../../../../components/section_tile.dart';
 // import '../../../../models/product.dart';
 // import '../../../../providers/product_provider.dart';
 // import '../../../../utils/constants.dart';
 // import '../../../../utils/size_config.dart';
 // import '../../../details/detail_screen.dart';
-
 // class Fashionable extends StatefulWidget {
 //   const Fashionable({super.key});
-
 //   @override
 //   State<Fashionable> createState() => _FashionableState();
 // }
-
 // class _FashionableState extends State<Fashionable> {
 //   final CollectionReference _refProducts =
 //       FirebaseFirestore.instance.collection('products');
 //   late Stream<QuerySnapshot> _streamProducts;
-
 //   @override
 //   void initState() {
 //     super.initState();
 //     _streamProducts = _refProducts.snapshots();
 //   }
-
 //   @override
 //   Widget build(BuildContext context) {
 //     return Column(
@@ -84,7 +78,6 @@
 //     );
 //   }
 // }
-
 // class FashionsCard extends StatelessWidget {
 //   final Product product;
 //   final String? image;
@@ -95,7 +88,6 @@
 //     this.image,
 //     this.category,
 //   });
-
 //   @override
 //   Widget build(BuildContext context) {
 //     return GestureDetector(
@@ -199,6 +191,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../components/section_tile.dart';
+import '../../../../components/skelton.dart';
 import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
@@ -214,11 +207,6 @@ class PopularProducts extends StatefulWidget {
 class _PopularProductsState extends State<PopularProducts> {
   final CollectionReference _refProducts =
       FirebaseFirestore.instance.collection('products');
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<List<Product>> fetchProductsFromFirestore() async {
     final List<Product> products = [];
@@ -249,18 +237,28 @@ class _PopularProductsState extends State<PopularProducts> {
           child: FutureBuilder<List<Product>>(
             future: fetchProductsFromFirestore(),
             builder: (context, snapshot) {
+              final List<Product> products = snapshot.data ?? [];
+
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return Center(
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      return const LoadingShimmerSkelton();
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 8);
+                    },
+                  ),
                 );
               }
+
               if (snapshot.hasError) {
                 return const Center(
                   child: Text('Something went wrong'),
                 );
               }
-
-              final List<Product> products = snapshot.data ?? [];
 
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -279,6 +277,46 @@ class _PopularProductsState extends State<PopularProducts> {
               );
             },
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class LoadingShimmerSkelton extends StatelessWidget {
+  const LoadingShimmerSkelton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Skelton(),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Expanded(child: Skelton(height: 10)),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Expanded(child: Skelton(height: 14)),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
+          child: Skelton(height: 12),
         ),
       ],
     );

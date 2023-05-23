@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:soni_store_app/resources/firestore_methods.dart';
 
-class ProfileControllerProvider with ChangeNotifier {
+class ProfileProvider with ChangeNotifier {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _numberController = TextEditingController();

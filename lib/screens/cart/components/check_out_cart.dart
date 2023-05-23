@@ -137,7 +137,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                       text: "Total:\n",
                       children: [
                         TextSpan(
-                          text: "\$ ${cartProvider.totalPrice}",
+                          text: "₹ ${cartProvider.totalPrice}",
                           style: const TextStyle(
                             fontSize: 16,
                             color: kPrimaryColor,

@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
 import 'package:soni_store_app/screens/details/components/product_description.dart';
@@ -7,9 +10,7 @@ import 'package:soni_store_app/screens/details/components/rating_tile.dart';
 import 'package:soni_store_app/screens/details/components/reviews_sheet.dart';
 import 'package:soni_store_app/screens/details/components/top_rounded_container.dart';
 
-import '../../../helper/stripe_helper.dart';
 import '../../../models/order.dart';
-import '../../../models/payment.dart';
 import '../../../models/product.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
@@ -340,170 +341,189 @@ class AddedWidget extends StatelessWidget {
   }
 
   Future<void> showPaymentDialog(BuildContext context, Product product) async {
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
     CartProvider cartProvider =
         Provider.of<CartProvider>(context, listen: false);
+    OrderProvider orderProvider =
+        Provider.of<OrderProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
 
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Center(
-            child: Text(
-              'Payment Method',
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: kPrimaryColor,
-                  ),
+    bool success = false;
+
+    try {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GestureDetector(
-                onTap: () async {
-                  userProvider.addPayment(
-                    Payment(
-                      id: 'payment_id',
-                      uid: 'user_id',
-                      paymentMethod: 'Cash',
-                      paymentStatus: 'payment_status',
-                      date: DateTime.now(),
-                      amount: 0,
+            title: Center(
+              child: Text(
+                'Checkout With',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryColor,
                     ),
-                  );
-                  await StripeHelper.instance
-                      .makePayment(price, context, order!);
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: getProportionateScreenHeight(50),
-                  margin: const EdgeInsets.only(
-                    top: 15,
-                    left: 15,
-                    right: 15,
-                  ),
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Cash',
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    if (order != null && userProvider.getUser != null) {
+                      await orderProvider.addOrder(
+                          order!, userProvider.getUser!.uid);
+                      success = true;
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: getProportionateScreenHeight(50),
+                    margin: const EdgeInsets.only(
+                      top: 15,
+                      left: 15,
+                      right: 15,
+                    ),
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Cash',
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  // Add your logic for online payment here
-                  // For example, you can navigate to a payment screen
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => OnlinePaymentScreen(),
-                  //   ),
-                  // );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: getProportionateScreenHeight(50),
-                  margin: const EdgeInsets.only(
-                    top: 15,
-                    left: 15,
-                    right: 15,
-                  ),
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Online Payment',
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                GestureDetector(
+                  onTap: () async {
+                    if (order != null && userProvider.getUser != null) {
+                      await orderProvider.addOrder(
+                          order!, userProvider.getUser!.uid);
+                      success = true;
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: getProportionateScreenHeight(50),
+                    margin: const EdgeInsets.only(
+                      top: 15,
+                      left: 15,
+                      right: 15,
+                    ),
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Online Payment',
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  cartProvider.addToCart(product);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const CartScreen(),
+                GestureDetector(
+                  onTap: () {
+                    cartProvider.addToCart(product);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CartScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: getProportionateScreenHeight(50),
+                    margin: const EdgeInsets.only(
+                      top: 15,
+                      left: 15,
+                      right: 15,
                     ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: getProportionateScreenHeight(50),
-                  margin: const EdgeInsets.only(
-                    top: 15,
-                    left: 15,
-                    right: 15,
-                  ),
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Go to Cart',
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: getProportionateScreenHeight(50),
-                  margin: const EdgeInsets.only(
-                    top: 15,
-                    left: 15,
-                    right: 15,
-                  ),
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Cancel',
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                    child: Center(
+                      child: Text(
+                        'Go to Cart',
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: getProportionateScreenHeight(50),
+                    margin: const EdgeInsets.only(
+                      top: 15,
+                      left: 15,
+                      right: 15,
+                    ),
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Cancel',
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      success = false;
+      debugPrint('Error occurred while adding the order: $e');
+    }
+
+    if (success) {
+      Get.snackbar(
+        'Success',
+        'Order added successfully! 🎉',
+        backgroundColor: Colors.green,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } else {
+      Get.snackbar(
+        'Error',
+        'Failed to add order! ❗⚠',
+        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+      );
+    }
   }
 }
 

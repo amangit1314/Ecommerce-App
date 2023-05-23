@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/user_provider.dart';
 import 'package:soni_store_app/screens/profile/components/profile_pic.dart';
 import 'package:soni_store_app/utils/constants.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
-import '../../../providers/profile_controller_provider.dart';
+import '../../../providers/providers.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -40,7 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final profileProvider =
-        Provider.of<ProfileControllerProvider>(context, listen: false);
+        Provider.of<ProfileProvider>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,

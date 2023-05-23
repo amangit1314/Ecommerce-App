@@ -23,6 +23,9 @@ class _EcommerceAppState extends State<EcommerceApp> {
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => PaymentProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: GetMaterialApp(
         title: 'SnapCart Ecommerce App',

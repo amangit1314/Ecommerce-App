@@ -39,25 +39,22 @@ class IconBtnWithCounter extends StatelessWidget {
               top: -3,
               right: 0,
               child: Container(
-                padding: const EdgeInsets.all(2),
+                padding: const EdgeInsets.all(4),
                 height: getProportionateScreenWidth(18),
                 width: getProportionateScreenWidth(18),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF4848),
+                  color: Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(width: 1.5, color: Colors.white),
+                  border: Border.all(width: 1, color: kPrimaryColor),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Center(
-                    child: Text(
-                      "$numOfitem",
-                      style: TextStyle(
-                        fontSize: getProportionateScreenWidth(10),
-                        height: 1,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                child: Center(
+                  child: Text(
+                    "$numOfitem",
+                    style: TextStyle(
+                      fontSize: getProportionateScreenHeight(9),
+                      fontWeight: FontWeight.bold,
+                      height: 1.1,
+                      color: kPrimaryColor,
                     ),
                   ),
                 ),

@@ -7,10 +7,12 @@ class OrderProvider with ChangeNotifier {
 
   List<models.Order> get orders => [..._orders];
 
-  Future<void> fetchOrders() async {
+  Future<void> fetchOrders(String userId) async {
     try {
-      final querySnapshot =
-          await FirebaseFirestore.instance.collection('orders').get();
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .where('userId', isEqualTo: userId)
+          .get();
 
       _orders = querySnapshot.docs
           .map((doc) => models.Order.fromMap(doc.data()))
@@ -21,9 +23,10 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addOrder(models.Order order) async {
+  Future<void> addOrder(models.Order order, String userId) async {
     try {
       final orderData = order.toMap();
+      orderData['userId'] = userId;
 
       final documentRef =
           await FirebaseFirestore.instance.collection('orders').add(orderData);
@@ -34,6 +37,25 @@ class OrderProvider with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       throw Exception('Failed to add order: $error');
+    }
+  }
+
+  Future<List<models.Order>> getOrderDetailsByProductTitle(
+      String productTitle, String userId) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .where('productTitle', isEqualTo: productTitle)
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      final orderDetails = querySnapshot.docs
+          .map((doc) => models.Order.fromMap(doc.data()))
+          .toList();
+
+      return orderDetails;
+    } catch (error) {
+      throw Exception('Failed to retrieve order details: $error');
     }
   }
 }
