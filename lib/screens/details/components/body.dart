@@ -10,11 +10,13 @@ import 'package:soni_store_app/screens/details/components/rating_tile.dart';
 import 'package:soni_store_app/screens/details/components/reviews_sheet.dart';
 import 'package:soni_store_app/screens/details/components/top_rounded_container.dart';
 
+import '../../../components/section_tile.dart';
 import '../../../models/order.dart';
 import '../../../models/product.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 import '../../cart/cart_screen.dart';
+import '../../home/components/fashion/fashions.dart';
 import '../../home/home_screen.dart';
 import 'after_buy_now_sheet.dart';
 
@@ -76,6 +78,8 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
                   ReviewsSheet(
                     bottomSheetAnimationController:
                         bottomSheetAnimationController,
+                    product: widget.product,
+                    image: widget.product.images.first,
                   ),
 
                   // * similar items
@@ -197,18 +201,6 @@ class BuyNowButton extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  final order = Order(
-                    orderId: 'order_id',
-                    uid: 'user_id',
-                    productId: 'product_id',
-                    orderedDate: DateTime.now(),
-                    quantity: 1,
-                    amount: 10.0,
-                    address: 'Shipping address',
-                    productImage: product.images.first,
-                    orderStatus: 'Not Ordered',
-                  );
-                  // Show bottom sheet
                   showModalBottomSheet(
                     backgroundColor: const Color(0xFFF6F7F9),
                     context: context,
@@ -219,10 +211,8 @@ class BuyNowButton extends StatelessWidget {
                       ),
                     ),
                     builder: (context) => AfterBuyNowButtonSheet(
-                      // product: product,
                       widget: widget,
                       width: width,
-                      order: order,
                     ),
                   );
                 },
@@ -238,16 +228,18 @@ class BuyNowButton extends StatelessWidget {
 class AddedWidget extends StatelessWidget {
   const AddedWidget({
     super.key,
+    required this.widget,
     required this.width,
     required this.price,
-    this.order,
     required this.product,
+    required this.quantity,
   });
 
   final double width;
   final String price;
-  final Order? order;
   final Product product;
+  final AfterBuyNowButtonSheet widget;
+  final int quantity;
 
   @override
   Widget build(BuildContext context) {
@@ -349,6 +341,19 @@ class AddedWidget extends StatelessWidget {
         Provider.of<UserProvider>(context, listen: false);
 
     bool success = false;
+    String orderStatus = 'Processing';
+
+    Order order = Order(
+      orderId: DateTime.now().toString(),
+      uid: userProvider.getUser.uid,
+      orderedDate: DateTime.now(),
+      productId: product.id,
+      amount: double.parse(price),
+      productImage: product.images.first,
+      // address: userProvider.getUser.addresses!.first ?? 'No address found',
+      quantity: quantity,
+      orderStatus: orderStatus,
+    );
 
     try {
       await showDialog(
@@ -373,12 +378,18 @@ class AddedWidget extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    if (order != null && userProvider.getUser != null) {
-                      await orderProvider.addOrder(
-                          order!, userProvider.getUser!.uid);
+                    await orderProvider
+                        .addOrder(
+                      order,
+                      userProvider.getUser.uid,
+                    )
+                        .then((value) {
                       success = true;
                       Navigator.pop(context);
-                    }
+                    }).catchError((e) {
+                      success = false;
+                      Navigator.pop(context);
+                    });
                   },
                   child: Container(
                     width: double.infinity,
@@ -406,12 +417,20 @@ class AddedWidget extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    if (order != null && userProvider.getUser != null) {
-                      await orderProvider.addOrder(
-                          order!, userProvider.getUser!.uid);
-                      success = true;
-                      Navigator.pop(context);
-                    }
+                    Get.snackbar(
+                      'Information ℹ',
+                      'This functionality is yet to be implemented! 🙏',
+                      backgroundColor: Colors.yellow,
+                      colorText: Colors.black,
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+
+                    // if (order != null) {
+                    //   await orderProvider.addOrder(
+                    //       order!, userProvider.getUser.uid);
+                    //   success = true;
+                    //   Navigator.pop(context);
+                    // }
                   },
                   child: Container(
                     width: double.infinity,
@@ -527,65 +546,56 @@ class AddedWidget extends StatelessWidget {
   }
 }
 
-// class SimilarProducts extends StatelessWidget {
-//   const SimilarProducts({
-//     super.key,
-//     required this.widget,
-//   });
-//   final DetailFirebaseBody widget;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         const SizedBox(height: 10),
-//         Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 20),
-//           child: SectionTitle(
-//             title: 'Similar Products',
-//             press: () {},
-//           ),
-//         ),
-//         SizedBox(height: getProportionateScreenHeight(15)),
-//         Container(
-//           height: 250,
-//           padding: const EdgeInsets.only(left: 20.0),
-//           child: ListView.builder(
-//             scrollDirection: Axis.horizontal,
-//             itemCount: 6,
-//             itemBuilder: (context, index) {
-//               return GestureDetector(
-//                 // onTap: () {
-//                 //   Navigator.of(context).push(
-//                 //     MaterialPageRoute(
-//                 //       builder: (_) => DetailsScreen(
-//                 //         product: demoProducts[index],
-//                 //       ),
-//                 //     ),
-//                 //   );
-//                 // },
-//                 child: Container(
-//                   width: 170,
-//                   margin: const EdgeInsets.only(right: 10),
-//                   padding: const EdgeInsets.only(
-//                     top: 8,
-//                     left: 8,
-//                     right: 8,
-//                   ),
-//                   decoration: BoxDecoration(
-//                     color: Colors.white,
-//                     borderRadius: BorderRadius.circular(15),
-//                     border: Border.all(
-//                       color: kPrimaryColor.withOpacity(.2),
-//                     ),
-//                   ),
-//                   child: FashionsCard(product: widget.product),
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+class SimilarProducts extends StatelessWidget {
+  const SimilarProducts({
+    super.key,
+    required this.widget,
+  });
+  final DetailFirebaseBody widget;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SectionTitle(
+            title: 'Similar Products',
+            press: () {},
+          ),
+        ),
+        SizedBox(height: getProportionateScreenHeight(15)),
+        Container(
+          height: 250,
+          padding: const EdgeInsets.only(left: 20.0),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 6,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                child: Container(
+                  width: 170,
+                  margin: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(
+                    top: 8,
+                    left: 8,
+                    right: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: kPrimaryColor.withOpacity(.2),
+                    ),
+                  ),
+                  child: FashionsCard(product: widget.product),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}

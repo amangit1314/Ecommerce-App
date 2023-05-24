@@ -8,6 +8,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../../../showMore/show_more_screen.dart';
 
 class RecentlyViewd extends StatefulWidget {
   const RecentlyViewd({super.key});
@@ -43,8 +44,14 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
             horizontal: getProportionateScreenWidth(20),
           ),
           child: SectionTitle(
-            title: "Recently Views",
-            press: () {},
+            title: "Recently Viewed",
+            press: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ShowMore(),
+                ),
+              );
+            },
           ),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),

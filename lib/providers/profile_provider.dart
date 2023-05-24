@@ -1,17 +1,15 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:soni_store_app/resources/firestore_methods.dart';
 
 class ProfileProvider with ChangeNotifier {
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _numberController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _numberController = TextEditingController();
 
-  final nameFocusNode = FocusNode();
-  final emailFocusNode = FocusNode();
-  final numberFocusNode = FocusNode();
+  final FocusNode nameFocusNode = FocusNode();
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode numberFocusNode = FocusNode();
 
   bool loading = false;
 
@@ -33,69 +31,55 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future pickGalaryImage(BuildContext context) async {
-    await ImagePicker()
-        .pickImage(source: ImageSource.gallery, imageQuality: 100)
-        .then((value) {
-      setImage(value!);
-      uploadImage(context);
-    });
+  Future pickGalleryImage(String userId) async {
+    final pickedImage = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 100,
+    );
+
+    if (pickedImage != null) {
+      setImage(pickedImage);
+      await uploadImage(userId);
+    }
   }
 
-  Future pickCameraImage(BuildContext context) async {
-    await ImagePicker()
-        .pickImage(source: ImageSource.camera, imageQuality: 100)
-        .then((value) => setImage(value!));
+  Future pickCameraImage() async {
+    final pickedImage = await picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 100,
+    );
+
+    if (pickedImage != null) {
+      setImage(pickedImage);
+    }
   }
 
-  Future uploadImage(BuildContext context) async {
+  Future uploadImage(String userId) async {
     setLoading(true);
-    // upload image to firebase storage
     String imageUrl = await FirestoreMethods().uploadImageToStorage(
-      'profile_images',
-      _image! as Uint8List,
+      'profile_images/$userId',
+      await _image!.readAsBytes(), // Convert XFile to Uint8List
       false,
     );
     setLoading(false);
-    Navigator.pop(context);
+    return imageUrl;
   }
 
-  Future showUsernameDialogAlert(BuildContext context, String name) {
-    _nameController.text = name;
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Change Username'),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _nameController,
-                    focusNode: nameFocusNode,
-                    decoration: InputDecoration(
-                      hintText: name,
-                    ),
-                    onChanged: (value) {},
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Save'),
-              ),
-            ],
-          );
-        });
+  Future updateProfile(String userId) async {
+    setLoading(true);
+    String username = nameController.text;
+    String email = emailController.text;
+    String number = numberController.text;
+    String imageUrl = image?.path ?? ''; // Use the image path if available
+
+    await FirestoreMethods().updateProfile(
+      userId,
+      username,
+      email,
+      number,
+      imageUrl,
+    );
+
+    setLoading(false);
   }
 }

@@ -7,15 +7,18 @@ import 'package:soni_store_app/resources/auth_methods.dart';
 import '../models/order.dart';
 
 class UserProvider with ChangeNotifier {
-  models.User? _user;
+  models.User _user = models.User(
+    email: 'default@gmail.com',
+    uid: '',
+  );
   final AuthMethods _authMethods = AuthMethods();
 
-  models.User? get getUser => _user;
-  List<Order>? get orders => _user?.orders;
+  models.User get getUser => _user;
+  List<Order>? get orders => _user.orders;
 
   // ? <------------------ Authentication Methods ------------------->
   Future<void> refreshUser() async {
-    models.User? user = await _authMethods.getUserDetails();
+    models.User user = await _authMethods.getUserDetails();
     _user = models.User(
       uid: user.uid,
       email: user.email,
@@ -64,22 +67,18 @@ class UserProvider with ChangeNotifier {
     List<models.Payment>? payments,
     List<models.Product>? cartItems,
   }) async {
-    if (_user == null) {
-      throw Exception('User is not available');
-    }
-
     final updatedUser = models.User(
-      uid: _user!.uid,
-      email: email ?? _user!.email,
-      username: username ?? _user!.username,
-      password: password ?? _user!.password,
-      number: number ?? _user!.number,
-      profImage: profImage ?? _user!.profImage,
-      gender: gender ?? _user!.gender,
-      addresses: addresses ?? _user!.addresses,
-      orders: orders ?? _user!.orders,
-      payments: payments ?? _user!.payments,
-      cartItems: cartItems ?? _user!.cartItems,
+      uid: _user.uid,
+      email: email ?? _user.email,
+      username: username ?? _user.username,
+      password: password ?? _user.password,
+      number: number ?? _user.number,
+      profImage: profImage ?? _user.profImage,
+      gender: gender ?? _user.gender,
+      addresses: addresses ?? _user.addresses,
+      orders: orders ?? _user.orders,
+      payments: payments ?? _user.payments,
+      cartItems: cartItems ?? _user.cartItems,
     );
 
     // Call a method to update the user details in the backend
@@ -92,10 +91,7 @@ class UserProvider with ChangeNotifier {
 
   // * <----------------------- Payments ---------------------->
   Future<void> addPayment(models.Payment payment) async {
-    if (_user == null) {
-      throw Exception('User is not available');
-    }
-    _user!.payments!.add(payment);
+    _user.payments!.add(payment);
     notifyListeners();
   }
   // * <------------------------------------------------------->

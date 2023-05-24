@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/user.dart' as model;
+import 'firestore_methods.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -42,6 +43,8 @@ class AuthMethods {
             .collection('users')
             .doc(cred.user!.uid)
             .set(user.toMap());
+        await FirestoreMethods().addUserToFirestore(
+            cred.user!.uid, email, '+911234567891', password);
 
         res = 'success';
       } else {

@@ -11,7 +11,7 @@ class Order {
   final DateTime orderedDate;
   final int quantity;
   final double amount;
-  final String address;
+  // final String address;
   final String orderStatus;
   final Payment? paymentInfo;
 
@@ -23,7 +23,7 @@ class Order {
     required this.orderedDate,
     required this.quantity,
     required this.amount,
-    required this.address,
+    // required this.address,
     required this.orderStatus,
     this.paymentInfo,
   });
@@ -37,7 +37,7 @@ class Order {
       'orderedDate': orderedDate.millisecondsSinceEpoch,
       'quantity': quantity,
       'amount': amount,
-      'address': address,
+      // 'address': address,
       'orderStatus': orderStatus,
       'paymentInfo': paymentInfo!.toMap(),
     };
@@ -52,7 +52,7 @@ class Order {
       orderedDate: DateTime.fromMillisecondsSinceEpoch(map['orderedDate']),
       quantity: map['quantity']?.toInt() ?? 0,
       amount: map['amount']?.toDouble() ?? 0.0,
-      address: map['address'] ?? '',
+      // address: map['address'] ?? '',
       orderStatus: map['orderStatus'] ?? '',
       paymentInfo: Payment.fromMap(
         map['paymentInfo'],

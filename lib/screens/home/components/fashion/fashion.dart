@@ -5,6 +5,7 @@ import 'package:soni_store_app/utils/size_config.dart';
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
 import '../../../details/detail_screen.dart';
+import '../../../showMore/show_more_screen.dart';
 
 class Fashion extends StatefulWidget {
   const Fashion({Key? key}) : super(key: key);
@@ -38,7 +39,16 @@ class _FashionState extends State<Fashion> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SectionTitle(title: 'Fashion', press: () {}),
+        SectionTitle(
+          title: 'Fashion',
+          press: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const ShowMore(),
+              ),
+            );
+          },
+        ),
         SizedBox(height: getProportionateScreenHeight(20)),
         Container(
           margin: const EdgeInsets.only(right: 10),

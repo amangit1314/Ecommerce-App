@@ -199,6 +199,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../../../showMore/show_more_screen.dart';
 
 class Sports extends StatefulWidget {
   const Sports({super.key});
@@ -239,7 +240,13 @@ class _SportsState extends State<Sports> {
           ),
           child: SectionTitle(
             title: "Sports Collection",
-            press: () {},
+            press: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ShowMore(),
+                ),
+              );
+            },
           ),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),

@@ -18,18 +18,18 @@ class User {
   final List<Payment>? payments;
   final List<Product> cartItems;
 
-  const User({
+  User({
     required this.email,
     required this.uid,
-    this.username,
-    this.password,
+    this.username = 'Default User',
+    this.password = '',
     this.cartItems = const [],
-    this.number,
-    this.profImage,
-    this.gender,
-    this.addresses,
+    this.number = '+91 1234567891',
+    this.profImage = '',
+    this.gender = 'Not Defined',
+    this.addresses = const [],
     this.orders = const [], // Initialize orders with an empty list
-    this.payments,
+    this.payments = const [],
   });
 
   Map<String, dynamic> toMap() => {

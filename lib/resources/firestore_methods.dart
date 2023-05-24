@@ -85,4 +85,48 @@ class FirestoreMethods {
         .doc(_firestore.collection('users').doc().id)
         .set({'token': token});
   }
+
+  // add registered user to firestore
+  Future<void> addUserToFirestore(
+    String id,
+    String email,
+    String phone,
+    String password,
+  ) async {
+    try {
+      await _firestore.collection('users').doc(id).set({
+        'email': email,
+        'phone': phone,
+        'password': password,
+      });
+    } catch (err) {
+      Get.snackbar(
+        'Error Message',
+        err.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  Future<void> updateProfile(String id, String email, String phone, String name,
+      String profileImage) async {
+    try {
+      await _firestore.collection('users').doc(id).update({
+        'email': email,
+        'phone': phone,
+        'name': name,
+        'profileImage': profileImage,
+      });
+    } catch (err) {
+      Get.snackbar(
+        'Error Message',
+        err.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 }

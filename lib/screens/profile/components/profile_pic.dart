@@ -78,13 +78,14 @@ class _ProfilePicState extends State<ProfilePic> {
                 )
               : const CircleAvatar(
                   radius: 60,
-                  backgroundImage:
-                      NetworkImage('https://i.stack.imgur.com/l60Hf.png'),
+                  backgroundImage: NetworkImage(
+                      'https://media.sketchfab.com/models/296f9f80c4ac431aa3d354f7ef955605/thumbnails/1d824d70f65e441a8f81162ff8bac094/281cbed7656443ffb04d2e38f928ab14.jpeg'),
                   backgroundColor: Colors.red,
                 ),
           Positioned(
-            right: 70,
-            bottom: -6,
+            right: 5,
+            bottom: -10,
+            left: 75,
             child: CircleAvatar(
               backgroundColor: Colors.white,
               radius: 23,

@@ -196,6 +196,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../../../showMore/show_more_screen.dart';
 
 class PopularProducts extends StatefulWidget {
   const PopularProducts({Key? key}) : super(key: key);
@@ -229,7 +230,14 @@ class _PopularProductsState extends State<PopularProducts> {
           ),
           child: SectionTitle(
             title: "Popular Products",
-            press: () {},
+            press: () {
+              // navigate to ShowMore
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ShowMore(),
+                ),
+              );
+            },
           ),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
@@ -292,28 +300,30 @@ class LoadingShimmerSkelton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.start,
       children: [
         const Skelton(),
         const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 2.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Expanded(child: Skelton(height: 10)),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Expanded(child: Skelton(height: 14)),
-                ],
-              ),
-            ],
+          child: Flexible(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Skelton(height: 10),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Skelton(height: 14),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         const Padding(

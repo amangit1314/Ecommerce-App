@@ -203,6 +203,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../../../showMore/show_more_screen.dart';
 
 class Fashionable extends StatefulWidget {
   const Fashionable({super.key});
@@ -246,7 +247,13 @@ class _FashionableState extends State<Fashionable> {
           ),
           child: SectionTitle(
             title: "Fashion Collection",
-            press: () {},
+            press: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ShowMore(),
+                ),
+              );
+            },
           ),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),

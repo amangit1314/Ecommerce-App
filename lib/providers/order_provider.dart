@@ -32,9 +32,13 @@ class OrderProvider with ChangeNotifier {
           await FirebaseFirestore.instance.collection('orders').add(orderData);
       final documentSnapshot = await documentRef.get();
 
-      final addedOrder = models.Order.fromMap(documentSnapshot.data()!);
-      _orders.add(addedOrder);
-      notifyListeners();
+      if (documentSnapshot.exists) {
+        final addedOrder = models.Order.fromMap(documentSnapshot.data()!);
+        _orders.add(addedOrder);
+        notifyListeners();
+      } else {
+        throw Exception('Failed to add order: Document does not exist');
+      }
     } catch (error) {
       throw Exception('Failed to add order: $error');
     }

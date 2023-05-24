@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/screens/profile/components/profile_pic.dart';
+import 'package:soni_store_app/models/models.dart';
+import 'package:soni_store_app/providers/providers.dart';
 import 'package:soni_store_app/utils/constants.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
-import '../../../providers/providers.dart';
+import 'profile_pic.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -16,30 +16,16 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-
   final List<String> errors = [];
-
-  void addError({String? error}) {
-    if (!errors.contains(error)) {
-      setState(() {
-        errors.add(error!);
-      });
-    }
-  }
-
-  void removeError({String? error}) {
-    if (errors.contains(error)) {
-      setState(() {
-        errors.remove(error);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
+
+    final currentUser = userProvider.getUser;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -52,60 +38,44 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
         ),
         backgroundColor: Colors.white,
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
         elevation: 0,
         centerTitle: true,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         children: [
           const ProfilePic(),
-          const SizedBox(height: 40),
+          SizedBox(height: getProportionateScreenHeight(40)),
           Form(
             key: _formKey,
             child: Column(
-              children: const [
-                // GestureDetector(
-                //   onTap: () {
-                //     profileProvider.showUsernameDialogAlert(
-                //         context,
-                //         FirebaseAuth.instance.currentUser!.email!
-                //             .substring(0, 8));
-                //   },
-                //   child: EditBox(
-                //     controller: profileProvider.nameController,
-                //     onChanged: (value) {
-                //       if (_formKey.currentState!.validate()) {
-                //         _formKey.currentState!.save();
-                //       }
-                //     },
-
-                //   ),
-                // ),
-
-                SizedBox(height: 10),
-                // buildEditEmailFormField(),
-                SizedBox(height: 10),
-                // buildEditNumberFormField(),
+              children: [
+                buildEditUsernameFormField(
+                    userProvider, profileProvider, currentUser),
+                SizedBox(height: getProportionateScreenHeight(16)),
+                buildEditEmailFormField(
+                    userProvider, profileProvider, currentUser),
+                SizedBox(height: getProportionateScreenHeight(16)),
+                buildEditNumberFormField(
+                    userProvider, profileProvider, currentUser),
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: getProportionateScreenHeight(20)),
           GestureDetector(
             onTap: () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                await userProvider
-                    .updateAllFields(
-                      username: profileProvider.nameController.text,
-                      email: profileProvider.emailController.text,
-                      number: profileProvider.numberController.text,
-                    )
-                    .then((value) => Navigator.pop(context))
-                    .catchError((e) => GetSnackBar(message: e.toString()));
+                await profileProvider.updateProfile(currentUser.uid).then(
+                      (value) => Navigator.pop(context),
+                    );
               }
             },
             child: Container(
@@ -113,14 +83,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               height: getProportionateScreenHeight(60),
               decoration: BoxDecoration(
                 color: kPrimaryColor,
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: Text(
-                "Done",
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+              child: Center(
+                child: Text(
+                  "Done",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: getProportionateScreenWidth(14),
+                      ),
+                ),
               ),
             ),
           ),
@@ -129,126 +102,105 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  // TextFormField buildEditUsernameFormField() {
-  //   return TextFormField(
-  //     keyboardType: TextInputType.name,
-  //     onSaved: (newValue) => _numberController.text = newValue!,
-  //     style: TextStyle(fontSize: getProportionateScreenWidth(12)),
-  //     onChanged: (value) {
-  //       if (value.isNotEmpty) {
-  //         removeError(error: kEmailNullError);
-  //       } else if (emailValidatorRegExp.hasMatch(value)) {
-  //         removeError(error: kInvalidEmailError);
-  //       }
-  //       return;
-  //     },
-  //     decoration: InputDecoration(
-  //       labelText: "Username",
-  //       hintText: userProvider.getUser?.email,
-  //       border: OutlineInputBorder(
-  //         borderRadius: BorderRadius.circular(15),
-  //         borderSide: const BorderSide(
-  //           color: Colors.orange,
-  //           width: 1.0,
-  //         ),
-  //       ),
-  //       contentPadding: const EdgeInsets.symmetric(
-  //         vertical: 2,
-  //         horizontal: 16,
-  //       ),
-  //       floatingLabelBehavior: FloatingLabelBehavior.always,
-  //       suffixIcon:
-  //           const CustomSurffixIcon(svgIcon: "assets/icons/User Icon.svg"),
-  //     ),
-  //   );
-  // }
+  TextFormField buildEditUsernameFormField(UserProvider userProvider,
+      ProfileProvider profileProvider, User currentUser) {
+    return TextFormField(
+      style: TextStyle(
+        fontSize: getProportionateScreenHeight(14),
+      ),
+      controller: profileProvider.nameController,
+      keyboardType: TextInputType.name,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter a username";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Username",
+        hintText: currentUser.username ?? currentUser.email.substring(0, 8),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        prefixIcon: const Icon(Icons.account_circle_outlined),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.orange,
+            width: 1.0,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
+      ),
+    );
+  }
 
-  // TextFormField buildEditEmailFormField() {
-  //   return TextFormField(
-  //     keyboardType: TextInputType.name,
-  //     onSaved: (newValue) => _emailController.text = newValue!,
-  //     style: TextStyle(fontSize: getProportionateScreenWidth(12)),
-  //     onChanged: (value) {
-  //       if (value.isNotEmpty) {
-  //         removeError(error: kEmailNullError);
-  //       } else if (emailValidatorRegExp.hasMatch(value)) {
-  //         removeError(error: kInvalidEmailError);
-  //       }
-  //       return;
-  //     },
-  //     validator: (value) {
-  //       if (value!.isEmpty) {
-  //         addError(error: kEmailNullError);
-  //         return "";
-  //       } else if (!emailValidatorRegExp.hasMatch(value)) {
-  //         addError(error: kInvalidEmailError);
-  //         return "";
-  //       }
-  //       return null;
-  //     },
-  //     decoration: InputDecoration(
-  //       labelText: "Email",
-  //       hintText: userProvider.getUser?.email,
-  //       border: OutlineInputBorder(
-  //         borderRadius: BorderRadius.circular(15),
-  //         borderSide: const BorderSide(
-  //           color: Colors.orange,
-  //           width: 1.0,
-  //         ),
-  //       ),
-  //       contentPadding: const EdgeInsets.symmetric(
-  //         vertical: 2,
-  //         horizontal: 16,
-  //       ),
-  //       floatingLabelBehavior: FloatingLabelBehavior.always,
-  //       suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
-  //     ),
-  //   );
-  // }
+  TextFormField buildEditEmailFormField(UserProvider userProvider,
+      ProfileProvider profileProvider, User currentUser) {
+    return TextFormField(
+      style: TextStyle(
+        fontSize: getProportionateScreenHeight(14),
+      ),
+      controller: profileProvider.emailController,
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter an email";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Email",
+        hintText: currentUser.email,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        prefixIcon: const Icon(Icons.email),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.orange,
+            width: 1.0,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
+      ),
+    );
+  }
 
-  // TextFormField buildEditNumberFormField() {
-  //   return TextFormField(
-  //     keyboardType: TextInputType.phone,
-  //     obscureText: false,
-  //     style: TextStyle(fontSize: getProportionateScreenWidth(12)),
-  //     onSaved: (newValue) => _numberController.text = newValue!,
-  //     onChanged: (value) {
-  //       if (value.isNotEmpty) {
-  //         removeError(error: kPassNullError);
-  //       } else if (value.length >= 8) {
-  //         removeError(error: kShortPassError);
-  //       }
-  //       return;
-  //     },
-  //     validator: (value) {
-  //       if (value!.isEmpty) {
-  //         addError(error: kPassNullError);
-  //         return "";
-  //       } else if (value.length < 8) {
-  //         addError(error: kShortPassError);
-  //         return "";
-  //       }
-  //       return null;
-  //     },
-  //     decoration: InputDecoration(
-  //       labelText: "Number",
-  //       hintText: "Enter your number",
-  //       border: OutlineInputBorder(
-  //         borderRadius: BorderRadius.circular(15),
-  //         borderSide: const BorderSide(
-  //           color: Colors.orange,
-  //           width: 1.0,
-  //         ),
-  //       ),
-  //       contentPadding: const EdgeInsets.symmetric(
-  //         vertical: 2,
-  //         horizontal: 16,
-  //       ),
-  //       // If  you are using latest version of flutter then lable text and hint text shown like this
-  //       // if you r using flutter less then 1.20.* then maybe this is not working properly
-  //       floatingLabelBehavior: FloatingLabelBehavior.always,
-  //       suffixIcon: const CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
-  //     ),
-  //   );
-  // }
+  TextFormField buildEditNumberFormField(UserProvider userProvider,
+      ProfileProvider profileProvider, User currentUser) {
+    return TextFormField(
+      style: TextStyle(
+        fontSize: getProportionateScreenHeight(14),
+      ),
+      controller: profileProvider.numberController,
+      keyboardType: TextInputType.phone,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter a phone number";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Phone Number",
+        hintText: currentUser.number ?? "",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        prefixIcon: const Icon(Icons.phone),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.orange,
+            width: 1.0,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
+      ),
+    );
+  }
 }
