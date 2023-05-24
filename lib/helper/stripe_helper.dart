@@ -42,7 +42,7 @@ class StripeHelper {
   }
 
   void displayPaymentSheet(BuildContext context, Order order) async {
-    UserProvider? userProvider =
+    UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
 
     Completer<bool> paymentCompleter = Completer<bool>();
@@ -57,7 +57,6 @@ class StripeHelper {
 
     if (isSuccess) {
       Order newOrder = order;
-
       userProvider.orders?.add(newOrder);
     }
 

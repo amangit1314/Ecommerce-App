@@ -24,7 +24,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
 
-    final currentUser = userProvider.getUser;
+    final currentUser = userProvider.user;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

@@ -1,7 +1,4 @@
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
 
@@ -10,48 +7,13 @@ import '../../../providers/user_provider.dart';
 import 'edit_profile_screen.dart';
 
 class MyAccount extends StatefulWidget {
-  const MyAccount({super.key});
+  const MyAccount({Key? key}) : super(key: key);
 
   @override
   State<MyAccount> createState() => _MyAccountState();
 }
 
 class _MyAccountState extends State<MyAccount> {
-  pickImage(ImageSource source) async {
-    final ImagePicker imagePicker = ImagePicker();
-    XFile? file = await imagePicker.pickImage(source: source);
-    if (file != null) {
-      return await file.readAsBytes();
-    }
-    debugPrint('No Image Selected');
-  }
-
-  Uint8List? _image;
-
-  XFile? selectedImage;
-
-  selectImage(userProvider) async {
-    Uint8List imageBytes = await pickImage(ImageSource.gallery) ?? Uint8List(0);
-    if (imageBytes.isEmpty) return;
-
-    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('profile_images').child(imageName);
-
-    UploadTask uploadTask = storageReference.putData(imageBytes);
-    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
-
-    String profileImage = await taskSnapshot.ref.getDownloadURL();
-
-    setState(() {
-      _image = imageBytes;
-    });
-
-    if (profileImage.isNotEmpty) {
-      await userProvider.updateUserProfileImage(profileImage: profileImage);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,31 +61,27 @@ class _MyAccountState extends State<MyAccount> {
                   padding: const EdgeInsets.only(top: 5, bottom: 15),
                   child: Row(
                     children: [
-                      _image != null
-                          ? CircleAvatar(
-                              radius: 30,
-                              backgroundImage: MemoryImage(_image!),
-                              backgroundColor: Colors.red,
-                            )
-                          : const CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(
-                                  'https://i.stack.imgur.com/l60Hf.png'),
-                              backgroundColor: Colors.red,
-                            ),
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage: userProvider.user.profImage != null
+                            ? NetworkImage(userProvider.user.profImage!)
+                            : const AssetImage(
+                                    'assets/images/default_profile_image.png')
+                                as ImageProvider,
+                        backgroundColor: Colors.red,
+                      ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userProvider.getUser?.username ?? 'Aman Soni',
+                            userProvider.user.username ?? 'Aman Soni',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(userProvider.getUser?.email ??
-                              'gitaman8481@gmail.com'),
+                          Text(userProvider.user.email),
                         ],
                       ),
                     ],
@@ -139,7 +97,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Username'),
                           Text(
-                            userProvider.getUser?.username ?? 'Aman Soni',
+                            userProvider.user.username ?? 'Aman Soni',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -159,7 +117,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Phone number'),
                           Text(
-                            userProvider.getUser?.number ?? '+91 9649477393',
+                            userProvider.user.number ?? '+91 9649477393',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -179,7 +137,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Gender'),
                           Text(
-                            userProvider.getUser?.gender ?? 'Male',
+                            userProvider.user.gender ?? 'Male',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -199,7 +157,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Email'),
                           Text(
-                            userProvider.getUser?.email ?? 'example@gmail.com',
+                            userProvider.user.email,
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -224,18 +182,17 @@ class _MyAccountState extends State<MyAccount> {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
                                     title: const Text('Change Password'),
                                     content: TextFormField(
-                                        obscureText: true,
-                                        decoration: const InputDecoration(
-                                          hintText: 'Enter new password',
-                                        ),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            userProvider.updateAllFields(
-                                                password: value);
-                                          });
-                                        }),
+                                      obscureText: true,
+                                      decoration: const InputDecoration(
+                                        hintText: 'Enter new password',
+                                      ),
+                                      onChanged: (value) {},
+                                    ),
                                     actions: [
                                       TextButton(
                                         onPressed: () {

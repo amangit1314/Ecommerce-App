@@ -86,3 +86,24 @@ class User {
     );
   }
 }
+
+extension UserExtension on User {
+  User copyWith({
+    String? uid,
+    String? email,
+    String? username,
+    String? profImage,
+    String? number,
+    List<Order>? orders,
+    List<Payment>? payments,
+  }) {
+    return User(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      username: username ?? this.username,
+      profImage: profImage ?? this.profImage,
+      number: number ?? this.number,
+      payments: payments ?? this.payments,
+    );
+  }
+}

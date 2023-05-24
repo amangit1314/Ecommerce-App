@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:soni_store_app/screens/orders/orders_screen.dart';
 import 'package:soni_store_app/screens/products/products_search_screen.dart';
-import 'package:soni_store_app/screens/recent/recents.dart';
 
 import '../screens/home/home_screen.dart';
 import '../screens/profile/profile_screen.dart';

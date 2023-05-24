@@ -1,22 +1,18 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 import 'package:soni_store_app/resources/auth_methods.dart';
 
 import '../models/order.dart';
+import '../resources/user_details_methods.dart';
 
 class UserProvider with ChangeNotifier {
-  models.User _user = models.User(
-    email: 'default@gmail.com',
-    uid: '',
-  );
+  models.User _user = models.User(email: 'default@gmail.com', uid: '');
   final AuthMethods _authMethods = AuthMethods();
+  final UserDetailsMethods _userDetailsMethods = UserDetailsMethods();
 
-  models.User get getUser => _user;
+  models.User get user => _user;
   List<Order>? get orders => _user.orders;
 
-  // ? <------------------ Authentication Methods ------------------->
   Future<void> refreshUser() async {
     models.User user = await _authMethods.getUserDetails();
     _user = models.User(
@@ -29,7 +25,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future registerUser({
+  Future<String> registerUser({
     required String email,
     required String password,
     String? mobile,
@@ -38,61 +34,44 @@ class UserProvider with ChangeNotifier {
       email: email,
       password: password,
       username: email.substring(5),
+      phone: mobile,
     );
   }
 
-  Future authenticateUser({
+  Future<String> authenticateUser({
     required String email,
     required String password,
   }) async {
     return await _authMethods.loginUser(email: email, password: password);
   }
 
-  Future signOut() async {
-    return await _authMethods.signOut();
+  Future<void> signOut() async {
+    await _authMethods.signOut();
+    _user = models.User(email: 'default@gmail.com', uid: '');
+    notifyListeners();
   }
-  // ? <--------------------------------------------------------------->
 
-  // ! <----------------------- User Details ------------------------>
-  Future<void> updateAllFields({
-    String? username,
-    String? password,
-    String? email,
-    String? mobile,
-    String? profImage,
-    String? number,
-    String? gender,
-    List<String?>? addresses,
-    List<models.Order>? orders,
-    List<models.Payment>? payments,
-    List<models.Product>? cartItems,
-  }) async {
-    final updatedUser = models.User(
-      uid: _user.uid,
-      email: email ?? _user.email,
-      username: username ?? _user.username,
-      password: password ?? _user.password,
-      number: number ?? _user.number,
-      profImage: profImage ?? _user.profImage,
-      gender: gender ?? _user.gender,
-      addresses: addresses ?? _user.addresses,
-      orders: orders ?? _user.orders,
-      payments: payments ?? _user.payments,
-      cartItems: cartItems ?? _user.cartItems,
-    );
-
-    // Call a method to update the user details in the backend
-    await _authMethods.updateUserDetailsFromProvider(updatedUser);
-
+  Future<void> updateAllFields(models.User updatedUser) async {
+    await _userDetailsMethods.updateUserDetailsFromProvider(updatedUser);
     _user = updatedUser;
     notifyListeners();
   }
-  // ! <------------------------------------------------------------->
 
-  // * <----------------------- Payments ---------------------->
   Future<void> addPayment(models.Payment payment) async {
     _user.payments!.add(payment);
     notifyListeners();
   }
-  // * <------------------------------------------------------->
+
+  Future<void> addOrder(Order order) async {
+    _user.orders;
+    _user.orders.add(order);
+    await _userDetailsMethods.updateUserDetailsFromProvider(_user);
+    notifyListeners();
+  }
+
+  Future<void> updateProfileImage({required String profileImage}) async {
+    _user = _user.copyWith(profImage: profileImage);
+    await _userDetailsMethods.updateUserDetailsFromProvider(_user);
+    notifyListeners();
+  }
 }

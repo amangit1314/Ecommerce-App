@@ -80,13 +80,16 @@ class FirestoreMethods {
   }
 
   Future<void> addTokenToFirestore(String token) async {
-    await _firestore
-        .collection('users')
-        .doc(_firestore.collection('users').doc().id)
-        .set({'token': token});
+    try {
+      final firestore = FirebaseFirestore.instance;
+      final registrationDoc = firestore.collection('users').doc();
+      await registrationDoc.set({'token': token});
+      debugPrint('Token added to Firestore successfully!');
+    } catch (err) {
+      debugPrint('Error adding token to Firestore: $err');
+    }
   }
 
-  // add registered user to firestore
   Future<void> addUserToFirestore(
     String id,
     String email,
@@ -94,7 +97,8 @@ class FirestoreMethods {
     String password,
   ) async {
     try {
-      await _firestore.collection('users').doc(id).set({
+      final firestore = FirebaseFirestore.instance;
+      await firestore.collection('users').doc(id).set({
         'email': email,
         'phone': phone,
         'password': password,
@@ -110,10 +114,16 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> updateProfile(String id, String email, String phone, String name,
-      String profileImage) async {
+  Future<void> updateProfile(
+    String id,
+    String email,
+    String phone,
+    String name,
+    String profileImage,
+  ) async {
     try {
-      await _firestore.collection('users').doc(id).update({
+      final firestore = FirebaseFirestore.instance;
+      await firestore.collection('users').doc(id).update({
         'email': email,
         'phone': phone,
         'name': name,

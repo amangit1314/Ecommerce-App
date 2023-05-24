@@ -56,7 +56,7 @@ class _ProfilePicState extends State<ProfilePic> {
     });
 
     if (profileImage.isNotEmpty) {
-      await userProvider.updateUserProfileImage(profileImage: profileImage);
+      // await userProvider.updateUserProfileImage(profileImage: profileImage);
     }
   }
 

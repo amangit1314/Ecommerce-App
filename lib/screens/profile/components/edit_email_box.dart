@@ -72,7 +72,7 @@ class _EditBoxEmailState extends State<EditBoxEmail> {
       },
       decoration: InputDecoration(
         labelText: "Email",
-        hintText: userProvider.getUser?.email,
+        hintText: userProvider.user.email,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50),
           borderSide: const BorderSide(

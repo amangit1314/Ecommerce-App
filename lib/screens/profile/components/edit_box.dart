@@ -24,10 +24,9 @@ class EditBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
-    if (userProvider.getUser != null) {
-      currentText = userProvider.getUser!.username ?? 'Aman';
-    }
+    final UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    currentText = userProvider.user.username ?? 'Aman';
     return TextFormField(
       keyboardType: TextInputType.name,
       onSaved: (newValue) => controller.text = newValue!,
@@ -42,7 +41,7 @@ class EditBox extends StatelessWidget {
       },
       decoration: InputDecoration(
         labelText: "Username",
-        hintText: userProvider.getUser?.email,
+        hintText: userProvider.user.email,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50),
           borderSide: const BorderSide(
@@ -50,10 +49,7 @@ class EditBox extends StatelessWidget {
             width: 1.0,
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 2,
-          horizontal: 16,
-        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         prefixIcon: const FaIcon(
           FontAwesomeIcons.circleUser,

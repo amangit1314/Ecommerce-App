@@ -345,7 +345,7 @@ class AddedWidget extends StatelessWidget {
 
     Order order = Order(
       orderId: DateTime.now().toString(),
-      uid: userProvider.getUser.uid,
+      uid: userProvider.user.uid,
       orderedDate: DateTime.now(),
       productId: product.id,
       amount: double.parse(price),
@@ -379,10 +379,7 @@ class AddedWidget extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     await orderProvider
-                        .addOrder(
-                      order,
-                      userProvider.getUser.uid,
-                    )
+                        .addOrder(order, userProvider.user)
                         .then((value) {
                       success = true;
                       Navigator.pop(context);
@@ -424,13 +421,6 @@ class AddedWidget extends StatelessWidget {
                       colorText: Colors.black,
                       snackPosition: SnackPosition.BOTTOM,
                     );
-
-                    // if (order != null) {
-                    //   await orderProvider.addOrder(
-                    //       order!, userProvider.getUser.uid);
-                    //   success = true;
-                    //   Navigator.pop(context);
-                    // }
                   },
                   child: Container(
                     width: double.infinity,
