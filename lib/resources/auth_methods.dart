@@ -5,15 +5,16 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/user.dart' as model;
+import 'firestore_methods.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<model.User> getUserDetails() async {
-    User currentUser = _auth.currentUser!;
-    final DocumentSnapshot snap =
-        await _firestore.collection('users').doc(currentUser.uid).get();
+    User? currentUser = _auth.currentUser;
+    final DocumentSnapshot<Map<String, dynamic>> snap =
+        await _firestore.collection('users').doc(currentUser!.uid).get();
     return model.User.fromMap(snap);
   }
 
@@ -23,10 +24,9 @@ class AuthMethods {
     required String password,
     required String username,
   }) async {
-    //final navigator = Navigator.of(context!);
-    String res = "Some error occured";
+    String res = "Some error occurred";
     try {
-      if (email.isNotEmpty || password.isNotEmpty || username.isNotEmpty) {
+      if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
@@ -43,17 +43,21 @@ class AuthMethods {
             .collection('users')
             .doc(cred.user!.uid)
             .set(user.toMap());
+        await FirestoreMethods().addUserToFirestore(
+            cred.user!.uid, email, '+911234567891', password);
 
         res = 'success';
+      } else {
+        res = '❗Please enter all required information';
       }
     } on FirebaseAuthException catch (err) {
       if (err.code == 'invalid-email') {
-        res = '❗The email is badly formated...';
+        res = '❗The email is badly formatted';
       } else if (err.code == 'weak-password') {
-        res = 'Password should be 6 characters long...';
+        res = '❗Password should be at least 6 characters long';
       }
     } catch (err) {
-      res = res.toString();
+      res = err.toString();
       Get.snackbar(
         'Error Message',
         err.toString(),
@@ -65,28 +69,24 @@ class AuthMethods {
     return res;
   }
 
-  Future<String> loginUser(
-      {BuildContext? context, required email, required password}) async {
-    String res = "❓error occured";
+  Future<String> loginUser({
+    BuildContext? context,
+    required String email,
+    required String password,
+  }) async {
+    String res = "❓Error occurred";
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
-        await _auth
-            .signInWithEmailAndPassword(
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
-        )
-            .then((value) {
-          FirebaseFirestore.instance
-              .collection('users')
-              .doc(value.user!.uid)
-              .get();
-        });
+        );
         res = 'success';
       } else {
         res = '❗Please enter both email and password';
       }
     } catch (err) {
-      res = res.toString();
+      res = err.toString();
       Get.snackbar(
         'Error Message',
         err.toString(),
@@ -116,39 +116,79 @@ class AuthMethods {
     await _auth.signOut();
   }
 
-  // update displayName
-  Future updateUserDetails({required String displayName}) async {
+  Future<void> addProfileImage({required String photoURL}) async {
     User? currentUser = _auth.currentUser;
-    await currentUser!.updateDisplayName(displayName);
+    try {
+      await _firestore
+          .collection('users')
+          .doc(currentUser!.uid)
+          .update({'photoURL': photoURL});
+    } catch (err) {
+      throw Exception(err);
+    }
   }
 
-  // update number
-  // Future updateUserNumber({required String number}) async {
-  //   User? currentUser = _auth.currentUser;
-  //   await currentUser!.updatePhoneNumber(
-  //       PhoneAuthProvider.credential(verificationId: '', smsCode: number));
-  // }
-
-  // update email
-  Future updateUserEmail({required String email}) async {
+  Future<void> addPhoneNumber({required String phoneNumber}) async {
     User? currentUser = _auth.currentUser;
-    await currentUser!.updateEmail(email);
+    try {
+      await _firestore
+          .collection('users')
+          .doc(currentUser!.uid)
+          .update({'phoneNumber': phoneNumber});
+    } catch (err) {
+      throw Exception(err);
+    }
   }
 
-  // update password
-  Future updateUserPassword({required String password}) async {
+  Future<void> updateUserDetailsFromProvider(model.User user) async {
+    try {
+      await _firestore.collection('users').doc(user.uid).update(user.toMap());
+    } catch (err) {
+      throw Exception(err);
+    }
+  }
+}
+
+class UserDetailsMethods {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> addProfileImage({required String photoURL}) async {
     User? currentUser = _auth.currentUser;
-    await currentUser!.updatePassword(password);
+    try {
+      await _firestore
+          .collection('users')
+          .doc(currentUser!.uid)
+          .update({'photoURL': photoURL});
+    } catch (err) {
+      throw Exception(err);
+    }
   }
 
-  // change pic
-  Future updateUserPic({required String photoURL}) async {
+  Future<void> addPhoneNumber({required String phoneNumber}) async {
     User? currentUser = _auth.currentUser;
-    await currentUser!.updatePhotoURL(photoURL);
+    try {
+      await _firestore
+          .collection('users')
+          .doc(currentUser!.uid)
+          .update({'phoneNumber': phoneNumber});
+    } catch (err) {
+      throw Exception(err);
+    }
   }
 
-  // reset password
-  Future resetPassword({required String email}) async {
-    await _auth.sendPasswordResetEmail(email: email);
+  Future<void> updateUserDetailsFromProvider(model.User user) async {
+    try {
+      await _firestore.collection('users').doc(user.uid).update(user.toMap());
+    } catch (err) {
+      throw Exception(err);
+    }
+  }
+
+  Future<model.User> getUserDetails() async {
+    User? currentUser = _auth.currentUser;
+    final DocumentSnapshot<Map<String, dynamic>> snap =
+        await _firestore.collection('users').doc(currentUser!.uid).get();
+    return model.User.fromMap(snap);
   }
 }

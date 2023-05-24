@@ -1,19 +1,34 @@
-// ignore_for_file: avoid_print
-
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:soni_store_app/models/cart_item.dart';
 import 'package:soni_store_app/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/product.dart';
-import '../models/user.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<String> uploadImageToStorage(
+    String folderName,
+    Uint8List file,
+    bool isCart,
+  ) async {
+    String res = "Some error occurred";
+    try {
+      String photoUrl = await StorageMethods().uploadImageToStorage(
+        folderName,
+        file,
+        isCart,
+      );
+      res = photoUrl;
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 
   Future<String> addItemToCart(
     String description,
@@ -23,7 +38,6 @@ class FirestoreMethods {
     String price,
     String profImage,
   ) async {
-    // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
     String res = "Some error occurred";
     try {
       String photoUrl = await StorageMethods().uploadImageToStorage(
@@ -31,13 +45,13 @@ class FirestoreMethods {
         file,
         true,
       );
-      // creates unique id based on time
+
       String productId = const Uuid().v1();
-      CartItem cartItem = CartItem(
-        uid: productId,
-        productName: itemName,
-        price: price,
-        productUrl: photoUrl,
+      Product cartItem = Product(
+        id: productId,
+        title: itemName,
+        price: int.parse(price),
+        images: [photoUrl],
       );
       _firestore.collection('user').doc(productId).set(cartItem.toMap());
       res = "success";
@@ -54,7 +68,6 @@ class FirestoreMethods {
     return res;
   }
 
-  // Delete CartItem
   Future<String> deleteCartItem(String productId) async {
     String res = "Some error occurred";
     try {
@@ -66,74 +79,54 @@ class FirestoreMethods {
     return res;
   }
 
-  // get product from firestore from users collection and cart_items sub collection
-  Future<List<Product>> getProductsFromFirestore(String userId) async {
-    List<Product> products = [];
-
-    try {
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
-
-      User user = User.fromMap(userSnapshot);
-
-      QuerySnapshot cartItemsSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('cart_items')
-          .get();
-
-      List<CartItem> cartItems = cartItemsSnapshot.docs
-          .map((doc) => CartItem.fromMap(doc as Map<String, dynamic>))
-          .toList();
-
-      for (CartItem cartItem in cartItems) {
-        DocumentSnapshot<Map<String, dynamic>> productSnapshot =
-            await FirebaseFirestore.instance.doc(cartItem.productUrl).get();
-
-        Product product = Product.fromMap(productSnapshot.data()!);
-
-        products.add(product);
-      }
-    } catch (e) {
-      print('Error getting products from Firestore: $e');
-    }
-
-    return products;
-  }
-
-  // edit or addaddress to firebase firestore
-  Future<void> editAddress({
-    required String address,
-    required String city,
-    required String state,
-    required String pincode,
-  }) async {
-    await _firestore
-        .collection('users')
-        .doc(_firestore.collection('users').doc().id)
-        .set({
-      'address': address,
-      'city': city,
-      'state': state,
-      'pincode': pincode,
-    });
-  }
-
-  // add number or edit number in firestore
-  Future<void> editNumber(String number) async {
-    await _firestore
-        .collection('users')
-        .doc(_firestore.collection('users').doc().id)
-        .set({'number': number});
-  }
-
-  // flutter notifications
   Future<void> addTokenToFirestore(String token) async {
     await _firestore
         .collection('users')
         .doc(_firestore.collection('users').doc().id)
         .set({'token': token});
+  }
+
+  // add registered user to firestore
+  Future<void> addUserToFirestore(
+    String id,
+    String email,
+    String phone,
+    String password,
+  ) async {
+    try {
+      await _firestore.collection('users').doc(id).set({
+        'email': email,
+        'phone': phone,
+        'password': password,
+      });
+    } catch (err) {
+      Get.snackbar(
+        'Error Message',
+        err.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  Future<void> updateProfile(String id, String email, String phone, String name,
+      String profileImage) async {
+    try {
+      await _firestore.collection('users').doc(id).update({
+        'email': email,
+        'phone': phone,
+        'name': name,
+        'profileImage': profileImage,
+      });
+    } catch (err) {
+      Get.snackbar(
+        'Error Message',
+        err.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 }

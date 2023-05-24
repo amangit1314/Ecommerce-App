@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../models/product.dart';
-import '../../../utils/constatns.dart';
+import '../../../utils/constants.dart';
 
 class CartCard extends StatelessWidget {
   const CartCard({
@@ -25,8 +26,19 @@ class CartCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(
+                    cart.images[0],
+                  ),
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Image.asset(cart.images[0]),
+              child: CachedNetworkImage(
+                imageUrl: cart.images[0],
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
             ),
           ),
         ),
@@ -48,7 +60,7 @@ class CartCard extends StatelessWidget {
                     fontWeight: FontWeight.w600, color: kPrimaryColor),
                 children: [
                   TextSpan(
-                    text: " x 2",
+                    text: " x 1", // Use the quantity property of the cart item
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],

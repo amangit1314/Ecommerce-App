@@ -53,7 +53,6 @@ class CustomBottomNavBar extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.category_outlined,
-                // "assets/icons/Chat bubble Icon.svg",
                 color: MenuState.shipment == selectedMenu
                     ? kPrimaryColor
                     : inActiveIconColor,
@@ -62,8 +61,7 @@ class CustomBottomNavBar extends StatelessWidget {
             ),
             IconButton(
               icon: FaIcon(
-                FontAwesomeIcons.moneyBills,
-                // "assets/icons/Chat bubble Icon.svg",
+                FontAwesomeIcons.moneyCheck,
                 color: MenuState.wallet == selectedMenu
                     ? kPrimaryColor
                     : inActiveIconColor,
@@ -73,7 +71,6 @@ class CustomBottomNavBar extends StatelessWidget {
             IconButton(
               icon: FaIcon(
                 FontAwesomeIcons.circleUser,
-                // "assets/icons/Chat bubble Icon.svg",
                 color: MenuState.profile == selectedMenu
                     ? kPrimaryColor
                     : inActiveIconColor,

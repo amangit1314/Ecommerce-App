@@ -8,6 +8,7 @@ class Grocery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -31,7 +32,7 @@ class Grocery extends StatelessWidget {
           ),
           height: 230,
         ),
-        SizedBox(height: getProportionateScreenHeight(5)),
+        SizedBox(height: getProportionateScreenHeight(8)),
         Container(
           decoration: BoxDecoration(
             color: Colors.transparent,
@@ -45,8 +46,8 @@ class Grocery extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    height: 150,
-                    width: 157,
+                    height: getProportionateScreenHeight(150),
+                    width: getProportionateScreenWidth(width * .43),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.deepPurpleAccent.withOpacity(.3),
@@ -63,8 +64,8 @@ class Grocery extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    height: 150,
-                    width: 157,
+                    height: getProportionateScreenHeight(150),
+                    width: getProportionateScreenWidth(width * .43),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.indigoAccent.withOpacity(.3),
@@ -86,8 +87,8 @@ class Grocery extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    height: 150,
-                    width: 157,
+                    height: getProportionateScreenHeight(150),
+                    width: getProportionateScreenWidth(width * .43),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.amber.shade900.withOpacity(.3),
@@ -104,8 +105,8 @@ class Grocery extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    height: 150,
-                    width: 157,
+                    height: getProportionateScreenHeight(150),
+                    width: getProportionateScreenWidth(width * .43),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.greenAccent.withOpacity(.3),

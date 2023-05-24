@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/rounded_icon_button.dart';
 import '../../../models/product.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
@@ -15,38 +14,53 @@ class ColorDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Now this is fixed and only for demo
-    int selectedColor = 3;
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(20),
+      ),
+      // child: Row(
+      //   children: [
+      //     StreamBuilder<DocumentSnapshot>(
+      //       stream: FirebaseFirestore.instance
+      //           .collection('products')
+      //           .doc(product.id.toString())
+      //           .snapshots(),
+      //       builder: (context, snapshot) {
+      //         if (snapshot.hasData) {
+      //           Map<String, dynamic> data =
+      //               snapshot.data!.data() as Map<String, dynamic>;
+      //           List<String> colors = List<String>.from(data['colors']);
+
       child: Row(
-        children: [
-          ...List.generate(
-            product.colors.length,
-            (index) => ColorDot(
-              color: product.colors[index],
-              isSelected: index == selectedColor,
-            ),
-          ),
-          const Spacer(),
-          RoundedIconBtn(
-            icon: Icons.remove,
-            press: () {},
-          ),
-          SizedBox(width: getProportionateScreenWidth(8)),
-          const Text('2'),
-          SizedBox(width: getProportionateScreenWidth(8)),
-          RoundedIconBtn(
-            icon: Icons.add,
-            showShadow: true,
-            press: () {},
+        children: const [
+          // colors.map((color) {
+          //   int index = colors.indexOf(color);
+          //   bool isSelected = index == 0 ? true : false;
+          //   return
+          ColorDot(
+            // // convert string to Color
+            // color: Color(int.parse(colors[index])),
+            color: Colors.blue,
+            isSelected: true,
           ),
         ],
       ),
     );
+    // }).toList(),
+    // ));
   }
 }
+// } else {
+//   return const CircularProgressIndicator();
+// }
+//       },
+//     ),
+//     const Spacer(),
+//   ],
+// ),
+//     );
+//   }
+// }
 
 class ColorDot extends StatelessWidget {
   const ColorDot({
@@ -67,8 +81,10 @@ class ColorDot extends StatelessWidget {
       width: getProportionateScreenWidth(30),
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border:
-            Border.all(color: isSelected ? kPrimaryColor : Colors.transparent),
+        border: Border.all(
+          color: isSelected ? kPrimaryColor : Colors.red,
+          width: 3,
+        ),
         shape: BoxShape.circle,
       ),
       child: DecoratedBox(

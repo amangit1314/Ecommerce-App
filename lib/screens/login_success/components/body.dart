@@ -27,10 +27,12 @@ class Body extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        SizedBox(
+        Container(
+          margin: const EdgeInsets.all(15),
           width: screenWidth * 0.6,
           child: DefaultButton(
             text: "Back to home",
+            txtColor: Colors.white,
             press: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -38,7 +40,6 @@ class Body extends StatelessWidget {
             },
           ),
         ),
-        const Spacer(),
       ],
     );
   }

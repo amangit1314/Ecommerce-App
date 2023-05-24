@@ -1,40 +1,45 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../models/product.dart';
 
 class ProductProvider with ChangeNotifier {
-  String _name = '';
-  String _price = '';
-  String _description = '';
-  String _category = '';
-  String _image = '';
+  final List<Product> _products = [];
+  List<Product> get products => _products;
 
-  String get name => _name;
-  String get price => _price;
-  String get description => _description;
-  String get category => _category;
-  String get image => _image;
+  Product? _product;
+  Product? get product => _product;
 
-  changeName(String newName) {
-    _name = newName;
+  int _quantity = 1;
+  int get quantity => _quantity;
+
+  int _totalPrice = 0;
+  int get totalPrice => _totalPrice;
+
+  int get totalAmount => _product?.price ?? 0 * _quantity;
+
+  void setProduct(Product product) {
+    _product = product;
+    _quantity = 1;
+    _totalPrice = _product?.price ?? 0;
     notifyListeners();
   }
 
-  changePrice(String newPrice) {
-    _price = newPrice;
-    notifyListeners();
+  void increaseQuantity() {
+    _quantity++;
+    updateTotalPrice();
   }
 
-  changeDescription(String newDescription) {
-    _description = newDescription;
-    notifyListeners();
+  void decreaseQuantity() {
+    if (_quantity > 1) {
+      _quantity--;
+      updateTotalPrice();
+    }
   }
 
-  changeCategory(String newCategory) {
-    _category = newCategory;
-    notifyListeners();
-  }
-
-  changeImage(String newImage) {
-    _image = newImage;
+  void updateTotalPrice() {
+    if (_quantity > 0 && _product != null) {
+      _totalPrice = _product!.price * _quantity;
+    }
     notifyListeners();
   }
 }

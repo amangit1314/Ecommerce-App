@@ -1,3 +1,5 @@
+//
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +8,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../../../showMore/show_more_screen.dart';
 
 class RecentlyViewd extends StatefulWidget {
   const RecentlyViewd({super.key});
@@ -17,12 +20,10 @@ class RecentlyViewd extends StatefulWidget {
 class _RecentlyViewdState extends State<RecentlyViewd> {
   final CollectionReference _refProducts =
       FirebaseFirestore.instance.collection('products');
-  late Stream<QuerySnapshot> _streamProducts;
 
   @override
   void initState() {
     super.initState();
-    _streamProducts = _refProducts.snapshots();
   }
 
   Future<List<Product>> fetchProductsFromFirestore() async {
@@ -39,44 +40,51 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
     return Column(
       children: [
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SectionTitle(title: "Recently Viewed", press: () {}),
+          padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(20),
+          ),
+          child: SectionTitle(
+            title: "Recently Viewed",
+            press: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ShowMore(),
+                ),
+              );
+            },
+          ),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),
         Container(
           height: 250,
           padding: const EdgeInsets.only(left: 20.0),
-          child: StreamBuilder<QuerySnapshot>(
-            stream: _streamProducts,
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          child: FutureBuilder<List<Product>>(
+            future: fetchProductsFromFirestore(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
               if (snapshot.hasError) {
                 return const Center(
                   child: Text('Something went wrong'),
                 );
               }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              final List<Product> products = snapshot.data!.docs
-                  .map((e) => Product.fromMap(e.data() as Map<String, dynamic>))
-                  .toList();
+              final List<Product> products = snapshot.data ?? [];
 
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 1,
+                itemCount: products.length,
                 itemBuilder: (context, index) {
                   return RecentlyViewdCard(
                     image: products[index].images.isNotEmpty
-                        ? products[index].images[index]
+                        ? products[index].images[0]
                         : '',
                     product: products[index],
                     category: products[index].categories.isNotEmpty
-                        ? products[index].categories[index]
+                        ? products[index].categories[0]
                         : '',
                   );
                 },
@@ -184,7 +192,7 @@ class RecentlyViewdCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
               child: Text(
-                '\$ ${product.price}',
+                '₹ ${product.price}',
                 style: const TextStyle(
                   fontSize: 12,
                   color: kPrimaryColor,

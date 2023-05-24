@@ -23,15 +23,13 @@ class _EcommerceAppState extends State<EcommerceApp> {
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => PaymentProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: GetMaterialApp(
         title: 'SnapCart Ecommerce App',
         debugShowCheckedModeBanner: false,
-        // useInheritedMediaQuery: true,
-        // locale: DevicePreview.locale(context),
-        // builder: DevicePreview.appBuilder,
-        // themeMode: ThemeMode.dark,
-        // darkTheme: ThemeData.dark(),
         theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
           primarySwatch: Colors.deepOrange,

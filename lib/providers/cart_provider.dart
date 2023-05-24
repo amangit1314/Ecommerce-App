@@ -2,69 +2,75 @@ import 'package:flutter/cupertino.dart';
 import 'package:soni_store_app/models/product.dart';
 
 class CartProvider with ChangeNotifier {
-  // list of getter cartItems responsible for all cart items
   final List<Product> _cartItems = [];
-  // getter cartItemsCount responsible for count of cart items
-  List get cartItems => _cartItems;
+  List<Product> get cartItems => _cartItems;
 
   String _name = '';
-  String _price = '';
-  String _description = '';
-  String _category = '';
-  String _image = '';
-  bool _isInCart = false;
+  final String _price = '';
+  final String _description = '';
+  final String _category = '';
+  final String _image = '';
+  final bool _isInCart = false;
+  int _cartItemQuantity = 1;
 
+  int get cartItemQuantity => _cartItemQuantity;
   String get name => _name;
   String get price => _price;
-  String get description => _description;
-  String get category => _category;
   String get image => _image;
-  int get length => cartItems.length;
   bool get isInCart => _isInCart;
+  String get category => _category;
+  int get length => cartItems.length;
+  String get description => _description;
 
   changeName(String newName) {
     _name = newName;
     notifyListeners();
   }
 
-  // if in cart notify if not then add
-  changeIsInCart(bool newIsInCart) {
-    _isInCart = newIsInCart;
+  void addToCart(Product product) {
+    int index = cartItems.indexWhere(
+      (item) => item.title == product.title,
+    );
+
+    if (index != -1) {
+      cartItems[index].quantity++;
+    } else {
+      cartItems.add(
+        Product(
+          categories: [],
+          description: product.description,
+          id: product.id,
+          images: product.images,
+          title: product.title,
+          quantity: product.quantity,
+          price: product.price,
+        ),
+      );
+    }
+
+    _cartItemQuantity++; // Increment cartItemQuantity
     notifyListeners();
   }
 
-  changePrice(String newPrice) {
-    _price = newPrice;
+  // delete From Cart
+  void deleteFromCart(Product product) {
+    int index = cartItems.indexWhere(
+      (item) => item.title == product.title,
+    );
+
+    if (index != -1) {
+      cartItems.removeAt(index);
+      _cartItemQuantity--; // Decrement cartItemQuantity
+    }
+
     notifyListeners();
   }
 
-  changeDescription(String newDescription) {
-    _description = newDescription;
-    notifyListeners();
-  }
-
-  changeCategory(String newCategory) {
-    _category = newCategory;
-    notifyListeners();
-  }
-
-  changeImage(String newImage) {
-    _image = newImage;
-    notifyListeners();
-  }
-
-  // calculate total price and notify
   double get totalPrice {
     double total = 0;
     for (var element in _cartItems) {
       total += element.price;
     }
     return total;
-  }
-
-  // add cart to cartItems
-  addItemCart(Product cart) {
-    _cartItems.add(cart);
-    notifyListeners();
   }
 }
