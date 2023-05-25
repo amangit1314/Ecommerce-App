@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:soni_store_app/providers/order_provider.dart';
 
 import '../models/order.dart';
-import '../providers/user_provider.dart';
 
 class StripeHelper {
   static StripeHelper instance = StripeHelper();
@@ -42,8 +42,8 @@ class StripeHelper {
   }
 
   void displayPaymentSheet(BuildContext context, Order order) async {
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+    OrderProvider orderProvider =
+        Provider.of<OrderProvider>(context, listen: false);
 
     Completer<bool> paymentCompleter = Completer<bool>();
 
@@ -57,7 +57,7 @@ class StripeHelper {
 
     if (isSuccess) {
       Order newOrder = order;
-      userProvider.orders?.add(newOrder);
+      orderProvider.addOrder(newOrder);
     }
 
     Future.delayed(const Duration(seconds: 2), () {

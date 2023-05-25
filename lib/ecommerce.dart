@@ -7,6 +7,8 @@ import 'package:soni_store_app/providers/providers.dart';
 import 'package:soni_store_app/screens/home/home_screen.dart';
 import 'package:soni_store_app/screens/splash/splash_screen.dart';
 
+import 'helper/locator.dart';
+
 class EcommerceApp extends StatefulWidget {
   const EcommerceApp({Key? key}) : super(key: key);
 
@@ -19,13 +21,13 @@ class _EcommerceAppState extends State<EcommerceApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => ProductProvider()),
-        ChangeNotifierProvider(create: (_) => CartProvider()),
-        ChangeNotifierProvider(create: (_) => CategoryProvider()),
-        ChangeNotifierProvider(create: (_) => OrderProvider()),
-        ChangeNotifierProvider(create: (_) => PaymentProvider()),
-        ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => locator<UserProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<ProductProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<CartProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<CategoryProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<OrderProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<PaymentProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<ProfileProvider>()),
       ],
       child: GetMaterialApp(
         title: 'SnapCart Ecommerce App',

@@ -81,7 +81,7 @@ class _ProductDescriptionState extends State<ProductDescription>
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            '4.4',
+                            widget.product.rating.toString(),
                             style: TextStyle(
                               fontSize: getProportionateScreenHeight(14),
                               fontWeight: FontWeight.bold,

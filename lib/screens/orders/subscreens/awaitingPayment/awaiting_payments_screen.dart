@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../../../utils/constants.dart';
-import '../../../../utils/size_config.dart';
+import 'package:soni_store_app/utils/constants.dart';
+import 'package:soni_store_app/utils/size_config.dart';
 
 class AwaitingPaymentOrder extends StatelessWidget {
   const AwaitingPaymentOrder({

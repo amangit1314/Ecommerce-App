@@ -42,11 +42,15 @@ class CustomBottomNavBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/Shop Icon.svg",
-                color: MenuState.home == selectedMenu
-                    ? kPrimaryColor
-                    : inActiveIconColor,
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                    MenuState.home == selectedMenu
+                        ? kPrimaryColor
+                        : inActiveIconColor,
+                    BlendMode.srcOver),
+                child: SvgPicture.asset(
+                  "assets/icons/Shop Icon.svg",
+                ),
               ),
               onPressed: () => Get.to(const HomeScreen()),
             ),

@@ -17,16 +17,13 @@ class AddReviewScreen extends StatefulWidget {
 }
 
 class _AddReviewScreenState extends State<AddReviewScreen> {
-  late final _ratingController;
-  late double _rating;
+  late TextEditingController _ratingController;
+  late final double _rating;
 
-  final double _userRating = 3.0;
-  final int _ratingBarMode = 1;
   final double _initialRating = 2.0;
-  final bool _isRTLMode = false;
   final bool _isVertical = false;
-  bool turnedOn = false;
 
+  bool turnedOn = false;
   IconData? _selectedIcon;
 
   @override
@@ -240,12 +237,9 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
   Widget buildIOSSwitch() => Transform.scale(
         scale: 1.1,
         child: CupertinoSwitch(
-          // border should be orange and the dial should be orange except that all will be of transparent color
           activeColor: kPrimaryColor.withOpacity(.5),
           trackColor: Colors.black,
           thumbColor: kPrimaryColor,
-          // track border
-
           value: turnedOn,
           onChanged: (value) => setState(() => turnedOn = value),
         ),
@@ -253,9 +247,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
 }
 
 class ReviewCommentInputField extends StatelessWidget {
-  const ReviewCommentInputField({
-    super.key,
-  });
+  const ReviewCommentInputField({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -266,9 +258,7 @@ class ReviewCommentInputField extends StatelessWidget {
       margin: const EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: kPrimaryColor,
-        ),
+        border: Border.all(color: kPrimaryColor),
       ),
       child: TextField(
         maxLines: 5,

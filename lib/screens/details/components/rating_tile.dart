@@ -4,7 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../utils/size_config.dart';
 
 class RatingTile extends StatelessWidget {
-  const RatingTile({super.key});
+  final String rating;
+  const RatingTile({super.key, required this.rating});
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +22,15 @@ class RatingTile extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text.rich(
+               Text.rich(
                 TextSpan(
-                  text: '4.4 ',
-                  style: TextStyle(
+                  text: rating,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
-                  children: [
+                  children: const [
                     TextSpan(
                       text: '/5',
                       style: TextStyle(

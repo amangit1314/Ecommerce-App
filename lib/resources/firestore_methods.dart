@@ -79,16 +79,16 @@ class FirestoreMethods {
     return res;
   }
 
-  Future<void> addTokenToFirestore(String token) async {
-    try {
-      final firestore = FirebaseFirestore.instance;
-      final registrationDoc = firestore.collection('users').doc();
-      await registrationDoc.set({'token': token});
-      debugPrint('Token added to Firestore successfully!');
-    } catch (err) {
-      debugPrint('Error adding token to Firestore: $err');
-    }
-  }
+  // Future<void> addTokenToFirestore(String token) async {
+  //   try {
+  //     final firestore = FirebaseFirestore.instance;
+  //     final registrationDoc = firestore.collection('users').doc();
+  //     await registrationDoc.update({'token': token});
+  //     debugPrint('Token added to Firestore successfully!');
+  //   } catch (err) {
+  //     debugPrint('Error adding token to Firestore: $err');
+  //   }
+  // }
 
   Future<void> addUserToFirestore(
     String id,
@@ -122,6 +122,9 @@ class FirestoreMethods {
     String profileImage,
   ) async {
     try {
+      if (id.isEmpty) {
+        throw Exception('Invalid user ID');
+      }
       final firestore = FirebaseFirestore.instance;
       await firestore.collection('users').doc(id).update({
         'email': email,
@@ -130,9 +133,10 @@ class FirestoreMethods {
         'profileImage': profileImage,
       });
     } catch (err) {
+      debugPrint('Error updating profile: $err');
       Get.snackbar(
-        'Error Message',
-        err.toString(),
+        'Error',
+        'Failed to update profile: $err',
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,

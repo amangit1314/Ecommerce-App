@@ -11,6 +11,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -18,11 +19,8 @@ class Body extends StatelessWidget {
           child: Column(
             children: [
               // show white_new_logo
-              SizedBox(
-                height: screenHeight * 0.08,
-                child: Image.asset("assets/icons/white_new_logo.png"),
-              ),
-              SizedBox(height: screenHeight * 0.02),
+
+              SizedBox(height: screenHeight * 0.04),
               const Text(
                 "Welcome Back",
                 style: TextStyle(

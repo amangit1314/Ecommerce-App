@@ -52,7 +52,9 @@ class ReviewsSheet extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // * rating tile
-                            const RatingTile(),
+                            RatingTile(
+                              rating: product.rating.toString(),
+                            ),
 
                             // divider
                             Padding(

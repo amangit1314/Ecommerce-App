@@ -7,6 +7,7 @@ import 'package:soni_store_app/screens/details/components/size_dots.dart';
 
 import '../../../components/rounded_icon_button.dart';
 import '../../../utils/size_config.dart';
+import 'checkout_button_alert_box.dart';
 
 class AfterBuyNowButtonSheet extends StatefulWidget {
   const AfterBuyNowButtonSheet({
@@ -42,7 +43,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
         final int totalAmount = productProvider.totalPrice;
         return Column(
           children: [
-            // * Select Quantity
             Padding(
               padding: const EdgeInsets.only(
                 top: 30,
@@ -52,7 +52,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
               ),
               child: Row(
                 children: [
-                  // * Column ( unit price text and price )
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +70,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                     ],
                   ),
                   const Spacer(),
-                  // * Column ( quantity text and Row ( + quantity - ) )
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +83,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                       ),
                       Row(
                         children: [
-                          // * decrement icon
                           RoundedIconBtn(
                             icon: Icons.remove,
                             press: () {
@@ -93,7 +90,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                             },
                           ),
                           SizedBox(width: getProportionateScreenWidth(8)),
-                          // * quantity
                           Text(
                             productProvider.quantity.toString(),
                             style: const TextStyle(
@@ -102,7 +98,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                             ),
                           ),
                           SizedBox(width: getProportionateScreenWidth(8)),
-                          // * increment icon
                           RoundedIconBtn(
                             icon: Icons.add,
                             showShadow: true,
@@ -117,8 +112,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 ],
               ),
             ),
-
-            // * divider
             Padding(
               padding: const EdgeInsets.only(left: 15.0, right: 15.0),
               child: Divider(
@@ -127,8 +120,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 thickness: 1,
               ),
             ),
-
-            // * select color
             Padding(
               padding: const EdgeInsets.only(
                 bottom: 15.0,
@@ -156,8 +147,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 ],
               ),
             ),
-
-            // * select size
             Padding(
               padding: const EdgeInsets.only(
                 bottom: 15.0,
@@ -185,8 +174,6 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 ],
               ),
             ),
-
-            // * button
             Container(
               height: getProportionateScreenWidth(65),
               margin: const EdgeInsets.only(
@@ -268,23 +255,25 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                               topLeft: Radius.circular(40),
                             ),
                           ),
-                          builder: (context) => DraggableScrollableSheet(
-                            expand: false,
-                            initialChildSize: 0.5,
-                            maxChildSize: 0.9,
-                            builder: (context, scrollController) {
-                              return SingleChildScrollView(
-                                controller: scrollController,
-                                child: AddedWidget(
-                                  product: widget.widget.product,
-                                  price: productProvider.totalPrice.toString(),
-                                  width: MediaQuery.of(context).size.width,
-                                  widget: widget,
-                                  quantity: productProvider.quantity,
-                                ),
-                              );
-                            },
-                          ),
+                          builder: (context) {
+                            return DraggableScrollableSheet(
+                              expand: false,
+                              initialChildSize: 0.5,
+                              maxChildSize: 0.9,
+                              builder: (context, scrollController) {
+                                return SingleChildScrollView(
+                                  controller: scrollController,
+                                  child: CheckoutButtonAlertBox(
+                                    price:
+                                        productProvider.totalPrice.toString(),
+                                    width: MediaQuery.of(context).size.width,
+                                    widget: widget,
+                                    quantity: productProvider.quantity,
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         );
                       },
                     ),

@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void requestPermission() async {
-    // permision for firebase notification
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
@@ -44,14 +43,13 @@ class _HomeScreenState extends State<HomeScreen> {
       sound: true,
     );
 
-    // check for authorization state
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      debugPrint('User granted permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      debugPrint('User granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      debugPrint('User declined or has not accepted permission');
     }
   }
 
@@ -68,12 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void saveToken(String token) async {
-    // get uid of current user
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    // save token to database
-    await FirebaseFirestore.instance.collection('users').doc(uid).set({
-      'token': token,
-    });
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .set({'token': token}, SetOptions(merge: true));
   }
 
   makePayment() async {
@@ -89,12 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
             merchantCountryCode: 'US',
           ),
           style: ThemeMode.dark,
-          merchantDisplayName: 'Soni Store',
+          merchantDisplayName: 'SnapCart',
         ),
       );
       displayPaymentSheet();
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -102,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await Stripe.instance.presentPaymentSheet();
     } catch (e) {
-      print('faild');
+      debugPrint('faild');
     }
   }
 
@@ -125,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       return json.decode(response.body);
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       throw (Exception(e.toString()));
     }
   }

@@ -22,16 +22,16 @@ class Body extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: SizeConfig.screenHeight * 0.04), // 4%
+                // SizedBox(height: SizeConfig.screenHeight * 0.04), // 4%
                 Text("Register Account", style: headingStyle),
                 SizedBox(height: SizeConfig.screenHeight * 0.01), // 4%
                 const Text(
                   "Complete your details or continue \nwith social media",
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: SizeConfig.screenHeight * 0.07),
+                SizedBox(height: SizeConfig.screenHeight * 0.06),
                 const SignUpForm(),
-                SizedBox(height: SizeConfig.screenHeight * 0.07),
+                SizedBox(height: SizeConfig.screenHeight * 0.06),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -40,8 +40,6 @@ class Body extends StatelessWidget {
                       press: () {
                         try {
                           AuthMethods().signInWithGoogle;
-                          // Navigator.pushNamedAndRemoveUntil(context,
-                          //     Constants.homeNavigate, (route) => false);
                         } catch (e) {
                           if (e is FirebaseAuthException) {
                             SnackBar(content: Text(e.message!));
@@ -63,7 +61,7 @@ class Body extends StatelessWidget {
                 Text(
                   'By continuing your confirm that you agree \nwith our Term and Condition',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 )
               ],
             ),

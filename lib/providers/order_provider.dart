@@ -22,32 +22,16 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addOrder(models.Order order, models.User user) async {
-    try {
-      final orderData = order.toMap();
+  Future<void> addOrder(models.Order order) async {
+    final orderData = order.toMap();
 
-      final documentRef =
-          await FirebaseFirestore.instance.collection('orders').add(orderData);
-
-      final documentSnapshot = await documentRef.get();
-
-      if (documentSnapshot.exists) {
-        final addedOrder = models.Order.fromMap(documentSnapshot.data()!);
-        _orders.add(addedOrder);
-        notifyListeners();
-
-        // Update user's orders field
-        final userRef =
-            FirebaseFirestore.instance.collection('users').doc(user.uid);
-        final userData = {
-          'orders': FieldValue.arrayUnion([addedOrder.toMap()])
-        };
-        await userRef.update(userData);
-      } else {
-        throw Exception('Failed to add order: Document does not exist');
-      }
-    } catch (error) {
-      throw Exception('Failed to add order: $error');
-    }
+    final CollectionReference ordersCollection =
+        FirebaseFirestore.instance.collection('orders');
+    ordersCollection
+        .add(orderData)
+        .then((value) => debugPrint('Order added successfully ✨🎉🥳'))
+        .catchError((e) =>
+            throw Exception('Failed to add order: Document does not exist'));
+    notifyListeners();
   }
 }
