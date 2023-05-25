@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/order_provider.dart';
 
 import '../models/order.dart';
@@ -15,7 +14,7 @@ class StripeHelper {
   Map<String, dynamic>? paymentIntent;
 
   Future<void> makePayment(
-      String amount, BuildContext context, Order order) async {
+      String amount, Order order, OrderProvider orderProvider) async {
     try {
       paymentIntent = await createPaymentIntent(amount, 'USD');
 
@@ -27,24 +26,20 @@ class StripeHelper {
 
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret:
-              paymentIntent!['client_secret'], // Gotten from payment intent
+          paymentIntentClientSecret: paymentIntent!['client_secret'],
           style: ThemeMode.light,
           merchantDisplayName: 'Aman Soni',
           googlePay: gpay,
         ),
       );
 
-      displayPaymentSheet(context, order);
+      displayPaymentSheet(order, orderProvider);
     } catch (err) {
       // Handle error
     }
   }
 
-  void displayPaymentSheet(BuildContext context, Order order) async {
-    OrderProvider orderProvider =
-        Provider.of<OrderProvider>(context, listen: false);
-
+  void displayPaymentSheet(Order order, OrderProvider orderProvider) async {
     Completer<bool> paymentCompleter = Completer<bool>();
 
     Stripe.instance.presentPaymentSheet().then((_) {
@@ -60,15 +55,11 @@ class StripeHelper {
       orderProvider.addOrder(newOrder);
     }
 
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pop(context);
-    });
+    await Future.delayed(const Duration(seconds: 2));
   }
 
   Future<Map<String, dynamic>> createPaymentIntent(
-    String amount,
-    String currency,
-  ) async {
+      String amount, String currency) async {
     try {
       Map<String, dynamic> body = {
         'amount': amount,

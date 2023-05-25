@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/constatns.dart';
+import '../../../utils/constants.dart';
 
 class ProductCard extends StatelessWidget {
-  ProductCard({
+  const ProductCard({
     Key? key,
     this.width = 150,
-    this.aspectRetio = 1.02,
+    this.aspectRatio = 1.02,
     required this.productImage,
     this.productName = 'Gaming',
     this.productDesc = 'These are from gaming category',
@@ -16,15 +16,14 @@ class ProductCard extends StatelessWidget {
     this.onTap,
   }) : super(key: key);
 
-  final double width, aspectRetio;
+  final double width, aspectRatio;
   final String productImage;
   final String productName;
   final String productDesc;
   final Color color;
   final String price;
-  bool? addedToCart = false;
+  final bool addedToCart;
   final VoidCallback? onTap;
-  bool? isTransparent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +73,7 @@ class ProductCard extends StatelessWidget {
                     width: 40,
                     color: kPrimaryColor.withOpacity(0.1),
                     child: Icon(
-                      addedToCart!
+                      addedToCart
                           ? Icons.shopping_bag
                           : Icons.shopping_bag_outlined,
                       size: 14,

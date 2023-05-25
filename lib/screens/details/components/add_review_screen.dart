@@ -9,8 +9,12 @@ import '../../../utils/constants.dart';
 class AddReviewScreen extends StatefulWidget {
   final Product product;
   final String image;
-  const AddReviewScreen(
-      {super.key, required this.product, required this.image});
+
+  const AddReviewScreen({
+    Key? key,
+    required this.product,
+    required this.image,
+  }) : super(key: key);
 
   @override
   State<AddReviewScreen> createState() => _AddReviewScreenState();
@@ -18,11 +22,9 @@ class AddReviewScreen extends StatefulWidget {
 
 class _AddReviewScreenState extends State<AddReviewScreen> {
   late TextEditingController _ratingController;
-  late final double _rating;
+  double _rating = 2.0;
 
-  final double _initialRating = 2.0;
   final bool _isVertical = false;
-
   bool turnedOn = false;
   IconData? _selectedIcon;
 
@@ -30,7 +32,12 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
   void initState() {
     super.initState();
     _ratingController = TextEditingController(text: '3.0');
-    _rating = _initialRating;
+  }
+
+  @override
+  void dispose() {
+    _ratingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -105,7 +112,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                 ),
                 const SizedBox(height: 10),
                 RatingBar.builder(
-                  initialRating: _initialRating,
+                  initialRating: _rating,
                   minRating: 1,
                   direction: _isVertical ? Axis.vertical : Axis.horizontal,
                   allowHalfRating: true,
@@ -205,7 +212,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          // * Add review button
+// * Add review button
           GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -247,7 +254,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
 }
 
 class ReviewCommentInputField extends StatelessWidget {
-  const ReviewCommentInputField({super.key});
+  const ReviewCommentInputField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -282,8 +289,8 @@ class ReviewCommentInputField extends StatelessWidget {
 
 class ReviewRatingInputField extends StatelessWidget {
   const ReviewRatingInputField({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -119,12 +119,6 @@ class PantsSections extends StatefulWidget {
 class _PantsSectionsState extends State<PantsSections> {
   final CollectionReference _refProducts =
       FirebaseFirestore.instance.collection('products');
-  late Stream<QuerySnapshot> _streamProducts;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<List<Product>> fetchProductsFromFirestore() async {
     final List<Product> products = [];

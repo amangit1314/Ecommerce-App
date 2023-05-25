@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
@@ -24,14 +26,15 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> addOrder(models.Order order) async {
     final orderData = order.toMap();
-
-    final CollectionReference ordersCollection =
-        FirebaseFirestore.instance.collection('orders');
+    log(orderData.toString());
+    final ordersCollection =
+        FirebaseFirestore.instance.collection('orders').doc();
     ordersCollection
-        .add(orderData)
+        .set(orderData)
         .then((value) => debugPrint('Order added successfully ✨🎉🥳'))
-        .catchError((e) =>
-            throw Exception('Failed to add order: Document does not exist'));
+        .catchError((e) => debugPrint(e.toString())
+            // throw Exception('Failed to add order: Document does not exist')
+            );
     notifyListeners();
   }
 }

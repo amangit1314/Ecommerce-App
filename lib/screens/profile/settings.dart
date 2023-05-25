@@ -94,10 +94,13 @@ class _SettingsState extends State<Settings> {
                 ),
                 ListTile(
                   onTap: () {},
-                  leading: SvgPicture.asset(
-                    "assets/icons/Bell.svg",
-                    color: kPrimaryColor,
-                    width: 18,
+                  leading: ColorFiltered(
+                    colorFilter: const ColorFilter.mode(
+                        kPrimaryColor, BlendMode.srcOver),
+                    child: SvgPicture.asset(
+                      "assets/icons/Bell.svg",
+                      width: 18,
+                    ),
                   ),
                   title: const Text('Notification'),
                   subtitle: const Text(

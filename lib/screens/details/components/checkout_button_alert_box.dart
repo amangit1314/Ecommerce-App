@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -125,6 +127,16 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     bool success = false;
     String orderStatus = 'Processing';
 
+    log(userProvider.user.uid);
+    log('---------------');
+    log(widget.widget.product.id);
+    log('---------------');
+    log(widget.widget.product.images.first);
+    log('---------------');
+    log(double.parse(price).toString());
+    log('---------------');
+    log(quantity.toString());
+
     Order order = Order(
       orderId: DateTime.now().toString(),
       uid: userProvider.user.uid,
@@ -159,11 +171,13 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     try {
+                      log(order.toString());
                       await orderProvider
                           .addOrder(order)
                           .then((value) => Navigator.pop(context));
                       success = true;
                     } catch (error) {
+                      debugPrint(error.toString());
                       success = false;
                       Navigator.pop(context);
                     }
