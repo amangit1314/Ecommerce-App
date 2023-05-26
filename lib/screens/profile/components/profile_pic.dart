@@ -56,7 +56,7 @@ class _ProfilePicState extends State<ProfilePic> {
     });
 
     if (profileImage.isNotEmpty) {
-      await userProvider.updateUserProfileImage(profileImage: profileImage);
+      // await userProvider.updateUserProfileImage(profileImage: profileImage);
     }
   }
 
@@ -98,7 +98,8 @@ class _ProfilePicState extends State<ProfilePic> {
                   },
                   child: SvgPicture.asset(
                     "assets/icons/Camera Icon.svg",
-                    color: Colors.black87,
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black87, BlendMode.srcIn),
                   ),
                 ),
               ),

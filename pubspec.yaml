@@ -17,32 +17,32 @@ dependencies:
   firebase_storage: ^11.0.9
   flutter:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
+  flutter_app_badger: ^1.5.0
   flutter_local_notifications: any
+  flutter_native_splash: null
   flutter_rating_bar: ^4.0.1
   flutter_stripe: ^9.2.0
   flutter_svg: ^2.0.5
   font_awesome_flutter: ^10.4.0
+  geocoding: ^2.1.0
+  geolocator: ^9.0.2
   get: ^4.6.1
   get_it: ^7.6.0
   google_fonts: ^4.0.3
+  google_maps_flutter: null
+  google_maps_flutter_web: null
   google_sign_in: ^6.1.0
   http: ^0.13.5
   image_picker: ^0.8.5
   permission_handler: ^10.2.0
   provider: ^6.0.2
   shared_preferences: any
-  uuid: ^3.0.6
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
-
-flutter_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/launcher.png"
 
 flutter:
   uses-material-design: true

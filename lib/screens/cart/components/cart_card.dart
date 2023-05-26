@@ -33,12 +33,6 @@ class CartCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: CachedNetworkImage(
-                imageUrl: cart.images[0],
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
             ),
           ),
         ),

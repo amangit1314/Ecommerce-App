@@ -79,14 +79,17 @@ class FirestoreMethods {
     return res;
   }
 
-  Future<void> addTokenToFirestore(String token) async {
-    await _firestore
-        .collection('users')
-        .doc(_firestore.collection('users').doc().id)
-        .set({'token': token});
-  }
+  // Future<void> addTokenToFirestore(String token) async {
+  //   try {
+  //     final firestore = FirebaseFirestore.instance;
+  //     final registrationDoc = firestore.collection('users').doc();
+  //     await registrationDoc.update({'token': token});
+  //     debugPrint('Token added to Firestore successfully!');
+  //   } catch (err) {
+  //     debugPrint('Error adding token to Firestore: $err');
+  //   }
+  // }
 
-  // add registered user to firestore
   Future<void> addUserToFirestore(
     String id,
     String email,
@@ -94,7 +97,8 @@ class FirestoreMethods {
     String password,
   ) async {
     try {
-      await _firestore.collection('users').doc(id).set({
+      final firestore = FirebaseFirestore.instance;
+      await firestore.collection('users').doc(id).set({
         'email': email,
         'phone': phone,
         'password': password,
@@ -110,19 +114,29 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> updateProfile(String id, String email, String phone, String name,
-      String profileImage) async {
+  Future<void> updateProfile(
+    String id,
+    String email,
+    String phone,
+    String name,
+    String profileImage,
+  ) async {
     try {
-      await _firestore.collection('users').doc(id).update({
+      if (id.isEmpty) {
+        throw Exception('Invalid user ID');
+      }
+      final firestore = FirebaseFirestore.instance;
+      await firestore.collection('users').doc(id).update({
         'email': email,
         'phone': phone,
         'name': name,
         'profileImage': profileImage,
       });
     } catch (err) {
+      debugPrint('Error updating profile: $err');
       Get.snackbar(
-        'Error Message',
-        err.toString(),
+        'Error',
+        'Failed to update profile: $err',
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,

@@ -5,7 +5,7 @@ import '../../../utils/constants.dart';
 import '../../details/detail_screen.dart';
 
 class ProductSearchScreenItemCard extends StatelessWidget {
-  ProductSearchScreenItemCard({
+  const ProductSearchScreenItemCard({
     Key? key,
     this.width = 150,
     this.aspectRetio = 1.02,
@@ -26,7 +26,7 @@ class ProductSearchScreenItemCard extends StatelessWidget {
   final String price;
 
   final VoidCallback? onTap;
-  bool? isTransparent = false;
+  final bool isTransparent = false;
 
   @override
   Widget build(BuildContext context) {

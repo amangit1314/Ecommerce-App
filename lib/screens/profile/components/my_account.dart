@@ -1,60 +1,32 @@
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:soni_store_app/components/default_button.dart';
 import 'package:soni_store_app/providers/providers.dart';
+import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../../utils/constants.dart';
-import '../../../providers/user_provider.dart';
+import '../../../components/custom_surfix_icon.dart';
 import 'edit_profile_screen.dart';
 
 class MyAccount extends StatefulWidget {
-  const MyAccount({super.key});
+  const MyAccount({Key? key}) : super(key: key);
 
   @override
   State<MyAccount> createState() => _MyAccountState();
 }
 
 class _MyAccountState extends State<MyAccount> {
-  pickImage(ImageSource source) async {
-    final ImagePicker imagePicker = ImagePicker();
-    XFile? file = await imagePicker.pickImage(source: source);
-    if (file != null) {
-      return await file.readAsBytes();
-    }
-    debugPrint('No Image Selected');
-  }
-
-  Uint8List? _image;
-
-  XFile? selectedImage;
-
-  selectImage(userProvider) async {
-    Uint8List imageBytes = await pickImage(ImageSource.gallery) ?? Uint8List(0);
-    if (imageBytes.isEmpty) return;
-
-    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('profile_images').child(imageName);
-
-    UploadTask uploadTask = storageReference.putData(imageBytes);
-    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
-
-    String profileImage = await taskSnapshot.ref.getDownloadURL();
-
-    setState(() {
-      _image = imageBytes;
-    });
-
-    if (profileImage.isNotEmpty) {
-      await userProvider.updateUserProfileImage(profileImage: profileImage);
-    }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.user;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
@@ -92,44 +64,53 @@ class _MyAccountState extends State<MyAccount> {
         padding: const EdgeInsets.all(20.0),
         child: Consumer<UserProvider>(
           builder: (context, userProvider, _) {
+            userProvider.getCurrentUserDetails();
+
+            if (userProvider.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (userProvider.error != null) {
+              return Center(
+                child: Text(
+                  'Error: ${userProvider.error}',
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
             return Column(
               children: [
-                // * header tile
                 Container(
                   padding: const EdgeInsets.only(top: 5, bottom: 15),
                   child: Row(
                     children: [
-                      _image != null
-                          ? CircleAvatar(
-                              radius: 30,
-                              backgroundImage: MemoryImage(_image!),
-                              backgroundColor: Colors.red,
-                            )
-                          : const CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(
-                                  'https://i.stack.imgur.com/l60Hf.png'),
-                              backgroundColor: Colors.red,
-                            ),
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage: userProvider.user.profImage != null
+                            ? NetworkImage(userProvider.user.profImage!)
+                            : const AssetImage(
+                                    'assets/images/default_profile_image.png')
+                                as ImageProvider,
+                        backgroundColor: Colors.red,
+                      ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userProvider.getUser?.username ?? 'Aman Soni',
+                            userProvider.user.username ?? 'Aman Soni',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(userProvider.getUser?.email ??
-                              'gitaman8481@gmail.com'),
+                          Text(userProvider.user.email),
                         ],
                       ),
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(top: 40.0),
                   child: Column(
@@ -139,7 +120,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Username'),
                           Text(
-                            userProvider.getUser?.username ?? 'Aman Soni',
+                            userProvider.user.username ?? 'Aman Soni',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -159,7 +140,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Phone number'),
                           Text(
-                            userProvider.getUser?.number ?? '+91 9649477393',
+                            userProvider.user.number ?? '+91 1234567890',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -179,7 +160,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Gender'),
                           Text(
-                            userProvider.getUser?.gender ?? 'Male',
+                            userProvider.user.gender ?? 'Not Specified',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -199,7 +180,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Email'),
                           Text(
-                            userProvider.getUser?.email ?? 'example@gmail.com',
+                            userProvider.user.email,
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -218,48 +199,78 @@ class _MyAccountState extends State<MyAccount> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Password'),
-                          TextButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text('Change Password'),
-                                    content: TextFormField(
-                                        obscureText: true,
-                                        decoration: const InputDecoration(
-                                          hintText: 'Enter new password',
+                          SizedBox(
+                            width: getProportionateScreenWidth(190),
+                            child: DefaultButton(
+                                txtColor: Colors.white,
+                                press: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            userProvider.updateAllFields(
-                                                password: value);
-                                          });
-                                        }),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Change'),
-                                      ),
-                                    ],
+                                        title: Center(
+                                          child: Text(
+                                            'Change Password',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall!
+                                                .copyWith(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: kPrimaryColor,
+                                                ),
+                                          ),
+                                        ),
+                                        content: TextFormField(
+                                          obscureText: true,
+                                          decoration: InputDecoration(
+                                            hintStyle:
+                                                const TextStyle(fontSize: 14),
+                                            hintText: "Enter new password",
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              borderSide: const BorderSide(
+                                                color: Colors.orange,
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              vertical: 2,
+                                              horizontal: 16,
+                                            ),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            suffixIcon: const CustomSurffixIcon(
+                                                svgIcon:
+                                                    "assets/icons/Lock.svg"),
+                                          ),
+                                          onChanged: (value) {},
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Change'),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            child: const Text(
-                              'Change password',
-                              style: TextStyle(
-                                color: kPrimaryColor,
-                              ),
-                            ),
+                                text: 'Change password'),
                           ),
                         ],
                       ),

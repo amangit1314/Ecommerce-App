@@ -1,8 +1,7 @@
 import express from 'express';
 import MessageResponse from '../interfaces/MessageResponse';
-import emojis from './emojis';
-import Todos from './todos/todos.model';
-
+// import emojis from './emojis';
+import supportChat from '././support_chat/supportChat';
 
 const router = express.Router();
 
@@ -13,8 +12,8 @@ router.get<{}, MessageResponse>('/', (req, res) => {
 });
 
 
-router.use('/emojis', emojis);
-router.use('/todos', Todos);
+// router.use('/emojis', emojis);
+router.use('/support_chat', supportChat);
 
 
 export default router;

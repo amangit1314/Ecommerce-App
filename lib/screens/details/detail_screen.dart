@@ -6,20 +6,6 @@ import '../../utils/constants.dart';
 import '../../utils/size_config.dart';
 import 'components/body.dart';
 
-// class DetailsScreen extends StatelessWidget {
-//   final Product product;
-//   const DetailsScreen({Key? key, required this.product}) : super(key: key);
-//   static String routeName = "/details";
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: const Color(0xFFF5F6F9),
-//       body: Body(product: product),
-//     );
-//   }
-// }
-
 class DetailsScreenFirebase extends StatelessWidget {
   final Product product;
   const DetailsScreenFirebase({Key? key, required this.product})
@@ -28,8 +14,6 @@ class DetailsScreenFirebase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProductDetailsArguments? args =
-        ModalRoute.of(context)?.settings.arguments as ProductDetailsArguments?;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
@@ -70,30 +54,24 @@ class DetailsScreenFirebase extends StatelessWidget {
               ),
               child: Row(
                 children: [
+                  SvgPicture.asset("assets/icons/Star Icon.svg"),
+                  const SizedBox(width: 5),
                   Text(
-                    "${args?.product.rating}",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                    product.rating.toString(),
+                    style: TextStyle(
+                      fontSize: getProportionateScreenHeight(14),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
-                  const SizedBox(width: 5),
-                  SvgPicture.asset("assets/icons/Star Icon.svg"),
                 ],
               ),
             ),
           ],
         ),
       ),
-      // backgroundColor: const Color(0xFFF5F6F9),
       backgroundColor: Colors.white,
       body: DetailFirebaseBody(product: product),
     );
   }
-}
-
-class ProductDetailsArguments {
-  final Product product;
-
-  ProductDetailsArguments({required this.product});
 }

@@ -12,7 +12,20 @@ class SignInScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
-        title: const Text("Sign In"),
+        title: Text(
+          "Sign In",
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                // 16 size
+                fontSize: 16,
+              ),
+        ),
+        leading: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
+          size: 18,
+        ),
         elevation: 0,
       ),
       body: const Body(),

@@ -47,7 +47,7 @@ class ForgotPassForm extends StatefulWidget {
   const ForgotPassForm({Key? key}) : super(key: key);
 
   @override
-  _ForgotPassFormState createState() => _ForgotPassFormState();
+  State<ForgotPassForm> createState() => _ForgotPassFormState();
 }
 
 class _ForgotPassFormState extends State<ForgotPassForm> {

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/models/models.dart';
@@ -24,7 +26,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
 
-    final currentUser = userProvider.getUser;
+    final currentUser = userProvider.user;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -73,9 +75,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             onTap: () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                await profileProvider.updateProfile(currentUser.uid).then(
-                      (value) => Navigator.pop(context),
-                    );
+                await profileProvider.updateProfile(currentUser.uid);
+                Navigator.pop(context);
               }
             },
             child: Container(

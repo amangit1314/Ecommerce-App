@@ -9,31 +9,35 @@ import '../../../utils/constants.dart';
 class AddReviewScreen extends StatefulWidget {
   final Product product;
   final String image;
-  const AddReviewScreen(
-      {super.key, required this.product, required this.image});
+
+  const AddReviewScreen({
+    Key? key,
+    required this.product,
+    required this.image,
+  }) : super(key: key);
 
   @override
   State<AddReviewScreen> createState() => _AddReviewScreenState();
 }
 
 class _AddReviewScreenState extends State<AddReviewScreen> {
-  late final _ratingController;
-  late double _rating;
+  late TextEditingController _ratingController;
+  double _rating = 2.0;
 
-  final double _userRating = 3.0;
-  final int _ratingBarMode = 1;
-  final double _initialRating = 2.0;
-  final bool _isRTLMode = false;
   final bool _isVertical = false;
   bool turnedOn = false;
-
   IconData? _selectedIcon;
 
   @override
   void initState() {
     super.initState();
     _ratingController = TextEditingController(text: '3.0');
-    _rating = _initialRating;
+  }
+
+  @override
+  void dispose() {
+    _ratingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -108,7 +112,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                 ),
                 const SizedBox(height: 10),
                 RatingBar.builder(
-                  initialRating: _initialRating,
+                  initialRating: _rating,
                   minRating: 1,
                   direction: _isVertical ? Axis.vertical : Axis.horizontal,
                   allowHalfRating: true,
@@ -208,7 +212,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          // * Add review button
+// * Add review button
           GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -240,12 +244,9 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
   Widget buildIOSSwitch() => Transform.scale(
         scale: 1.1,
         child: CupertinoSwitch(
-          // border should be orange and the dial should be orange except that all will be of transparent color
           activeColor: kPrimaryColor.withOpacity(.5),
           trackColor: Colors.black,
           thumbColor: kPrimaryColor,
-          // track border
-
           value: turnedOn,
           onChanged: (value) => setState(() => turnedOn = value),
         ),
@@ -253,9 +254,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
 }
 
 class ReviewCommentInputField extends StatelessWidget {
-  const ReviewCommentInputField({
-    super.key,
-  });
+  const ReviewCommentInputField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -266,9 +265,7 @@ class ReviewCommentInputField extends StatelessWidget {
       margin: const EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: kPrimaryColor,
-        ),
+        border: Border.all(color: kPrimaryColor),
       ),
       child: TextField(
         maxLines: 5,
@@ -292,8 +289,8 @@ class ReviewCommentInputField extends StatelessWidget {
 
 class ReviewRatingInputField extends StatelessWidget {
   const ReviewRatingInputField({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

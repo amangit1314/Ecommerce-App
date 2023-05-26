@@ -81,7 +81,7 @@ class _ProductDescriptionState extends State<ProductDescription>
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            '4.4',
+                            widget.product.rating.toString(),
                             style: TextStyle(
                               fontSize: getProportionateScreenHeight(14),
                               fontWeight: FontWeight.bold,
@@ -128,9 +128,11 @@ class _ProductDescriptionState extends State<ProductDescription>
                         ),
                         child: SvgPicture.asset(
                           "assets/icons/Cart Icon.svg",
-                          color: widget.product.isFavourite
-                              ? const Color(0xFFFF4848)
-                              : const Color(0xFFDBDEE4),
+                          colorFilter: ColorFilter.mode(
+                              widget.product.isFavourite
+                                  ? const Color(0xFFFF4848)
+                                  : const Color(0xFFDBDEE4),
+                              BlendMode.srcIn),
                           height: getProportionateScreenWidth(16),
                         ),
                       ),

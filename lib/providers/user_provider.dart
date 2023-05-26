@@ -1,98 +1,116 @@
-import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
-import 'package:soni_store_app/resources/auth_methods.dart';
-
-import '../models/order.dart';
+import 'package:soni_store_app/providers/auth_provider.dart';
 
 class UserProvider with ChangeNotifier {
-  models.User _user = models.User(
-    email: 'default@gmail.com',
-    uid: '',
-  );
-  final AuthMethods _authMethods = AuthMethods();
+  late models.User _currentUser;
+  late String _username;
+  late String _email;
+  late String _profileImage;
+  bool _loading = false;
+  String? _error;
 
-  models.User get getUser => _user;
-  List<Order>? get orders => _user.orders;
+  models.User get currentUser => _currentUser;
+  String get uid => _currentUser.uid;
+  String get username => _username;
+  String get email => _email;
+  String get profileImage => _profileImage;
+  bool get loading => _loading;
+  String? get error => _error;
 
-  // ? <------------------ Authentication Methods ------------------->
-  Future<void> refreshUser() async {
-    models.User user = await _authMethods.getUserDetails();
-    _user = models.User(
-      uid: user.uid,
-      email: user.email,
-      username: user.username,
-      profImage: user.profImage,
-      number: user.number,
-    );
+  void setCurrentUser(models.User user) {
+    _currentUser = user;
     notifyListeners();
   }
 
-  Future registerUser({
+  Future<void> getCurrentUserDetails() async {
+    try {
+      _loading = true;
+
+      await Future.delayed(Duration.zero); // Add this line
+
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final DocumentSnapshot<Map<String, dynamic>> snap =
+          await firestore.collection('users').doc(uid).get();
+      _currentUser = models.User.fromMap(snap);
+
+      _username = _currentUser.username!;
+      _email = _currentUser.email;
+      _profileImage = _currentUser.profImage!;
+
+      _loading = false;
+    } catch (e) {
+      _loading = false;
+      _error = e.toString();
+    }
+  }
+
+  Future<void> updateProfileImage({required String profileImage}) async {
+    _profileImage = profileImage;
+
+    try {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      await firestore
+          .collection('users')
+          .doc(uid)
+          .update({'photoURL': profileImage});
+    } catch (err) {
+      throw Exception(err);
+    }
+
+    notifyListeners();
+  }
+
+  final AuthProvider _authDataProvider = AuthProvider();
+
+  models.User get user => _authDataProvider.user;
+
+  Future<void> refreshUser() async {
+    await _authDataProvider.refreshUser();
+    notifyListeners();
+  }
+
+  Future<void> updateAllFields(models.User updatedUser) async {
+    try {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      await firestore.collection('users').doc(uid).update(updatedUser.toMap());
+    } catch (err) {
+      throw Exception(err);
+    }
+
+    notifyListeners();
+  }
+
+  Future<String> authenticateUser({
     required String email,
     required String password,
-    String? mobile,
   }) async {
-    return await _authMethods.registerUser(
+    final AuthProvider authDataProvider = AuthProvider();
+    final String uid = await authDataProvider.authenticateUser(
       email: email,
       password: password,
-      username: email.substring(5),
-    );
-  }
-
-  Future authenticateUser({
-    required String email,
-    required String password,
-  }) async {
-    return await _authMethods.loginUser(email: email, password: password);
-  }
-
-  Future signOut() async {
-    return await _authMethods.signOut();
-  }
-  // ? <--------------------------------------------------------------->
-
-  // ! <----------------------- User Details ------------------------>
-  Future<void> updateAllFields({
-    String? username,
-    String? password,
-    String? email,
-    String? mobile,
-    String? profImage,
-    String? number,
-    String? gender,
-    List<String?>? addresses,
-    List<models.Order>? orders,
-    List<models.Payment>? payments,
-    List<models.Product>? cartItems,
-  }) async {
-    final updatedUser = models.User(
-      uid: _user.uid,
-      email: email ?? _user.email,
-      username: username ?? _user.username,
-      password: password ?? _user.password,
-      number: number ?? _user.number,
-      profImage: profImage ?? _user.profImage,
-      gender: gender ?? _user.gender,
-      addresses: addresses ?? _user.addresses,
-      orders: orders ?? _user.orders,
-      payments: payments ?? _user.payments,
-      cartItems: cartItems ?? _user.cartItems,
     );
 
-    // Call a method to update the user details in the backend
-    await _authMethods.updateUserDetailsFromProvider(updatedUser);
+    await getCurrentUserDetails();
+    notifyListeners();
+    return uid;
+  }
 
-    _user = updatedUser;
+  Future<UserCredential> authenticateWithGoogle() async {
+    final AuthProvider authDataProvider = AuthProvider();
+    final UserCredential credential =
+        await authDataProvider.authenticateWithGoogle();
+
+    await getCurrentUserDetails();
+    notifyListeners();
+    return credential;
+  }
+
+  Future<void> signOut() async {
+    final AuthProvider authDataProvider = AuthProvider();
+    await authDataProvider.signOut();
     notifyListeners();
   }
-  // ! <------------------------------------------------------------->
-
-  // * <----------------------- Payments ---------------------->
-  Future<void> addPayment(models.Payment payment) async {
-    _user.payments!.add(payment);
-    notifyListeners();
-  }
-  // * <------------------------------------------------------->
 }

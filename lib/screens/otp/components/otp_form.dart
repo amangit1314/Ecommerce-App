@@ -5,12 +5,10 @@ import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
 class OtpForm extends StatefulWidget {
-  const OtpForm({
-    Key? key,
-  }) : super(key: key);
+  const OtpForm({Key? key}) : super(key: key);
 
   @override
-  _OtpFormState createState() => _OtpFormState();
+  State<OtpForm> createState() => _OtpFormState();
 }
 
 class _OtpFormState extends State<OtpForm> {

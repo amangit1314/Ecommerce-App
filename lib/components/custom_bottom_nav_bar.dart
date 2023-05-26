@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:soni_store_app/screens/orders/orders_screen.dart';
 import 'package:soni_store_app/screens/products/products_search_screen.dart';
-import 'package:soni_store_app/screens/recent/recents.dart';
 
 import '../screens/home/home_screen.dart';
 import '../screens/profile/profile_screen.dart';
@@ -44,11 +44,13 @@ class CustomBottomNavBar extends StatelessWidget {
             IconButton(
               icon: SvgPicture.asset(
                 "assets/icons/Shop Icon.svg",
-                color: MenuState.home == selectedMenu
-                    ? kPrimaryColor
-                    : inActiveIconColor,
+                colorFilter: ColorFilter.mode(
+                    MenuState.home == selectedMenu
+                        ? kPrimaryColor
+                        : inActiveIconColor,
+                    BlendMode.srcIn),
               ),
-              onPressed: () => Get.to(const HomeScreen()),
+              onPressed: () => Get.to(() => const HomeScreen()),
             ),
             IconButton(
               icon: Icon(
@@ -57,7 +59,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () => Get.to(const ProductSearchPage()),
+              onPressed: () => Get.to(() => const ProductSearchPage()),
             ),
             IconButton(
               icon: FaIcon(
@@ -66,7 +68,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () => Get.to(const RecentsScreen()),
+              onPressed: () => Get.to(() => const RecentsScreen()),
             ),
             IconButton(
               icon: FaIcon(
@@ -75,7 +77,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () => Get.to(const ProfileScreen()),
+              onPressed: () => Get.to(() => const ProfileScreen()),
             ),
           ],
         ),

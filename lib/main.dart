@@ -1,19 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:soni_store_app/ecommerce.dart';
 import 'package:soni_store_app/firebase_options.dart';
 
+import 'helper/locator.dart';
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  debugPrint("Handling a background message: ${message.messageId}");
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -21,7 +23,6 @@ void main() async {
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  // final fcmToken = await messaging.getToken();
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     announcement: false,
@@ -31,6 +32,22 @@ void main() async {
     provisional: false,
     sound: true,
   );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    debugPrint('Notification permission granted');
+    const GetSnackBar(
+      title: 'Notification permission granted',
+      message: 'Notification permission granted',
+      backgroundColor: Colors.green,
+    );
+  } else {
+    debugPrint('Notification permission denied');
+    const GetSnackBar(
+      title: 'Notification permission denied',
+      message: 'Notification permission denied',
+      backgroundColor: Colors.red,
+    );
+  }
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     debugPrint('Got a message whilst in the foreground!');
@@ -42,5 +59,6 @@ void main() async {
     }
   });
 
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const EcommerceApp());
 }
