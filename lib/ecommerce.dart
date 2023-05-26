@@ -22,6 +22,7 @@ class _EcommerceAppState extends State<EcommerceApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => locator<UserProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<AuthProvider>()),
         ChangeNotifierProvider(create: (_) => locator<ProductProvider>()),
         ChangeNotifierProvider(create: (_) => locator<CartProvider>()),
         ChangeNotifierProvider(create: (_) => locator<CategoryProvider>()),

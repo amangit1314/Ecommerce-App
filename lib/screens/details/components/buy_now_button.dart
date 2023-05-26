@@ -9,14 +9,13 @@ class BuyNowButton extends StatelessWidget {
   const BuyNowButton({
     Key? key,
     required this.width,
-    required this.price,
     required this.widget,
     required this.product,
   }) : super(key: key);
 
   final double width;
   final DetailFirebaseBody widget;
-  final String price;
+
   final Product product;
 
   @override
@@ -40,6 +39,7 @@ class BuyNowButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // * Black Part with the price
             Container(
               width: getProportionateScreenWidth(width * .4),
               height: getProportionateScreenWidth(65),
@@ -60,7 +60,7 @@ class BuyNowButton extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "₹ $price ",
+                    "₹ ${widget.product.price.toString()} ",
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -77,6 +77,8 @@ class BuyNowButton extends StatelessWidget {
                 ],
               ),
             ),
+
+            // * Buy Now Orange Part of Button
             Container(
               height: getProportionateScreenWidth(65),
               width: getProportionateScreenWidth(width * .3),

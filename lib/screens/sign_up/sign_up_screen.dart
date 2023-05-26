@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/utils/constants.dart';
 
 import 'components/body.dart';
 
@@ -15,12 +14,20 @@ class SignUpScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
+        leading: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
+          // 18 size
+          size: 18,
+        ),
         elevation: 0,
         title: Text(
           "Sign Up",
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: kPrimaryColor,
+                color: Colors.black87,
                 fontWeight: FontWeight.bold,
+                // 16 size
+                fontSize: 16,
               ),
         ),
       ),

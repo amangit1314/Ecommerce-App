@@ -7,10 +7,11 @@ GetIt locator = GetIt.instance;
 
 void setupLocator() {
   locator.registerLazySingleton(() => Api('products'));
-  // user provider
+  locator.registerLazySingleton(() => AuthProvider());
   locator.registerLazySingleton(() => UserProvider());
   locator.registerLazySingleton(() => OrderProvider());
   locator.registerLazySingleton(() => CartProvider());
   locator.registerLazySingleton(() => ProductProvider());
   locator.registerLazySingleton(() => CategoryProvider());
+  locator.registerLazySingleton(() => ProfileProvider());
 }

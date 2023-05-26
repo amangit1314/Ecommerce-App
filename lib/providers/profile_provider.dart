@@ -36,7 +36,7 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future pickGalleryImage(String userId) async {
+  Future pickGalleryImage() async {
     final pickedImage = await picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 100,
@@ -44,7 +44,6 @@ class ProfileProvider with ChangeNotifier {
 
     if (pickedImage != null) {
       setImage(pickedImage);
-      await uploadImage(userId);
     }
   }
 
@@ -59,27 +58,34 @@ class ProfileProvider with ChangeNotifier {
     }
   }
 
-  Future uploadImage(String userId) async {
+  Future<String> uploadImage(String userId) async {
     setLoading(true);
-    String imageUrl = await FirestoreMethods().uploadImageToStorage(
-      'profile_images/$userId',
-      await _image.readAsBytes(), // Convert XFile to Uint8List
-      false,
-    );
-    setLoading(false);
-    return imageUrl;
+
+    try {
+      String imageUrl = await FirestoreMethods().uploadImageToStorage(
+        'profile_images/$userId',
+        await _image.readAsBytes(), // Convert XFile to Uint8List
+        false,
+      );
+
+      setLoading(false);
+      return imageUrl;
+    } catch (error) {
+      setLoading(false);
+      throw Exception('Failed to upload image: $error');
+    }
   }
 
   Future<void> updateProfile(String userId) async {
     if (userId.isEmpty) {
-      throw Exception('Invalid user ID');
+      throw Exception('Empty or Invalid user ID');
     }
 
     setLoading(true);
     String username = nameController.text;
     String email = emailController.text;
     String number = numberController.text;
-    String imageUrl = image.path.toString(); // Use the image path if available
+    String imageUrl = image.path; // Use the image path if available
 
     try {
       await usersCollection.doc(userId).update({
@@ -89,9 +95,21 @@ class ProfileProvider with ChangeNotifier {
         'photoURL': imageUrl,
       });
     } catch (error) {
+      setLoading(false);
       throw Exception('Failed to update profile: $error');
     }
 
     setLoading(false);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _numberController.dispose();
+    nameFocusNode.dispose();
+    emailFocusNode.dispose();
+    numberFocusNode.dispose();
+    super.dispose();
   }
 }

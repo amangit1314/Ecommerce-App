@@ -6,7 +6,6 @@ import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../components/custom_surfix_icon.dart';
-import '../../../providers/user_provider.dart';
 import 'edit_profile_screen.dart';
 
 class MyAccount extends StatefulWidget {
@@ -17,6 +16,13 @@ class MyAccount extends StatefulWidget {
 }
 
 class _MyAccountState extends State<MyAccount> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,9 +64,23 @@ class _MyAccountState extends State<MyAccount> {
         padding: const EdgeInsets.all(20.0),
         child: Consumer<UserProvider>(
           builder: (context, userProvider, _) {
+            userProvider.getCurrentUserDetails();
+
+            if (userProvider.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (userProvider.error != null) {
+              return Center(
+                child: Text(
+                  'Error: ${userProvider.error}',
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
             return Column(
               children: [
-                // * header tile
                 Container(
                   padding: const EdgeInsets.only(top: 5, bottom: 15),
                   child: Row(
@@ -91,7 +111,6 @@ class _MyAccountState extends State<MyAccount> {
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(top: 40.0),
                   child: Column(
@@ -121,7 +140,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Phone number'),
                           Text(
-                            userProvider.user.number ?? '+91 9649477393',
+                            userProvider.user.number ?? '+91 1234567890',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -141,7 +160,7 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           const Text('Gender'),
                           Text(
-                            userProvider.user.gender ?? 'Male',
+                            userProvider.user.gender ?? 'Not Specified',
                             style: const TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
@@ -225,8 +244,6 @@ class _MyAccountState extends State<MyAccount> {
                                               vertical: 2,
                                               horizontal: 16,
                                             ),
-                                            // If  you are using latest version of flutter then lable text and hint text shown like this
-                                            // if you r using flutter less then 1.20.* then maybe this is not working properly
                                             floatingLabelBehavior:
                                                 FloatingLabelBehavior.always,
                                             suffixIcon: const CustomSurffixIcon(

@@ -42,17 +42,15 @@ class CustomBottomNavBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: ColorFiltered(
+              icon: SvgPicture.asset(
+                "assets/icons/Shop Icon.svg",
                 colorFilter: ColorFilter.mode(
                     MenuState.home == selectedMenu
                         ? kPrimaryColor
                         : inActiveIconColor,
-                    BlendMode.srcOver),
-                child: SvgPicture.asset(
-                  "assets/icons/Shop Icon.svg",
-                ),
+                    BlendMode.srcIn),
               ),
-              onPressed: () => Get.to(const HomeScreen()),
+              onPressed: () => Get.to(() => const HomeScreen()),
             ),
             IconButton(
               icon: Icon(
@@ -61,7 +59,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () => Get.to(const ProductSearchPage()),
+              onPressed: () => Get.to(() => const ProductSearchPage()),
             ),
             IconButton(
               icon: FaIcon(
@@ -70,7 +68,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () => Get.to(const RecentsScreen()),
+              onPressed: () => Get.to(() => const RecentsScreen()),
             ),
             IconButton(
               icon: FaIcon(
@@ -79,7 +77,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     ? kPrimaryColor
                     : inActiveIconColor,
               ),
-              onPressed: () => Get.to(const ProfileScreen()),
+              onPressed: () => Get.to(() => const ProfileScreen()),
             ),
           ],
         ),

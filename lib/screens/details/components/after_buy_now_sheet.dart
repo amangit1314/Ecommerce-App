@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/product_provider.dart';
 import 'package:soni_store_app/screens/details/components/body.dart';
 import 'package:soni_store_app/screens/details/components/color_dots.dart';
 import 'package:soni_store_app/screens/details/components/size_dots.dart';
 
 import '../../../components/rounded_icon_button.dart';
+import '../../../providers/providers.dart';
 import '../../../utils/size_config.dart';
 import 'checkout_button_alert_box.dart';
 
@@ -38,8 +38,8 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductProvider>(
-      builder: (context, productProvider, _) {
+    return Consumer2<ProductProvider, AuthProvider>(
+      builder: (context, productProvider, authProvider, _) {
         final int totalAmount = productProvider.totalPrice;
         return Column(
           children: [
@@ -268,7 +268,11 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                                         productProvider.totalPrice.toString(),
                                     width: MediaQuery.of(context).size.width,
                                     widget: widget,
+                                    productId: productProvider.id,
+                                    uid: authProvider.user.uid,
                                     quantity: productProvider.quantity,
+                                    productImage:
+                                        widget.widget.product.images.first,
                                   ),
                                 );
                               },

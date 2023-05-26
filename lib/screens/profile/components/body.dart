@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/resources/auth_methods.dart';
+import 'package:provider/provider.dart';
 import 'package:soni_store_app/screens/profile/components/my_account.dart';
 import 'package:soni_store_app/screens/profile/settings.dart';
 import 'package:soni_store_app/screens/splash/splash_screen.dart';
 
+import '../../../providers/providers.dart';
 import '../help_center.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -52,20 +53,6 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                   },
                 ),
 
-                // // * Notifications
-                // ProfileMenu(
-                //   text: "Notifications",
-                //   icon: "assets/icons/Bell.svg",
-                //   press: () {
-                //     // navigate to notification screen
-                //     Navigator.of(context).push(
-                //       MaterialPageRoute(
-                //         builder: (context) => const NotificationScreen(),
-                //       ),
-                //     );
-                //   },
-                // ),
-
                 // * Settings
                 ProfileMenu(
                   text: "Settings",
@@ -96,8 +83,12 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                 ProfileMenu(
                   text: "Log Out",
                   icon: "assets/icons/Log out.svg",
-                  press: () {
-                    AuthMethods().signOut();
+                  press: () async {
+                    AuthProvider authProvider =
+                        Provider.of<AuthProvider>(context, listen: false);
+                    await authProvider.signOut();
+
+                    if (!mounted) return;
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                         builder: (context) => const SplashScreen(),

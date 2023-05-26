@@ -9,6 +9,9 @@ class ProductProvider with ChangeNotifier {
   Product? _product;
   Product? get product => _product;
 
+  String _id = '';
+  String get id => _id;
+
   int _quantity = 1;
   int get quantity => _quantity;
 
@@ -19,6 +22,7 @@ class ProductProvider with ChangeNotifier {
 
   void setProduct(Product product) {
     _product = product;
+    _id = product.id;
     _quantity = 1;
     _totalPrice = _product?.price ?? 0;
     notifyListeners();

@@ -78,7 +78,6 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
           product: widget.product,
           width: width,
           widget: widget,
-          price: widget.product.price.toString(),
         ),
       ],
     );

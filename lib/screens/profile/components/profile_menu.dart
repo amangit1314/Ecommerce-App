@@ -33,13 +33,11 @@ class ProfileMenu extends StatelessWidget {
         onPressed: press,
         child: Row(
           children: [
-            ColorFiltered(
+            SvgPicture.asset(
+              icon,
+              width: 22,
               colorFilter:
-                  const ColorFilter.mode(kPrimaryColor, BlendMode.srcOver),
-              child: SvgPicture.asset(
-                icon,
-                width: 22,
-              ),
+                  const ColorFilter.mode(kPrimaryColor, BlendMode.srcIn),
             ),
             const SizedBox(width: 20),
             Expanded(

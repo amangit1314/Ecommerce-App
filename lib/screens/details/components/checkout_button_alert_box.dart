@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:soni_store_app/utils/utils.dart';
 
 import '../../../models/models.dart';
 import '../../../providers/providers.dart';
@@ -19,10 +20,16 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     required this.width,
     required this.price,
     required this.quantity,
+    required this.productId,
+    required this.uid,
+    required this.productImage,
   });
 
   final double width;
   final String price;
+  final String productId;
+  final String uid;
+  final String productImage;
   final AfterBuyNowButtonSheet widget;
   final int quantity;
 
@@ -105,7 +112,12 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     ),
                   ),
                   onPressed: () async {
-                    await showPaymentDialog(context);
+                    await showPaymentDialog(
+                      context,
+                      uid,
+                      productId,
+                      productImage,
+                    );
                   },
                 ),
               ),
@@ -116,34 +128,39 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     );
   }
 
-  Future<void> showPaymentDialog(BuildContext context) async {
+  Future<void> showPaymentDialog(
+    BuildContext context,
+    String userId,
+    String productId,
+    String productImage,
+  ) async {
     CartProvider cartProvider =
         Provider.of<CartProvider>(context, listen: false);
     OrderProvider orderProvider =
         Provider.of<OrderProvider>(context, listen: false);
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
 
     bool success = false;
     String orderStatus = 'Processing';
 
-    log(userProvider.user.uid);
     log('---------------');
-    log(widget.widget.product.id);
+    log(userId);
     log('---------------');
-    log(widget.widget.product.images.first);
+    log(productId);
     log('---------------');
-    log(double.parse(price).toString());
+    log(productImage);
+    log('---------------');
+    log(price.toString());
     log('---------------');
     log(quantity.toString());
+    log('---------------');
 
     Order order = Order(
-      orderId: DateTime.now().toString(),
-      uid: userProvider.user.uid,
+      orderId: generateOrderId(),
+      uid: userId,
       orderedDate: DateTime.now(),
-      productId: widget.widget.product.id,
+      productId: productId,
       amount: double.parse(price),
-      productImage: widget.widget.product.images.first,
+      productImage: productImage,
       quantity: quantity,
       orderStatus: orderStatus,
     );
@@ -153,8 +170,9 @@ class CheckoutButtonAlertBox extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: Center(
               child: Text(
                 'Checkout With',
@@ -171,7 +189,9 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     try {
+                      log('---------------');
                       log(order.toString());
+                      log('---------------');
                       await orderProvider
                           .addOrder(order)
                           .then((value) => Navigator.pop(context));

@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:soni_store_app/components/no_account_text.dart';
-import 'package:soni_store_app/resources/auth_methods.dart';
 import 'package:soni_store_app/screens/sign_in/components/sign_in_form.dart';
 
 import '../../../components/social_card.dart';
+import '../../../providers/providers.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -47,7 +50,17 @@ class Body extends StatelessWidget {
                 children: [
                   SocialCard(
                     icon: "assets/icons/google-icon.svg",
-                    press: () => AuthMethods().signInWithGoogle(),
+                    press: () async {
+                      AuthProvider authProvider =
+                          Provider.of<AuthProvider>(context, listen: false);
+                      try {
+                        await authProvider.authenticateWithGoogle();
+                        // Authentication successful, perform necessary actions or navigate to next screen
+                      } catch (error) {
+                        // Handle authentication error
+                        log("Google authentication error: $error");
+                      }
+                    },
                   ),
                   SocialCard(
                     icon: "assets/icons/facebook-2.svg",

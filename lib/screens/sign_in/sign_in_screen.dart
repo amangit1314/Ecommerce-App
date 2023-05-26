@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/screens/sign_in/components/body.dart';
 
-import '../../utils/constants.dart';
-
 class SignInScreen extends StatelessWidget {
   static const routeName = '/sign-in';
   const SignInScreen({Key? key}) : super(key: key);
@@ -17,9 +15,16 @@ class SignInScreen extends StatelessWidget {
         title: Text(
           "Sign In",
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: kPrimaryColor,
+                color: Colors.black87,
                 fontWeight: FontWeight.bold,
+                // 16 size
+                fontSize: 16,
               ),
+        ),
+        leading: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
+          size: 18,
         ),
         elevation: 0,
       ),

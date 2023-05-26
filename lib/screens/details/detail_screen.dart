@@ -14,9 +14,6 @@ class DetailsScreenFirebase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final ProductDetailsArguments? args =
-    //     ModalRoute.of(context)?.settings.arguments as ProductDetailsArguments?;
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
@@ -77,10 +74,4 @@ class DetailsScreenFirebase extends StatelessWidget {
       body: DetailFirebaseBody(product: product),
     );
   }
-}
-
-class ProductDetailsArguments {
-  final Product product;
-
-  ProductDetailsArguments({required this.product});
 }

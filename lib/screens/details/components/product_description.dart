@@ -126,16 +126,14 @@ class _ProductDescriptionState extends State<ProductDescription>
                             bottomLeft: Radius.circular(20),
                           ),
                         ),
-                        child: ColorFiltered(
+                        child: SvgPicture.asset(
+                          "assets/icons/Cart Icon.svg",
                           colorFilter: ColorFilter.mode(
                               widget.product.isFavourite
                                   ? const Color(0xFFFF4848)
                                   : const Color(0xFFDBDEE4),
-                              BlendMode.srcOver),
-                          child: SvgPicture.asset(
-                            "assets/icons/Cart Icon.svg",
-                            height: getProportionateScreenWidth(16),
-                          ),
+                              BlendMode.srcIn),
+                          height: getProportionateScreenWidth(16),
                         ),
                       ),
                     );

@@ -96,12 +96,10 @@ class _ProfilePicState extends State<ProfilePic> {
                   onPressed: () async {
                     await selectImage(userProvider);
                   },
-                  child: ColorFiltered(
-                    colorFilter: const ColorFilter.mode(
-                        Colors.black87, BlendMode.srcOver),
-                    child: SvgPicture.asset(
-                      "assets/icons/Camera Icon.svg",
-                    ),
+                  child: SvgPicture.asset(
+                    "assets/icons/Camera Icon.svg",
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black87, BlendMode.srcIn),
                   ),
                 ),
               ),

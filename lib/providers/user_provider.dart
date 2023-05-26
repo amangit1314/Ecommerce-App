@@ -1,37 +1,116 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
-import 'package:soni_store_app/resources/auth_methods.dart';
-
-import '../resources/user_details_methods.dart';
+import 'package:soni_store_app/providers/auth_provider.dart';
 
 class UserProvider with ChangeNotifier {
-  models.User _user = models.User(email: 'default@gmail.com', uid: '');
-  final AuthMethods _authMethods = AuthMethods();
-  final UserDetailsMethods _userDetailsMethods = UserDetailsMethods();
+  late models.User _currentUser;
+  late String _username;
+  late String _email;
+  late String _profileImage;
+  bool _loading = false;
+  String? _error;
 
-  models.User get user => _user;
+  models.User get currentUser => _currentUser;
+  String get uid => _currentUser.uid;
+  String get username => _username;
+  String get email => _email;
+  String get profileImage => _profileImage;
+  bool get loading => _loading;
+  String? get error => _error;
+
+  void setCurrentUser(models.User user) {
+    _currentUser = user;
+    notifyListeners();
+  }
+
+  Future<void> getCurrentUserDetails() async {
+    try {
+      _loading = true;
+
+      await Future.delayed(Duration.zero); // Add this line
+
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final DocumentSnapshot<Map<String, dynamic>> snap =
+          await firestore.collection('users').doc(uid).get();
+      _currentUser = models.User.fromMap(snap);
+
+      _username = _currentUser.username!;
+      _email = _currentUser.email;
+      _profileImage = _currentUser.profImage!;
+
+      _loading = false;
+    } catch (e) {
+      _loading = false;
+      _error = e.toString();
+    }
+  }
+
+  Future<void> updateProfileImage({required String profileImage}) async {
+    _profileImage = profileImage;
+
+    try {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      await firestore
+          .collection('users')
+          .doc(uid)
+          .update({'photoURL': profileImage});
+    } catch (err) {
+      throw Exception(err);
+    }
+
+    notifyListeners();
+  }
+
+  final AuthProvider _authDataProvider = AuthProvider();
+
+  models.User get user => _authDataProvider.user;
 
   Future<void> refreshUser() async {
-    models.User user = await _authMethods.getUserDetails();
-    _user = models.User(
-      uid: user.uid,
-      email: user.email,
-      username: user.username,
-      profImage: user.profImage,
-      number: user.number,
-    );
+    await _authDataProvider.refreshUser();
     notifyListeners();
   }
 
   Future<void> updateAllFields(models.User updatedUser) async {
-    await _userDetailsMethods.updateUserDetailsFromProvider(updatedUser);
-    _user = updatedUser;
+    try {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      await firestore.collection('users').doc(uid).update(updatedUser.toMap());
+    } catch (err) {
+      throw Exception(err);
+    }
+
     notifyListeners();
   }
 
-  Future<void> updateProfileImage({required String profileImage}) async {
-    _user = _user.copyWith(profImage: profileImage);
-    await _userDetailsMethods.updateUserDetailsFromProvider(_user);
+  Future<String> authenticateUser({
+    required String email,
+    required String password,
+  }) async {
+    final AuthProvider authDataProvider = AuthProvider();
+    final String uid = await authDataProvider.authenticateUser(
+      email: email,
+      password: password,
+    );
+
+    await getCurrentUserDetails();
+    notifyListeners();
+    return uid;
+  }
+
+  Future<UserCredential> authenticateWithGoogle() async {
+    final AuthProvider authDataProvider = AuthProvider();
+    final UserCredential credential =
+        await authDataProvider.authenticateWithGoogle();
+
+    await getCurrentUserDetails();
+    notifyListeners();
+    return credential;
+  }
+
+  Future<void> signOut() async {
+    final AuthProvider authDataProvider = AuthProvider();
+    await authDataProvider.signOut();
     notifyListeners();
   }
 }
