@@ -6,7 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 
 class AuthProvider with ChangeNotifier {
-  models.User _user = models.User(email: 'default@gmail.com', uid: '');
+  models.User _user = models.User(uid: '', email: '');
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -15,16 +15,15 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> refreshUser() async {
     try {
-      models.User user = await _getUserDetails();
-      _user = models.User(
-        uid: user.uid,
-        email: user.email,
-        username: user.username,
-        profImage: user.profImage,
-        number: user.number,
-      );
+      models.User user = await getUserDetails();
+      _user = user;
     } catch (error) {
-      _user = models.User(email: 'default@gmail.com', uid: '');
+      const GetSnackBar(
+        title: 'User LogedOut',
+        message: 'User is currently loged out',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+      );
     }
     notifyListeners();
   }
@@ -85,7 +84,7 @@ class AuthProvider with ChangeNotifier {
           email: email,
           password: password,
         );
-        _user = await _getUserDetails();
+        _user = await getUserDetails();
         notifyListeners();
         res = 'success';
       } else {
@@ -118,7 +117,7 @@ class AuthProvider with ChangeNotifier {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
 
-      _user = await _getUserDetails();
+      _user = await getUserDetails();
       notifyListeners();
       return userCredential;
     } catch (error) {
@@ -129,14 +128,13 @@ class AuthProvider with ChangeNotifier {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-      _user = models.User(email: 'default@gmail.com', uid: '');
       notifyListeners();
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<models.User> _getUserDetails() async {
+  Future<models.User> getUserDetails() async {
     User? currentUser = _auth.currentUser;
     final DocumentSnapshot<Map<String, dynamic>> snap =
         await _firestore.collection('users').doc(currentUser!.uid).get();

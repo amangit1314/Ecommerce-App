@@ -5,10 +5,10 @@ import 'package:soni_store_app/models/payment.dart';
 
 class Order {
   final String orderId;
-  final String uid;
+  final String? uid;
   final String productId;
   final String productImage;
-  final DateTime orderedDate;
+  final String orderedDate;
   final int quantity;
   final double amount;
   // final String address;
@@ -17,7 +17,7 @@ class Order {
 
   Order({
     required this.orderId,
-    required this.uid,
+    this.uid,
     required this.productId,
     required this.productImage,
     required this.orderedDate,
@@ -34,7 +34,7 @@ class Order {
       'uid': uid,
       'productId': productId,
       'productImage': productImage,
-      'orderedDate': orderedDate.millisecondsSinceEpoch,
+      'orderedDate': orderedDate,
       'quantity': quantity,
       'amount': amount,
       // 'address': address,
@@ -49,7 +49,7 @@ class Order {
       uid: map['uid'] ?? '',
       productId: map['productId'] ?? '',
       productImage: map['productImage'] ?? '',
-      orderedDate: DateTime.fromMillisecondsSinceEpoch(map['orderedDate']),
+      orderedDate: map['orderedDate'] ?? DateTime.now().toString(),
       quantity: map['quantity']?.toInt() ?? 0,
       amount: map['amount']?.toDouble() ?? 0.0,
       // address: map['address'] ?? '',

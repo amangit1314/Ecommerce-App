@@ -1,5 +1,6 @@
 gradle-wrapper.jar
 /.gradle
+/.app/google-services.json
 /captures/
 /gradlew
 /app/.json

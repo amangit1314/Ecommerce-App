@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soni_store_app/models/payment.dart';
 import 'package:soni_store_app/models/product.dart';
 
+import 'address.dart';
+
 class User {
   final String email;
   final String uid;
@@ -12,7 +14,7 @@ class User {
   final String? number;
   final String? profImage;
   final String? gender;
-  final List<String?>? addresses;
+  final List<Address?>? addresses;
   final List<Product> cartItems;
 
   User({

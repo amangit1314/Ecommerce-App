@@ -38,8 +38,8 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ProductProvider, AuthProvider>(
-      builder: (context, productProvider, authProvider, _) {
+    return Consumer3<ProductProvider, AuthProvider, OrderProvider>(
+      builder: (context, productProvider, authProvider, orderProvider, _) {
         final int totalAmount = productProvider.totalPrice;
         return Column(
           children: [
@@ -269,8 +269,8 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                                     width: MediaQuery.of(context).size.width,
                                     widget: widget,
                                     productId: productProvider.id,
-                                    uid: authProvider.user.uid,
                                     quantity: productProvider.quantity,
+                                    userId: authProvider.user.uid,
                                     productImage:
                                         widget.widget.product.images.first,
                                   ),

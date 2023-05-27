@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/utils/utils.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../models/models.dart';
 import '../../../providers/providers.dart';
@@ -15,23 +15,23 @@ import 'components.dart';
 
 class CheckoutButtonAlertBox extends StatelessWidget {
   const CheckoutButtonAlertBox({
-    super.key,
+    Key? key,
     required this.widget,
     required this.width,
     required this.price,
     required this.quantity,
     required this.productId,
-    required this.uid,
+    required this.userId,
     required this.productImage,
-  });
+  }) : super(key: key);
 
   final double width;
   final String price;
   final String productId;
-  final String uid;
   final String productImage;
   final AfterBuyNowButtonSheet widget;
   final int quantity;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -103,23 +103,26 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   color: Colors.deepOrange,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: TextButton(
-                  child: const Text(
-                    "Checkout",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                child:
+                    Consumer<AuthProvider>(builder: (context, authProvider, _) {
+                  return TextButton(
+                    child: const Text(
+                      "Checkout",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  onPressed: () async {
-                    await showPaymentDialog(
-                      context,
-                      uid,
-                      productId,
-                      productImage,
-                    );
-                  },
-                ),
+                    onPressed: () async {
+                      await showPaymentDialog(
+                        context,
+                        userId,
+                        productId,
+                        productImage,
+                      );
+                    },
+                  );
+                }),
               ),
             ),
           ],
@@ -127,6 +130,8 @@ class CheckoutButtonAlertBox extends StatelessWidget {
       },
     );
   }
+
+  // ...
 
   Future<void> showPaymentDialog(
     BuildContext context,
@@ -142,22 +147,32 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     bool success = false;
     String orderStatus = 'Processing';
 
+    String generateOrderId() {
+      const uuid = Uuid();
+      return uuid.v4();
+    }
+
+    String orderId = generateOrderId();
+
     log('---------------');
-    log(userId);
+    log('ORDER_ID = $orderId');
     log('---------------');
-    log(productId);
+    log('USER_ID = $userId');
     log('---------------');
-    log(productImage);
+    log('PRODUCT_ID = $productId');
     log('---------------');
-    log(price.toString());
+    log('PRODUCT_IMAGE = $productImage');
     log('---------------');
-    log(quantity.toString());
+    log('PRICE = ${price.toString()}');
+    log('---------------');
+    log('QUANTITY = ${quantity.toString()}');
+    log('---------------');
+    log('ORDER STATUS = $orderStatus');
     log('---------------');
 
     Order order = Order(
-      orderId: generateOrderId(),
-      uid: userId,
-      orderedDate: DateTime.now(),
+      orderId: orderId,
+      orderedDate: DateTime.now().toString(),
       productId: productId,
       amount: double.parse(price),
       productImage: productImage,
@@ -193,12 +208,15 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                       log(order.toString());
                       log('---------------');
                       await orderProvider
-                          .addOrder(order)
-                          .then((value) => Navigator.pop(context));
+                          .addOrder(order: order, uid: userId, oid: orderId)
+                          .then((value) => success = true);
                       success = true;
                     } catch (error) {
-                      debugPrint(error.toString());
+                      log('---------------');
+                      log(error.toString());
+                      log('---------------');
                       success = false;
+                    } finally {
                       Navigator.pop(context);
                     }
                   },
@@ -227,7 +245,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () async {
+                  onTap: () {
                     Get.snackbar(
                       'Information ℹ',
                       'This functionality is yet to be implemented! 🙏',
@@ -328,7 +346,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
       );
     } catch (e) {
       success = false;
-      debugPrint('Error occurred while adding the order: $e');
+      log('Error occurred while adding the order: $e');
     }
 
     if (success) {
@@ -337,6 +355,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
         'Order added successfully! 🎉',
         backgroundColor: Colors.green,
         snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
       );
     } else {
       Get.snackbar(
