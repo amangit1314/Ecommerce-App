@@ -13,6 +13,7 @@ class OrderProvider with ChangeNotifier {
       final querySnapshot = await FirebaseFirestore.instance
           .collection('orders')
           .where('userId', isEqualTo: userId)
+          .orderBy('uid')
           .get();
 
       _orders = querySnapshot.docs
@@ -24,17 +25,37 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addOrder(models.Order order) async {
-    final orderData = order.toMap();
-    log(orderData.toString());
-    final ordersCollection =
-        FirebaseFirestore.instance.collection('orders').doc();
-    ordersCollection
-        .set(orderData)
-        .then((value) => debugPrint('Order added successfully ✨🎉🥳'))
-        .catchError((e) => debugPrint(e.toString())
-            // throw Exception('Failed to add order: Document does not exist')
-            );
-    notifyListeners();
+  Future<void> addOrder({
+    required models.Order order,
+    required String uid,
+    required String oid,
+  }) async {
+    try {
+      final orderData = order.toMap();
+      if (orderData.isEmpty) {
+        throw Exception('Order data is null');
+      }
+
+      final ordersCollection = FirebaseFirestore.instance.collection('orders');
+      final orderDoc = ordersCollection.doc(oid);
+
+      final orderSnapshot = await orderDoc.get();
+      if (!orderSnapshot.exists) {
+        // Create a new document with userId as the document ID
+        final userOrderDoc = ordersCollection.doc(uid);
+        await userOrderDoc.set(orderData);
+        log('New order document created for user');
+      } else {
+        // Update the existing order document
+        await orderDoc.set(orderData);
+        log('Existing order document updated');
+      }
+
+      log('Order added successfully ✨🎉🥳');
+      notifyListeners();
+    } catch (error) {
+      log('Failed to add order: $error');
+      throw Exception('Failed to add order: $error');
+    }
   }
 }

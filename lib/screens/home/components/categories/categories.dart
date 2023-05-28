@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../components/section_tile.dart';
+import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
+import '../../../details/detail_screen.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -12,25 +14,54 @@ class Categories extends StatefulWidget {
   State<Categories> createState() => _CategoriesState();
 }
 
-class _CategoriesState extends State<Categories> {
+class _CategoriesState extends State<Categories>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   int curr = 0;
+
+  List iconData = [
+    Icons.flash_on,
+    Icons.shopping_bag,
+    Icons.sports_basketball,
+    Icons.card_giftcard,
+    Icons.more_horiz,
+  ];
+
+  List categoryText = [
+    "Deal's",
+    "Fashion",
+    "Sport's",
+    "Grocery",
+    "More",
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: iconData.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  final CollectionReference _refProducts =
+      FirebaseFirestore.instance.collection('products');
+
+  Future<List<Product>> fetchProductsFromFirestore() async {
+    final List<Product> products = [];
+
+    final QuerySnapshot snapshot = await _refProducts.get();
+    for (var element in snapshot.docs) {
+      products.add(Product.fromMap(element.data() as Map<String, dynamic>));
+    }
+    return products;
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> categories = [
-      {"icon": "assets/icons/Flash Icon.svg", "text": "Deal's"},
-      {"icon": "assets/icons/Bill Icon.svg", "text": "Fashion"},
-      {"icon": "assets/icons/Game Icon.svg", "text": "Sport's"},
-      {"icon": "assets/icons/Gift Icon.svg", "text": "Grocery"},
-      {"icon": "assets/icons/Discover.svg", "text": "More"},
-    ];
-
-    List iconData = [
-      Icons.flash_on,
-      Icons.shopping_bag,
-      Icons.sports_basketball,
-      Icons.card_giftcard,
-      Icons.more_horiz,
-    ];
     return Padding(
       padding: EdgeInsets.only(
         top: getProportionateScreenWidth(15),
@@ -38,32 +69,88 @@ class _CategoriesState extends State<Categories> {
         bottom: getProportionateScreenWidth(20),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: SectionTitle(title: 'Categories', press: () {}),
           ),
           SizedBox(height: getProportionateScreenWidth(15)),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                categories.length,
-                (index) => CategoryCard2(
+          SizedBox(
+            height: getProportionateScreenWidth(55),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(
+                  iconData.length,
+                  (index) => CategoryCard(
                     iconData: iconData[index],
-                    text: categories[index]["text"],
+                    text: categoryText[index],
                     press: () {
                       setState(() {
                         curr = index;
                       });
                     },
-                    bgColor:
-                        curr == index ? kPrimaryColor : Colors.transparent),
+                    bgColor: curr == index ? kPrimaryColor : Colors.transparent,
+                  ),
+                ),
               ),
             ),
           ),
+          // SizedBox(height: getProportionateScreenWidth(15)),
+          // FutureBuilder<List<Product>>(
+          //   future: fetchProductsFromFirestore(),
+          //   builder: (context, snapshot) {
+          //     final List<Product> products = snapshot.data ?? [];
+
+          //     if (snapshot.connectionState == ConnectionState.waiting) {
+          //       return Center(
+          //         child: SizedBox(
+          //           height: 200, // Provide a specific height for the ListView
+          //           child: ListView.separated(
+          //             shrinkWrap: true,
+          //             scrollDirection: Axis.horizontal,
+          //             itemCount: products.length,
+          //             itemBuilder: (context, index) {
+          //               return const LoadingShimmerSkelton();
+          //             },
+          //             separatorBuilder: (context, index) {
+          //               return const SizedBox(width: 8);
+          //             },
+          //           ),
+          //         ),
+          //       );
+          //     }
+
+          //     if (snapshot.hasError) {
+          //       return const Center(
+          //         child: Text('Something went wrong'),
+          //       );
+          //     }
+
+          //     return Expanded(
+          //       child: GridView.builder(
+          //         shrinkWrap: true,
+          //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //           crossAxisCount: 2,
+          //           childAspectRatio: 0.75,
+          //           crossAxisSpacing: 2,
+          //           mainAxisSpacing: 2,
+          //         ),
+          //         itemCount: products.length < 4 ? products.length : 4,
+          //         itemBuilder: (context, index) {
+          //           return CategoryGridItem(
+          //             product: products[index],
+          //             image: products[index].images.first,
+          //             category: products[index].categories.first,
+          //           );
+          //         },
+          //       ),
+          //     );
+          //   },
+          // ),
         ],
       ),
     );
@@ -72,45 +159,6 @@ class _CategoriesState extends State<Categories> {
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
-    Key? key,
-    required this.icon,
-    required this.text,
-    required this.press,
-  }) : super(key: key);
-
-  final String icon, text;
-  final GestureTapCallback press;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: press,
-      child: SizedBox(
-        width: getProportionateScreenWidth(55),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(getProportionateScreenWidth(15)),
-              height: getProportionateScreenWidth(55),
-              width: getProportionateScreenWidth(55),
-              decoration: BoxDecoration(
-                // color: const Color(0xFFFFECDF),
-                color: kPrimaryColor.withOpacity(.3),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SvgPicture.asset(icon),
-            ),
-            const SizedBox(height: 5),
-            Text(text, textAlign: TextAlign.center)
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CategoryCard2 extends StatelessWidget {
-  const CategoryCard2({
     Key? key,
     this.icon,
     required this.text,
@@ -131,21 +179,15 @@ class CategoryCard2 extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(right: getProportionateScreenWidth(15)),
         width: getProportionateScreenWidth(109),
-        child:
-            // Column(
-            //   children: [
-            Container(
+        child: Container(
           padding: EdgeInsets.all(getProportionateScreenWidth(15)),
-          // margin: EdgeInsets.all(getProportionateScreenWidth(15)),
           height: getProportionateScreenWidth(55),
           width: getProportionateScreenWidth(55),
           decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(
-                color: kPrimaryColor,
-                width: 1,
-              )),
+            color: bgColor,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: kPrimaryColor, width: 1),
+          ),
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -171,10 +213,104 @@ class CategoryCard2 extends StatelessWidget {
             ),
           ),
         ),
-        // const SizedBox(height: 5),
-        // Text(text, textAlign: TextAlign.center)
-        // ],
-        // ),
+      ),
+    );
+  }
+}
+
+class CategoryGridItem extends StatelessWidget {
+  final Product product;
+  final String? image;
+  final String? category;
+  const CategoryGridItem({
+    Key? key,
+    required this.product,
+    this.image,
+    this.category,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => DetailsScreenFirebase(
+              product: product,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: 150,
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.only(
+          top: 8,
+          left: 8,
+          right: 8,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: kPrimaryColor.withOpacity(.2),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 148,
+              width: 170,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(
+                    image! == '' ? 'https://picsum.photos/250?image=9' : image!,
+                  ),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(16),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
+              child: Text(
+                '₹ ${product.price}',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: kPrimaryColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

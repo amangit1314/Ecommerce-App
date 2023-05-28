@@ -1,84 +1,84 @@
-import 'dart:async';
-import 'dart:convert';
+// import 'dart:async';
+// import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:http/http.dart' as http;
-import 'package:soni_store_app/providers/order_provider.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:soni_store_app/providers/order_provider.dart';
 
-import '../models/order.dart';
+// import '../models/order.dart';
 
-class StripeHelper {
-  static StripeHelper instance = StripeHelper();
+// class StripeHelper {
+//   static StripeHelper instance = StripeHelper();
 
-  Map<String, dynamic>? paymentIntent;
+//   Map<String, dynamic>? paymentIntent;
 
-  Future<void> makePayment(
-      String amount, Order order, OrderProvider orderProvider) async {
-    try {
-      paymentIntent = await createPaymentIntent(amount, 'USD');
+//   Future<void> makePayment(
+//       String amount, Order order, OrderProvider orderProvider) async {
+//     try {
+//       paymentIntent = await createPaymentIntent(amount, 'USD');
 
-      var gpay = const PaymentSheetGooglePay(
-        merchantCountryCode: "US",
-        currencyCode: "USD",
-        testEnv: true,
-      );
+//       var gpay = const PaymentSheetGooglePay(
+//         merchantCountryCode: "US",
+//         currencyCode: "USD",
+//         testEnv: true,
+//       );
 
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: paymentIntent!['client_secret'],
-          style: ThemeMode.light,
-          merchantDisplayName: 'Aman Soni',
-          googlePay: gpay,
-        ),
-      );
+//       await Stripe.instance.initPaymentSheet(
+//         paymentSheetParameters: SetupPaymentSheetParameters(
+//           paymentIntentClientSecret: paymentIntent!['client_secret'],
+//           style: ThemeMode.light,
+//           merchantDisplayName: 'Aman Soni',
+//           googlePay: gpay,
+//         ),
+//       );
 
-      displayPaymentSheet(order, orderProvider);
-    } catch (err) {
-      // Handle error
-    }
-  }
+//       displayPaymentSheet(order, orderProvider);
+//     } catch (err) {
+//       // Handle error
+//     }
+//   }
 
-  void displayPaymentSheet(Order order, OrderProvider orderProvider) async {
-    Completer<bool> paymentCompleter = Completer<bool>();
+//   void displayPaymentSheet(Order order, OrderProvider orderProvider) async {
+//     Completer<bool> paymentCompleter = Completer<bool>();
 
-    Stripe.instance.presentPaymentSheet().then((_) {
-      paymentCompleter.complete(true);
-    }).catchError((error) {
-      paymentCompleter.complete(false);
-    });
+//     Stripe.instance.presentPaymentSheet().then((_) {
+//       paymentCompleter.complete(true);
+//     }).catchError((error) {
+//       paymentCompleter.complete(false);
+//     });
 
-    bool isSuccess = await paymentCompleter.future;
+//     bool isSuccess = await paymentCompleter.future;
 
-    if (isSuccess) {
-      Order newOrder = order;
-      orderProvider.addOrder(newOrder);
-    }
+//     if (isSuccess) {
+//       Order newOrder = order;
+//       orderProvider.addOrder(newOrder);
+//     }
 
-    await Future.delayed(const Duration(seconds: 2));
-  }
+//     await Future.delayed(const Duration(seconds: 2));
+//   }
 
-  Future<Map<String, dynamic>> createPaymentIntent(
-      String amount, String currency) async {
-    try {
-      Map<String, dynamic> body = {
-        'amount': amount,
-        'currency': currency,
-      };
+//   Future<Map<String, dynamic>> createPaymentIntent(
+//       String amount, String currency) async {
+//     try {
+//       Map<String, dynamic> body = {
+//         'amount': amount,
+//         'currency': currency,
+//       };
 
-      var response = await http.post(
-        Uri.parse('https://api.stripe.com/v1/payment_intents'),
-        headers: {
-          'Authorization':
-              'Bearer sk_test_51MWx8OAVMyklfe3C3gP4wKOhTsRdF6r1PYhhg1PqupXDITMrV3asj5Mmf0G5F9moPL6zNfG3juK8KHgV9XNzFPlq00wmjWwZYA',
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: body,
-      );
+//       var response = await http.post(
+//         Uri.parse('https://api.stripe.com/v1/payment_intents'),
+//         headers: {
+//           'Authorization':
+//               'Bearer sk_test_51MWx8OAVMyklfe3C3gP4wKOhTsRdF6r1PYhhg1PqupXDITMrV3asj5Mmf0G5F9moPL6zNfG3juK8KHgV9XNzFPlq00wmjWwZYA',
+//           'Content-Type': 'application/x-www-form-urlencoded',
+//         },
+//         body: body,
+//       );
 
-      return json.decode(response.body);
-    } catch (err) {
-      throw Exception(err.toString());
-    }
-  }
-}
+//       return json.decode(response.body);
+//     } catch (err) {
+//       throw Exception(err.toString());
+//     }
+//   }
+// }

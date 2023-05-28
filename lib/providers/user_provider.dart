@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 import 'package:soni_store_app/providers/auth_provider.dart';
 
+import '../models/address.dart';
+
 class UserProvider with ChangeNotifier {
-  late models.User _currentUser;
+  models.User _currentUser = models.User(email: '', uid: '');
   late String _username;
   late String _email;
   late String _profileImage;
@@ -112,5 +114,44 @@ class UserProvider with ChangeNotifier {
     final AuthProvider authDataProvider = AuthProvider();
     await authDataProvider.signOut();
     notifyListeners();
+  }
+
+  Future<void> addAddress(
+    String uid,
+    Address address,
+  ) async {
+    try {
+      final userCollection = FirebaseFirestore.instance.collection('users');
+      final userDoc = userCollection.doc(uid);
+
+      await userDoc.update({
+        'addresses': FieldValue.arrayUnion([address]),
+      });
+
+      notifyListeners();
+    } catch (error) {
+      throw Exception('Failed to add address: $error');
+    }
+  }
+
+  Future<List<String>> getAddresses(String uid) async {
+    try {
+      final userCollection = FirebaseFirestore.instance.collection('users');
+      final userDoc = userCollection.doc(uid);
+
+      final userSnapshot = await userDoc.get();
+      if (userSnapshot.exists) {
+        final userData = userSnapshot.data() as Map<String, dynamic>;
+        final addresses = userData['addresses'] as List<dynamic>?;
+
+        if (addresses != null) {
+          return addresses.cast<String>();
+        }
+      }
+
+      return [];
+    } catch (error) {
+      throw Exception('Failed to get addresses: $error');
+    }
   }
 }

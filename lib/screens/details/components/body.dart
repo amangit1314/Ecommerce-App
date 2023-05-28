@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:soni_store_app/screens/details/components/product_description.dart';
 import 'package:soni_store_app/screens/details/components/product_images.dart';
 import 'package:soni_store_app/screens/details/components/rating_tile.dart';
-import 'package:soni_store_app/screens/details/components/reviews_sheet.dart';
 import 'package:soni_store_app/screens/details/components/top_rounded_container.dart';
+import 'package:soni_store_app/screens/details/reviews/reviews_sheet.dart';
 import 'package:soni_store_app/screens/details/similarProducts/similar_products.dart';
 
 import '../../../models/product.dart';

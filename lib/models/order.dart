@@ -1,23 +1,20 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:soni_store_app/models/payment.dart';
-
 class Order {
   final String orderId;
-  final String uid;
+  final String? uid;
   final String productId;
   final String productImage;
-  final DateTime orderedDate;
+  final String orderedDate;
   final int quantity;
   final double amount;
   // final String address;
   final String orderStatus;
-  final Payment? paymentInfo;
+  // final Payment? paymentInfo;
 
   Order({
     required this.orderId,
-    required this.uid,
+    this.uid,
     required this.productId,
     required this.productImage,
     required this.orderedDate,
@@ -25,7 +22,7 @@ class Order {
     required this.amount,
     // required this.address,
     required this.orderStatus,
-    this.paymentInfo,
+    // this.paymentInfo,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,12 +31,12 @@ class Order {
       'uid': uid,
       'productId': productId,
       'productImage': productImage,
-      'orderedDate': orderedDate.millisecondsSinceEpoch,
+      'orderedDate': orderedDate,
       'quantity': quantity,
       'amount': amount,
       // 'address': address,
       'orderStatus': orderStatus,
-      'paymentInfo': paymentInfo!.toMap(),
+      // 'paymentInfo': paymentInfo!.toMap(),
     };
   }
 
@@ -49,15 +46,15 @@ class Order {
       uid: map['uid'] ?? '',
       productId: map['productId'] ?? '',
       productImage: map['productImage'] ?? '',
-      orderedDate: DateTime.fromMillisecondsSinceEpoch(map['orderedDate']),
+      orderedDate: map['orderedDate'] ?? DateTime.now().toString(),
       quantity: map['quantity']?.toInt() ?? 0,
       amount: map['amount']?.toDouble() ?? 0.0,
       // address: map['address'] ?? '',
       orderStatus: map['orderStatus'] ?? '',
-      paymentInfo: Payment.fromMap(
-        map['paymentInfo'],
-        FirebaseAuth.instance.currentUser!,
-      ),
+      // paymentInfo: Payment.fromMap(
+      //   map['paymentInfo'],
+      //   FirebaseAuth.instance.currentUser!,
+      // ),
     );
   }
 

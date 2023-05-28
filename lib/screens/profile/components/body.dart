@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/screens/profile/components/my_account.dart';
 import 'package:soni_store_app/screens/profile/settings.dart';
-import 'package:soni_store_app/screens/splash/splash_screen.dart';
 
-import '../../../providers/providers.dart';
+import '../../../resources/services/auth/auth_service.dart';
 import '../help_center.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -30,6 +29,8 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 20),
       children: [
@@ -83,18 +84,20 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                 ProfileMenu(
                   text: "Log Out",
                   icon: "assets/icons/Log out.svg",
-                  press: () async {
-                    AuthProvider authProvider =
-                        Provider.of<AuthProvider>(context, listen: false);
-                    await authProvider.signOut();
+                  // press: () async {
+                  //   AuthProvider authProvider =
+                  //       Provider.of<AuthProvider>(context, listen: false);
+                  //   await authProvider.signOut();
 
-                    if (!mounted) return;
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => const SplashScreen(),
-                      ),
-                      (route) => false,
-                    );
+                  //   if (!mounted) return;
+                  //   Navigator.of(context).pushAndRemoveUntil(
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const SplashScreen()),
+                  //     (route) => false,
+                  //   );
+                  // },
+                  press: () async {
+                    await authService.signOut();
                   },
                 ),
               ],

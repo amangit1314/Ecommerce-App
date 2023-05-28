@@ -5,9 +5,7 @@ import '../../../../utils/size_config.dart';
 import '../../../splash/comonents/dot_indicator.dart';
 
 class DiscountBanner extends StatefulWidget {
-  const DiscountBanner({
-    Key? key,
-  }) : super(key: key);
+  const DiscountBanner({Key? key}) : super(key: key);
 
   @override
   State<DiscountBanner> createState() => _DiscountBannerState();
@@ -46,99 +44,92 @@ class _DiscountBannerState extends State<DiscountBanner> {
                       Colors.black.withOpacity(0.3),
                       BlendMode.darken,
                     ),
-                    // opacity: .5,
                   ),
                 ),
-                child: Flexible(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: getProportionateScreenWidth(270),
-                        margin: EdgeInsets.only(
-                          left: getProportionateScreenWidth(5),
-                          top: getProportionateScreenHeight(15),
-                          bottom: getProportionateScreenHeight(15),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: getProportionateScreenWidth(20),
-                          vertical: getProportionateScreenWidth(15),
-                        ),
-                        decoration: const BoxDecoration(
-                          // color: const Color(0xFF4A3298),
-                          color: Colors.transparent,
-                          // borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade400,
-                              ),
-                              child: Text(
-                                "Summer Surpise".toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: getProportionateScreenHeight(10),
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black,
-                                ),
-                              ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: getProportionateScreenWidth(270),
+                      margin: EdgeInsets.only(
+                        left: getProportionateScreenWidth(5),
+                        top: getProportionateScreenHeight(15),
+                        bottom: getProportionateScreenHeight(15),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenWidth(20),
+                        vertical: getProportionateScreenWidth(15),
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade400,
                             ),
-                            SizedBox(height: getProportionateScreenHeight(7)),
-                            Text(
-                              "Summer".toUpperCase(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    height: 1.5,
-                                    fontSize: getProportionateScreenWidth(26),
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                            ),
-                            Text(
-                              "Sale".toUpperCase(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    height: 1,
-                                    fontSize: getProportionateScreenWidth(26),
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                            ),
-                            SizedBox(height: getProportionateScreenHeight(7)),
-                            Text(
-                              "up to 20% off".toUpperCase(),
+                            child: Text(
+                              "Summer Surpise".toUpperCase(),
                               style: TextStyle(
                                 fontSize: getProportionateScreenHeight(10),
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
                               ),
                             ),
-                          ],
+                          ),
+                          SizedBox(height: getProportionateScreenHeight(7)),
+                          Text(
+                            "Summer".toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  height: 1.5,
+                                  fontSize: getProportionateScreenWidth(26),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                          ),
+                          Text(
+                            "Sale".toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  height: 1,
+                                  fontSize: getProportionateScreenWidth(26),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                          ),
+                          SizedBox(height: getProportionateScreenHeight(7)),
+                          Text(
+                            "up to 20% off".toUpperCase(),
+                            style: TextStyle(
+                              fontSize: getProportionateScreenHeight(10),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        margin: EdgeInsets.all(getProportionateScreenWidth(10)),
+                        child: Image.asset(
+                          shoes[index],
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      Flexible(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          margin:
-                              EdgeInsets.all(getProportionateScreenWidth(10)),
-                          child: Image.asset(
-                            // "assets/images/shoes2.png",
-                            shoes[index],
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             },

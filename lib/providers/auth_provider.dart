@@ -1,32 +1,74 @@
+import 'dart:core';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:soni_store_app/models/models.dart' as models;
+import 'package:soni_store_app/models/user.dart' as models;
+
+import '../models/address.dart';
 
 class AuthProvider with ChangeNotifier {
-  models.User _user = models.User(email: 'default@gmail.com', uid: '');
+  models.User _user = models.User(uid: '', email: '');
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   models.User get user => _user;
 
+  String _uid = '';
+  String get uid => _uid;
+
+  String _email = '';
+  String get email => _email;
+
+  String _username = '';
+  String get username => _username;
+
+  final String _profileImage =
+      'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
+  String get profileImage => _profileImage;
+
+  List<Address?>? _addresses = [];
+  List<Address?>? get addresses => _addresses;
+
+  Address? _selectedAddress;
+  Address? get selectedAddress => _selectedAddress;
+
   Future<void> refreshUser() async {
     try {
-      models.User user = await _getUserDetails();
-      _user = models.User(
-        uid: user.uid,
-        email: user.email,
-        username: user.username,
-        profImage: user.profImage,
-        number: user.number,
-      );
+      models.User user = await getUserDetails();
+      _user = user;
+      _uid = user.uid;
+      _email = user.email;
+      _username = user.username ?? user.email.split('@')[0];
+      _addresses = user.addresses;
     } catch (error) {
-      _user = models.User(email: 'default@gmail.com', uid: '');
+      Get.snackbar(
+        'User Logged Out',
+        'User is currently logged out',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+      );
     }
     notifyListeners();
+  }
+
+  Future<models.User> getUserDetails() async {
+    User? currentUser = _auth.currentUser;
+    final DocumentSnapshot<Map<String, dynamic>> snap =
+        await _firestore.collection('users').doc(currentUser!.uid).get();
+    return models.User.fromMap(snap);
+  }
+
+  Future<void> updateUserField(String uid, String field, dynamic value) async {
+    try {
+      await _firestore.collection('users').doc(uid).update({field: value});
+      refreshUser();
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<String> registerUser({
@@ -85,7 +127,7 @@ class AuthProvider with ChangeNotifier {
           email: email,
           password: password,
         );
-        _user = await _getUserDetails();
+        _user = await getUserDetails();
         notifyListeners();
         res = 'success';
       } else {
@@ -118,7 +160,7 @@ class AuthProvider with ChangeNotifier {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
 
-      _user = await _getUserDetails();
+      _user = await getUserDetails();
       notifyListeners();
       return userCredential;
     } catch (error) {
@@ -129,17 +171,30 @@ class AuthProvider with ChangeNotifier {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-      _user = models.User(email: 'default@gmail.com', uid: '');
       notifyListeners();
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<models.User> _getUserDetails() async {
+  Future<void> setAddress(Address address, String uid) async {
     User? currentUser = _auth.currentUser;
-    final DocumentSnapshot<Map<String, dynamic>> snap =
-        await _firestore.collection('users').doc(currentUser!.uid).get();
-    return models.User.fromMap(snap);
+    if (currentUser == null) {
+      throw Exception('User is Empty');
+    }
+
+    _addresses!.add(address);
+
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .update({'addresses': _addresses});
+
+    refreshUser();
+  }
+
+  void setSelectedAddress(Address address) {
+    _selectedAddress = address;
+    notifyListeners();
   }
 }
