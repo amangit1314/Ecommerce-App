@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:soni_store_app/models/address.dart';
 
 import '../../../components/default_button.dart';
 import '../../../providers/user_provider.dart';
+import '../../../providers/user_provider_try.dart';
 import '../../../utils/size_config.dart';
 
 class AddShippingAddress extends StatefulWidget {
@@ -18,6 +21,9 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController addressTypeController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController pinCodeController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   final List<String> errors = [];
 
@@ -43,24 +49,22 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
     addressController.dispose();
     addressTypeController.dispose();
     phoneController.dispose();
+    pinCodeController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // form key
-    final formKey = GlobalKey<FormState>();
+    final address = context.watch<UserProviderTry>().user;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
-            // bold text  middle (Add new Address)
             Container(
               margin: const EdgeInsets.only(top: 15, right: 15, left: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // ios back btn with navigator.pop
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
@@ -91,88 +95,123 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                 ],
               ),
             ),
-
-            Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 25, right: 15, left: 15),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey.shade200,
-                    ),
-                    child: TextFormField(
-                      controller: addressTypeController,
-                      style:
-                          TextStyle(fontSize: getProportionateScreenWidth(12)),
-                      decoration: InputDecoration(
-                        hintText: 'Enter address type',
-                        border: InputBorder.none,
-                        // prefix ixon font awesome type
-                        suffixIcon: const Icon(
-                          FontAwesomeIcons.houseCircleCheck,
-                          size: 16,
+            Column(
+              children: [
+                Text(address.toString()),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  child: Text('OR'),
+                ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin:
+                            const EdgeInsets.only(top: 25, right: 15, left: 15),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey.shade200,
                         ),
-                        hintStyle: TextStyle(
-                            fontSize: getProportionateScreenWidth(12)),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 15, right: 15, left: 15),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey.shade200,
-                    ),
-                    child: TextFormField(
-                      controller: addressController,
-                      style:
-                          TextStyle(fontSize: getProportionateScreenWidth(12)),
-                      decoration: InputDecoration(
-                        hintText: 'Enter your address',
-                        border: InputBorder.none,
-                        suffixIcon: const Icon(
-                          FontAwesomeIcons.addressBook,
-                          size: 16,
+                        child: TextFormField(
+                          controller: addressTypeController,
+                          style: TextStyle(
+                              fontSize: getProportionateScreenWidth(12)),
+                          decoration: InputDecoration(
+                            hintText: 'Enter address type',
+                            border: InputBorder.none,
+                            suffixIcon: const Icon(
+                              FontAwesomeIcons.houseCircleCheck,
+                              size: 16,
+                            ),
+                            hintStyle: TextStyle(
+                                fontSize: getProportionateScreenWidth(12)),
+                          ),
                         ),
-                        hintStyle: TextStyle(
-                            fontSize: getProportionateScreenWidth(12)),
                       ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 15, right: 15, left: 15),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey.shade200,
-                    ),
-                    child: TextFormField(
-                      controller: phoneController,
-                      style:
-                          TextStyle(fontSize: getProportionateScreenWidth(12)),
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your phone number',
-                        border: InputBorder.none,
-                        suffixIcon: const Icon(
-                          FontAwesomeIcons.phone,
-                          size: 16,
+                      Container(
+                        margin:
+                            const EdgeInsets.only(top: 15, right: 15, left: 15),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey.shade200,
                         ),
-                        hintStyle: TextStyle(
-                            fontSize: getProportionateScreenWidth(12)),
+                        child: TextFormField(
+                          controller: addressController,
+                          style: TextStyle(
+                              fontSize: getProportionateScreenWidth(12)),
+                          decoration: InputDecoration(
+                            hintText: 'Enter your address',
+                            border: InputBorder.none,
+                            suffixIcon: const Icon(
+                              FontAwesomeIcons.addressBook,
+                              size: 16,
+                            ),
+                            hintStyle: TextStyle(
+                                fontSize: getProportionateScreenWidth(12)),
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        margin:
+                            const EdgeInsets.only(top: 15, right: 15, left: 15),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey.shade200,
+                        ),
+                        child: TextFormField(
+                          controller: phoneController,
+                          style: TextStyle(
+                              fontSize: getProportionateScreenWidth(12)),
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your phone number',
+                            border: InputBorder.none,
+                            suffixIcon: const Icon(
+                              FontAwesomeIcons.phone,
+                              size: 16,
+                            ),
+                            hintStyle: TextStyle(
+                                fontSize: getProportionateScreenWidth(12)),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin:
+                            const EdgeInsets.only(top: 15, right: 15, left: 15),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey.shade200,
+                        ),
+                        child: TextFormField(
+                          controller: pinCodeController,
+                          style: TextStyle(
+                            fontSize: getProportionateScreenWidth(12),
+                          ),
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your pin code',
+                            border: InputBorder.none,
+                            suffixIcon: const Icon(
+                              FontAwesomeIcons.locationPin,
+                              size: 16,
+                            ),
+                            hintStyle: TextStyle(
+                              fontSize: getProportionateScreenWidth(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-
-            // default button to submit and add address to users collections address field using user provider
             Container(
               margin: const EdgeInsets.only(top: 15, right: 15, left: 15),
               child: DefaultButton(
@@ -180,29 +219,40 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                 txtColor: Colors.white,
                 press: () {
                   final userProvider = context.read<UserProvider>();
+                  final userProviderTry = context.read<UserProviderTry>();
 
-                  const address = Address(
-                    address: '',
-                    addressType: 'User Address',
-                    phone: '+91 9649477393',
-                    pincode: '331001',
+                  final address = Address(
+                    address: addressController.text,
+                    addressType: addressTypeController.text,
+                    phone: phoneController.text,
+                    pincode: pinCodeController.text,
                   );
 
-                  if (formKey.currentState!.validate()) {
-                    formKey.currentState!.save();
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
 
-                    userProvider
-                        .addAddress(userProvider.uid, address)
-                        .then((_) {
-                      Navigator.pop(context);
-                    }).catchError((error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(error.toString()),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    });
+                    if (userProviderTry.uid != '') {
+                      // userProvider
+                      //     .addAddress(userProvider.uid, address)
+                      //     .then((_) {
+                      //   Navigator.pop(context);
+                      // }).catchError((error) {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(
+                      //       content: Text(error.toString()),
+                      //       backgroundColor: Colors.red,
+                      //     ),
+                      //   );
+                      // });
+
+                      // log(userProvider.uid);
+                      // userProviderTry.setAddress(address, userProvider.uid);
+
+                      log(userProviderTry.uid);
+                      userProviderTry.setAddress(address, userProviderTry.uid);
+                    }
+
+                    log(userProvider.uid);
                   }
                 },
               ),

@@ -9,60 +9,60 @@ import '../../cart/cart_screen.dart';
 import '../../notification/notification_screen.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({
-    Key? key,
-  }) : super(key: key);
+  const HomeHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-      child: Consumer<CartProvider>(builder: (context, cartProvider, _) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "SnapCart",
-              style: TextStyle(
-                fontSize: getProportionateScreenWidth(18),
-                color: kPrimaryColor,
-                fontWeight: FontWeight.bold,
+      child: Consumer<CartProvider>(
+        builder: (context, cartProvider, _) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "SnapCart",
+                style: TextStyle(
+                  fontSize: getProportionateScreenWidth(18),
+                  color: kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconBtnWithCounter(
-                  svgSrc: "assets/icons/Bell.svg",
-                  numOfitem: 1,
-                  press: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) {
-                        return const NotificationScreen();
-                      },
-                    ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconBtnWithCounter(
+                    svgSrc: "assets/icons/Bell.svg",
+                    numOfitem: 1,
+                    press: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const NotificationScreen(),
+                        ),
+                      );
+                    },
                   ),
-                ),
-                SizedBox(width: getProportionateScreenWidth(8)),
-                IconBtnWithCounter(
-                  svgSrc: "assets/icons/Cart Icon.svg",
-                  numOfitem: cartProvider.length,
-                  press: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) {
-                        return const CartScreen();
-                      },
-                    ),
+                  SizedBox(width: getProportionateScreenWidth(8)),
+                  IconBtnWithCounter(
+                    svgSrc: "assets/icons/Cart Icon.svg",
+                    numOfitem: cartProvider.length,
+                    press: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CartScreen(),
+                        ),
+                      );
+                    },
                   ),
-                ),
-              ],
-            ),
-          ],
-        );
-      }),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

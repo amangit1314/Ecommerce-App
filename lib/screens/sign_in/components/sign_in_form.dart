@@ -8,6 +8,7 @@ import 'package:soni_store_app/screens/login_success/login_success_screen.dart';
 
 import '../../../components/default_button.dart';
 import '../../../providers/providers.dart';
+import '../../../resources/services/auth/auth_service.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
@@ -42,10 +43,9 @@ class _SignFormState extends State<SignForm> {
     }
   }
 
-  Future<void> loginUser() async {
+  Future<void> loginUser(AuthProvider authProvider) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final result = await authProvider.authenticateUser(
         email: emailController.text,
         password: passwordController.text,
@@ -54,7 +54,7 @@ class _SignFormState extends State<SignForm> {
         Get.snackbar(
           'Authentication Successful',
           'Authentication is successful 🥳🎉',
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
         if (!mounted) return;
@@ -75,6 +75,8 @@ class _SignFormState extends State<SignForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -117,17 +119,27 @@ class _SignFormState extends State<SignForm> {
           ),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
-          Container(
-            height: 55,
-            decoration: BoxDecoration(
-              color: Colors.orange,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: DefaultButton(
-              txtColor: Colors.white,
-              text: "Continue",
-              press: loginUser,
-            ),
+          Consumer<AuthProvider>(
+            builder: (context, authProvider, _) {
+              return Container(
+                height: 55,
+                decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: DefaultButton(
+                  txtColor: Colors.white,
+                  text: "Continue",
+                  // press: () => loginUser(authProvider),
+                  press: () {
+                    authService.signInWithEmailAndPassword(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),

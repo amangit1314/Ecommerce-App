@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/components/custom_surfix_icon.dart';
+import 'package:soni_store_app/models/models.dart' as models;
 import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
-import '../../../providers/providers.dart';
+import '../../../providers/user_provider_try.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
@@ -43,42 +46,47 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  Future register() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
+  void _register(BuildContext context) async {
+    final form = _formKey.currentState;
+    if (form!.validate()) {
+      form.save();
 
       try {
-        String uid = await authProvider.registerUser(
+        final userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
-          username: emailController.text.substring(0, 5),
         );
 
-        if (uid.isNotEmpty) {
-          await userProvider.refreshUser(); // Refresh the user information
+        if (emailController.text.isNotEmpty &&
+            passwordController.text.isNotEmpty &&
+            passwordController.text == confirmPasswordController.text) {
+          models.User user = models.User(
+            email: userCredential.user!.email!,
+            username: userCredential.user!.email!.substring(0, 6),
+            uid: userCredential.user!.uid,
+          );
 
-          const GetSnackBar(
-            message: 'User registered successfully 🎉',
-            backgroundColor: Colors.greenAccent,
-          );
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .set(user.toMap(), SetOptions(merge: true));
+
           if (!mounted) return;
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const SignInScreen(),
-            ),
-          );
-        } else {
-          const GetSnackBar(
-            message: 'User registration unsuccessful ❌',
-            backgroundColor: Colors.redAccent,
+          Provider.of<UserProviderTry>(context, listen: false).setUser(user);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const SignInScreen()),
           );
         }
-      } catch (error) {
-        GetSnackBar(
-          message: error.toString(),
+
+        const GetSnackBar(
+          message: 'Email and Password is required ❗',
+          backgroundColor: Colors.redAccent,
+        );
+      } catch (e) {
+        const GetSnackBar(
+          message: 'Registeration error ❌',
           backgroundColor: Colors.redAccent,
         );
       }
@@ -107,7 +115,7 @@ class _SignUpFormState extends State<SignUpForm> {
             child: DefaultButton(
               txtColor: Colors.white,
               text: "Continue",
-              press: register,
+              press: () => _register(context),
             ),
           ),
         ],

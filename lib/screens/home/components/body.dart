@@ -20,6 +20,7 @@ class Body extends StatelessWidget {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(height: getProportionateScreenHeight(10)),
             const HomeHeader(),

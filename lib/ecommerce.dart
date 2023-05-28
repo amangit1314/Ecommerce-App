@@ -1,11 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
-import 'package:soni_store_app/screens/home/home_screen.dart';
-import 'package:soni_store_app/screens/splash/splash_screen.dart';
+import 'package:soni_store_app/providers/user_provider_try.dart';
+import 'package:soni_store_app/resources/services/auth/auth_service.dart';
+import 'package:soni_store_app/wrapper.dart';
 
 import 'helper/locator.dart';
 
@@ -21,6 +21,7 @@ class _EcommerceAppState extends State<EcommerceApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<AuthService>(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => locator<UserProvider>()),
         ChangeNotifierProvider(create: (_) => locator<AuthProvider>()),
         ChangeNotifierProvider(create: (_) => locator<ProductProvider>()),
@@ -29,6 +30,7 @@ class _EcommerceAppState extends State<EcommerceApp> {
         ChangeNotifierProvider(create: (_) => locator<OrderProvider>()),
         ChangeNotifierProvider(create: (_) => locator<PaymentProvider>()),
         ChangeNotifierProvider(create: (_) => locator<ProfileProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<UserProviderTry>()),
       ],
       child: GetMaterialApp(
         title: 'SnapCart Ecommerce App',
@@ -37,21 +39,22 @@ class _EcommerceAppState extends State<EcommerceApp> {
           textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
           primarySwatch: Colors.deepOrange,
         ),
-        home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
-                return const HomeScreen();
-              }
-              return const SplashScreen();
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return const SplashScreen();
-          },
-        ),
+        home: const Wrapper(),
+        // home: StreamBuilder(
+        //   stream: FirebaseAuth.instance.authStateChanges(),
+        //   builder: (BuildContext context, snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.active) {
+        //       if (snapshot.hasData) {
+        //         return const HomeScreen();
+        //       }
+        //       return const SplashScreen();
+        //     }
+        //     if (snapshot.connectionState == ConnectionState.waiting) {
+        //       return const Center(child: CircularProgressIndicator());
+        //     }
+        //     return const SplashScreen();
+        //   },
+        // ),
       ),
     );
   }

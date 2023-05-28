@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:soni_store_app/models/payment.dart';
-
 class Order {
   final String orderId;
   final String? uid;
@@ -13,7 +10,7 @@ class Order {
   final double amount;
   // final String address;
   final String orderStatus;
-  final Payment? paymentInfo;
+  // final Payment? paymentInfo;
 
   Order({
     required this.orderId,
@@ -25,7 +22,7 @@ class Order {
     required this.amount,
     // required this.address,
     required this.orderStatus,
-    this.paymentInfo,
+    // this.paymentInfo,
   });
 
   Map<String, dynamic> toMap() {
@@ -39,7 +36,7 @@ class Order {
       'amount': amount,
       // 'address': address,
       'orderStatus': orderStatus,
-      'paymentInfo': paymentInfo!.toMap(),
+      // 'paymentInfo': paymentInfo!.toMap(),
     };
   }
 
@@ -54,10 +51,10 @@ class Order {
       amount: map['amount']?.toDouble() ?? 0.0,
       // address: map['address'] ?? '',
       orderStatus: map['orderStatus'] ?? '',
-      paymentInfo: Payment.fromMap(
-        map['paymentInfo'],
-        FirebaseAuth.instance.currentUser!,
-      ),
+      // paymentInfo: Payment.fromMap(
+      //   map['paymentInfo'],
+      //   FirebaseAuth.instance.currentUser!,
+      // ),
     );
   }
 

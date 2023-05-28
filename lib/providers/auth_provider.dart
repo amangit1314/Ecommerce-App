@@ -1,9 +1,13 @@
+import 'dart:core';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:soni_store_app/models/models.dart' as models;
+import 'package:soni_store_app/models/user.dart' as models;
+
+import '../models/address.dart';
 
 class AuthProvider with ChangeNotifier {
   models.User _user = models.User(uid: '', email: '');
@@ -13,19 +17,58 @@ class AuthProvider with ChangeNotifier {
 
   models.User get user => _user;
 
+  String _uid = '';
+  String get uid => _uid;
+
+  String _email = '';
+  String get email => _email;
+
+  String _username = '';
+  String get username => _username;
+
+  final String _profileImage =
+      'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
+  String get profileImage => _profileImage;
+
+  List<Address?>? _addresses = [];
+  List<Address?>? get addresses => _addresses;
+
+  Address? _selectedAddress;
+  Address? get selectedAddress => _selectedAddress;
+
   Future<void> refreshUser() async {
     try {
       models.User user = await getUserDetails();
       _user = user;
+      _uid = user.uid;
+      _email = user.email;
+      _username = user.username ?? user.email.split('@')[0];
+      _addresses = user.addresses;
     } catch (error) {
-      const GetSnackBar(
-        title: 'User LogedOut',
-        message: 'User is currently loged out',
+      Get.snackbar(
+        'User Logged Out',
+        'User is currently logged out',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
       );
     }
     notifyListeners();
+  }
+
+  Future<models.User> getUserDetails() async {
+    User? currentUser = _auth.currentUser;
+    final DocumentSnapshot<Map<String, dynamic>> snap =
+        await _firestore.collection('users').doc(currentUser!.uid).get();
+    return models.User.fromMap(snap);
+  }
+
+  Future<void> updateUserField(String uid, String field, dynamic value) async {
+    try {
+      await _firestore.collection('users').doc(uid).update({field: value});
+      refreshUser();
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<String> registerUser({
@@ -134,10 +177,24 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<models.User> getUserDetails() async {
+  Future<void> setAddress(Address address, String uid) async {
     User? currentUser = _auth.currentUser;
-    final DocumentSnapshot<Map<String, dynamic>> snap =
-        await _firestore.collection('users').doc(currentUser!.uid).get();
-    return models.User.fromMap(snap);
+    if (currentUser == null) {
+      throw Exception('User is Empty');
+    }
+
+    _addresses!.add(address);
+
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .update({'addresses': _addresses});
+
+    refreshUser();
+  }
+
+  void setSelectedAddress(Address address) {
+    _selectedAddress = address;
+    notifyListeners();
   }
 }

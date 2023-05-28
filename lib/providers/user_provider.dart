@@ -7,7 +7,7 @@ import 'package:soni_store_app/providers/auth_provider.dart';
 import '../models/address.dart';
 
 class UserProvider with ChangeNotifier {
-  late models.User _currentUser;
+  models.User _currentUser = models.User(email: '', uid: '');
   late String _username;
   late String _email;
   late String _profileImage;
@@ -67,7 +67,7 @@ class UserProvider with ChangeNotifier {
 
   final AuthProvider _authDataProvider = AuthProvider();
 
-  models.User get user => _authDataProvider.user!;
+  models.User get user => _authDataProvider.user;
 
   Future<void> refreshUser() async {
     await _authDataProvider.refreshUser();
