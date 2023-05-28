@@ -55,21 +55,26 @@ flutter:
     - assets/images/1.jpg
     - assets/images/2.jpg
     - assets/images/3.jpg
+    - assets/images/sneakers.jpg
+    - assets/images/shoes2.png
     - assets/images/4.jpg
-    - assets/images/ringing_bell.png
-    - assets/images/shopping.png
+    - assets/images/sneak_pink.jpg
+    - assets/ringing_bell.png
+    - assets/shopping.png
     - assets/delivery.png
-  # fonts:
-  #   - family: Muli
-  #     fonts:
-  #       - asset: assets/fonts/muli/Muli-Light.ttf
-  #       - asset: assets/fonts/muli/Muli.ttf
-  #       - asset: assets/fonts/muli/Muli-SemiBold.ttf
-  #       - asset: assets/fonts/muli/Muli-Bold.ttf
-  # - family: Poppins
-  #   fonts:
-  #     - asset: assets/fonts/Roboto-Regular.ttf
-  #     - asset: assets/fonts/Roboto-Medium.ttf
-  #     - asset: assets/fonts/Roboto-SemiBold.ttf
-  #     - asset: assets/fonts/Roboto-Bold.ttf
-  #     - asset: assets/fonts/Roboto-ExtraBold.ttf
+    - assets/images/basket.jpg
+    - assets/images/vegies.jpg
+    - assets/images/bill.jpg
+    - assets/images/shop_girl.jpg
+    - assets/images/grains2.jpg
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Light.ttf
+        - asset: assets/fonts/Poppins/Poppins-Thin.ttf
+        - asset: assets/fonts/Poppins/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
+        - asset: assets/fonts/Poppins/Poppins-Bold.ttf
+        - asset: assets/fonts/Poppins/Poppins-ExtraBold.ttf

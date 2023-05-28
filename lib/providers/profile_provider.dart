@@ -1,16 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:soni_store_app/resources/firestore_methods.dart';
+import 'package:soni_store_app/resources/services/firebase/firestore_methods.dart';
 
 class ProfileProvider with ChangeNotifier {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
-
-  final FocusNode nameFocusNode = FocusNode();
-  final FocusNode emailFocusNode = FocusNode();
-  final FocusNode numberFocusNode = FocusNode();
 
   bool loading = false;
 
@@ -107,9 +103,6 @@ class ProfileProvider with ChangeNotifier {
     _nameController.dispose();
     _emailController.dispose();
     _numberController.dispose();
-    nameFocusNode.dispose();
-    emailFocusNode.dispose();
-    numberFocusNode.dispose();
     super.dispose();
   }
 }
