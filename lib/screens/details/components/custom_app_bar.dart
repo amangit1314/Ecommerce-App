@@ -14,7 +14,8 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
+      child: Container(
+        color: Colors.grey,
         padding:
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child: Row(

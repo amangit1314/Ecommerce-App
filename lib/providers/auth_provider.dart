@@ -26,7 +26,7 @@ class AuthProvider with ChangeNotifier {
   String _username = '';
   String get username => _username;
 
-  final String _profileImage =
+  String _profileImage =
       'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
   String get profileImage => _profileImage;
 
@@ -44,6 +44,8 @@ class AuthProvider with ChangeNotifier {
       _email = user.email;
       _username = user.username ?? user.email.split('@')[0];
       _addresses = user.addresses;
+      _profileImage = user.profImage ??
+          'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
     } catch (error) {
       Get.snackbar(
         'User Logged Out',

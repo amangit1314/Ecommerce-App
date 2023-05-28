@@ -203,7 +203,7 @@ class CategoryCard extends StatelessWidget {
                   text!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     color:
                         bgColor != kPrimaryColor ? kPrimaryColor : Colors.white,
                     fontWeight: FontWeight.bold,

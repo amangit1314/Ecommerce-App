@@ -137,69 +137,67 @@ class _ProductImagesFirebaseState extends State<ProductImagesFirebase> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              SizedBox(
-                width: width,
-                child: Center(
-                  child: Hero(
-                    tag: widget.product.id.toString(),
-                    child: Center(
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: _productsStream,
-                        builder: (
-                          context,
-                          AsyncSnapshot<QuerySnapshot> snapshot,
-                        ) {
-                          if (snapshot.hasData) {
-                            return Container(
-                              height: 300,
-                              width: width,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    widget.product.images[selectedImage],
-                                  ),
-                                  fit: BoxFit.cover,
+    return Column(
+      children: [
+        Stack(
+          children: [
+            SizedBox(
+              width: width,
+              child: Center(
+                child: Hero(
+                  tag: widget.product.id.toString(),
+                  child: Center(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: _productsStream,
+                      builder: (
+                        context,
+                        AsyncSnapshot<QuerySnapshot> snapshot,
+                      ) {
+                        if (snapshot.hasData) {
+                          return Container(
+                            height: 300,
+                            width: width,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  widget.product.images[selectedImage],
                                 ),
+                                fit: BoxFit.cover,
                               ),
-                            );
-                          } else {
-                            return const CircularProgressIndicator();
-                          }
-                        },
-                      ),
+                            ),
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
                     ),
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ...List.generate(
-                          widget.product.images.length,
-                          (index) => buildSmallProductPreview(index),
-                        ),
-                      ],
-                    ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 12,
                   ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ...List.generate(
+                        widget.product.images.length,
+                        (index) => buildSmallProductPreview(index),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 

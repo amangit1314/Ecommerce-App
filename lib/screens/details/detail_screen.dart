@@ -19,7 +19,7 @@ class DetailsScreenFirebase extends StatelessWidget {
           rating: product.rating,
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       body: DetailFirebaseBody(product: product),
     );
   }

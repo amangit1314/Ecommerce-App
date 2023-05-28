@@ -35,7 +35,7 @@ class FeaturesSection extends StatelessWidget {
                         topLeft: Radius.circular(15),
                       ),
                       image: const DecorationImage(
-                        image: AssetImage('assets/images/tshirt_w.jpg'),
+                        image: AssetImage('assets/images/shoes2.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -50,7 +50,7 @@ class FeaturesSection extends StatelessWidget {
                         topRight: Radius.circular(15),
                       ),
                       image: const DecorationImage(
-                        image: AssetImage('assets/images/images.jpg'),
+                        image: AssetImage('assets/images/1.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
