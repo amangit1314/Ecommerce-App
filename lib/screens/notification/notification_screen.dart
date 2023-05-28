@@ -98,7 +98,7 @@ class NotificationsDisabledVIew extends StatelessWidget {
           ),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/ringing_bell.png'),
+              image: AssetImage('assets/ringing_bell.png'),
               fit: BoxFit.cover,
             ),
           ),
