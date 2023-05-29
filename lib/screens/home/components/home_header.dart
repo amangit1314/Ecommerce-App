@@ -26,7 +26,7 @@ class HomeHeader extends StatelessWidget {
                 style: TextStyle(
                   fontSize: getProportionateScreenWidth(18),
                   color: kPrimaryColor,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               Row(
@@ -47,7 +47,7 @@ class HomeHeader extends StatelessWidget {
                   SizedBox(width: getProportionateScreenWidth(8)),
                   IconBtnWithCounter(
                     svgSrc: "assets/icons/Cart Icon.svg",
-                    numOfitem: cartProvider.length,
+                    numOfitem: cartProvider.cartItems.length,
                     press: () {
                       Navigator.push(
                         context,

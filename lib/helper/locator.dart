@@ -11,7 +11,8 @@ void setupLocator() {
   locator.registerLazySingleton(() => AuthProvider());
   locator.registerLazySingleton(() => UserProvider());
   locator.registerLazySingleton(() => OrderProvider());
-  locator.registerLazySingleton(() => CartProvider());
+  locator.registerLazySingleton(
+      () => CartProvider(locator<AuthProvider>().user.uid));
   locator.registerLazySingleton(() => ProductProvider());
   locator.registerLazySingleton(() => CategoryProvider());
   locator.registerLazySingleton(() => ProfileProvider());
