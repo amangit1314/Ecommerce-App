@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../models/product.dart';
 import '../../utils/constants.dart';
 import '../details/detail_screen.dart';
-import '../home/components/popular/popular_product.dart';
 
 class ShowMore extends StatefulWidget {
   const ShowMore({Key? key}) : super(key: key);
@@ -60,18 +59,19 @@ class _ShowMoreState extends State<ShowMore> {
                 final List<Product> products = snapshot.data ?? [];
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: products.length,
-                      itemBuilder: (context, index) {
-                        return const LoadingShimmerSkelton();
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(width: 8);
-                      },
-                    ),
-                  );
+                  // return Center(
+                  //   child: ListView.separated(
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemCount: products.length,
+                  //     itemBuilder: (context, index) {
+                  //       return const LoadingShimmerSkelton();
+                  //     },
+                  //     separatorBuilder: (context, index) {
+                  //       return const SizedBox(width: 8);
+                  //     },
+                  //   ),
+                  // );
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 if (snapshot.hasError) {

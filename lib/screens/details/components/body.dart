@@ -9,6 +9,7 @@ import 'package:soni_store_app/screens/details/similarProducts/similar_products.
 import '../../../models/product.dart';
 import '../../../utils/size_config.dart';
 import 'buy_now_button.dart';
+import 'custom_app_bar.dart';
 
 class DetailFirebaseBody extends StatefulWidget {
   const DetailFirebaseBody({
@@ -49,25 +50,44 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
       children: [
         ListView(
           children: [
-            ProductImagesFirebase(product: widget.product),
-            TopRoundedContainer(
-              color: Colors.white,
+            Stack(
+              children: [
+                Stack(
+                  children: [
+                    ProductImagesFirebase(product: widget.product),
+                    CustomAppBar(
+                      rating: widget.product.rating,
+                      color: Colors.transparent,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SingleChildScrollView(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ProductDescription(
-                    product: widget.product,
-                    pressOnSeeMore: () {},
+                  TopRoundedContainer(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ProductDescription(
+                          product: widget.product,
+                          pressOnSeeMore: () {},
+                        ),
+                        RatingTile(
+                          rating: widget.product.rating.toString(),
+                        ),
+                        ReviewsSheet(
+                          bottomSheetAnimationController:
+                              bottomSheetAnimationController,
+                          product: widget.product,
+                          image: widget.product.images.first,
+                        ),
+                        SimilarProducts(widget: widget),
+                      ],
+                    ),
                   ),
-                  RatingTile(
-                    rating: widget.product.rating.toString(),
-                  ),
-                  ReviewsSheet(
-                    bottomSheetAnimationController:
-                        bottomSheetAnimationController,
-                    product: widget.product,
-                    image: widget.product.images.first,
-                  ),
-                  SimilarProducts(widget: widget),
                 ],
               ),
             ),

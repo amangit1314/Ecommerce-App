@@ -1,17 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/section_tile.dart';
-import '../../../utils/constatns.dart';
+import '../../../models/product.dart';
 import '../../../utils/size_config.dart';
+import '../../home/components/popular/popular_product.dart';
 import '../../showMore/show_more_screen.dart';
 import '../components/body.dart';
 
-class SimilarProducts extends StatelessWidget {
+class SimilarProducts extends StatefulWidget {
   const SimilarProducts({
-    super.key,
+    Key? key,
     required this.widget,
-  });
+  }) : super(key: key);
+
   final DetailFirebaseBody widget;
+
+  @override
+  State<SimilarProducts> createState() => _SimilarProductsState();
+}
+
+class _SimilarProductsState extends State<SimilarProducts> {
+  final CollectionReference _refProducts =
+      FirebaseFirestore.instance.collection('products');
+
+  Future<List<Product>> fetchProductsFromFirestore() async {
+    final List<Product> products = [];
+    final QuerySnapshot snapshot = await _refProducts
+        .where(
+          'categories',
+          arrayContains: widget.widget.product.categories.first,
+        )
+        .get();
+    for (var element in snapshot.docs) {
+      products.add(Product.fromMap(element.data() as Map<String, dynamic>));
+    }
+    return products;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,27 +62,46 @@ class SimilarProducts extends StatelessWidget {
         Container(
           height: 250,
           padding: const EdgeInsets.only(left: 20.0),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 3,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                child: Container(
-                  width: 170,
-                  margin: const EdgeInsets.only(right: 10),
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                    left: 8,
-                    right: 8,
+          child: FutureBuilder<List<Product>>(
+            future: fetchProductsFromFirestore(),
+            builder: (context, snapshot) {
+              final List<Product> products = snapshot.data ?? [];
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      return const LoadingShimmerSkelton();
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 8);
+                    },
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: kPrimaryColor.withOpacity(.2),
-                    ),
-                  ),
-                ),
+                );
+              }
+
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Something went wrong'),
+                );
+              }
+
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: products.length < 5 ? products.length : 5,
+                itemBuilder: (context, index) {
+                  return FashionsCard(
+                    image: products[index].images.isNotEmpty
+                        ? products[index].images[0]
+                        : '',
+                    product: products[index],
+                    category: products[index].categories.isNotEmpty
+                        ? products[index].categories[0]
+                        : '',
+                  );
+                },
               );
             },
           ),

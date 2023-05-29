@@ -22,7 +22,7 @@ class SplashContent extends StatelessWidget {
           style: TextStyle(
             fontSize: getProportionateScreenWidth(36),
             color: kPrimaryColor,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 15),
@@ -30,7 +30,7 @@ class SplashContent extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
         ),
-        const Spacer(flex: 2),
+        const Spacer(),
         Image.asset(
           image,
           height: getProportionateScreenHeight(265),

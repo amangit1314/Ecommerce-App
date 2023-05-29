@@ -18,7 +18,7 @@ class _BodyState extends State<Body> {
   int currentPage = 0;
   List<Splash> splashData = [
     Splash(
-        text: "Welcome to Snap Cart, Let’s shop!",
+        text: "Get Ready to Snap and Shop \n Where Convenience Meets Quality.",
         image: "assets/images/splash_1.png"),
     Splash(
         text: "We help people conect with store \naround Rajasthan India",
@@ -34,9 +34,9 @@ class _BodyState extends State<Body> {
         width: double.infinity,
         child: Column(
           children: <Widget>[
-            const SizedBox(height: 42),
+            const SizedBox(height: 20),
             Expanded(
-              flex: 3,
+              flex: 4,
               child: PageView.builder(
                 onPageChanged: (value) {
                   setState(() {

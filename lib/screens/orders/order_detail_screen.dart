@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/product.dart';
+import '../../models/models.dart' as models;
 import '../../utils/constants.dart';
 import '../../utils/size_config.dart';
+import '../home/components/popular/popular_product.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final String statusName;
@@ -26,73 +29,92 @@ class OrderDetailScreen extends StatefulWidget {
 }
 
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
-  List<Product> products = []; // List to store fetched products
+  final CollectionReference _refOrders =
+      FirebaseFirestore.instance.collection('orders');
+
+  Future<List<models.Order>> fetchProductsFromFirestore() async {
+    final List<models.Order> orders = [];
+    // filtering if order status is Processing
+    final QuerySnapshot snapshot =
+        await _refOrders.where('orderStatus', isEqualTo: 'Processing').get();
+    for (var element in snapshot.docs) {
+      orders.add(models.Order.fromMap(element.data() as Map<String, dynamic>));
+    }
+    return orders;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          widget.statusName,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: kPrimaryColor,
+              ),
+        ),
+        backgroundColor: Colors.white,
+        leading: const Icon(
+          Icons.arrow_back_ios,
+          color: kPrimaryColor,
+        ),
+        elevation: 0,
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                  Text(
-                    widget.statusName,
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: kPrimaryColor,
+              Expanded(
+                // Wrap the StreamBuilder with Expanded
+                child: FutureBuilder<List<models.Order>>(
+                  future: fetchProductsFromFirestore(),
+                  builder: (context, snapshot) {
+                    final List<models.Order> orders = snapshot.data ?? [];
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: orders.length,
+                          itemBuilder: (context, index) {
+                            return const LoadingShimmerSkelton();
+                          },
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(width: 8);
+                          },
                         ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 15),
-              StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('orders')
-                    .where('orderStatus', isEqualTo: 'Processing')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
+                      );
+                    }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                    if (snapshot.hasError) {
+                      log('------------------------------');
+                      log(snapshot.error.toString());
+                      log('------------------------------');
+                      return const Center(
+                        child: Text('Something went wrong'),
+                      );
+                    }
 
-                  List<DocumentSnapshot> orderDocuments = snapshot.data!.docs;
-                  int orderCount = orderDocuments.length;
-
-                  return Expanded(
-                    child: ListView.builder(
-                      itemCount: orderCount,
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: orders.length,
                       itemBuilder: (context, index) {
-                        DocumentSnapshot orderSnapshot = orderDocuments[index];
-                        Map<String, dynamic> orderData =
-                            orderSnapshot.data() as Map<String, dynamic>;
-
                         return OrderWidget(
-                          productImage: orderData['productImage'],
-                          orderCategory: orderData['orderCategory'],
-                          orderName: orderData['orderName'],
-                          orderPrice: orderData['orderPrice'],
+                          productImage: orders[index].productImage,
+                          quantity: orders[index].quantity,
+                          orderId: orders[index].orderId,
+                          productId: orders[index].productId,
+                          orderPrice: orders[index].amount,
+                          orderDate: orders[index].orderedDate,
                         );
                       },
-                    ),
-                  );
-                },
-              )
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -103,27 +125,30 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
 class OrderWidget extends StatelessWidget {
   final String? productImage;
-  final String orderCategory;
-  final String orderName;
-  final String orderPrice;
+  final int quantity;
+  final String orderId;
+  final String productId;
+  final double orderPrice;
+  final String orderDate;
 
   const OrderWidget({
     Key? key,
     this.productImage,
-    required this.orderCategory,
-    required this.orderName,
+    required this.quantity,
+    required this.orderId,
+    required this.productId,
     required this.orderPrice,
+    required this.orderDate,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: kPrimaryColor.withOpacity(.3),
-            width: 1,
-          ),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: kPrimaryColor.withOpacity(0.2),
         ),
       ),
       child: Row(
@@ -132,11 +157,10 @@ class OrderWidget extends StatelessWidget {
             height: getProportionateScreenHeight(100),
             width: getProportionateScreenWidth(100),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(14),
               image: DecorationImage(
                 image: NetworkImage(
-                  productImage ??
-                      'https://theproductmanager.b-cdn.net/wp-content/uploads/sites/4/2020/05/what-does-a-product-manager-do-featured-image-01-800x800.png',
+                  productImage ?? 'https://example.com/default-image.jpg',
                 ),
                 fit: BoxFit.cover,
               ),
@@ -148,29 +172,59 @@ class OrderWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // * orderid
                 Text(
-                  orderCategory,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Colors.grey,
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                      ),
-                ),
-                Text(
-                  orderName,
+                  orderId,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.black,
                         fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+
+                // * productid
+                Text(
+                  productId,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: kPrimaryColor,
+                        fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
+
+                // * date
                 Text(
-                  orderPrice,
+                  orderDate,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: kPrimaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
                       ),
+                ),
+
+                // * price and quantity
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      orderPrice.toString(),
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: kPrimaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                          ),
+                    ),
+                    Text(
+                      quantity.toString(),
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: kPrimaryColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -3,24 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:soni_store_app/resources/services/firebase/firestore_methods.dart';
 
+import '../models/user.dart';
+
 class ProfileProvider with ChangeNotifier {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _numberController = TextEditingController();
-
-  bool loading = false;
-
-  final picker = ImagePicker();
-  XFile _image = XFile('');
-
-  XFile get image => _image;
-
   TextEditingController get nameController => _nameController;
+
+  final TextEditingController _emailController = TextEditingController();
   TextEditingController get emailController => _emailController;
+
+  final TextEditingController _numberController = TextEditingController();
   TextEditingController get numberController => _numberController;
 
-  final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users');
+  XFile _image = XFile(
+      'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000');
+  XFile get image => _image;
+
+  bool loading = false;
+  final picker = ImagePicker();
+  final usersCollection = FirebaseFirestore.instance.collection('users');
+
+  void setUserFromAuthProvider(User user) {
+    nameController.text = user.username ?? '';
+    emailController.text = user.email;
+    numberController.text = user.number ?? '';
+
+    notifyListeners();
+  }
 
   void setImage(XFile image) {
     _image = image;

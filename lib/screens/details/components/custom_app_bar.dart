@@ -4,20 +4,35 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double rating;
+  final Color? color;
 
-  const CustomAppBar({super.key, required this.rating});
+  const CustomAppBar({
+    Key? key,
+    required this.rating,
+    this.color,
+  }) : super(key: key);
 
-  Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
+  @override
+  Size get preferredSize => AppBar().preferredSize;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        color: Colors.grey,
-        padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(40),
+            bottomRight: Radius.circular(40),
+          ),
+        ),
+        padding: EdgeInsets.only(
+          left: getProportionateScreenWidth(20),
+          top: getProportionateScreenHeight(10),
+          right: getProportionateScreenWidth(10),
+        ),
         child: Row(
           children: [
             SizedBox(
@@ -33,9 +48,12 @@ class CustomAppBar extends StatelessWidget {
                   padding: EdgeInsets.zero,
                 ),
                 onPressed: () => Navigator.pop(context),
-                child: SvgPicture.asset(
-                  "assets/icons/Back ICon.svg",
-                  height: 15,
+                child: Center(
+                  child: SvgPicture.asset(
+                    "assets/icons/Back ICon.svg",
+                    height: 15,
+                    // colorFilter  white color
+                  ),
                 ),
               ),
             ),

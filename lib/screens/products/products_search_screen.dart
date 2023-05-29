@@ -58,9 +58,11 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
               ),
               SizedBox(height: getProportionateScreenHeight(5)),
               _isSearching
-                  ? const Padding(
-                      padding: EdgeInsets.all(15),
-                      child: SearchedItemsScreenView(),
+                  ? Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: SearchedItemsScreenView(
+                        item: _searchController.text,
+                      ),
                     )
                   : const Padding(
                       padding: EdgeInsets.all(15),

@@ -16,9 +16,10 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Profile",
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: kPrimaryColor,
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge!
+              .copyWith(color: kPrimaryColor),
         ),
         backgroundColor: Colors.white,
         leading: const Icon(

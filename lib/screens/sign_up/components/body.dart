@@ -25,7 +25,12 @@ class Body extends StatelessWidget {
             child: Column(
               children: [
                 // SizedBox(height: SizeConfig.screenHeight * 0.04), // 4%
-                Text("Register Account", style: headingStyle),
+                Text(
+                  "Register Account",
+                  style: headingStyle.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 SizedBox(height: SizeConfig.screenHeight * 0.01), // 4%
                 const Text(
                   "Complete your details or continue \nwith social media",
@@ -51,14 +56,15 @@ class Body extends StatelessWidget {
                         }
                       },
                     ),
-                    SocialCard(
-                      icon: "assets/icons/facebook-2.svg",
-                      press: () {},
-                    ),
-                    SocialCard(
-                      icon: "assets/icons/twitter.svg",
-                      press: () {},
-                    ),
+
+                    // SocialCard(
+                    //   icon: "assets/icons/facebook-2.svg",
+                    //   press: () {},
+                    // ),
+                    // SocialCard(
+                    //   icon: "assets/icons/twitter.svg",
+                    //   press: () {},
+                    // ),
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),

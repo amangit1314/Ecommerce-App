@@ -16,6 +16,10 @@ class AuthProvider with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   models.User get user => _user;
+  set setUser(models.User user) {
+    _user = user;
+    notifyListeners();
+  }
 
   String _uid = '';
   String get uid => _uid;
@@ -38,14 +42,16 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> refreshUser() async {
     try {
-      models.User user = await getUserDetails();
-      _user = user;
-      _uid = user.uid;
-      _email = user.email;
-      _username = user.username ?? user.email.split('@')[0];
-      _addresses = user.addresses;
-      _profileImage = user.profImage ??
-          'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
+      if (_auth.currentUser != null) {
+        await getUserDetails(_auth.currentUser!);
+        _user = user;
+        _uid = user.uid;
+        _email = user.email;
+        _username = user.username ?? user.email.split('@')[0];
+        _addresses = user.addresses;
+        _profileImage = user.profImage ??
+            'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
+      }
     } catch (error) {
       Get.snackbar(
         'User Logged Out',
@@ -57,16 +63,19 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<models.User> getUserDetails() async {
-    User? currentUser = _auth.currentUser;
+  Future<void> getUserDetails(User user) async {
+    // User? currentUser = _auth.currentUser;
     final DocumentSnapshot<Map<String, dynamic>> snap =
-        await _firestore.collection('users').doc(currentUser!.uid).get();
-    return models.User.fromMap(snap);
+        await _firestore.collection('users').doc(user.uid).get();
+    _user = models.User.fromMap(snap);
   }
 
   Future<void> updateUserField(String uid, String field, dynamic value) async {
     try {
-      await _firestore.collection('users').doc(uid).update({field: value});
+      await _firestore
+          .collection('users')
+          .doc(_user.uid)
+          .update({field: value});
       refreshUser();
     } catch (error) {
       rethrow;
@@ -129,7 +138,9 @@ class AuthProvider with ChangeNotifier {
           email: email,
           password: password,
         );
-        _user = await getUserDetails();
+        if (_auth.currentUser != null) {
+          await getUserDetails(_auth.currentUser!);
+        }
         notifyListeners();
         res = 'success';
       } else {
@@ -162,7 +173,9 @@ class AuthProvider with ChangeNotifier {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
 
-      _user = await getUserDetails();
+      if (_auth.currentUser != null) {
+        await getUserDetails(_auth.currentUser!);
+      }
       notifyListeners();
       return userCredential;
     } catch (error) {
