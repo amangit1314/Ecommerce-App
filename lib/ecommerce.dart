@@ -39,10 +39,9 @@ class _EcommerceAppState extends State<EcommerceApp> {
         title: 'SnapCart Ecommerce App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            // textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-            primarySwatch: Colors.deepOrange,
-            fontFamily: 'Poppins'),
-        // home: const Wrapper(),
+          primarySwatch: Colors.deepOrange,
+          fontFamily: 'Poppins',
+        ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (BuildContext context, snapshot) {
@@ -50,7 +49,6 @@ class _EcommerceAppState extends State<EcommerceApp> {
               if (snapshot.hasData && snapshot.data != null) {
                 Provider.of<AuthProvider>(context, listen: false)
                     .getUserDetails(snapshot.data!);
-
                 log(snapshot.data.toString());
                 return const HomeScreen();
               }

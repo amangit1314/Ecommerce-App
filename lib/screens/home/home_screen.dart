@@ -29,6 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     requestPermission();
     getToken();
+    saveToken(mtoken!);
+    makePayment();
+    displayPaymentSheet();
+    createPaymentIntent();
   }
 
   void requestPermission() async {

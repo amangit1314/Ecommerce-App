@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:soni_store_app/ecommerce.dart';
 import 'package:soni_store_app/firebase_options.dart';
 
@@ -9,56 +10,33 @@ import 'helper/locator.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  log("Handling a background message: ${message.messageId}");
+}
 
-  debugPrint("Handling a background message: ${message.messageId}");
+Future<void> _listenToOnMessage(RemoteMessage message) async {
+  log('Got a message whilst in the foreground!');
+  log('Message data: ${message.data}');
+
+  if (message.notification != null) {
+    log('Message also contained a notification: ${message.notification}');
+  }
 }
 
 void main() async {
+  // * Enduring Initialization of Widget Binding in Flutter
   WidgetsFlutterBinding.ensureInitialized();
+
+  // * Initializing Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // * Locating Dependenices for Dependency Injection
   setupLocator();
+
+  // * Notifications methods
+  FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  FirebaseMessaging.onMessage.listen(_listenToOnMessage);
 
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    debugPrint('Notification permission granted');
-    const GetSnackBar(
-      title: 'Notification permission granted',
-      message: 'Notification permission granted',
-      backgroundColor: Colors.green,
-    );
-  } else {
-    debugPrint('Notification permission denied');
-    const GetSnackBar(
-      title: 'Notification permission denied',
-      message: 'Notification permission denied',
-      backgroundColor: Colors.red,
-    );
-  }
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    debugPrint('Got a message whilst in the foreground!');
-    debugPrint('Message data: ${message.data}');
-
-    if (message.notification != null) {
-      debugPrint(
-          'Message also contained a notification: ${message.notification}');
-    }
-  });
-
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // * Function to run the Material App
   runApp(const EcommerceApp());
 }
