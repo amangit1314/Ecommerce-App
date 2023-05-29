@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,7 +47,11 @@ class _EcommerceAppState extends State<EcommerceApp> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (BuildContext context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
+              if (snapshot.hasData && snapshot.data != null) {
+                Provider.of<AuthProvider>(context, listen: false)
+                    .getUserDetails(snapshot.data!);
+
+                log(snapshot.data.toString());
                 return const HomeScreen();
               }
               return const SplashScreen();

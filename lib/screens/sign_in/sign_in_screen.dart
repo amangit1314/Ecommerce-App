@@ -16,15 +16,20 @@ class SignInScreen extends StatelessWidget {
           "Sign In",
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Colors.black87,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 // 16 size
                 fontSize: 16,
               ),
         ),
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
-          size: 18,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+            size: 18,
+          ),
         ),
         elevation: 0,
       ),

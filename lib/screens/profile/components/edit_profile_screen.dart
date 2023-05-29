@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/models/models.dart';
@@ -22,11 +20,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
 
-    final currentUser = userProvider.user;
+    final currentUser = authProvider.user;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -60,13 +58,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: Column(
               children: [
                 buildEditUsernameFormField(
-                    userProvider, profileProvider, currentUser),
-                SizedBox(height: getProportionateScreenHeight(16)),
+                  authProvider,
+                  profileProvider,
+                  currentUser,
+                ),
+                SizedBox(height: getProportionateScreenHeight(15)),
                 buildEditEmailFormField(
-                    userProvider, profileProvider, currentUser),
-                SizedBox(height: getProportionateScreenHeight(16)),
+                  authProvider,
+                  profileProvider,
+                  currentUser,
+                ),
+                SizedBox(height: getProportionateScreenHeight(15)),
                 buildEditNumberFormField(
-                    userProvider, profileProvider, currentUser),
+                  authProvider,
+                  profileProvider,
+                  currentUser,
+                ),
               ],
             ),
           ),
@@ -76,6 +83,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
                 await profileProvider.updateProfile(currentUser.uid);
+                if (!mounted) return;
                 Navigator.pop(context);
               }
             },
@@ -103,7 +111,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  TextFormField buildEditUsernameFormField(UserProvider userProvider,
+  TextFormField buildEditUsernameFormField(AuthProvider authProvider,
       ProfileProvider profileProvider, User currentUser) {
     return TextFormField(
       style: TextStyle(
@@ -119,25 +127,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       },
       decoration: InputDecoration(
         labelText: "Username",
-        hintText: currentUser.username ?? currentUser.email.substring(0, 8),
+        hintText: currentUser.username ?? currentUser.email.split('@')[0],
         floatingLabelBehavior: FloatingLabelBehavior.always,
         prefixIcon: const Icon(Icons.account_circle_outlined),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.orange,
-            width: 1.0,
-          ),
+          borderSide: const BorderSide(color: Colors.orange, width: 1.0),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 16,
-        ),
+        contentPadding: const EdgeInsets.all(16),
       ),
     );
   }
 
-  TextFormField buildEditEmailFormField(UserProvider userProvider,
+  TextFormField buildEditEmailFormField(AuthProvider authProvider,
       ProfileProvider profileProvider, User currentUser) {
     return TextFormField(
       style: TextStyle(
@@ -158,20 +160,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         prefixIcon: const Icon(Icons.email),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.orange,
-            width: 1.0,
-          ),
+          borderSide: const BorderSide(color: Colors.orange, width: 1.0),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 16,
-        ),
+        contentPadding: const EdgeInsets.all(16),
       ),
     );
   }
 
-  TextFormField buildEditNumberFormField(UserProvider userProvider,
+  TextFormField buildEditNumberFormField(AuthProvider authProvider,
       ProfileProvider profileProvider, User currentUser) {
     return TextFormField(
       style: TextStyle(
@@ -187,20 +183,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       },
       decoration: InputDecoration(
         labelText: "Phone Number",
-        hintText: currentUser.number ?? "",
+        hintText: currentUser.number ?? "+91 1234567891",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         prefixIcon: const Icon(Icons.phone),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Colors.orange,
-            width: 1.0,
-          ),
+          borderSide: const BorderSide(color: Colors.orange, width: 1.0),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 16,
-        ),
+        contentPadding: const EdgeInsets.all(16),
       ),
     );
   }

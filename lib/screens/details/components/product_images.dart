@@ -81,19 +81,19 @@ class _ProductImagesState extends State<ProductImages> {
         });
       },
       child: AnimatedContainer(
-          duration: defaultDuration,
-          margin: const EdgeInsets.only(top: 10),
-          padding: const EdgeInsets.all(8),
-          height: getProportionateScreenWidth(48),
-          width: getProportionateScreenWidth(48),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-                color:
-                    kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
-          ),
-          child: Image.asset(widget.product.images[selectedImage])),
+        duration: defaultDuration,
+        margin: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.all(8),
+        height: getProportionateScreenWidth(48),
+        width: getProportionateScreenWidth(48),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+              color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
+        ),
+        child: Image.asset(widget.product.images[selectedImage]),
+      ),
     );
   }
 }
@@ -142,47 +142,55 @@ class _ProductImagesFirebaseState extends State<ProductImagesFirebase> {
         children: [
           Stack(
             children: [
-              SizedBox(
-                width: width,
-                child: Center(
-                  child: Hero(
-                    tag: widget.product.id.toString(),
-                    child: Center(
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: _productsStream,
-                        builder: (
-                          context,
-                          AsyncSnapshot<QuerySnapshot> snapshot,
-                        ) {
-                          if (snapshot.hasData) {
-                            return Container(
-                              height: 300,
-                              width: width,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    widget.product.images[selectedImage],
+              Column(
+                children: [
+                  SizedBox(
+                    width: getProportionateScreenWidth(
+                        MediaQuery.of(context).size.width),
+                    height: MediaQuery.of(context).size.height * .4,
+                    // child: AspectRatio(
+                    //   aspectRatio: 1,
+                    child: Hero(
+                      tag: widget.product.id.toString(),
+                      child: Center(
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: _productsStream,
+                          builder: (
+                            context,
+                            AsyncSnapshot<QuerySnapshot> snapshot,
+                          ) {
+                            if (snapshot.hasData) {
+                              return Container(
+                                height: 300,
+                                width: width,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      widget.product.images[selectedImage],
+                                    ),
+                                    fit: BoxFit.cover,
                                   ),
-                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                            );
-                          } else {
-                            return const CircularProgressIndicator();
-                          }
-                        },
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          },
+                        ),
                       ),
                     ),
+                    //   ),
+                    // ),
                   ),
-                ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12,
+                    padding: const EdgeInsets.only(
+                      top: 80.0,
+                      right: 12,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -218,7 +226,6 @@ class _ProductImagesFirebaseState extends State<ProductImagesFirebase> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          // shadow
           boxShadow: [
             BoxShadow(
               offset: const Offset(0, 4),

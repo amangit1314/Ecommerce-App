@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../models/product.dart';
 import 'components/body.dart';
-import 'components/custom_app_bar.dart';
 
 class DetailsScreenFirebase extends StatelessWidget {
   final Product product;
@@ -13,13 +12,6 @@ class DetailsScreenFirebase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-        child: CustomAppBar(
-          rating: product.rating,
-        ),
-      ),
-      backgroundColor: Colors.white,
       body: DetailFirebaseBody(product: product),
     );
   }

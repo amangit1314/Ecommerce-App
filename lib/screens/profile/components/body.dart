@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:soni_store_app/screens/profile/components/my_account.dart';
 import 'package:soni_store_app/screens/profile/settings.dart';
 
-import '../../../resources/services/auth/auth_service.dart';
+import '../../../providers/auth_provider.dart';
+import '../../splash/splash_screen.dart';
 import '../help_center.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -29,7 +30,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
+    // final authService = Provider.of<AuthService>(context);
 
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -84,21 +85,23 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                 ProfileMenu(
                   text: "Log Out",
                   icon: "assets/icons/Log out.svg",
-                  // press: () async {
-                  //   AuthProvider authProvider =
-                  //       Provider.of<AuthProvider>(context, listen: false);
-                  //   await authProvider.signOut();
-
-                  //   if (!mounted) return;
-                  //   Navigator.of(context).pushAndRemoveUntil(
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const SplashScreen()),
-                  //     (route) => false,
-                  //   );
-                  // },
                   press: () async {
-                    await authService.signOut();
+                    AuthProvider authProvider =
+                        Provider.of<AuthProvider>(context, listen: false);
+                    await authProvider.signOut().then(
+                      (value) {
+                        if (!mounted) return;
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const SplashScreen()),
+                          (route) => false,
+                        );
+                      },
+                    );
                   },
+                  // press: () async {
+                  //   await authService.signOut();
+                  // },
                 ),
               ],
             ),

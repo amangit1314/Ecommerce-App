@@ -7,6 +7,7 @@ import 'package:soni_store_app/screens/sign_in/components/sign_in_form.dart';
 
 import '../../../components/social_card.dart';
 import '../../../providers/providers.dart';
+import '../../otp/otp_screen.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class Body extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 10),
@@ -63,13 +64,23 @@ class Body extends StatelessWidget {
                     },
                   ),
                   SocialCard(
-                    icon: "assets/icons/facebook-2.svg",
-                    press: () {},
+                    icon: "assets/icons/Phone.svg",
+                    press: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const OtpScreen(),
+                        ),
+                      );
+                    },
                   ),
-                  SocialCard(
-                    icon: "assets/icons/twitter.svg",
-                    press: () {},
-                  ),
+                  // SocialCard(
+                  //   icon: "assets/icons/facebook-2.svg",
+                  //   press: () {},
+                  // ),
+                  // SocialCard(
+                  //   icon: "assets/icons/twitter.svg ",
+                  //   press: () {},
+                  // ),
                 ],
               ),
               const SizedBox(height: 20),

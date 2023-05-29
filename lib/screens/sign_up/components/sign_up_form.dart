@@ -9,6 +9,8 @@ import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../providers/user_provider.dart';
 import '../../../providers/user_provider_try.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
@@ -43,6 +45,45 @@ class _SignUpFormState extends State<SignUpForm> {
       setState(() {
         errors.remove(error);
       });
+    }
+  }
+
+  Future register(AuthProvider authProvider, UserProvider userProvider) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      try {
+        String uid = await authProvider.registerUser(
+          email: emailController.text,
+          password: passwordController.text,
+          username: emailController.text.substring(0, 5),
+        );
+
+        if (uid.isNotEmpty) {
+          await userProvider.refreshUser(); // Refresh the user information
+
+          const GetSnackBar(
+            message: 'User registered successfully 🎉',
+            backgroundColor: Colors.greenAccent,
+          );
+          if (!mounted) return;
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const SignInScreen(),
+            ),
+          );
+        } else {
+          const GetSnackBar(
+            message: 'User registration unsuccessful ❌',
+            backgroundColor: Colors.redAccent,
+          );
+        }
+      } catch (error) {
+        GetSnackBar(
+          message: error.toString(),
+          backgroundColor: Colors.redAccent,
+        );
+      }
     }
   }
 
@@ -95,6 +136,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Form(
       key: _formKey,
       child: Column(
@@ -115,7 +158,7 @@ class _SignUpFormState extends State<SignUpForm> {
             child: DefaultButton(
               txtColor: Colors.white,
               text: "Continue",
-              press: () => _register(context),
+              press: () => register(authProvider, userProvider),
             ),
           ),
         ],

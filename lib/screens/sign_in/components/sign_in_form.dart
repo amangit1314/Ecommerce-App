@@ -8,7 +8,6 @@ import 'package:soni_store_app/screens/login_success/login_success_screen.dart';
 
 import '../../../components/default_button.dart';
 import '../../../providers/providers.dart';
-import '../../../resources/services/auth/auth_service.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
@@ -75,7 +74,8 @@ class _SignFormState extends State<SignForm> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
+    // final authService = Provider.of<AuthService>(context);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Form(
       key: _formKey,
@@ -119,27 +119,23 @@ class _SignFormState extends State<SignForm> {
           ),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
-          Consumer<AuthProvider>(
-            builder: (context, authProvider, _) {
-              return Container(
-                height: 55,
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: DefaultButton(
-                  txtColor: Colors.white,
-                  text: "Continue",
-                  // press: () => loginUser(authProvider),
-                  press: () {
-                    authService.signInWithEmailAndPassword(
-                      email: emailController.text,
-                      password: passwordController.text,
-                    );
-                  },
-                ),
-              );
-            },
+          Container(
+            height: 55,
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: DefaultButton(
+              txtColor: Colors.white,
+              text: "Continue",
+              press: () => loginUser(authProvider),
+              // press: () {
+              //   authService.signInWithEmailAndPassword(
+              //     email: emailController.text,
+              //     password: passwordController.text,
+              //   );
+              // },
+            ),
           ),
         ],
       ),

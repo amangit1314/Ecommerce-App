@@ -14,18 +14,23 @@ class SignUpScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
-          // 18 size
-          size: 18,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+            // 18 size
+            size: 18,
+          ),
         ),
         elevation: 0,
         title: Text(
           "Sign Up",
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Colors.black87,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 // 16 size
                 fontSize: 16,
               ),
