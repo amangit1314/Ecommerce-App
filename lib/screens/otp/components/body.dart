@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/otp/components/otp_form.dart';
 
-import '../../../utils/constatns.dart';
+import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
+import 'otp_form.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
+  const Body({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -17,15 +19,17 @@ class Body extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: SizeConfig.screenHeight * 0.05),
+              SizedBox(height: height * 0.05),
               Text(
                 "OTP Verification",
-                style: headingStyle,
+                style: headingStyle.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const Text("We sent your code to +1 898 860 ***"),
               buildTimer(),
               const OtpForm(),
-              SizedBox(height: SizeConfig.screenHeight * 0.1),
+              SizedBox(height: height * 0.1),
               GestureDetector(
                 onTap: () {
                   // OTP code resend
@@ -50,8 +54,8 @@ class Body extends StatelessWidget {
         TweenAnimationBuilder(
           tween: Tween(begin: 30.0, end: 0.0),
           duration: const Duration(seconds: 30),
-          builder: (_, value, child) => Text(
-            "00:$value",
+          builder: (_, dynamic value, child) => Text(
+            "00:${value.toInt()}",
             style: const TextStyle(color: kPrimaryColor),
           ),
         ),

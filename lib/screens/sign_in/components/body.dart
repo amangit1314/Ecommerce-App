@@ -7,7 +7,7 @@ import 'package:soni_store_app/screens/sign_in/components/sign_in_form.dart';
 
 import '../../../components/social_card.dart';
 import '../../../providers/providers.dart';
-import '../../otp/otp_screen.dart';
+import '../../otp/enter_mobile_number.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class Body extends StatelessWidget {
                     press: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const OtpScreen(),
+                          builder: (context) => const MobileNumberScreen(),
                         ),
                       );
                     },
