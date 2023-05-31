@@ -41,12 +41,10 @@ class OrderProvider with ChangeNotifier {
 
       final orderSnapshot = await orderDoc.get();
       if (!orderSnapshot.exists) {
-        // Create a new document with userId as the document ID
         final userOrderDoc = ordersCollection.doc(uid);
         await userOrderDoc.set(orderData);
         log('New order document created for user');
       } else {
-        // Update the existing order document
         await orderDoc.set(orderData);
         log('Existing order document updated');
       }

@@ -171,6 +171,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     log('---------------');
 
     Order order = Order(
+      uid: userId,
       orderId: orderId,
       orderedDate: DateTime.now().toString(),
       productId: productId,
@@ -357,6 +358,13 @@ class CheckoutButtonAlertBox extends StatelessWidget {
         snackPosition: SnackPosition.BOTTOM,
         colorText: Colors.white,
       );
+      log('---------------');
+      log('USER_ID = $userId');
+      log('---------------');
+      log('PRICE = ${price.toString()}');
+      log('---------------');
+      log('QUANTITY = ${quantity.toString()}');
+      log('---------------');
     } else {
       Get.snackbar(
         'Error',

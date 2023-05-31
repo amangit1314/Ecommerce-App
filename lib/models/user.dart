@@ -14,7 +14,7 @@ class User {
   final String? profImage;
   final String? gender;
   final List<Address?>? addresses;
-  final List<Product>? cartItems;
+  final List<dynamic>? cartItems;
 
   User({
     required this.email,
@@ -53,7 +53,7 @@ class User {
       profImage: data['profImage'] as String?,
       gender: data['gender'] as String?,
       addresses: data['addresses'] as List<Address?>?,
-      cartItems: (data['cartItems'] as List<Product>?)
+      cartItems: (data['cartItems'] as List<dynamic>?)
           ?.map((item) => Product.fromMap(item as Map<String, dynamic>))
           .toList(),
     );

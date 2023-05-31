@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:soni_store_app/providers/auth_provider.dart';
 
 import '../../models/models.dart' as models;
 import '../../utils/constants.dart';
@@ -11,16 +13,12 @@ import '../home/components/popular/popular_product.dart';
 class OrderDetailScreen extends StatefulWidget {
   final String statusName;
   final String orderCategory;
-  final String orderName;
-  final String orderPrice;
   final String? productImage;
 
   const OrderDetailScreen({
     Key? key,
     required this.statusName,
     required this.orderCategory,
-    required this.orderName,
-    required this.orderPrice,
     this.productImage,
   }) : super(key: key);
 
@@ -32,11 +30,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   final CollectionReference _refOrders =
       FirebaseFirestore.instance.collection('orders');
 
-  Future<List<models.Order>> fetchProductsFromFirestore() async {
+  Future<List<models.Order>> fetchProductsFromFirestore(
+      AuthProvider authProvider) async {
     final List<models.Order> orders = [];
     // filtering if order status is Processing
-    final QuerySnapshot snapshot =
-        await _refOrders.where('orderStatus', isEqualTo: 'Processing').get();
+    final QuerySnapshot snapshot = await _refOrders
+        .where('orderStatus', isEqualTo: 'Processing')
+        .where('uid', isEqualTo: authProvider.user.uid)
+        .get();
     for (var element in snapshot.docs) {
       orders.add(models.Order.fromMap(element.data() as Map<String, dynamic>));
     }
@@ -45,6 +46,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -54,9 +57,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               ),
         ),
         backgroundColor: Colors.white,
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: kPrimaryColor,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: kPrimaryColor,
+          ),
         ),
         elevation: 0,
         centerTitle: true,
@@ -70,7 +78,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               Expanded(
                 // Wrap the StreamBuilder with Expanded
                 child: FutureBuilder<List<models.Order>>(
-                  future: fetchProductsFromFirestore(),
+                  future: fetchProductsFromFirestore(authProvider),
                   builder: (context, snapshot) {
                     final List<models.Order> orders = snapshot.data ?? [];
 
@@ -98,17 +106,36 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       );
                     }
 
-                    return ListView.builder(
+                    return ListView.separated(
                       scrollDirection: Axis.vertical,
                       itemCount: orders.length,
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(height: 8);
+                      },
                       itemBuilder: (context, index) {
-                        return OrderWidget(
-                          productImage: orders[index].productImage,
-                          quantity: orders[index].quantity,
-                          orderId: orders[index].orderId,
-                          productId: orders[index].productId,
-                          orderPrice: orders[index].amount,
-                          orderDate: orders[index].orderedDate,
+                        return FutureBuilder<String?>(
+                          future: getProductName(orders[index].productId),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator(); // Show a loading indicator while fetching the product name.
+                            } else if (snapshot.hasError) {
+                              return const Text(
+                                  'Error'); // Show an error message if an error occurred while fetching the product name.
+                            } else {
+                              final String? productName = snapshot.data;
+
+                              return OrderWidget(
+                                productImage: orders[index].productImage,
+                                quantity: orders[index].quantity,
+                                orderId: orders[index].orderId,
+                                productName: productName ??
+                                    'Unknown', // Use the retrieved product name or a default value if it's null.
+                                orderPrice: orders[index].amount,
+                                orderDate: orders[index].orderedDate,
+                              );
+                            }
+                          },
                         );
                       },
                     );
@@ -121,13 +148,29 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       ),
     );
   }
+
+  Future<String?> getProductName(String productId) async {
+    try {
+      var productDoc = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productId)
+          .get();
+      var productData = productDoc.data();
+      if (productData != null) {
+        return productData['title'];
+      }
+    } catch (error) {
+      log('Failed to get product name: $error');
+    }
+    return null; // Return null if the product is not found or if an error occurs.
+  }
 }
 
 class OrderWidget extends StatelessWidget {
   final String? productImage;
   final int quantity;
   final String orderId;
-  final String productId;
+  final String productName;
   final double orderPrice;
   final String orderDate;
 
@@ -136,7 +179,7 @@ class OrderWidget extends StatelessWidget {
     this.productImage,
     required this.quantity,
     required this.orderId,
-    required this.productId,
+    required this.productName,
     required this.orderPrice,
     required this.orderDate,
   }) : super(key: key);
@@ -174,17 +217,18 @@ class OrderWidget extends StatelessWidget {
               children: [
                 // * orderid
                 Text(
-                  orderId,
+                  productName,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
-
-                // * productid
+                const SizedBox(height: 4),
+                // * orderId
                 Text(
-                  productId,
+                  'OrderID: ${orderId.substring(0, 15)}',
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: kPrimaryColor,
@@ -192,31 +236,31 @@ class OrderWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-
+                // const SizedBox(height: 4),
                 // * date
                 Text(
-                  orderDate,
+                  '${orderDate.split(' ')[0]} at ${orderDate.substring(10, 16)}',
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: kPrimaryColor,
-                        fontSize: 12,
+                        color: kTextColor,
+                        fontSize: 10,
                         fontWeight: FontWeight.normal,
                       ),
                 ),
-
+                const SizedBox(height: 4),
                 // * price and quantity
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                Wrap(
+                  spacing: 30,
                   children: [
                     Text(
-                      orderPrice.toString(),
+                      'Amount: ₹ ${orderPrice.toString()}',
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: kPrimaryColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
                           ),
                     ),
                     Text(
-                      quantity.toString(),
+                      'Items (${quantity.toString()})',
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: kPrimaryColor,

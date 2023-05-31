@@ -1,11 +1,14 @@
+import 'dart:developer';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:soni_store_app/providers/auth_provider.dart';
 
-import '../../../providers/user_provider.dart';
+import '../../../utils/constants.dart';
 
 class ProfilePic extends StatefulWidget {
   const ProfilePic({Key? key}) : super(key: key);
@@ -15,30 +18,32 @@ class ProfilePic extends StatefulWidget {
 }
 
 class _ProfilePicState extends State<ProfilePic> {
-  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-    foregroundColor: const Color(0xFFF5F6F9),
-    minimumSize: const Size(88, 44),
-    padding: const EdgeInsets.all(20),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(50),
-      side: const BorderSide(color: Colors.white),
-    ),
-  );
-
-  pickImage(ImageSource source) async {
-    final ImagePicker imagePicker = ImagePicker();
-    XFile? file = await imagePicker.pickImage(source: source);
-    if (file != null) {
-      return await file.readAsBytes();
-    }
-    debugPrint('No Image Selected');
-  }
-
+  bool _isImagePickerActive = false;
   Uint8List? _image;
-
   XFile? selectedImage;
 
-  selectImage(userProvider) async {
+  pickImage(ImageSource source) async {
+    if (_isImagePickerActive) {
+      return;
+    }
+
+    _isImagePickerActive = true;
+
+    try {
+      final ImagePicker imagePicker = ImagePicker();
+      XFile? file = await imagePicker.pickImage(source: source);
+      if (file != null) {
+        return await file.readAsBytes();
+      }
+      debugPrint('No Image Selected');
+    } catch (error) {
+      debugPrint('Failed to pick image: $error');
+    } finally {
+      _isImagePickerActive = false;
+    }
+  }
+
+  selectImage(AuthProvider authProvider) async {
     Uint8List imageBytes = await pickImage(ImageSource.gallery) ?? Uint8List(0);
     if (imageBytes.isEmpty) return;
 
@@ -47,7 +52,9 @@ class _ProfilePicState extends State<ProfilePic> {
         FirebaseStorage.instance.ref().child('profile_images').child(imageName);
 
     UploadTask uploadTask = storageReference.putData(imageBytes);
-    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {
+      log('Profile Image Uploaded');
+    });
 
     String profileImage = await taskSnapshot.ref.getDownloadURL();
 
@@ -56,13 +63,17 @@ class _ProfilePicState extends State<ProfilePic> {
     });
 
     if (profileImage.isNotEmpty) {
-      // await userProvider.updateUserProfileImage(profileImage: profileImage);
+      await authProvider.updateUserField(
+        authProvider.user.uid,
+        'profImage',
+        profileImage,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
     return SizedBox(
       height: 115,
       width: 115,
@@ -70,17 +81,20 @@ class _ProfilePicState extends State<ProfilePic> {
         clipBehavior: Clip.none,
         fit: StackFit.expand,
         children: [
-          _image != null
+          authProvider.user.profImage != null
               ? CircleAvatar(
-                  radius: 60,
-                  backgroundImage: MemoryImage(_image!),
-                  backgroundColor: Colors.red,
+                  radius: 30,
+                  backgroundImage: NetworkImage(
+                    authProvider.user.profImage!,
+                  ), // Cast AssetImage to ImageProvider
+                  backgroundColor: kPrimaryColor,
                 )
               : const CircleAvatar(
-                  radius: 60,
+                  radius: 30,
                   backgroundImage: NetworkImage(
-                      'https://media.sketchfab.com/models/296f9f80c4ac431aa3d354f7ef955605/thumbnails/1d824d70f65e441a8f81162ff8bac094/281cbed7656443ffb04d2e38f928ab14.jpeg'),
-                  backgroundColor: Colors.red,
+                    'https://media.sketchfab.com/models/296f9f80c4ac431aa3d354f7ef955605/thumbnails/1d824d70f65e441a8f81162ff8bac094/281cbed7656443ffb04d2e38f928ab14.jpeg',
+                  ), // Cast AssetImage to ImageProvider
+                  backgroundColor: kPrimaryColor,
                 ),
           Positioned(
             right: 5,
@@ -94,7 +108,12 @@ class _ProfilePicState extends State<ProfilePic> {
                 radius: 21,
                 child: TextButton(
                   onPressed: () async {
-                    await selectImage(userProvider);
+                    authProvider.updateUserField(
+                      authProvider.user.uid,
+                      'profImage',
+                      selectImage(authProvider),
+                    );
+                    await selectImage(authProvider);
                   },
                   child: SvgPicture.asset(
                     "assets/icons/Camera Icon.svg",

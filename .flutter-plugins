@@ -52,3 +52,6 @@ shared_preferences_windows=C:\\Users\\gitam\\AppData\\Local\\Pub\\Cache\\hosted\
 sqflite=C:\\Users\\gitam\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\sqflite-2.2.8+4\\
 stripe_android=C:\\Users\\gitam\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\stripe_android-9.2.0\\
 stripe_ios=C:\\Users\\gitam\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\stripe_ios-9.2.0\\
+webview_flutter=C:\\Users\\gitam\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\webview_flutter-3.0.4\\
+webview_flutter_android=C:\\Users\\gitam\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\webview_flutter_android-2.10.4\\
+webview_flutter_wkwebview=C:\\Users\\gitam\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\webview_flutter_wkwebview-2.9.5\\

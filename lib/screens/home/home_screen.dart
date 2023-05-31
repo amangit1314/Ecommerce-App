@@ -8,7 +8,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:soni_store_app/components/custom_bottom_nav_bar.dart';
 import 'package:soni_store_app/screens/home/components/body.dart';
 
+import '../../utils/constants.dart';
 import '../../utils/enums.dart';
+import '../support_chat/support_chat.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Map<String, dynamic>? paymentIntent;
+  // Map<String, dynamic>? paymentIntent;
   String? mtoken = " ";
 
   @override
@@ -100,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //   }
   // }
 
-  // displayPaymentSheet() async {
+  // displayPaymentSheet() async {import '../../utils/enums.dart';
   //   try {
   //     await Stripe.instance.presentPaymentSheet();
   //   } catch (e) {
@@ -207,12 +209,32 @@ class _HomeScreenState extends State<HomeScreen> {
         .show(0, title, body, platformChannelSpecifics);
   }
 
+  //dispose
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
-      body: Body(),
-      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
+      body: const Body(),
+      bottomNavigationBar:
+          const CustomBottomNavBar(selectedMenu: MenuState.home),
+      // floating btn with support agent icon
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SupportChat(),
+            ),
+          );
+        },
+        backgroundColor: kPrimaryColor,
+        child: const Icon(Icons.support_agent),
+      ),
     );
   }
 }

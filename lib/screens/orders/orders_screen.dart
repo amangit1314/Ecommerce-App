@@ -71,8 +71,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Processing',
                     orderCategory: 'Pants',
-                    orderName: 'Adididas Boxers',
-                    orderPrice: '₹ 500',
                   ),
                 ),
               );
@@ -85,8 +83,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Awaiting Payments',
                     orderCategory: 'Pants',
-                    orderName: 'Adididas Boxers',
-                    orderPrice: '₹ 500',
                   ),
                 ),
               );
@@ -99,8 +95,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Delivered',
                     orderCategory: 'Pants',
-                    orderName: 'Adididas Boxers',
-                    orderPrice: '₹ 500',
                   ),
                 ),
               );
@@ -113,8 +107,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Returned Orders',
                     orderCategory: 'Pants',
-                    orderName: 'Adididas Boxers',
-                    orderPrice: '₹ 500',
                   ),
                 ),
               );
@@ -127,8 +119,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Cancled Orders',
                     orderCategory: 'Pants',
-                    orderName: 'Adididas Boxers',
-                    orderPrice: '₹ 500',
                   ),
                 ),
               );

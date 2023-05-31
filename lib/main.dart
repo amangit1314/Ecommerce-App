@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:soni_store_app/ecommerce.dart';
 import 'package:soni_store_app/firebase_options.dart';
+import 'package:soni_store_app/resources/services/notification/notification.dart';
 
 import 'helper/locator.dart';
 
@@ -14,11 +18,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> _listenToOnMessage(RemoteMessage message) async {
-  log('Got a message whilst in the foreground!');
-  log('Message data: ${message.data}');
-
-  if (message.notification != null) {
-    log('Message also contained a notification: ${message.notification}');
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      const NotificationDetails(
+          android: AndroidNotificationDetails('channel.id', 'channel.name')),
+      payload: json.encode(message.data),
+    );
   }
 }
 
@@ -31,6 +41,13 @@ void main() async {
 
   // * Locating Dependenices for Dependency Injection
   setupLocator();
+
+  // * handling ask for permission to send notification
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+  });
 
   // * Notifications methods
   FirebaseMessaging.instance.getInitialMessage();
