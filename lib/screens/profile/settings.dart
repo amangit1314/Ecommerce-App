@@ -18,6 +18,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -47,23 +48,14 @@ class _SettingsState extends State<Settings> {
       ),
       body: Column(
         children: [
+          // image with 300 height
+          SizedBox(
+            height: 300,
+            child: Image.asset("assets/settings.png"),
+          ),
           Expanded(
             child: ListView(
               children: [
-                ListTile(
-                  onTap: () {},
-                  leading: const Icon(
-                    Icons.language,
-                    color: kPrimaryColor,
-                  ),
-                  title: const Text('Change Language'),
-                  subtitle: const Text(
-                    'English',
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: buildIOSSwitch(),
-                ),
                 ListTile(
                   onTap: () {},
                   leading: const FaIcon(
@@ -80,23 +72,9 @@ class _SettingsState extends State<Settings> {
                 ),
                 ListTile(
                   onTap: () {},
-                  leading: const Icon(
-                    Icons.color_lens,
-                    color: kPrimaryColor,
-                  ),
-                  title: const Text('Change Theme'),
-                  subtitle: const Text(
-                    'Light',
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: buildIOSSwitch(),
-                ),
-                ListTile(
-                  onTap: () {},
                   leading: ColorFiltered(
-                    colorFilter: const ColorFilter.mode(
-                        kPrimaryColor, BlendMode.srcOver),
+                    colorFilter:
+                        const ColorFilter.mode(kPrimaryColor, BlendMode.srcIn),
                     child: SvgPicture.asset(
                       "assets/icons/Bell.svg",
                       width: 18,

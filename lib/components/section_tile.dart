@@ -36,3 +36,30 @@ class SectionTitle extends StatelessWidget {
     );
   }
 }
+
+class CategorySectionTitle extends StatelessWidget {
+  const CategorySectionTitle({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: getProportionateScreenWidth(16),
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const Spacer(),
+      ],
+    );
+  }
+}

@@ -10,16 +10,17 @@ import 'package:soni_store_app/models/user.dart' as models;
 import '../models/address.dart';
 
 class AuthProvider with ChangeNotifier {
-  models.User _user = models.User(uid: '', email: '');
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
+  // set setUser(models.User user) {
+  //   _user = user;
+  //   notifyListeners();
+  // }
+
+  models.User _user = models.User(uid: '', email: '');
   models.User get user => _user;
-  set setUser(models.User user) {
-    _user = user;
-    notifyListeners();
-  }
 
   String _uid = '';
   String get uid => _uid;

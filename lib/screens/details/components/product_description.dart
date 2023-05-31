@@ -46,6 +46,8 @@ class _ProductDescriptionState extends State<ProductDescription>
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+    // final authProvider = Provider.of<AuthProvider>(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,42 +101,36 @@ class _ProductDescriptionState extends State<ProductDescription>
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: Consumer<CartProvider>(
-                  builder: (context, cartProvider, _) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          widget.product.isFavourite =
-                              !widget.product.isFavourite;
-                        });
-
-                        cartProvider.addToCart(widget.product);
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.all(getProportionateScreenWidth(15)),
-                        width: getProportionateScreenWidth(64),
-                        decoration: BoxDecoration(
-                          color: widget.product.isFavourite
-                              ? const Color(0xFFFFE6E6)
-                              : const Color(0xFFF5F6F9),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                          ),
-                        ),
-                        child: SvgPicture.asset(
-                          "assets/icons/Cart Icon.svg",
-                          colorFilter: ColorFilter.mode(
-                              widget.product.isFavourite
-                                  ? const Color(0xFFFF4848)
-                                  : const Color(0xFFDBDEE4),
-                              BlendMode.srcIn),
-                          height: getProportionateScreenWidth(16),
-                        ),
-                      ),
-                    );
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      widget.product.isFavourite = !widget.product.isFavourite;
+                    });
+                    cartProvider.addToCart(widget.product);
                   },
+                  child: Container(
+                    padding: EdgeInsets.all(getProportionateScreenWidth(15)),
+                    width: getProportionateScreenWidth(64),
+                    decoration: BoxDecoration(
+                      color: widget.product.isFavourite
+                          ? const Color(0xFFFFE6E6)
+                          : const Color(0xFFF5F6F9),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                      ),
+                    ),
+                    child: SvgPicture.asset(
+                      "assets/icons/Cart Icon.svg",
+                      colorFilter: ColorFilter.mode(
+                        widget.product.isFavourite
+                            ? const Color(0xFFFF4848)
+                            : const Color(0xFFDBDEE4),
+                        BlendMode.srcIn,
+                      ),
+                      height: getProportionateScreenWidth(16),
+                    ),
+                  ),
                 ),
               ),
             ],

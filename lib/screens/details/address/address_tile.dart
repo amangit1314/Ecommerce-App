@@ -12,11 +12,11 @@ class AddressTile extends StatelessWidget {
   final String number;
   const AddressTile({
     super.key,
-    this.isSelected = false,
-    this.addressType = 'My Address',
-    this.address = 'Gudri Bajar, Mochiwara Churu',
-    this.pincode = '331001',
-    this.number = '+91 9649477393',
+    required this.isSelected,
+    required this.addressType,
+    required this.address,
+    required this.pincode,
+    required this.number,
   });
 
   @override
@@ -52,6 +52,7 @@ class AddressTile extends StatelessWidget {
               Text(
                 addressType,
                 style: const TextStyle(
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: kPrimaryColor,
                 ),
@@ -59,21 +60,36 @@ class AddressTile extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          const Text(
-            'Gudri Bajar, Mochiwara, Churu',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-            ),
+          Row(
+            children: [
+              Text(
+                '$address,',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(width: 2),
+              Text(
+                pincode,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: kPrimaryColor,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
-          const Text(
-            '+91 9649477393',
-            style: TextStyle(
+          const SizedBox(height: 4),
+          Text(
+            number,
+            style: const TextStyle(
               fontSize: 12,
-              color: Colors.grey,
+              color: kPrimaryColor,
               fontWeight: FontWeight.bold,
             ),
           ),

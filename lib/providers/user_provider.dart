@@ -57,7 +57,7 @@ class UserProvider with ChangeNotifier {
       await firestore
           .collection('users')
           .doc(uid)
-          .update({'photoURL': profileImage});
+          .update({'profImage': profileImage});
     } catch (err) {
       throw Exception(err);
     }

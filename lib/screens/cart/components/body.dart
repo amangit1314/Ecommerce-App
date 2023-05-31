@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/cart_provider.dart';
+import 'package:soni_store_app/providers/providers.dart';
 import 'package:soni_store_app/screens/cart/components/cart_card.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
@@ -19,8 +19,8 @@ class _BodyState extends State<Body> {
       padding: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(20),
       ),
-      child: Consumer<CartProvider>(
-        builder: (context, cartProvider, child) {
+      child: Consumer2<CartProvider, AuthProvider>(
+        builder: (context, cartProvider, authProvider, child) {
           return ListView.builder(
             itemCount: cartProvider.length,
             itemBuilder: (context, index) => Padding(

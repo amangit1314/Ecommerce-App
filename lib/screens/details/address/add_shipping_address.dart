@@ -2,12 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/models/address.dart';
+import 'package:soni_store_app/providers/auth_provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../components/default_button.dart';
-import '../../../providers/user_provider.dart';
-import '../../../providers/user_provider_try.dart';
+import '../../../providers/address_provider.dart';
 import '../../../utils/size_config.dart';
 
 class AddShippingAddress extends StatefulWidget {
@@ -54,7 +56,6 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
 
   @override
   Widget build(BuildContext context) {
-    final address = context.watch<UserProviderTry>().user;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -97,7 +98,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
             ),
             Column(
               children: [
-                Text(address.toString()),
+                const Text('Pick From Geolocator'),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 20.0),
                   child: Text('OR'),
@@ -218,10 +219,18 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                 text: 'Add Address',
                 txtColor: Colors.white,
                 press: () {
-                  final userProvider = context.read<UserProvider>();
-                  final userProviderTry = context.read<UserProviderTry>();
+                  final addressProvider = context.read<AddressProvider>();
+                  final authProvider = context.read<AuthProvider>();
+                  String generateAddressId() {
+                    const uuid = Uuid();
+                    return uuid.v4();
+                  }
+
+                  final String generatedAddressId = generateAddressId();
 
                   final address = Address(
+                    uid: authProvider.user.uid,
+                    addressId: generatedAddressId,
                     address: addressController.text,
                     addressType: addressTypeController.text,
                     phone: phoneController.text,
@@ -231,28 +240,31 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    if (userProviderTry.uid != '') {
-                      // userProvider
-                      //     .addAddress(userProvider.uid, address)
-                      //     .then((_) {
-                      //   Navigator.pop(context);
-                      // }).catchError((error) {
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(
-                      //       content: Text(error.toString()),
-                      //       backgroundColor: Colors.red,
-                      //     ),
-                      //   );
-                      // });
-
-                      // log(userProvider.uid);
-                      // userProviderTry.setAddress(address, userProvider.uid);
-
-                      log(userProviderTry.uid);
-                      userProviderTry.setAddress(address, userProviderTry.uid);
+                    if (authProvider.user.uid != '' &&
+                        authProvider.user.uid.isNotEmpty) {
+                      addressProvider
+                          .addAddress(
+                        address,
+                        authProvider.user.uid,
+                      )
+                          .then((_) {
+                        const GetSnackBar(
+                          title: 'Address Added ✔',
+                          message: 'Address Successfully Added ✔✨',
+                          backgroundColor: Colors.greenAccent,
+                        );
+                        log('Address Added Successfully');
+                        Navigator.pop(context);
+                      }).catchError((error) {
+                        GetSnackBar(
+                          title: 'Error Caught ⚠',
+                          message: error.toString(),
+                          backgroundColor: Colors.red,
+                        );
+                      });
                     }
 
-                    log(userProvider.uid);
+                    log('User Id -> ${authProvider.user.uid}');
                   }
                 },
               ),

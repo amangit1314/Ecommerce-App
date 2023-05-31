@@ -71,9 +71,9 @@ class _CategoriesState extends State<Categories>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: SectionTitle(title: 'Categories', press: () {}),
+          const Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: CategorySectionTitle(title: 'Categories'),
           ),
           SizedBox(height: getProportionateScreenWidth(15)),
           SizedBox(

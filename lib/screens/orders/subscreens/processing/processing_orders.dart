@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:soni_store_app/utils/constants.dart';
 import 'package:soni_store_app/utils/size_config.dart';
+
+import '../../../../providers/auth_provider.dart';
 
 class ProcessingOrders extends StatelessWidget {
   const ProcessingOrders({
@@ -14,6 +17,7 @@ class ProcessingOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return Padding(
       padding: EdgeInsets.only(
         left: getProportionateScreenWidth(20),
@@ -36,6 +40,7 @@ class ProcessingOrders extends StatelessWidget {
             stream: FirebaseFirestore.instance
                 .collection('orders')
                 .where('orderStatus', isEqualTo: 'Processing')
+                .where('uid', isEqualTo: authProvider.user.uid)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {

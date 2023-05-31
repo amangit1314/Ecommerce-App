@@ -53,10 +53,10 @@ class SearchedItemsScreenView extends StatelessWidget {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
-                final name = product['name'] as String;
-                final category = product['category'] as String;
-                final price = product['price'] as String;
-                final imageUrl = product['image_url'] as String;
+                final name = product['title'] as String;
+                final category = product['categories'] as List<String>;
+                final price = product['price'].toString();
+                final imageUrl = product['images'] as List<String>;
 
                 return GridTile(
                   child: GestureDetector(
@@ -74,7 +74,7 @@ class SearchedItemsScreenView extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.network(
-                                imageUrl,
+                                imageUrl.first,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -87,7 +87,7 @@ class SearchedItemsScreenView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            category,
+                            category.first,
                             style: const TextStyle(
                               color: Colors.grey,
                             ),

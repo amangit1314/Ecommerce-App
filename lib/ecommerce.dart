@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:soni_store_app/providers/address_provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
-import 'package:soni_store_app/providers/user_provider_try.dart';
 import 'package:soni_store_app/resources/services/auth/auth_service.dart';
 import 'package:soni_store_app/screens/home/home_screen.dart';
 import 'package:soni_store_app/screens/splash/splash_screen.dart';
@@ -25,15 +25,13 @@ class _EcommerceAppState extends State<EcommerceApp> {
     return MultiProvider(
       providers: [
         Provider<AuthService>(create: (_) => AuthService()),
-        ChangeNotifierProvider(create: (_) => locator<UserProvider>()),
         ChangeNotifierProvider(create: (_) => locator<AuthProvider>()),
         ChangeNotifierProvider(create: (_) => locator<ProductProvider>()),
         ChangeNotifierProvider(create: (_) => locator<CartProvider>()),
-        ChangeNotifierProvider(create: (_) => locator<CategoryProvider>()),
         ChangeNotifierProvider(create: (_) => locator<OrderProvider>()),
         ChangeNotifierProvider(create: (_) => locator<PaymentProvider>()),
         ChangeNotifierProvider(create: (_) => locator<ProfileProvider>()),
-        ChangeNotifierProvider(create: (_) => locator<UserProviderTry>()),
+        ChangeNotifierProvider(create: (_) => locator<AddressProvider>()),
       ],
       child: GetMaterialApp(
         title: 'SnapCart Ecommerce App',
@@ -49,6 +47,7 @@ class _EcommerceAppState extends State<EcommerceApp> {
               if (snapshot.hasData && snapshot.data != null) {
                 Provider.of<AuthProvider>(context, listen: false)
                     .getUserDetails(snapshot.data!);
+
                 log(snapshot.data.toString());
                 return const HomeScreen();
               }

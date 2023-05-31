@@ -1,3 +1,4 @@
+export 'address.dart';
 export 'cart.dart';
 export 'order.dart';
 export 'payment.dart';
