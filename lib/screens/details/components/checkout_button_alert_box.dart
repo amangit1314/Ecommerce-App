@@ -281,7 +281,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    cartProvider.addToCart(widget.widget.product);
+                    cartProvider.addToCart(widget.widget.product, userId);
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const CartScreen(),
