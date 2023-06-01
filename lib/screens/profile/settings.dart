@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../utils/constants.dart';
 
@@ -13,7 +11,31 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool value = true;
+  bool _notificationPermissionEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkNotificationPermissionStatus();
+  }
+
+  void _checkNotificationPermissionStatus() async {
+    final status = await Permission.notification.status;
+    setState(() {
+      _notificationPermissionEnabled = status.isGranted;
+    });
+  }
+
+  void _toggleNotificationPermission() async {
+    if (!_notificationPermissionEnabled) {
+      final status = await Permission.notification.request();
+      setState(() {
+        _notificationPermissionEnabled = status.isGranted;
+      });
+    } else {
+      openAppSettings();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,38 +78,43 @@ class _SettingsState extends State<Settings> {
           Expanded(
             child: ListView(
               children: [
-                ListTile(
-                  onTap: () {},
-                  leading: const FaIcon(
-                    FontAwesomeIcons.ticket,
-                    color: kPrimaryColor,
-                  ),
-                  title: const Text('Change Currency'),
-                  subtitle: const Text(
-                    'USD',
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: buildIOSSwitch(),
+                SwitchListTile(
+                  title: const Text('Notifications'),
+                  value: _notificationPermissionEnabled,
+                  onChanged: (_) => _toggleNotificationPermission(),
                 ),
-                ListTile(
-                  onTap: () {},
-                  leading: ColorFiltered(
-                    colorFilter:
-                        const ColorFilter.mode(kPrimaryColor, BlendMode.srcIn),
-                    child: SvgPicture.asset(
-                      "assets/icons/Bell.svg",
-                      width: 18,
-                    ),
-                  ),
-                  title: const Text('Notification'),
-                  subtitle: const Text(
-                    'On',
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: buildIOSSwitch(),
-                ),
+                // ListTile(
+                //   onTap: () {},
+                //   leading: const FaIcon(
+                //     FontAwesomeIcons.ticket,
+                //     color: kPrimaryColor,
+                //   ),
+                //   title: const Text('Change Currency'),
+                //   subtitle: const Text(
+                //     'USD',
+                //     maxLines: 3,
+                //     overflow: TextOverflow.ellipsis,
+                //   ),
+                //   trailing: buildIOSSwitch(),
+                // ),
+                // ListTile(
+                //   onTap: () {},
+                //   leading: ColorFiltered(
+                //     colorFilter:
+                //         const ColorFilter.mode(kPrimaryColor, BlendMode.srcIn),
+                //     child: SvgPicture.asset(
+                //       "assets/icons/Bell.svg",
+                //       width: 18,
+                //     ),
+                //   ),
+                //   title: const Text('Notification'),
+                //   subtitle: const Text(
+                //     'On',
+                //     maxLines: 3,
+                //     overflow: TextOverflow.ellipsis,
+                //   ),
+                //   trailing: buildIOSSwitch(),
+                // ),
               ],
             ),
           ),
@@ -96,14 +123,14 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget buildIOSSwitch() => Transform.scale(
-        scale: 1.1,
-        child: CupertinoSwitch(
-          activeColor: kPrimaryColor.withOpacity(.5),
-          trackColor: Colors.black,
-          thumbColor: kPrimaryColor,
-          value: value,
-          onChanged: (value) => setState(() => this.value = value),
-        ),
-      );
+  // Widget buildIOSSwitch() => Transform.scale(
+  //       scale: 1.1,
+  //       child: CupertinoSwitch(
+  //         activeColor: kPrimaryColor.withOpacity(.5),
+  //         trackColor: Colors.black,
+  //         thumbColor: kPrimaryColor,
+  //         value: value,
+  //         onChanged: (value) => setState(() => this.value = value),
+  //       ),
+  //     );
 }

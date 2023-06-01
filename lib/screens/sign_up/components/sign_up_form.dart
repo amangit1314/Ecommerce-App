@@ -10,7 +10,6 @@ import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../providers/auth_provider.dart';
-import '../../../providers/user_provider.dart';
 import '../../../providers/user_provider_try.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
@@ -48,7 +47,7 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  Future register(AuthProvider authProvider, UserProvider userProvider) async {
+  Future register(AuthProvider authProvider) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -60,7 +59,7 @@ class _SignUpFormState extends State<SignUpForm> {
         );
 
         if (uid.isNotEmpty) {
-          await userProvider.refreshUser(); // Refresh the user information
+          await authProvider.refreshUser(); // Refresh the user information
 
           const GetSnackBar(
             message: 'User registered successfully 🎉',
@@ -137,7 +136,7 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -158,7 +157,7 @@ class _SignUpFormState extends State<SignUpForm> {
             child: DefaultButton(
               txtColor: Colors.white,
               text: "Continue",
-              press: () => register(authProvider, userProvider),
+              press: () => register(authProvider),
             ),
           ),
         ],

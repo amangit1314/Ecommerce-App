@@ -22,17 +22,21 @@ class _BodyState extends State<Body> {
       child: Consumer2<CartProvider, AuthProvider>(
         builder: (context, cartProvider, authProvider, child) {
           return ListView.builder(
-            itemCount: cartProvider.length,
+            itemCount: cartProvider.cartItems.length,
             itemBuilder: (context, index) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               // display every cart item from cartProvider
               child: Dismissible(
-                key: Key(cartProvider.name),
+                key: Key(cartProvider.cartItems[index].id),
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) {
                   setState(() {
                     cartProvider.cartItems.removeAt(index);
                   });
+                  cartProvider.removeFromCart(
+                    cartProvider.cartItems[index],
+                    authProvider.user.uid,
+                  );
                 },
                 background: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

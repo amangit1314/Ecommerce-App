@@ -5,6 +5,7 @@ import 'package:soni_store_app/providers/cart_provider.dart';
 import 'package:soni_store_app/screens/details/components/product_details_sheet.dart';
 
 import '../../../models/product.dart';
+import '../../../providers/auth_provider.dart';
 import '../../../utils/size_config.dart';
 import '../address/shipping_address_sheet.dart';
 
@@ -47,7 +48,7 @@ class _ProductDescriptionState extends State<ProductDescription>
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    // final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +107,10 @@ class _ProductDescriptionState extends State<ProductDescription>
                     setState(() {
                       widget.product.isFavourite = !widget.product.isFavourite;
                     });
-                    cartProvider.addToCart(widget.product);
+                    cartProvider.addToCart(
+                      widget.product,
+                      authProvider.user.uid,
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.all(getProportionateScreenWidth(15)),

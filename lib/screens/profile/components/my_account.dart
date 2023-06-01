@@ -35,11 +35,11 @@ class _MyAccountState extends State<MyAccount> {
               ),
         ),
         backgroundColor: Colors.white,
-        leading: GestureDetector(
-          onTap: () {
+        leading: IconButton(
+          onPressed: () {
             Navigator.pop(context);
           },
-          child: const Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: kPrimaryColor,
           ),

@@ -2,141 +2,85 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 
-import 'auth_provider.dart';
-
 class CartProvider with ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  final Map<String, models.Product> _items = {};
-
   List<models.Product> _cartItems = [];
   List<models.Product> get cartItems => _cartItems;
-  int get length => cartItems.length;
 
-  models.User _user = models.User(uid: '', email: '');
-  models.User get user => _user;
-
-  final String _userId = AuthProvider().user.email;
-  String get userId => _userId;
-
-  String _name = '';
-  String get name => _name;
-
-  final String _image = '';
-  String get image => _image;
-
-  final String _price = '';
-  String get price => _price;
-
-  final bool _isInCart = false;
-  bool get isInCart => _isInCart;
-
-  int _cartItemQuantity = 0;
-  int get cartItemQuantity => _cartItemQuantity;
-
-  changeName(String newName) {
-    _name = newName;
-    notifyListeners();
-  }
-
-  Future<void> getUserDetails() async {
-    final DocumentSnapshot<Map<String, dynamic>> snap =
-        await _firestore.collection('users').doc(userId).get();
-    _user = models.User.fromMap(snap);
-  }
-
-  Future<void> addToCart(models.Product product) async {
+  Future<void> addToCart(models.Product product, String uid) async {
     try {
-      var cartItemsSnapshot = await FirebaseFirestore.instance
+      final productsData = product.toMap();
+      if (productsData.isEmpty) {
+        throw Exception('Product data is null');
+      }
+
+      final cartItemsCollection = FirebaseFirestore.instance
           .collection('users')
-          .doc(_user.uid)
-          .collection("cartItems")
-          .get();
+          .doc(uid)
+          .collection("cartItems");
 
-      for (var doc in cartItemsSnapshot.docs) {
-        var cartItem = models.Product.fromJson(doc.id);
-        _items[doc.id] = cartItem;
-      }
-
-      int index = cartItems.indexWhere((item) => item.id == product.id);
-
-      if (index != -1) {
-        cartItems[index].quantity += 1;
-      } else {
-        cartItems.add(
-          models.Product(
-            id: product.id,
-            title: product.title,
-            quantity: 1,
-            price: product.price,
-            images: product.images,
-          ),
-        );
-      }
-
-      _cartItemQuantity = _calculateCartItemQuantity();
-
-      await _updateCartItems(
-        cartItems,
-        FirebaseFirestore.instance.collection('users').doc(_user.uid),
+      // Check if the product already exists in the cart
+      final existingProduct = _cartItems.firstWhere(
+        (item) => item.id == product.id,
+        orElse: () => product,
       );
+
+      if (existingProduct != null) {
+        // Increment the quantity of the existing product
+        existingProduct.quantity += 1;
+        log('Product quantity incremented: $existingProduct');
+
+        // Update the quantity in Firestore
+        final existingProductDoc = cartItemsCollection.doc(product.id);
+        await existingProductDoc.set(
+          {'quantity': existingProduct.quantity},
+          SetOptions(merge: true),
+        );
+      } else {
+        // Add the product to the cart
+        _cartItems.add(product);
+        log('Product added to cart: $product');
+
+        // Generate a new unique document ID for the product
+        final newProductDoc = cartItemsCollection.doc(product.id);
+
+        await newProductDoc.set({
+          ...productsData,
+          'userId': uid,
+          'quantity': 1, // Set initial quantity to 1
+        });
+      }
 
       notifyListeners();
     } catch (error) {
-      log('-----------------------------------------');
       log('Failed to add item to cart: $error');
-      log('-----------------------------------------');
-      log('id: ${product.id}');
-      log('title: ${product.title}');
-      log('-----------------------------------------');
-      log('userId: ${_user.uid}');
-      log('-----------------------------------------');
-      log('quantity: ${product.quantity}');
-      log('price: ${product.price}');
-      log('images: ${product.images}');
-      log('-----------------------------------------');
     }
   }
 
-  Future<void> removeFromCart(models.Product product) async {
+  Future<void> removeFromCart(models.Product product, String uid) async {
     try {
-      var cartItemsSnapshot = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(_user.uid)
-          .collection("cartItems")
-          .get();
+      final cartItemsCollection = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection("cartItems");
 
-      for (var doc in cartItemsSnapshot.docs) {
-        var cartItem = models.Product.fromJson(doc.id);
-        _items[doc.id] = cartItem;
-      }
+      await cartItemsCollection.doc(product.id).delete();
 
-      int index = cartItems.indexWhere((item) => item.id == product.id);
+      _cartItems.remove(product);
 
-      if (index != -1) {
-        if (cartItems[index].quantity > 1) {
-          cartItems[index].quantity -= 1;
-        } else {
-          cartItems.removeAt(index);
-        }
-
-        await _updateCartItems(
-          cartItems,
-          FirebaseFirestore.instance.collection("users").doc(_user.uid),
-        );
-      }
+      notifyListeners();
     } catch (error) {
       log('Failed to delete item from cart: $error');
     }
   }
 
-  Future<void> getCartItems(String userId) async {
+  Future<List<models.Product>> getCartItems(String uid) async {
     try {
       var cartItemsSnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(userId)
+          .doc(uid)
           .collection("cartItems")
           .get();
 
@@ -151,40 +95,11 @@ class CartProvider with ChangeNotifier {
         );
       }).toList();
 
-      _cartItemQuantity = _calculateCartItemQuantity();
-
-      notifyListeners();
+      return _cartItems;
     } catch (error) {
       log('Failed to fetch cart items: $error');
-      _cartItems = [];
-      _cartItemQuantity = 0;
+      return [];
     }
-  }
-
-  Future<void> _updateCartItems(
-    List<models.Product> cartItems,
-    DocumentReference userDocRef,
-  ) async {
-    try {
-      var cartItemsData = cartItems.map((item) => item.toMap()).toList();
-
-      await userDocRef.update({'cartItems': cartItemsData});
-
-      _cartItems = cartItems;
-      _cartItemQuantity = _calculateCartItemQuantity();
-
-      notifyListeners();
-    } catch (error) {
-      log('Failed to update cart items: $error');
-    }
-  }
-
-  int _calculateCartItemQuantity() {
-    int quantity = 0;
-    for (var item in _cartItems) {
-      quantity += item.quantity;
-    }
-    return quantity;
   }
 
   double get totalPrice {

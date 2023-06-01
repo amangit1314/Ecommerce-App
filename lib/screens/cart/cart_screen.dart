@@ -42,7 +42,7 @@ class CartScreen extends StatelessWidget {
           Consumer<CartProvider>(
             builder: (context, cartProvider, index) {
               return Text(
-                "${cartProvider.length} items",
+                "${cartProvider.cartItems.length} items",
                 style: Theme.of(context).textTheme.bodySmall,
               );
             },
