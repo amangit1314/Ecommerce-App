@@ -5,21 +5,28 @@ import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 
 class OrderProvider with ChangeNotifier {
-  List<models.Order> _orders = [];
+  final List<models.Order> _orders = [];
   List<models.Order> get orders => _orders;
 
-  Future<void> fetchOrders(String userId) async {
+  Future<List<models.Order>> fetchOrders(
+      String userId, String orderStaus) async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance
+      final querySnapshotCollection = FirebaseFirestore.instance
           .collection('orders')
           .where('userId', isEqualTo: userId)
-          .orderBy('uid')
-          .get();
+          .where('orderStatus', isEqualTo: orderStaus);
 
-      _orders = querySnapshot.docs
-          .map((doc) => models.Order.fromMap(doc.data()))
-          .toList();
+      final ordersSnapshot = await querySnapshotCollection.get();
+
+      _orders.clear();
+
+      for (final doc in ordersSnapshot.docs) {
+        final orderItemData = doc.data();
+        _orders.add(models.Order.fromMap(orderItemData));
+      }
+
       notifyListeners();
+      return _orders;
     } catch (error) {
       throw Exception('Failed to fetch orders: $error');
     }
@@ -54,6 +61,30 @@ class OrderProvider with ChangeNotifier {
     } catch (error) {
       log('Failed to add order: $error');
       throw Exception('Failed to add order: $error');
+    }
+  }
+
+  // change orderCategory to Delivered
+  Future<void> changeOrderStatus({
+    required String uid,
+    required String oid,
+    required String orderStatus,
+  }) async {
+    try {
+      final ordersCollection = FirebaseFirestore.instance.collection('orders');
+      final orderDoc = ordersCollection.doc(oid);
+
+      final orderSnapshot = await orderDoc.get();
+      if (!orderSnapshot.exists) {
+        throw Exception('Order document does not exist');
+      }
+
+      await orderDoc.update({'orderStatus': orderStatus});
+      log('Order status updated successfully ✨🎉🥳');
+      notifyListeners();
+    } catch (error) {
+      log('Failed to update order status: $error');
+      throw Exception('Failed to update order status: $error');
     }
   }
 }

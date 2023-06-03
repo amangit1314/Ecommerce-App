@@ -34,7 +34,7 @@ class AuthService {
         }
       }
     } catch (e) {
-      log(e.toString());
+      print('Error retrieving user data: $e');
     }
 
     return null;
@@ -82,7 +82,7 @@ class AuthService {
         });
       }
     } catch (e) {
-      log(e.toString());
+      print('Error signing in with email and password: $e');
     }
 
     return null;
@@ -111,121 +111,90 @@ class AuthService {
           addresses: [],
         );
 
-        await _firestore
-            .collection('users')
-            .doc(user.uid)
-            .set(user.toMap(), SetOptions(merge: true));
-        return _userFromFirebase(userCredential.user);
+        await _firestore.collection('users').doc(user.uid).set(user.toMap());
+
+        return user;
       }
     } catch (e) {
-      log(e.toString());
-      return null;
+      log('Error creating user with email and password: $e');
     }
+
+    return null;
+  }
+
+  Future<models.User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuth =
+            await googleSignInAccount.authentication;
+
+        final auth.AuthCredential credential =
+            auth.GoogleAuthProvider.credential(
+          idToken: googleSignInAuth.idToken,
+          accessToken: googleSignInAuth.accessToken,
+        );
+
+        final auth.UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+
+        if (userCredential.user != null) {
+          final uid = userCredential.user!.uid;
+          final email = userCredential.user!.email;
+
+          // Check if the user exists in Firestore
+          final snapshot = await _firestore.collection('users').doc(uid).get();
+          if (snapshot.exists) {
+            final userData = snapshot.data();
+            if (userData != null) {
+              return models.User(
+                uid: uid,
+                email: email!,
+                username: userData['username'],
+                password: userData['password'],
+                profImage: userData['profImage'],
+                gender: userData['gender'],
+                number: userData['number'],
+                cartItems: userData['cartItems'],
+                addresses: userData['addresses'],
+              );
+            }
+          }
+
+          // If the user does not exist in Firestore, create a new user
+          models.User user = models.User(
+            uid: uid,
+            email: email!,
+            username: email.split('@')[0],
+            password: '',
+            profImage:
+                'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000',
+            gender: 'Not Defined',
+            number: 'Not Defined',
+            cartItems: [],
+            addresses: [],
+          );
+
+          await _firestore.collection('users').doc(uid).set(user.toMap());
+
+          return user;
+        }
+      }
+    } catch (e) {
+      log('Error signing in with Google: $e');
+    }
+
     return null;
   }
 
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
-    } catch (error) {
-      log(error.toString());
-      rethrow;
+      await _googleSignIn.signOut();
+    } catch (e) {
+      log('Error signing out: $e');
     }
   }
-
-  Future<auth.UserCredential> authenticateWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      final credential = auth.GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      auth.UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-
-      return userCredential;
-    } catch (error) {
-      log(error.toString());
-      rethrow;
-    }
-  }
-
-  Future<models.User?> getUserDetails(String uid) async {
-    try {
-      final DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await _firestore.collection('users').doc(uid).get();
-      if (snapshot.exists) {
-        final userData = snapshot.data();
-        if (userData != null) {
-          return models.User(
-            uid: uid,
-            email: userData['email'],
-            username: userData['username'],
-            password: userData['password'],
-            profImage: userData['profImage'],
-            gender: userData['gender'],
-            number: userData['number'],
-            cartItems: userData['cartItems'],
-            addresses: userData['addresses'],
-          );
-        }
-      }
-    } catch (error) {
-      log(error.toString());
-    }
-    return null;
-  }
-
-  Future<void> updateUserField(String uid, String field, dynamic value) async {
-    try {
-      await _firestore.collection('users').doc(uid).update({field: value});
-    } catch (error) {
-      log(error.toString());
-      rethrow;
-    }
-  }
-
-//   Future<void> setAddress(Address address, String uid) async {
-//     try {
-//       final DocumentReference userRef = _firestore.collection('users').doc(uid);
-//       final DocumentSnapshot<Object?> snapshot = await userRef.get();
-//       if (snapshot.exists) {
-//         final List<Address?>? addresses = snapshot.data()?['addresses'];
-//         if (addresses != null) {
-//           addresses.add(address);
-//           await userRef.update({'addresses': addresses});
-//         }
-//       }
-//     } catch (error) {
-//       log(error.toString());
-//       rethrow;
-//     }
-//   }
-
-// void setSelectedAddress(Address address, String uid) async {
-//     try {
-//       final DocumentReference userRef = _firestore.collection('users').doc(uid);
-//       final DocumentSnapshot<Map<String, dynamic>> snapshot =
-//           await userRef.get();
-//       if (snapshot.exists) {
-//         final List<Address?>? addresses = snapshot.data()?['addresses'];
-//         if (addresses != null) {
-//           for (int i = 0; i < addresses.length; i++) {
-//             if (addresses[i]?.id == address.id) {
-//               addresses[i] = address;
-//               break;
-//             }
-//           }
-//           await userRef.update({'addresses': addresses});
-//         }
-//       }
-//     } catch (error) {
-//       log(error.toString());
-//       rethrow;
-//     }
-//   }
 }

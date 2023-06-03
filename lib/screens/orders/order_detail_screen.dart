@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/auth_provider.dart';
+import 'package:soni_store_app/providers/order_provider.dart';
 
 import '../../models/models.dart' as models;
 import '../../utils/constants.dart';
@@ -19,7 +21,8 @@ class OrderDetailScreen extends StatefulWidget {
     Key? key,
     required this.statusName,
     required this.orderCategory,
-    this.productImage,
+    this.productImage =
+        'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000',
   }) : super(key: key);
 
   @override
@@ -31,11 +34,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       FirebaseFirestore.instance.collection('orders');
 
   Future<List<models.Order>> fetchProductsFromFirestore(
-      AuthProvider authProvider) async {
+      AuthProvider authProvider, String orderStaus) async {
     final List<models.Order> orders = [];
     // filtering if order status is Processing
     final QuerySnapshot snapshot = await _refOrders
-        .where('orderStatus', isEqualTo: 'Processing')
+        .where('orderStatus', isEqualTo: orderStaus)
         .where('uid', isEqualTo: authProvider.user.uid)
         .get();
     for (var element in snapshot.docs) {
@@ -46,9 +49,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           widget.statusName,
@@ -77,70 +79,117 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             children: [
               Expanded(
                 // Wrap the StreamBuilder with Expanded
-                child: FutureBuilder<List<models.Order>>(
-                  future: fetchProductsFromFirestore(authProvider),
-                  builder: (context, snapshot) {
-                    final List<models.Order> orders = snapshot.data ?? [];
+                child: Consumer2<OrderProvider, AuthProvider>(
+                    builder: (context, orderProvider, authProvider, child) {
+                  return FutureBuilder<List<models.Order>>(
+                    future: fetchProductsFromFirestore(
+                        authProvider, widget.statusName),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: orders.length,
-                          itemBuilder: (context, index) {
-                            return const LoadingShimmerSkelton();
-                          },
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(width: 8);
-                          },
-                        ),
-                      );
-                    }
-
-                    if (snapshot.hasError) {
-                      log('------------------------------');
-                      log(snapshot.error.toString());
-                      log('------------------------------');
-                      return const Center(
-                        child: Text('Something went wrong'),
-                      );
-                    }
-
-                    return ListView.separated(
-                      scrollDirection: Axis.vertical,
-                      itemCount: orders.length,
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: 8);
-                      },
-                      itemBuilder: (context, index) {
-                        return FutureBuilder<String?>(
-                          future: getProductName(orders[index].productId),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator(); // Show a loading indicator while fetching the product name.
-                            } else if (snapshot.hasError) {
-                              return const Text(
-                                  'Error'); // Show an error message if an error occurred while fetching the product name.
-                            } else {
-                              final String? productName = snapshot.data;
-
-                              return OrderWidget(
-                                productImage: orders[index].productImage,
-                                quantity: orders[index].quantity,
-                                orderId: orders[index].orderId,
-                                productName: productName ??
-                                    'Unknown', // Use the retrieved product name or a default value if it's null.
-                                orderPrice: orders[index].amount,
-                                orderDate: orders[index].orderedDate,
-                              );
-                            }
-                          },
+                      if (snapshot.hasError) {
+                        log('------------------------------');
+                        log(snapshot.error.toString());
+                        log('------------------------------');
+                        return const Center(
+                          child: Text('Something went wrong'),
                         );
-                      },
-                    );
-                  },
-                ),
+                      }
+
+                      final List<models.Order> orders = snapshot.data ?? [];
+
+                      if (orders.isEmpty) {
+                        return const Center(child: Text('Your cart is empty'));
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: orders.length,
+                            itemBuilder: (context, index) {
+                              return const LoadingShimmerSkelton();
+                            },
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(width: 8);
+                            },
+                          ),
+                        );
+                      }
+
+                      return ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        itemCount: orders.length,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 8);
+                        },
+                        itemBuilder: (context, index) {
+                          return FutureBuilder<String?>(
+                            future: getProductName(orders[index].productId),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator(); // Show a loading indicator while fetching the product name.
+                              } else if (snapshot.hasError) {
+                                return const Text(
+                                    'Error'); // Show an error message if an error occurred while fetching the product name.
+                              } else {
+                                final String? productName = snapshot.data;
+
+                                return Dismissible(
+                                  key: Key(orders[index].productId),
+                                  direction: DismissDirection.endToStart,
+                                  onDismissed: (direction) {
+                                    orderProvider.changeOrderStatus(
+                                      uid: authProvider.user.uid,
+                                      oid: orders[index].orderId,
+                                      orderStatus: 'Delivered',
+                                    );
+                                  },
+                                  background: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFFFFE6E6),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Spacer(),
+                                        SizedBox(
+                                          // height width 18
+                                          height:
+                                              getProportionateScreenHeight(18),
+                                          child: SvgPicture.asset(
+                                            "assets/icons/Success.svg",
+                                            // color: Colors.green,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  child: OrderWidget(
+                                    productImage: orders[index].productImage,
+                                    quantity: orders[index].quantity,
+                                    orderId: orders[index].orderId,
+                                    productName: productName ??
+                                        'Cart Order', // Use the retrieved product name or a default value if it's null.
+                                    orderPrice: orders[index].amount,
+                                    orderDate: orders[index].orderedDate,
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        },
+                      );
+                    },
+                  );
+                }),
               ),
             ],
           ),
@@ -203,7 +252,8 @@ class OrderWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
               image: DecorationImage(
                 image: NetworkImage(
-                  productImage ?? 'https://example.com/default-image.jpg',
+                  productImage ??
+                      'https://img.freepik.com/premium-vector/order-received-abstract-concept-vector-illustration_107173-31017.jpg',
                 ),
                 fit: BoxFit.cover,
               ),

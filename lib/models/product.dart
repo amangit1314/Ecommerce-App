@@ -50,6 +50,7 @@ class Product {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'title': title,
       'description': description,
       'images': images,
       'colors': colors.map((x) => x).toList(),

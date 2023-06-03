@@ -16,7 +16,6 @@ class HelpCenter extends StatelessWidget {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            // back to previous screen
             Navigator.of(context).pop();
           },
           icon: const Icon(
@@ -30,11 +29,8 @@ class HelpCenter extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
-          // logout icon
           IconButton(
-            onPressed: () {
-              // logout
-            },
+            onPressed: () {},
             icon: const Icon(
               Icons.logout,
               color: kPrimaryColor,
@@ -44,7 +40,6 @@ class HelpCenter extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // container with decoration image
           Container(
             height: 200,
             margin: const EdgeInsets.only(
@@ -60,12 +55,10 @@ class HelpCenter extends StatelessWidget {
               ),
             ),
           ),
-
           const Center(
             child: Text(
               'We are here to help so please get in touch with us',
               textAlign: TextAlign.center,
-              // style of big bold font size with black color
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -73,11 +66,9 @@ class HelpCenter extends StatelessWidget {
               ),
             ),
           ),
-          // size box h 20
           const SizedBox(
             height: 20,
           ),
-          // tile with circular container contains phone icon with column have detail of phone number
           const ListTile(
             leading: CircleAvatar(
               backgroundColor: kPrimaryColor,
@@ -86,10 +77,20 @@ class HelpCenter extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            title: Text('Phone Number'),
-            subtitle: Text('+91 1234567890'),
+            title: Text(
+              'Phone Number',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: Text(
+              '+91 1234567890',
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
           ),
-          // divider with vertical padding of 20
           const Padding(
             padding: EdgeInsets.only(
               top: 2.0,
@@ -112,14 +113,22 @@ class HelpCenter extends StatelessWidget {
                 ),
               ),
             ),
-            title: Text('E-mail address'),
-            subtitle: Text('gitaman8481@gmail.com'),
+            title: Text(
+              'E-mail address',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: Text(
+              'gitaman8481@gmail.com',
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
           ),
-
-          // tile with square pic with little borderradius and column of contact live chat
         ],
       ),
-      // bottom nav bar with littile
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(
           vertical: getProportionateScreenWidth(15),
@@ -148,18 +157,23 @@ class HelpCenter extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Center(
-                child: FaIcon(
-              FontAwesomeIcons.facebookMessenger,
-              color: Colors.white,
-            )),
+              child: FaIcon(
+                FontAwesomeIcons.facebookMessenger,
+                color: Colors.white,
+              ),
+            ),
           ),
-          title: const Text('Contact Live Chat'),
+          title: const Text(
+            'Contact Live Chat',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           subtitle: const Text(
             'We are ready to answer you',
-            // style with font siz e8
             style: TextStyle(fontSize: 12),
           ),
-          // tailing icon of ios right arrow
           trailing: const Icon(Icons.arrow_forward_ios_rounded),
         ),
       ),
