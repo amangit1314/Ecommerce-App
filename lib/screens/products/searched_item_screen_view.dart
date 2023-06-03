@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class SearchedItemsScreenView extends StatelessWidget {
   final String item;
+
   const SearchedItemsScreenView({Key? key, required this.item})
       : super(key: key);
 
@@ -25,7 +26,7 @@ class SearchedItemsScreenView extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        StreamBuilder<QuerySnapshot>(
+        StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
           stream: item.isNotEmpty
               ? FirebaseFirestore.instance
                   .collection('products')
@@ -54,9 +55,9 @@ class SearchedItemsScreenView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final product = products[index];
                 final name = product['title'] as String;
-                final category = product['categories'] as List<String>;
+                final category = product['categories'] as List<dynamic>;
                 final price = product['price'].toString();
-                final imageUrl = product['images'] as List<String>;
+                final imageUrl = product['images'] as List<dynamic>;
 
                 return GridTile(
                   child: GestureDetector(
@@ -74,7 +75,7 @@ class SearchedItemsScreenView extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.network(
-                                imageUrl.first,
+                                imageUrl.first as String,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -87,7 +88,7 @@ class SearchedItemsScreenView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            category.first,
+                            category.first as String,
                             style: const TextStyle(
                               color: Colors.grey,
                             ),
