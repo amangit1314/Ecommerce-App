@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:soni_store_app/utils/constants.dart';
 
 import '../../utils/size_config.dart';
+import '../support_chat/support_chat.dart';
 
 class HelpCenter extends StatelessWidget {
   const HelpCenter({super.key});
@@ -50,7 +51,8 @@ class HelpCenter extends StatelessWidget {
             ),
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/payment.png'),
+                image: NetworkImage(
+                    'https://img.freepik.com/free-vector/flat-design-illustration-customer-support_23-2148887720.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -61,7 +63,7 @@ class HelpCenter extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
             ),
@@ -85,7 +87,7 @@ class HelpCenter extends StatelessWidget {
               ),
             ),
             subtitle: Text(
-              '+91 1234567890',
+              '+91 9649477393',
               style: TextStyle(
                 fontSize: 12,
               ),
@@ -129,52 +131,62 @@ class HelpCenter extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: getProportionateScreenWidth(15),
-          horizontal: getProportionateScreenWidth(5),
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, -15),
-              blurRadius: 20,
-              color: const Color(0xFFDADADA).withOpacity(0.15),
-            )
-          ],
-        ),
-        child: ListTile(
-          leading: Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: kPrimaryColor,
-              borderRadius: BorderRadius.circular(10),
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SupportChat(),
             ),
-            child: const Center(
-              child: FaIcon(
-                FontAwesomeIcons.facebookMessenger,
-                color: Colors.white,
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: getProportionateScreenWidth(15),
+            horizontal: getProportionateScreenWidth(5),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, -15),
+                blurRadius: 20,
+                color: const Color(0xFFDADADA).withOpacity(0.15),
+              )
+            ],
+          ),
+          child: ListTile(
+            leading: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: kPrimaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Center(
+                child: FaIcon(
+                  FontAwesomeIcons.facebookMessenger,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-          title: const Text(
-            'Contact Live Chat',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
+            title: const Text(
+              'Contact Live Chat',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
             ),
+            subtitle: const Text(
+              'We are ready to answer you',
+              style: TextStyle(fontSize: 12),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
-          subtitle: const Text(
-            'We are ready to answer you',
-            style: TextStyle(fontSize: 12),
-          ),
-          trailing: const Icon(Icons.arrow_forward_ios_rounded),
         ),
       ),
     );

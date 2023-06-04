@@ -81,7 +81,7 @@ class _RecentsScreenState extends State<RecentsScreen>
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const OrderDetailScreen(
-                    statusName: 'Awaiting Payments',
+                    statusName: 'Processing',
                     orderCategory: 'Pants',
                   ),
                 ),

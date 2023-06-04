@@ -34,7 +34,7 @@ class AuthService {
         }
       }
     } catch (e) {
-      print('Error retrieving user data: $e');
+      log('Error retrieving user data: $e');
     }
 
     return null;
@@ -82,7 +82,7 @@ class AuthService {
         });
       }
     } catch (e) {
-      print('Error signing in with email and password: $e');
+      log('Error signing in with email and password: $e');
     }
 
     return null;

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -271,7 +272,7 @@ class CategoryGridItem extends StatelessWidget {
               width: 170,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(
+                  image: CachedNetworkImageProvider(
                     image! == '' ? 'https://picsum.photos/250?image=9' : image!,
                   ),
                   fit: BoxFit.cover,
