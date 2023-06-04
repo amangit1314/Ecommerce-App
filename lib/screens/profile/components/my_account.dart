@@ -108,7 +108,12 @@ class _MyAccountState extends State<MyAccount> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Username'),
+                          const Text('Username',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              )),
                           Text(
                             authProvider.user.username ?? 'Aman Soni',
                             style: const TextStyle(

@@ -1,6 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../utils/constants.dart';
 
@@ -13,12 +13,21 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   late int counter;
-  bool notificationsOnOrOff = false;
+
+  bool _notificationPermissionEnabled = false;
 
   @override
   void initState() {
-    counter = 0;
     super.initState();
+    counter = 0;
+    _checkNotificationPermissionStatus();
+  }
+
+  void _checkNotificationPermissionStatus() async {
+    final status = await Permission.notification.status;
+    setState(() {
+      _notificationPermissionEnabled = status.isGranted;
+    });
   }
 
   @override
@@ -28,10 +37,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        // leading ios back arrow button
         leading: IconButton(
           onPressed: () {
-            // back to previous screen
             Navigator.of(context).pop();
           },
           icon: const Icon(
@@ -49,39 +56,138 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
           )
         ],
-        title: const Text(
+        title: Text(
           'Notifications',
-          // textstyle color kPrimaryColor
-          style: TextStyle(color: kPrimaryColor),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: kPrimaryColor,
+              ),
         ),
       ),
-      // if notifications are off show other scrren and if turn on then show body
-      body: notificationsOnOrOff
+      body: _notificationPermissionEnabled
           ? const NotificationsEnabledView()
-          : const NotificationsDisabledVIew(),
+          : NotificationsDisabledView(
+              notificationPermissionEnabled: _notificationPermissionEnabled,
+            ),
     );
   }
 }
 
-class NotificationsEnabledView extends StatelessWidget {
-  const NotificationsEnabledView({
-    super.key,
-  });
+class NotificationsEnabledView extends StatefulWidget {
+  const NotificationsEnabledView({Key? key}) : super(key: key);
+
+  @override
+  State<NotificationsEnabledView> createState() =>
+      _NotificationsEnabledViewState();
+}
+
+class _NotificationsEnabledViewState extends State<NotificationsEnabledView> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  List<String> notifications = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _configureFirebaseMessaging();
+  }
+
+  void _configureFirebaseMessaging() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      setState(() {
+        notifications.add(message.notification?.body ?? '');
+      });
+    });
+  }
+
+  Future<void> _requestNotificationPermission() async {
+    final status = await Permission.notification.request();
+    if (status.isGranted) {
+      setState(() {
+        notifications.clear();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        Center(child: Text('turned on')),
-      ],
-    );
+    if (notifications.isEmpty) {
+      return Column(
+        children: [
+          Container(
+            height: 300,
+            margin: const EdgeInsets.only(
+              top: 45,
+              bottom: 5,
+              left: 20,
+              right: 20,
+            ),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(
+                    'https://cdni.iconscout.com/illustration/premium/thumb/no-notification-4790933-3989286.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(
+              left: 15.0,
+              right: 15,
+              bottom: 15,
+            ),
+            child: Text(
+              'You have no notifications\nWhen you have any, we will notify you',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: kTextColor,
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: notifications.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(notifications[index]),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    }
   }
 }
 
-class NotificationsDisabledVIew extends StatelessWidget {
-  const NotificationsDisabledVIew({
+class NotificationsDisabledView extends StatefulWidget {
+  final bool notificationPermissionEnabled;
+  const NotificationsDisabledView({
     super.key,
+    required this.notificationPermissionEnabled,
   });
+
+  @override
+  State<NotificationsDisabledView> createState() =>
+      _NotificationsDisabledViewState();
+}
+
+class _NotificationsDisabledViewState extends State<NotificationsDisabledView> {
+  void _toggleNotificationPermission(bool notificationPermissionEnabled) async {
+    if (!notificationPermissionEnabled) {
+      final status = await Permission.notification.request();
+      setState(() {
+        notificationPermissionEnabled = status.isGranted;
+      });
+    } else {
+      openAppSettings();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +204,8 @@ class NotificationsDisabledVIew extends StatelessWidget {
           ),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/ringing_bell.png'),
+              image: NetworkImage(
+                  'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/illustrationsAndSplash%2Fringing_bell.png?alt=media&token=0ea2ca3b-c78b-41ba-ae75-7e7de1128547'),
               fit: BoxFit.cover,
             ),
           ),
@@ -112,11 +219,8 @@ class NotificationsDisabledVIew extends StatelessWidget {
                 bottom: 15,
               ),
               child: Text(
-                'Push notifications are currently turned off'
-                // text align start
-                ,
+                'Push notifications are currently turned off',
                 textAlign: TextAlign.left,
-                // textstyle color kPrimaryColor
                 style: TextStyle(
                   color: kPrimaryColor,
                   fontSize: 18,
@@ -127,11 +231,8 @@ class NotificationsDisabledVIew extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.only(left: 15.0, right: 15),
               child: Text(
-                'Enabling notifications allow us to send you info about their products, sales, events and more!'
-                // text align start
-                ,
+                'Enabling notifications allow us to send you info about their products, sales, events and more!',
                 textAlign: TextAlign.left,
-                // textstyle color kPrimaryColor
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 12,
@@ -139,64 +240,15 @@ class NotificationsDisabledVIew extends StatelessWidget {
                 ),
               ),
             ),
-            // enable notification button
             Padding(
               padding: const EdgeInsets.only(top: 40.0, bottom: 30),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: 50,
                 child: ElevatedButton(
-                  // border radius
-
-                  onPressed: () {},
-
-                  // onPressed: () async {
-                  //   // Check if notification permission is granted
-                  //   PermissionStatus status =
-                  //       await Permission.notification.status;
-
-                  //   if (status.isDenied) {
-                  //     // If notification permission is off, show an AlertDialog
-                  //     showDialog(
-                  //       context: context,
-                  //       builder: (context) => AlertDialog(
-                  //         title: const Text('Notifications are turned off'),
-                  //         content: const Text(
-                  //             'Please turn on notifications from settings'),
-                  //         actions: [
-                  //           TextButton(
-                  //             onPressed: () {
-                  //               // Close the dialog when 'Cancel' is pressed
-                  //               Navigator.of(context).pop();
-                  //             },
-                  //             child: const Text('Cancel'),
-                  //           ),
-                  //           TextButton(
-                  //             onPressed: () async {
-                  //               // Open app settings
-                  //               await openAppSettings();
-
-                  //               // Close the dialog
-                  //               Navigator.of(context).pop();
-                  //             },
-                  //             child: const Text('Settings'),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     );
-                  //   } else {
-                  //     // If notification permission is granted, navigate to NotificationsEnabledView
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             const NotificationsEnabledView(),
-                  //       ),
-                  //     );
-                  //   }
-                  // },
-
-                  // button color kPrimaryColor
+                  onPressed: () => _toggleNotificationPermission(
+                    widget.notificationPermissionEnabled,
+                  ),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     backgroundColor: kPrimaryColor,
@@ -206,7 +258,6 @@ class NotificationsDisabledVIew extends StatelessWidget {
                   ),
                   child: const Text(
                     'Enable Notifications',
-                    // textstyle color kPrimaryColor
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

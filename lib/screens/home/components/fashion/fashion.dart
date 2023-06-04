@@ -39,15 +39,20 @@ class _FashionState extends State<Fashion> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SectionTitle(
-          title: 'Fashion',
-          press: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => const ShowMore(),
-              ),
-            );
-          },
+        Padding(
+          padding: const EdgeInsets.only(right: 15.0),
+          child: SectionTitle(
+            title: 'Fashion',
+            press: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ShowMore(
+                    keyword: 'Fashion',
+                  ),
+                ),
+              );
+            },
+          ),
         ),
         SizedBox(height: getProportionateScreenHeight(20)),
         Container(

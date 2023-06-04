@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import '../../models/product.dart';
 import '../../utils/constants.dart';
 import '../details/detail_screen.dart';
+import '../home/components/popular/popular_product.dart';
 
 class ShowMore extends StatefulWidget {
-  const ShowMore({Key? key}) : super(key: key);
+  final String keyword;
+  const ShowMore({Key? key, required this.keyword}) : super(key: key);
 
   @override
   State<ShowMore> createState() => _ShowMoreState();
@@ -16,10 +18,11 @@ class _ShowMoreState extends State<ShowMore> {
   final CollectionReference _refProducts =
       FirebaseFirestore.instance.collection('products');
 
-  Future<List<Product>> fetchProductsFromFirestore() async {
+  Future<List<Product>> fetchProductsFromFirestore(String keyword) async {
     final List<Product> products = [];
 
-    final QuerySnapshot snapshot = await _refProducts.get();
+    final QuerySnapshot snapshot =
+        await _refProducts.where(keyword, isEqualTo: true).get();
     for (var element in snapshot.docs) {
       products.add(Product.fromMap(element.data() as Map<String, dynamic>));
     }
@@ -35,7 +38,7 @@ class _ShowMoreState extends State<ShowMore> {
           "All Products",
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: kPrimaryColor,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
         ),
         backgroundColor: Colors.white,
@@ -54,24 +57,24 @@ class _ShowMoreState extends State<ShowMore> {
         children: [
           Expanded(
             child: FutureBuilder<List<Product>>(
-              future: fetchProductsFromFirestore(),
+              future: fetchProductsFromFirestore(widget.keyword),
               builder: (context, snapshot) {
                 final List<Product> products = snapshot.data ?? [];
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  // return Center(
-                  //   child: ListView.separated(
-                  //     scrollDirection: Axis.horizontal,
-                  //     itemCount: products.length,
-                  //     itemBuilder: (context, index) {
-                  //       return const LoadingShimmerSkelton();
-                  //     },
-                  //     separatorBuilder: (context, index) {
-                  //       return const SizedBox(width: 8);
-                  //     },
-                  //   ),
-                  // );
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        return const LoadingShimmerSkelton();
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(width: 8);
+                      },
+                    ),
+                  );
+                  // return const Center(child: CircularProgressIndicator());
                 }
 
                 if (snapshot.hasError) {

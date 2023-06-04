@@ -17,74 +17,71 @@ class SearchBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
-        padding: const EdgeInsets.all(4),
-        margin: const EdgeInsets.only(right: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(15),
-            bottomLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
-            bottomRight: Radius.circular(15),
+    return Container(
+      padding: const EdgeInsets.all(4),
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(15),
+          bottomLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+          bottomRight: Radius.circular(15),
+        ),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 10),
+            blurRadius: 50,
+            color: Colors.grey.withOpacity(0.3),
           ),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 10),
-              blurRadius: 50,
-              color: Colors.grey.withOpacity(0.3),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 50,
+            width: 50,
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: kPrimaryColor,
+              borderRadius: BorderRadius.circular(10),
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              height: 50,
-              width: 50,
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.circular(10),
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.search, color: Colors.white),
+                onPressed: () => onSearch(searchController.text),
               ),
-              child: Center(
-                child: IconButton(
-                  icon: const Icon(Icons.search, color: Colors.white),
-                  onPressed: () => onSearch(searchController.text),
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              style: const TextStyle(fontSize: 12),
+              controller: searchController,
+              decoration: const InputDecoration(
+                hintText: 'Search for products ...',
+                hintStyle: TextStyle(fontSize: 12),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(10),
+              ),
+              onSubmitted: onSearch,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+                color: kPrimaryColor, borderRadius: BorderRadius.circular(15)),
+            child: Center(
+              child: IconButton(
+                onPressed: () {},
+                icon: const FaIcon(
+                  FontAwesomeIcons.arrowDownShortWide,
+                  color: Colors.white,
+                  size: 20,
                 ),
               ),
             ),
-            Expanded(
-              child: TextField(
-                style: const TextStyle(fontSize: 12),
-                controller: searchController,
-                decoration: const InputDecoration(
-                  hintText: 'Search for products ...',
-                  hintStyle: TextStyle(fontSize: 12),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(10),
-                ),
-                onSubmitted: onSearch,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  borderRadius: BorderRadius.circular(15)),
-              child: Center(
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const FaIcon(
-                    FontAwesomeIcons.arrowDownShortWide,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

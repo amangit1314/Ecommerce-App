@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/product.dart';
@@ -57,7 +58,7 @@ class ProductSearchScreenItemCard extends StatelessWidget {
                 color: color.withOpacity(.3),
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: NetworkImage(
+                  image: CachedNetworkImageProvider(
                     productImage,
                   ),
                   fit: BoxFit.cover,
@@ -86,7 +87,7 @@ class ProductSearchScreenItemCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 12,
                   color: kPrimaryColor,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),

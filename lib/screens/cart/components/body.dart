@@ -20,8 +20,8 @@ class _BodyState extends State<Body> {
       padding: EdgeInsets.only(
         left: getProportionateScreenWidth(20),
         right: getProportionateScreenWidth(20),
-        top: getProportionateScreenWidth(10),
-        bottom: getProportionateScreenWidth(10),
+        top: getProportionateScreenWidth(20),
+        bottom: getProportionateScreenWidth(20),
       ),
       child: Consumer2<CartProvider, AuthProvider>(
         builder: (context, cartProvider, authProvider, child) {
@@ -42,13 +42,32 @@ class _BodyState extends State<Body> {
                 return const Center(child: Text('Your cart is empty'));
               }
 
+              // Filter cartItems to remove items with the same title
+              Set<String> uniqueTitles = {};
+              List<models.Product> uniqueCartItems = [];
+              List<int> cartItemQuantities = [];
+
+              for (var i = 0; i < cartItems.length; i++) {
+                final cartItem = cartItems[i];
+                if (!uniqueTitles.contains(cartItem.title)) {
+                  uniqueTitles.add(cartItem.title);
+                  uniqueCartItems.add(cartItem);
+                  cartItemQuantities.add(1);
+                } else {
+                  final index = uniqueCartItems
+                      .indexWhere((item) => item.title == cartItem.title);
+                  cartItemQuantities[index] += 1;
+                }
+              }
+
               return ListView.separated(
-                itemCount: cartItems.length,
+                itemCount: uniqueCartItems.length,
                 separatorBuilder: (context, index) {
-                  return SizedBox(height: getProportionateScreenHeight(8));
+                  return SizedBox(height: getProportionateScreenHeight(15));
                 },
                 itemBuilder: (context, index) {
-                  final cartItem = cartItems[index];
+                  final cartItem = uniqueCartItems[index];
+                  final quantity = cartItemQuantities[index];
                   return Dismissible(
                     key: Key(cartItem.id),
                     direction: DismissDirection.endToStart,
@@ -58,7 +77,8 @@ class _BodyState extends State<Body> {
                       setState(() {
                         cartProvider.removeFromCart(
                             cartItem, authProvider.user.uid);
-                        cartItems.removeAt(index);
+                        uniqueCartItems.removeAt(index);
+                        cartItemQuantities.removeAt(index);
                       });
                     },
                     background: Container(
@@ -78,6 +98,7 @@ class _BodyState extends State<Body> {
                     ),
                     child: CartCard(
                       cart: cartItem,
+                      quantity: quantity,
                     ),
                   );
                 },

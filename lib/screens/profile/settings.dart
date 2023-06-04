@@ -73,7 +73,8 @@ class _SettingsState extends State<Settings> {
           // image with 300 height
           SizedBox(
             height: 300,
-            child: Image.asset("assets/settings.png"),
+            child: Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/illustrationsAndSplash%2Fsettings.png?alt=media&token=79a2fd6d-7c2f-4b08-8de0-e4046d4b214c"),
           ),
           Expanded(
             child: ListView(

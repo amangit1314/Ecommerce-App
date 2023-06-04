@@ -53,7 +53,9 @@ class _FashionableState extends State<Fashionable> {
             press: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const ShowMore(),
+                  builder: (_) => const ShowMore(
+                    keyword: 'Fashion',
+                  ),
                 ),
               );
             },

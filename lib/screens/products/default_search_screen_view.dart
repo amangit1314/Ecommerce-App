@@ -11,16 +11,19 @@ class DefaultSearchScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const FeaturesSection(),
-        SizedBox(height: getProportionateScreenHeight(20)),
-        const TshirtsSection(),
-        SizedBox(height: getProportionateScreenHeight(10)),
-        const PantsSections(),
-        SizedBox(height: getProportionateScreenHeight(10)),
-        const ShoesSection(),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        children: [
+          const FeaturesSection(),
+          SizedBox(height: getProportionateScreenHeight(20)),
+          const TshirtsSection(),
+          SizedBox(height: getProportionateScreenHeight(10)),
+          const PantsSections(),
+          SizedBox(height: getProportionateScreenHeight(10)),
+          const ShoesSection(),
+        ],
+      ),
     );
   }
 }

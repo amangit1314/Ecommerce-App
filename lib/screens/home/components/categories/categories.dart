@@ -6,6 +6,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../popular/popular_product.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -24,15 +25,15 @@ class _CategoriesState extends State<Categories>
     Icons.shopping_bag,
     Icons.sports_basketball,
     Icons.card_giftcard,
-    Icons.more_horiz,
+    Icons.light,
   ];
 
   List categoryText = [
-    "Deal's",
+    "All",
     "Fashion",
     "Sport's",
     "Grocery",
-    "More",
+    "Electro",
   ];
 
   @override
@@ -99,58 +100,64 @@ class _CategoriesState extends State<Categories>
               ),
             ),
           ),
-          // SizedBox(height: getProportionateScreenWidth(15)),
-          // FutureBuilder<List<Product>>(
-          //   future: fetchProductsFromFirestore(),
-          //   builder: (context, snapshot) {
-          //     final List<Product> products = snapshot.data ?? [];
+          SizedBox(height: getProportionateScreenWidth(15)),
+          SizedBox(
+            height: getProportionateScreenHeight(450),
+            child: FutureBuilder<List<Product>>(
+              future: fetchProductsFromFirestore(),
+              builder: (context, snapshot) {
+                final List<Product> products = snapshot.data ?? [];
 
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return Center(
-          //         child: SizedBox(
-          //           height: 200, // Provide a specific height for the ListView
-          //           child: ListView.separated(
-          //             shrinkWrap: true,
-          //             scrollDirection: Axis.horizontal,
-          //             itemCount: products.length,
-          //             itemBuilder: (context, index) {
-          //               return const LoadingShimmerSkelton();
-          //             },
-          //             separatorBuilder: (context, index) {
-          //               return const SizedBox(width: 8);
-          //             },
-          //           ),
-          //         ),
-          //       );
-          //     }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: SizedBox(
+                      height: 200, // Provide a specific height for the ListView
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          return const LoadingShimmerSkelton();
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(width: 8);
+                        },
+                      ),
+                    ),
+                  );
+                }
 
-          //     if (snapshot.hasError) {
-          //       return const Center(
-          //         child: Text('Something went wrong'),
-          //       );
-          //     }
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Something went wrong'),
+                  );
+                }
 
-          //     return Expanded(
-          //       child: GridView.builder(
-          //         shrinkWrap: true,
-          //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //           crossAxisCount: 2,
-          //           childAspectRatio: 0.75,
-          //           crossAxisSpacing: 2,
-          //           mainAxisSpacing: 2,
-          //         ),
-          //         itemCount: products.length < 4 ? products.length : 4,
-          //         itemBuilder: (context, index) {
-          //           return CategoryGridItem(
-          //             product: products[index],
-          //             image: products[index].images.first,
-          //             category: products[index].categories.first,
-          //           );
-          //         },
-          //       ),
-          //     );
-          //   },
-          // ),
+                return Expanded(
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.75,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2,
+                    ),
+                    itemCount: products.length < 4 ? products.length : 4,
+                    itemBuilder: (context, index) {
+                      return CategoryGridItem(
+                        product: products[index],
+                        image: products[index].images.first,
+                        category: products[index].categories.first,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -260,7 +267,7 @@ class CategoryGridItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 148,
+              height: 140,
               width: 170,
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -289,7 +296,7 @@ class CategoryGridItem extends StatelessWidget {
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -299,7 +306,7 @@ class CategoryGridItem extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
+              padding: const EdgeInsets.only(right: 8.0, top: 2, bottom: 8),
               child: Text(
                 '₹ ${product.price}',
                 style: const TextStyle(

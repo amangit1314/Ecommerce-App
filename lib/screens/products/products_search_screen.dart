@@ -48,32 +48,24 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
               SizedBox(height: getProportionateScreenHeight(20)),
               const HomeHeader(),
               SizedBox(height: getProportionateScreenHeight(20)),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SearchBox(
-                  searchController: _searchController,
-                  onSearch: _onSearch,
-                  onClear: _onClear,
-                ),
+              SearchBox(
+                searchController: _searchController,
+                onSearch: _onSearch,
+                onClear: _onClear,
               ),
               SizedBox(height: getProportionateScreenHeight(5)),
               _isSearching
-                  ? Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: SearchedItemsScreenView(
-                        item: _searchController.text,
-                      ),
+                  ? SearchedItemsScreenView(
+                      item: _searchController.text,
                     )
-                  : const Padding(
-                      padding: EdgeInsets.all(15),
-                      child: DefaultSearchScreenView(),
-                    ),
+                  : const DefaultSearchScreenView(),
             ],
           ),
         ),
       ),
-      bottomNavigationBar:
-          const CustomBottomNavBar(selectedMenu: MenuState.shipment),
+      bottomNavigationBar: const CustomBottomNavBar(
+        selectedMenu: MenuState.shipment,
+      ),
     );
   }
 }

@@ -92,8 +92,8 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
               // container with 330 h
               SizedBox(
                 height: 330,
-                child: Image.asset(
-                  "assets/mobile.png",
+                child: Image.network(
+                  "https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/illustrationsAndSplash%2Fmobile.png?alt=media&token=b1580210-4eac-4780-8282-9a2f96af2ce6",
                   fit: BoxFit.cover,
                 ),
               ),

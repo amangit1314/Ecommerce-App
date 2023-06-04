@@ -13,8 +13,8 @@ class Body extends StatelessWidget {
     return Column(
       children: [
         SizedBox(height: screenHeight * 0.04),
-        Image.asset(
-          "assets/images/success.png",
+        Image.network(
+          "https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/illustrationsAndSplash%2Fsuccess.png?alt=media&token=69a74af2-5c47-41cd-88d1-cebdd3cc0b49",
           height: screenHeight * 0.4, //40%
         ),
         SizedBox(height: screenHeight * 0.08),
