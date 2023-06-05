@@ -34,7 +34,7 @@ class HomeHeader extends StatelessWidget {
                 children: [
                   IconBtnWithCounter(
                     svgSrc: "assets/icons/Bell.svg",
-                    numOfitem: 1,
+                    numOfitem: 0,
                     press: () {
                       Navigator.push(
                         context,

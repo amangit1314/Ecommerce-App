@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
@@ -72,14 +73,14 @@ class _MyAccountState extends State<MyAccount> {
                       authProvider.user.profImage != null
                           ? CircleAvatar(
                               radius: 30,
-                              backgroundImage: NetworkImage(
+                              backgroundImage: CachedNetworkImageProvider(
                                 authProvider.user.profImage!,
                               ), // Cast AssetImage to ImageProvider
                               backgroundColor: kPrimaryColor,
                             )
                           : const CircleAvatar(
                               radius: 30,
-                              backgroundImage: NetworkImage(
+                              backgroundImage: CachedNetworkImageProvider(
                                 'https://media.sketchfab.com/models/296f9f80c4ac431aa3d354f7ef955605/thumbnails/1d824d70f65e441a8f81162ff8bac094/281cbed7656443ffb04d2e38f928ab14.jpeg',
                               ), // Cast AssetImage to ImageProvider
                               backgroundColor: kPrimaryColor,
@@ -108,7 +109,12 @@ class _MyAccountState extends State<MyAccount> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Username'),
+                          const Text('Username',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              )),
                           Text(
                             authProvider.user.username ?? 'Aman Soni',
                             style: const TextStyle(
@@ -240,7 +246,10 @@ class _MyAccountState extends State<MyAccount> {
                                           suffixIcon: const CustomSurffixIcon(
                                               svgIcon: "assets/icons/Lock.svg"),
                                         ),
-                                        onChanged: (value) {},
+                                        onChanged: (String newPassword) =>
+                                            profileProvider.updatePassword(
+                                          authProvider.user.uid,
+                                        ),
                                       ),
                                       actions: [
                                         TextButton(

@@ -14,11 +14,6 @@ class AuthProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  // set setUser(models.User user) {
-  //   _user = user;
-  //   notifyListeners();
-  // }
-
   models.User _user = models.User(uid: '', email: '');
   models.User get user => _user;
 
@@ -102,6 +97,7 @@ class AuthProvider with ChangeNotifier {
         models.User user = models.User(
           email: email,
           username: username,
+          password: password.hashCode.toString(),
           uid: uid,
         );
 

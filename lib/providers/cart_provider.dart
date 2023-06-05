@@ -2,11 +2,10 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 
 class CartProvider with ChangeNotifier {
-  List<models.Product> _cartItems = [];
+  final List<models.Product> _cartItems = [];
   List<models.Product> get cartItems => _cartItems;
 
   Future<void> addToCart(models.Product product, String uid) async {
@@ -19,39 +18,28 @@ class CartProvider with ChangeNotifier {
       final cartItemsCollection = FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
-          .collection("cartItems");
+          .collection('cartItems');
 
       // Check if the product already exists in the cart
-      final existingProduct = _cartItems.firstWhere(
-        (item) => item.id == product.id,
-        orElse: () => product,
-      );
+      final existingProductIndex =
+          _cartItems.indexWhere((item) => item.id == product.id);
 
-      if (existingProduct != null) {
-        // Increment the quantity of the existing product
-        existingProduct.quantity += 1;
-        log('Product quantity incremented: $existingProduct');
-
-        // Update the quantity in Firestore
-        final existingProductDoc = cartItemsCollection.doc(product.id);
-        await existingProductDoc.set(
-          {'quantity': existingProduct.quantity},
-          SetOptions(merge: true),
-        );
-      } else {
-        // Add the product to the cart
-        _cartItems.add(product);
-        log('Product added to cart: $product');
-
-        // Generate a new unique document ID for the product
-        final newProductDoc = cartItemsCollection.doc(product.id);
-
-        await newProductDoc.set({
-          ...productsData,
-          'userId': uid,
-          'quantity': 1, // Set initial quantity to 1
-        });
+      if (existingProductIndex != -1) {
+        // If the product already exists, delete the existing document
+        final existingProduct = _cartItems[existingProductIndex];
+        await cartItemsCollection.doc(existingProduct.id).delete();
+        _cartItems.removeAt(existingProductIndex);
       }
+
+      // Generate a new unique document ID for the cartItem
+      final newProductDoc = cartItemsCollection.doc();
+
+      await newProductDoc.set({
+        'id': product.id,
+        ...productsData,
+      });
+
+      _cartItems.add(product);
 
       notifyListeners();
     } catch (error) {
@@ -64,7 +52,7 @@ class CartProvider with ChangeNotifier {
       final cartItemsCollection = FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
-          .collection("cartItems");
+          .collection('cartItems');
 
       await cartItemsCollection.doc(product.id).delete();
 
@@ -78,28 +66,33 @@ class CartProvider with ChangeNotifier {
 
   Future<List<models.Product>> getCartItems(String uid) async {
     try {
-      var cartItemsSnapshot = await FirebaseFirestore.instance
+      final cartItemsCollection = FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
-          .collection("cartItems")
-          .get();
+          .collection('cartItems');
 
-      _cartItems = cartItemsSnapshot.docs.map((doc) {
-        var productData = doc.data();
-        return models.Product(
-          id: doc.id,
-          title: productData['title'],
-          price: productData['price'].toDouble(),
-          images: [productData['image']],
-          quantity: productData['quantity'],
-        );
-      }).toList();
+      final cartItemsSnapshot = await cartItemsCollection.get();
+
+      _cartItems.clear();
+
+      for (final doc in cartItemsSnapshot.docs) {
+        final cartItemData = doc.data();
+        _cartItems.add(models.Product.fromMap(cartItemData));
+      }
 
       return _cartItems;
     } catch (error) {
       log('Failed to fetch cart items: $error');
       return [];
     }
+  }
+
+  int get totalCartItemQuantity {
+    int quantity = 0;
+    for (var item in _cartItems) {
+      quantity += item.quantity;
+    }
+    return quantity;
   }
 
   double get totalPrice {

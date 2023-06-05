@@ -234,7 +234,9 @@ class _PopularProductsState extends State<PopularProducts> {
               // navigate to ShowMore
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const ShowMore(),
+                  builder: (_) => const ShowMore(
+                    keyword: 'isPopular',
+                  ),
                 ),
               );
             },

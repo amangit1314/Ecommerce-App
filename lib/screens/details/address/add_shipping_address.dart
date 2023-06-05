@@ -98,7 +98,14 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
             ),
             Column(
               children: [
-                const Text('Pick From Geolocator'),
+                Container(
+                  margin: const EdgeInsets.only(top: 15, right: 15, left: 15),
+                  child: DefaultButton(
+                    text: 'Pick From Geolocator',
+                    txtColor: Colors.white,
+                    press: () {},
+                  ),
+                ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 20.0),
                   child: Text('OR'),

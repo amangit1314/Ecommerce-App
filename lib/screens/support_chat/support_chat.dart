@@ -13,24 +13,27 @@ class SupportChat extends StatelessWidget {
     // scaffold with chat ui
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Consumer<AuthProvider>(builder: (context, authProvider, _) {
-        return Tawk(
-          directChatLink: 'YOUR_DIRECT_CHAT_LINK',
-          visitor: TawkVisitor(
-            name: authProvider.user.username ?? 'Ayoub AMINE',
-            email: authProvider.user.email,
-          ),
-          onLoad: () {
-            log('Hello Tawk!');
-          },
-          onLinkTap: (String url) {
-            log(url);
-          },
-          placeholder: const Center(
-            child: Text('Loading...'),
-          ),
-        );
-      }),
+      body: SafeArea(
+        child: Consumer<AuthProvider>(builder: (context, authProvider, _) {
+          return Tawk(
+            directChatLink:
+                'https://tawk.to/chat/647783acad80445890f04277/1h1pdkn04',
+            visitor: TawkVisitor(
+              name: authProvider.user.username ?? 'SnapCart User',
+              email: authProvider.user.email,
+            ),
+            onLoad: () {
+              log('Hello Tawk!');
+            },
+            onLinkTap: (String url) {
+              log(url);
+            },
+            placeholder: const Center(
+              child: Text('Loading...'),
+            ),
+          );
+        }),
+      ),
     );
   }
 }

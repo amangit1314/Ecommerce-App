@@ -48,7 +48,9 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
             press: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const ShowMore(),
+                  builder: (_) => const ShowMore(
+                    keyword: 'Recently Viewed',
+                  ),
                 ),
               );
             },

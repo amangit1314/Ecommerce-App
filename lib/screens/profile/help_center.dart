@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:soni_store_app/utils/constants.dart';
 
 import '../../utils/size_config.dart';
+import '../support_chat/support_chat.dart';
 
 class HelpCenter extends StatelessWidget {
   const HelpCenter({super.key});
@@ -16,7 +17,6 @@ class HelpCenter extends StatelessWidget {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            // back to previous screen
             Navigator.of(context).pop();
           },
           icon: const Icon(
@@ -30,11 +30,8 @@ class HelpCenter extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
-          // logout icon
           IconButton(
-            onPressed: () {
-              // logout
-            },
+            onPressed: () {},
             icon: const Icon(
               Icons.logout,
               color: kPrimaryColor,
@@ -44,7 +41,6 @@ class HelpCenter extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // container with decoration image
           Container(
             height: 200,
             margin: const EdgeInsets.only(
@@ -55,29 +51,26 @@ class HelpCenter extends StatelessWidget {
             ),
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/payment.png'),
+                image: NetworkImage(
+                    'https://img.freepik.com/free-vector/flat-design-illustration-customer-support_23-2148887720.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-
           const Center(
             child: Text(
               'We are here to help so please get in touch with us',
               textAlign: TextAlign.center,
-              // style of big bold font size with black color
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
             ),
           ),
-          // size box h 20
           const SizedBox(
             height: 20,
           ),
-          // tile with circular container contains phone icon with column have detail of phone number
           const ListTile(
             leading: CircleAvatar(
               backgroundColor: kPrimaryColor,
@@ -86,10 +79,20 @@ class HelpCenter extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            title: Text('Phone Number'),
-            subtitle: Text('+91 1234567890'),
+            title: Text(
+              'Phone Number',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: Text(
+              '+91 9649477393',
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
           ),
-          // divider with vertical padding of 20
           const Padding(
             padding: EdgeInsets.only(
               top: 2.0,
@@ -112,55 +115,78 @@ class HelpCenter extends StatelessWidget {
                 ),
               ),
             ),
-            title: Text('E-mail address'),
-            subtitle: Text('gitaman8481@gmail.com'),
+            title: Text(
+              'E-mail address',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: Text(
+              'gitaman8481@gmail.com',
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
           ),
-
-          // tile with square pic with little borderradius and column of contact live chat
         ],
       ),
-      // bottom nav bar with littile
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: getProportionateScreenWidth(15),
-          horizontal: getProportionateScreenWidth(5),
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, -15),
-              blurRadius: 20,
-              color: const Color(0xFFDADADA).withOpacity(0.15),
-            )
-          ],
-        ),
-        child: ListTile(
-          leading: Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: kPrimaryColor,
-              borderRadius: BorderRadius.circular(10),
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SupportChat(),
             ),
-            child: const Center(
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: getProportionateScreenWidth(15),
+            horizontal: getProportionateScreenWidth(5),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, -15),
+                blurRadius: 20,
+                color: const Color(0xFFDADADA).withOpacity(0.15),
+              )
+            ],
+          ),
+          child: ListTile(
+            leading: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: kPrimaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Center(
                 child: FaIcon(
-              FontAwesomeIcons.facebookMessenger,
-              color: Colors.white,
-            )),
+                  FontAwesomeIcons.facebookMessenger,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            title: const Text(
+              'Contact Live Chat',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: const Text(
+              'We are ready to answer you',
+              style: TextStyle(fontSize: 12),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
-          title: const Text('Contact Live Chat'),
-          subtitle: const Text(
-            'We are ready to answer you',
-            // style with font siz e8
-            style: TextStyle(fontSize: 12),
-          ),
-          // tailing icon of ios right arrow
-          trailing: const Icon(Icons.arrow_forward_ios_rounded),
         ),
       ),
     );

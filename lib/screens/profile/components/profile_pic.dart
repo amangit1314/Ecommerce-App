@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -84,14 +85,14 @@ class _ProfilePicState extends State<ProfilePic> {
           authProvider.user.profImage != null
               ? CircleAvatar(
                   radius: 30,
-                  backgroundImage: NetworkImage(
+                  backgroundImage: CachedNetworkImageProvider(
                     authProvider.user.profImage!,
                   ), // Cast AssetImage to ImageProvider
                   backgroundColor: kPrimaryColor,
                 )
               : const CircleAvatar(
                   radius: 30,
-                  backgroundImage: NetworkImage(
+                  backgroundImage: CachedNetworkImageProvider(
                     'https://media.sketchfab.com/models/296f9f80c4ac431aa3d354f7ef955605/thumbnails/1d824d70f65e441a8f81162ff8bac094/281cbed7656443ffb04d2e38f928ab14.jpeg',
                   ), // Cast AssetImage to ImageProvider
                   backgroundColor: kPrimaryColor,

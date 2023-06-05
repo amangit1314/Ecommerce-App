@@ -52,7 +52,9 @@ class _SimilarProductsState extends State<SimilarProducts> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ShowMore(),
+                  builder: (context) => const ShowMore(
+                    keyword: 'Similar Products',
+                  ),
                 ),
               );
             },

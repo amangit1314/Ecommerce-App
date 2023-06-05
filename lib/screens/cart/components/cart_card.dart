@@ -1,46 +1,31 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:soni_store_app/models/product.dart'; // Import the correct product model
-import 'package:soni_store_app/providers/cart_provider.dart';
+import 'package:soni_store_app/models/models.dart' as models;
+import 'package:soni_store_app/utils/constants.dart';
 import 'package:soni_store_app/utils/size_config.dart';
-
-import '../../../utils/constants.dart';
 
 class CartCard extends StatelessWidget {
   const CartCard({
     Key? key,
     required this.cart,
+    required this.quantity,
   }) : super(key: key);
 
-  final Product cart;
+  final models.Product cart;
 
+  final int quantity;
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
-
-    // Check if the product is already in the cartItems list
-    final existingProduct = cartProvider.cartItems.firstWhere(
-      (product) => product.id == cart.id,
-      orElse: () {
-        return Product(
-          id: cart.id,
-          title: cart.title, // Include the title when creating a new product
-          price: cart.price, images: [],
-          quantity: 1,
-        );
-      },
-    );
-
-    // Calculate the quantity
-    final int quantity = existingProduct.quantity;
+    // final cartProvider = Provider.of<CartProvider>(context);
+    // final int quantity = cartProvider.totalCartItemQuantity;
+    // final int quantity = cart.quantity;
 
     return Row(
       children: [
         SizedBox(
-          width: 88,
+          width: getProportionateScreenWidth(85),
           child: AspectRatio(
-            aspectRatio: 0.88,
+            aspectRatio: 1,
             child: Container(
               padding: EdgeInsets.all(getProportionateScreenWidth(10)),
               decoration: BoxDecoration(
@@ -59,31 +44,35 @@ class CartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              existingProduct.title, // Use the title from existingProduct
+              cart.title,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.black, fontSize: 14),
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
               maxLines: 2,
             ),
             const SizedBox(height: 10),
             Text.rich(
               TextSpan(
-                text:
-                    "\$${existingProduct.price}", // Use the price from existingProduct
+                text: "\$${cart.price}",
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   color: kPrimaryColor,
                 ),
                 children: [
                   TextSpan(
-                    text: " x ",
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    text: " x",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge, // Use appropriate text style
                   ),
                   TextSpan(
-                    text: " x $quantity",
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    text: " $quantity",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge, // Use appropriate text style
                   ),
                 ],
               ),

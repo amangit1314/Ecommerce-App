@@ -39,15 +39,20 @@ class _FashionState extends State<Fashion> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SectionTitle(
-          title: 'Fashion',
-          press: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => const ShowMore(),
-              ),
-            );
-          },
+        Padding(
+          padding: const EdgeInsets.only(right: 15.0),
+          child: SectionTitle(
+            title: 'Fashion',
+            press: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ShowMore(
+                    keyword: 'Fashion',
+                  ),
+                ),
+              );
+            },
+          ),
         ),
         SizedBox(height: getProportionateScreenHeight(20)),
         Container(
@@ -61,7 +66,8 @@ class _FashionState extends State<Fashion> {
               bottomRight: Radius.circular(5),
             ),
             image: DecorationImage(
-              image: AssetImage('assets/images/Image Banner 3.png'),
+              image: NetworkImage(
+                  'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2FImage%20Banner%203.png?alt=media&token=efa74f88-8091-445b-847c-639b5a0b2fc2'),
               fit: BoxFit.cover,
             ),
           ),

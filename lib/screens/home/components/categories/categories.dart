@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../popular/popular_product.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -20,19 +22,20 @@ class _CategoriesState extends State<Categories>
   int curr = 0;
 
   List iconData = [
-    Icons.flash_on,
+    // Icons.flash_on,
     Icons.shopping_bag,
     Icons.sports_basketball,
-    Icons.card_giftcard,
-    Icons.more_horiz,
+    // Icons.card_giftcard,
+    Icons.sports_mma_outlined,
+    Icons.outlined_flag_outlined,
   ];
 
   List categoryText = [
-    "Deal's",
+    // "All",
     "Fashion",
-    "Sport's",
-    "Grocery",
-    "More",
+    "Sports",
+    "Footwear",
+    "tshirts",
   ];
 
   @override
@@ -50,10 +53,14 @@ class _CategoriesState extends State<Categories>
   final CollectionReference _refProducts =
       FirebaseFirestore.instance.collection('products');
 
-  Future<List<Product>> fetchProductsFromFirestore() async {
+  Future<List<Product>> fetchProductsFromFirestore(String category) async {
     final List<Product> products = [];
-
-    final QuerySnapshot snapshot = await _refProducts.get();
+    final QuerySnapshot snapshot = await _refProducts
+        .where(
+          'categories',
+          arrayContains: category,
+        )
+        .get();
     for (var element in snapshot.docs) {
       products.add(Product.fromMap(element.data() as Map<String, dynamic>));
     }
@@ -76,81 +83,90 @@ class _CategoriesState extends State<Categories>
             child: CategorySectionTitle(title: 'Categories'),
           ),
           SizedBox(height: getProportionateScreenWidth(15)),
-          SizedBox(
-            height: getProportionateScreenWidth(55),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(
-                  iconData.length,
-                  (index) => CategoryCard(
-                    iconData: iconData[index],
-                    text: categoryText[index],
-                    press: () {
-                      setState(() {
-                        curr = index;
-                      });
-                    },
-                    bgColor: curr == index ? kPrimaryColor : Colors.transparent,
-                  ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                iconData.length,
+                (index) => CategoryCard(
+                  iconData: iconData[index],
+                  text: categoryText[index],
+                  press: () {
+                    setState(() {
+                      curr = index;
+                    });
+                  },
+                  bgColor: curr == index ? kPrimaryColor : Colors.transparent,
                 ),
               ),
             ),
           ),
-          // SizedBox(height: getProportionateScreenWidth(15)),
-          // FutureBuilder<List<Product>>(
-          //   future: fetchProductsFromFirestore(),
-          //   builder: (context, snapshot) {
-          //     final List<Product> products = snapshot.data ?? [];
+          SizedBox(height: getProportionateScreenWidth(15)),
+          SizedBox(
+            height: getProportionateScreenHeight(450),
+            child: FutureBuilder<List<Product>>(
+              future: fetchProductsFromFirestore(
+                // curr == 0 ? '' :
+                categoryText[curr],
+              ),
+              builder: (context, snapshot) {
+                final List<Product> products = snapshot.data ?? [];
 
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return Center(
-          //         child: SizedBox(
-          //           height: 200, // Provide a specific height for the ListView
-          //           child: ListView.separated(
-          //             shrinkWrap: true,
-          //             scrollDirection: Axis.horizontal,
-          //             itemCount: products.length,
-          //             itemBuilder: (context, index) {
-          //               return const LoadingShimmerSkelton();
-          //             },
-          //             separatorBuilder: (context, index) {
-          //               return const SizedBox(width: 8);
-          //             },
-          //           ),
-          //         ),
-          //       );
-          //     }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: SizedBox(
+                      height: 200, // Provide a specific height for the ListView
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          return const LoadingShimmerSkelton();
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(width: 8);
+                        },
+                      ),
+                    ),
+                  );
+                }
 
-          //     if (snapshot.hasError) {
-          //       return const Center(
-          //         child: Text('Something went wrong'),
-          //       );
-          //     }
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Something went wrong'),
+                  );
+                }
 
-          //     return Expanded(
-          //       child: GridView.builder(
-          //         shrinkWrap: true,
-          //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //           crossAxisCount: 2,
-          //           childAspectRatio: 0.75,
-          //           crossAxisSpacing: 2,
-          //           mainAxisSpacing: 2,
-          //         ),
-          //         itemCount: products.length < 4 ? products.length : 4,
-          //         itemBuilder: (context, index) {
-          //           return CategoryGridItem(
-          //             product: products[index],
-          //             image: products[index].images.first,
-          //             category: products[index].categories.first,
-          //           );
-          //         },
-          //       ),
-          //     );
-          //   },
-          // ),
+                if (products.isEmpty) {
+                  return const Center(
+                    child: Text('No products found for the selected category'),
+                  );
+                }
+
+                return GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.75,
+                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 2,
+                  ),
+                  itemCount: products.length < 4 ? products.length : 4,
+                  itemBuilder: (context, index) {
+                    return CategoryGridItem(
+                      product: products[index],
+                      image: products[index].images.first,
+                      category: products[index].categories.first,
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -178,7 +194,7 @@ class CategoryCard extends StatelessWidget {
       onTap: press,
       child: Container(
         margin: EdgeInsets.only(right: getProportionateScreenWidth(15)),
-        width: getProportionateScreenWidth(109),
+        width: getProportionateScreenWidth(115),
         child: Container(
           padding: EdgeInsets.all(getProportionateScreenWidth(15)),
           height: getProportionateScreenWidth(55),
@@ -260,11 +276,11 @@ class CategoryGridItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 148,
+              height: 140,
               width: 170,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(
+                  image: CachedNetworkImageProvider(
                     image! == '' ? 'https://picsum.photos/250?image=9' : image!,
                   ),
                   fit: BoxFit.cover,
@@ -275,7 +291,7 @@ class CategoryGridItem extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Expanded(
+            Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2.0),
                 child: Column(
@@ -289,7 +305,7 @@ class CategoryGridItem extends StatelessWidget {
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -299,7 +315,7 @@ class CategoryGridItem extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
+              padding: const EdgeInsets.only(right: 8.0, top: 2, bottom: 8),
               child: Text(
                 '₹ ${product.price}',
                 style: const TextStyle(

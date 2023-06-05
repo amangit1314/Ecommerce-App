@@ -243,7 +243,9 @@ class _SportsState extends State<Sports> {
             press: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const ShowMore(),
+                  builder: (_) => const ShowMore(
+                    keyword: 'Sports',
+                  ),
                 ),
               );
             },

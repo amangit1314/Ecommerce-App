@@ -15,7 +15,8 @@ class Commercials extends StatelessWidget {
               margin: const EdgeInsets.only(left: 8, right: 8),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: const AssetImage('assets/images/sneakers.jpg'),
+                  image: const NetworkImage(
+                      'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2Fsneakers.jpg?alt=media&token=5a3fc818-f941-49c0-83e3-34dce3714b17'),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.3),
@@ -86,73 +87,6 @@ class Commercials extends StatelessWidget {
             ),
           ],
         ),
-        // Stack(
-        //   children: [
-        //     Container(
-        //       height: 180,
-        //       margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-        //       decoration: BoxDecoration(
-        //         image: DecorationImage(
-        //           image: const AssetImage('assets/images/download.jpg'),
-        //           fit: BoxFit.cover,
-        //           colorFilter: ColorFilter.mode(
-        //             Colors.black.withOpacity(0.3),
-        //             BlendMode.darken,
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //     Container(
-        //       height: 180,
-        //       margin: const EdgeInsets.all(8),
-        //       padding: const EdgeInsets.all(8),
-        //       child: Column(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           Container(
-        //             padding: const EdgeInsets.all(8),
-        //             color: Colors.grey,
-        //             child: const Text(
-        //               '10% Off',
-        //               style: TextStyle(
-        //                 color: Colors.white,
-        //                 fontSize: 16,
-        //                 fontWeight: FontWeight.bold,
-        //               ),
-        //             ),
-        //           ),
-        //           Text(
-        //             'Wednesday'.toUpperCase(),
-        //             style: const TextStyle(
-        //               color: Colors.white,
-        //               fontSize: 24,
-        //               fontWeight: FontWeight.w900,
-        //             ),
-        //           ),
-        //           Text(
-        //             'Deal'.toUpperCase(),
-        //             style: const TextStyle(
-        //               color: Colors.white,
-        //               fontSize: 24,
-        //               fontWeight: FontWeight.w900,
-        //             ),
-        //           ),
-        //           // const SizedBox(height: 5),
-        //           const Text(
-        //             'Collections',
-        //             // textAlign: TextAlign.center,
-        //             style: TextStyle(
-        //               color: Colors.white,
-        //               fontSize: 16,
-        //               fontWeight: FontWeight.normal,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ],
-        // ),
         const SizedBox(height: 8),
         Stack(
           children: [
@@ -162,7 +96,8 @@ class Commercials extends StatelessWidget {
               margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: const AssetImage('assets/images/sneak_pink.jpg'),
+                  image: const NetworkImage(
+                      'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2Fsneak_pink.jpg?alt=media&token=761b4fdb-2427-4fce-96af-bda7b64db36c'),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.3),

@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/cart_provider.dart';
 import 'package:soni_store_app/screens/cart/components/body.dart';
 import 'package:soni_store_app/screens/cart/components/check_out_cart.dart';
-import 'package:soni_store_app/utils/constants.dart';
+
+import '../../utils/constants.dart';
 
 class CartScreen extends StatelessWidget {
   static String routeName = "/cart";
@@ -23,27 +24,55 @@ class CartScreen extends StatelessWidget {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
-      leading: IconButton(
-        onPressed: () {
+      leading: GestureDetector(
+        onTap: () {
           Navigator.pop(context);
         },
-        icon: const Icon(
-          Icons.arrow_back_ios_new,
-          color: kPrimaryColor,
+        child: Container(
+          padding: const EdgeInsets.all(15),
+          margin: const EdgeInsets.only(left: 20, top: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: kPrimaryColor,
+          ),
+          child: const Center(
+            child: Icon(
+              Icons.arrow_back_ios,
+              size: 16,
+            ),
+          ),
         ),
       ),
+      centerTitle: true,
       title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             "Your Cart",
-            style: TextStyle(color: Colors.black),
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
           ),
           Consumer<CartProvider>(
             builder: (context, cartProvider, index) {
-              return Text(
-                "${cartProvider.cartItems.length} items",
-                style: Theme.of(context).textTheme.bodySmall,
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${cartProvider.cartItems.length}",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: kPrimaryColor.withOpacity(0.5),
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  Text(
+                    " items",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: kTextColor.withOpacity(0.5),
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                ],
               );
             },
           ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../resources/data/static_data.dart';
@@ -36,7 +37,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
                 decoration: BoxDecoration(
                   color: Colors.deepPurpleAccent,
                   image: DecorationImage(
-                    image: AssetImage(
+                    image: CachedNetworkImageProvider(
                       shoes[index],
                     ),
                     fit: BoxFit.cover,
@@ -123,7 +124,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         margin: EdgeInsets.all(getProportionateScreenWidth(10)),
-                        child: Image.asset(
+                        child: Image.network(
                           shoes[index],
                           fit: BoxFit.cover,
                         ),
