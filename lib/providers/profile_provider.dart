@@ -12,6 +12,9 @@ class ProfileProvider with ChangeNotifier {
   final TextEditingController _emailController = TextEditingController();
   TextEditingController get emailController => _emailController;
 
+  final TextEditingController _passwordController = TextEditingController();
+  TextEditingController get passwordController => _passwordController;
+
   final TextEditingController _numberController = TextEditingController();
   TextEditingController get numberController => _numberController;
 
@@ -94,10 +97,30 @@ class ProfileProvider with ChangeNotifier {
 
     try {
       await usersCollection.doc(userId).update({
-        'name': username,
+        'username': username,
         'email': email,
         'number': number,
-        'photoURL': imageUrl,
+        'profImage': imageUrl,
+      });
+    } catch (error) {
+      setLoading(false);
+      throw Exception('Failed to update profile: $error');
+    }
+
+    setLoading(false);
+  }
+
+  Future<void> updatePassword(String userId) async {
+    if (userId.isEmpty) {
+      throw Exception('Empty or Invalid user ID');
+    }
+
+    setLoading(true);
+    String password = passwordController.text;
+
+    try {
+      await usersCollection.doc(userId).update({
+        'password': password.hashCode.toString(),
       });
     } catch (error) {
       setLoading(false);

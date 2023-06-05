@@ -22,6 +22,8 @@ class ShippingAddressesListScreen extends StatefulWidget {
 
 class _ShippingAddressesListScreenState
     extends State<ShippingAddressesListScreen> {
+  String? selectedAddressId;
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -118,15 +120,31 @@ class _ShippingAddressesListScreenState
                       const SizedBox(height: 8),
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
-                      addressProvider.selectAddress(addressesList[index]);
+                      setState(() {
+                        selectedAddressId = addressesList[index].addressId;
+                      });
+                      addressProvider.selectAddress(
+                        addressesList[index].addressId,
+                        authProvider.user.uid,
+                      );
                     },
-                    child: AddressTile(
-                      isSelected: addressProvider.selectedAddress ==
-                          addressesList[index],
-                      pincode: addressesList[index].pincode,
-                      address: addressesList[index].address,
-                      addressType: addressesList[index].addressType,
-                      number: addressesList[index].phone,
+                    child: Row(
+                      children: [
+                        AddressTile(
+                          isSelected: addressesList[index].addressId ==
+                              selectedAddressId,
+                          pincode: addressesList[index].pincode,
+                          address: addressesList[index].address,
+                          addressType: addressesList[index].addressType,
+                          number: addressesList[index].phone,
+                          onChanged: (_) {
+                            addressProvider.selectAddress(
+                              addressesList[index].addressId,
+                              authProvider.user.uid,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 );

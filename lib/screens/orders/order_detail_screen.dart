@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/auth_provider.dart';
 import 'package:soni_store_app/providers/order_provider.dart';
@@ -153,7 +153,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20),
                                     decoration: const BoxDecoration(
-                                      color: Color(0xFFFFE6E6),
+                                      color: Colors.greenAccent,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(15),
                                       ),
@@ -165,9 +165,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           // height width 18
                                           height:
                                               getProportionateScreenHeight(18),
-                                          child: SvgPicture.asset(
-                                            "assets/icons/Success.svg",
-                                            // color: Colors.green,
+                                          // child: SvgPicture.asset(
+                                          //   "assets/icons/Success.svg",
+                                          //   // color: Colors.green,
+                                          // ),
+                                          child: const FaIcon(
+                                            FontAwesomeIcons.circleCheck,
                                           ),
                                         ),
                                       ],

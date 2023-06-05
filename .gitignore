@@ -37,7 +37,13 @@ build/
 ./build
 ./build/
 
-/secret/
+/.vscode/
+.vscode/
+/.vscode
+./.vscode
+./.vscode/
+
+# /secret/
 
 # Web related
 lib/generated_plugin_registrant.dart

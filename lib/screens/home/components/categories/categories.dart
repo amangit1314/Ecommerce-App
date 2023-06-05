@@ -22,19 +22,20 @@ class _CategoriesState extends State<Categories>
   int curr = 0;
 
   List iconData = [
-    Icons.flash_on,
+    // Icons.flash_on,
     Icons.shopping_bag,
     Icons.sports_basketball,
-    Icons.card_giftcard,
-    Icons.light,
+    // Icons.card_giftcard,
+    Icons.sports_mma_outlined,
+    Icons.outlined_flag_outlined,
   ];
 
   List categoryText = [
-    "All",
+    // "All",
     "Fashion",
-    "Sport's",
-    "Grocery",
-    "Electro",
+    "Sports",
+    "Footwear",
+    "tshirts",
   ];
 
   @override
@@ -52,10 +53,14 @@ class _CategoriesState extends State<Categories>
   final CollectionReference _refProducts =
       FirebaseFirestore.instance.collection('products');
 
-  Future<List<Product>> fetchProductsFromFirestore() async {
+  Future<List<Product>> fetchProductsFromFirestore(String category) async {
     final List<Product> products = [];
-
-    final QuerySnapshot snapshot = await _refProducts.get();
+    final QuerySnapshot snapshot = await _refProducts
+        .where(
+          'categories',
+          arrayContains: category,
+        )
+        .get();
     for (var element in snapshot.docs) {
       products.add(Product.fromMap(element.data() as Map<String, dynamic>));
     }
@@ -78,25 +83,22 @@ class _CategoriesState extends State<Categories>
             child: CategorySectionTitle(title: 'Categories'),
           ),
           SizedBox(height: getProportionateScreenWidth(15)),
-          SizedBox(
-            height: getProportionateScreenWidth(55),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(
-                  iconData.length,
-                  (index) => CategoryCard(
-                    iconData: iconData[index],
-                    text: categoryText[index],
-                    press: () {
-                      setState(() {
-                        curr = index;
-                      });
-                    },
-                    bgColor: curr == index ? kPrimaryColor : Colors.transparent,
-                  ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                iconData.length,
+                (index) => CategoryCard(
+                  iconData: iconData[index],
+                  text: categoryText[index],
+                  press: () {
+                    setState(() {
+                      curr = index;
+                    });
+                  },
+                  bgColor: curr == index ? kPrimaryColor : Colors.transparent,
                 ),
               ),
             ),
@@ -105,7 +107,10 @@ class _CategoriesState extends State<Categories>
           SizedBox(
             height: getProportionateScreenHeight(450),
             child: FutureBuilder<List<Product>>(
-              future: fetchProductsFromFirestore(),
+              future: fetchProductsFromFirestore(
+                // curr == 0 ? '' :
+                categoryText[curr],
+              ),
               builder: (context, snapshot) {
                 final List<Product> products = snapshot.data ?? [];
 
@@ -135,26 +140,29 @@ class _CategoriesState extends State<Categories>
                   );
                 }
 
-                return Expanded(
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.75,
-                      crossAxisSpacing: 2,
-                      mainAxisSpacing: 2,
-                    ),
-                    itemCount: products.length < 4 ? products.length : 4,
-                    itemBuilder: (context, index) {
-                      return CategoryGridItem(
-                        product: products[index],
-                        image: products[index].images.first,
-                        category: products[index].categories.first,
-                      );
-                    },
+                if (products.isEmpty) {
+                  return const Center(
+                    child: Text('No products found for the selected category'),
+                  );
+                }
+
+                return GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.75,
+                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 2,
                   ),
+                  itemCount: products.length < 4 ? products.length : 4,
+                  itemBuilder: (context, index) {
+                    return CategoryGridItem(
+                      product: products[index],
+                      image: products[index].images.first,
+                      category: products[index].categories.first,
+                    );
+                  },
                 );
               },
             ),
@@ -186,7 +194,7 @@ class CategoryCard extends StatelessWidget {
       onTap: press,
       child: Container(
         margin: EdgeInsets.only(right: getProportionateScreenWidth(15)),
-        width: getProportionateScreenWidth(109),
+        width: getProportionateScreenWidth(115),
         child: Container(
           padding: EdgeInsets.all(getProportionateScreenWidth(15)),
           height: getProportionateScreenWidth(55),
@@ -283,7 +291,7 @@ class CategoryGridItem extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Expanded(
+            Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2.0),
                 child: Column(

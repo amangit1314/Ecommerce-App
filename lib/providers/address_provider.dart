@@ -75,8 +75,35 @@ class AddressProvider with ChangeNotifier {
     }
   }
 
-  void selectAddress(models.Address address) {
-    _selectedAddress = address;
-    notifyListeners();
+  Future<void> selectAddress(String addressId, String uid) async {
+    try {
+      _selectedAddress =
+          addressesList.firstWhere((address) => address.addressId == addressId);
+      notifyListeners();
+
+      // Update the selected address in the user's collection UID document
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+      final userDocSnapshot = await userDocRef.get();
+
+      if (userDocSnapshot.exists) {
+        final userData = userDocSnapshot.data();
+        final selectedAddressData = {'addressId': addressId};
+
+        // Check if the user document already has a selectedAddress field
+        if (userData != null && userData.containsKey('selectedAddress')) {
+          // Update the selectedAddress field
+          await userDocRef.update({'selectedAddress': selectedAddressData});
+          log('Selected address updated in the user document');
+        } else {
+          // Add the selectedAddress field
+          await userDocRef.set({'selectedAddress': selectedAddressData},
+              SetOptions(merge: true));
+          log('Selected address added to the user document');
+        }
+      }
+    } catch (error) {
+      log('Failed to select address: $error');
+    }
   }
 }

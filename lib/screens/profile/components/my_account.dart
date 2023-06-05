@@ -246,7 +246,10 @@ class _MyAccountState extends State<MyAccount> {
                                           suffixIcon: const CustomSurffixIcon(
                                               svgIcon: "assets/icons/Lock.svg"),
                                         ),
-                                        onChanged: (value) {},
+                                        onChanged: (String newPassword) =>
+                                            profileProvider.updatePassword(
+                                          authProvider.user.uid,
+                                        ),
                                       ),
                                       actions: [
                                         TextButton(
