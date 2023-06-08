@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -131,6 +132,25 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     );
   }
 
+  void showLocalNotification(String? title, String? body,
+      BigTextStyleInformation? bigTextStyleInformation) {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'channel_description',
+      importance: Importance.high,
+      priority: Priority.high,
+      showWhen: false,
+      playSound: true,
+      styleInformation: bigTextStyleInformation,
+    );
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    FlutterLocalNotificationsPlugin()
+        .show(0, title, body, platformChannelSpecifics);
+  }
+
   // ...
 
   Future<void> showPaymentDialog(
@@ -212,6 +232,15 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                           .addOrder(order: order, uid: userId, oid: orderId)
                           .then((value) => success = true);
                       success = true;
+                      showLocalNotification(
+                        'Order Placed Successfully ✔🎉',
+                        'Your order is placed successfully',
+                        BigTextStyleInformation(
+                          'Your order of ${order.amount} is placed, \n estimated delivery in next 2 hours.',
+                          htmlFormatBigText: true,
+                          contentTitle: 'Order Placed Successfully ✔🎉',
+                        ),
+                      );
                     } catch (error) {
                       log('---------------');
                       log(error.toString());

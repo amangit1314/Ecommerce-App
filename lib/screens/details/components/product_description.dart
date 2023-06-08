@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +30,7 @@ class ProductDescription extends StatefulWidget {
 class _ProductDescriptionState extends State<ProductDescription>
     with SingleTickerProviderStateMixin {
   late AnimationController bottomSheetAnimationController;
+  bool isCartButtonActive = false;
 
   @override
   void initState() {
@@ -47,7 +50,7 @@ class _ProductDescriptionState extends State<ProductDescription>
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context);
     return SingleChildScrollView(
       child: Column(
@@ -103,14 +106,46 @@ class _ProductDescriptionState extends State<ProductDescription>
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     setState(() {
                       widget.product.isFavourite = !widget.product.isFavourite;
                     });
-                    cartProvider.addToCart(
-                      widget.product,
-                      authProvider.user.uid,
-                    );
+
+                    if (isCartButtonActive) {
+                      // Remove item from cart
+                      await cartProvider.removeFromCart(
+                          widget.product, authProvider.user.uid);
+                      setState(() {
+                        isCartButtonActive = false;
+                        widget.product.isFavourite = false;
+                      });
+                      log('Removed from cart, marked inactive');
+                    } else {
+                      // Check if item already exists in cart
+                      bool itemExists =
+                          cartProvider.isItemInCart(widget.product);
+
+                      if (itemExists) {
+                        // Remove item from cart
+                        await cartProvider.removeFromCart(
+                            widget.product, authProvider.user.uid);
+                        setState(() {
+                          isCartButtonActive = false;
+                          widget.product.isFavourite = false;
+                        });
+                        log('Removed from cart, marked inactive');
+                      } else {
+                        // Add item to cart
+                        await cartProvider.addToCart(
+                            widget.product, authProvider.user.uid);
+                        setState(() {
+                          isCartButtonActive = true;
+                          widget.product.isFavourite = true;
+                          // !widget.product.isFavourite;
+                        });
+                        log('Added to cart, marked active');
+                      }
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.all(getProportionateScreenWidth(15)),

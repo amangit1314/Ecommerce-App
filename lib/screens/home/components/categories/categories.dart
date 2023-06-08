@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
@@ -23,11 +24,12 @@ class _CategoriesState extends State<Categories>
 
   List iconData = [
     // Icons.flash_on,
-    Icons.shopping_bag,
-    Icons.sports_basketball,
+    FontAwesomeIcons.basketShopping,
+    // Icons.sports_basketball,
+    FontAwesomeIcons.baseball,
     // Icons.card_giftcard,
-    Icons.sports_mma_outlined,
-    Icons.outlined_flag_outlined,
+    FontAwesomeIcons.shoePrints,
+    FontAwesomeIcons.shirt,
   ];
 
   List categoryText = [
@@ -210,11 +212,11 @@ class CategoryCard extends StatelessWidget {
               children: [
                 Icon(
                   iconData,
-                  size: 16,
+                  size: 14,
                   color:
                       bgColor != kPrimaryColor ? kPrimaryColor : Colors.white,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Text(
                   text!,
                   textAlign: TextAlign.center,

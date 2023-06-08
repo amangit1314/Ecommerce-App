@@ -70,7 +70,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                 MaterialPageRoute(
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Processing',
-                    orderCategory: 'Pants',
                   ),
                 ),
               );
@@ -82,7 +81,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                 MaterialPageRoute(
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Processing',
-                    orderCategory: 'Pants',
                   ),
                 ),
               );
@@ -94,7 +92,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                 MaterialPageRoute(
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Delivered',
-                    orderCategory: 'Pants',
                   ),
                 ),
               );
@@ -106,7 +103,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                 MaterialPageRoute(
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Returned Orders',
-                    orderCategory: 'Pants',
                   ),
                 ),
               );
@@ -118,7 +114,6 @@ class _RecentsScreenState extends State<RecentsScreen>
                 MaterialPageRoute(
                   builder: (context) => const OrderDetailScreen(
                     statusName: 'Cancled Orders',
-                    orderCategory: 'Pants',
                   ),
                 ),
               );

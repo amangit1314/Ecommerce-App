@@ -5,29 +5,62 @@ import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 
 class OrderProvider with ChangeNotifier {
-  final List<models.Order> _orders = [];
+  List<models.Order> _orders = [];
   List<models.Order> get orders => _orders;
 
-  Future<List<models.Order>> fetchOrders(
-      String userId, String orderStaus) async {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  bool _isLoading = false;
+  bool _hasError = false;
+
+  bool get isLoading => _isLoading;
+  bool get hasError => _hasError;
+
+  Future<void> fetchOrders(String uid) async {
     try {
-      final querySnapshotCollection = FirebaseFirestore.instance
-          .collection('orders')
-          .where('userId', isEqualTo: userId)
-          .where('orderStatus', isEqualTo: orderStaus);
+      _isLoading = true;
+      _hasError = false;
+      notifyListeners();
 
-      final ordersSnapshot = await querySnapshotCollection.get();
+      final ordersCollection = _firestore.collection('orders');
+      final userOrderDoc = ordersCollection.doc(uid);
 
-      _orders.clear();
-
-      for (final doc in ordersSnapshot.docs) {
-        final orderItemData = doc.data();
-        _orders.add(models.Order.fromMap(orderItemData));
+      final userOrderSnapshot = await userOrderDoc.get();
+      if (!userOrderSnapshot.exists) {
+        _orders = [];
+        _isLoading = false;
+        notifyListeners();
+        return;
       }
 
+      final userOrderData = userOrderSnapshot.data();
+      if (userOrderData == null) {
+        _orders = [];
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      final userOrder = models.Order.fromMap(userOrderData);
+      _orders.add(userOrder);
+
+      final orderDocs = await ordersCollection.get();
+      for (final orderDoc in orderDocs.docs) {
+        final orderData = orderDoc.data();
+        if (orderData == null) {
+          continue;
+        }
+
+        final order = models.Order.fromMap(orderData);
+        _orders.add(order);
+      }
+
+      _isLoading = false;
       notifyListeners();
-      return _orders;
     } catch (error) {
+      _isLoading = false;
+      _hasError = true;
+      notifyListeners();
       throw Exception('Failed to fetch orders: $error');
     }
   }
@@ -86,5 +119,22 @@ class OrderProvider with ChangeNotifier {
       log('Failed to update order status: $error');
       throw Exception('Failed to update order status: $error');
     }
+  }
+
+  Future<String?> getProductName(String productId) async {
+    try {
+      final productDoc = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productId)
+          .get();
+      final productData = productDoc.data();
+
+      if (productData != null) {
+        return productData['title'] as String?;
+      }
+    } catch (error) {
+      log('Failed to get product name: $error');
+    }
+    return null;
   }
 }

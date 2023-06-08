@@ -22,7 +22,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Map<String, dynamic>? paymentIntent;
   String? mtoken = " ";
 
   @override
@@ -31,9 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
     requestPermission();
     getToken();
     saveToken(mtoken!);
-    // makePayment();
-    // displayPaymentSheet();
-    // createPaymentIntent();
     initInfo();
   }
 
@@ -66,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mtoken = token;
         });
         saveToken(token!);
-        return null;
+        return mtoken;
       },
     );
   }
@@ -78,88 +74,44 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('users')
         .doc(uid)
         .set({'token': token}, SetOptions(merge: true));
+
+    showLocalNotification(
+      '',
+      '',
+      const BigTextStyleInformation(
+        'Welcome to SnapCart',
+        htmlFormatBigText: true,
+        contentTitle: 'SnapCart',
+      ),
+    );
   }
-
-  // makePayment() async {
-  //   try {
-  //     paymentIntent = await createPaymentIntent();
-  //     await Stripe.instance.initPaymentSheet(
-  //       paymentSheetParameters: SetupPaymentSheetParameters(
-  //         paymentIntentClientSecret: paymentIntent!['client_secret'],
-  //         applePay: const PaymentSheetApplePay(
-  //           merchantCountryCode: 'US',
-  //         ),
-  //         googlePay: const PaymentSheetGooglePay(
-  //           merchantCountryCode: 'US',
-  //         ),
-  //         style: ThemeMode.dark,
-  //         merchantDisplayName: 'SnapCart',
-  //       ),
-  //     );
-  //     displayPaymentSheet();
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
-
-  // displayPaymentSheet() async {import '../../utils/enums.dart';
-  //   try {
-  //     await Stripe.instance.presentPaymentSheet();
-  //   } catch (e) {
-  //     debugPrint('faild');
-  //   }
-  // }
-
-  // createPaymentIntent() async {
-  //   try {
-  //     Map<String, dynamic> body = {
-  //       'amount': 100,
-  //       'currency': 'usd',
-  //       'payment_method_types[]': 'card, upi'
-  //     };
-
-  //     http.Response response = await http.post(
-  //       Uri.parse('https://api.stripe.com/v1/payment_intents'),
-  //       body: body,
-  //       headers: {
-  //         "Authorization": "Bearer TEST_TOKEN",
-  //         "Content-Type": "application/x-www-form-urlencoded"
-  //       },
-  //     );
-
-  //     return json.decode(response.body);
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     throw (Exception(e.toString()));
-  //   }
-  // }
 
   void initInfo() async {
     try {
-      // * Initialize Flutter Local Notifications
-      var androidInitialize =
-          const AndroidInitializationSettings('@mipmap/ic_launcher');
-      var initializationSettings =
+      // Initialize Flutter Local Notifications
+      const AndroidInitializationSettings androidInitialize =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
+      const InitializationSettings initializationSettings =
           InitializationSettings(android: androidInitialize);
-      await FlutterLocalNotificationsPlugin().initialize(initializationSettings,
-          onDidReceiveBackgroundNotificationResponse:
-              (dynamic payload) async {});
+      await FlutterLocalNotificationsPlugin()
+          .initialize(initializationSettings);
 
-      // * Retrieve Firebase Messaging token
-      FirebaseMessaging messaging = FirebaseMessaging.instance;
-      String? token = await messaging.getToken();
-      log('Firebase Messaging Token: $token');
+      // Retrieve Firebase Messaging token
+      final FirebaseMessaging messaging = FirebaseMessaging.instance;
+      // final String? token = await messaging.getToken();
+      log('Firebase Messaging Token: $mtoken');
 
-      // ? Request permission to display notifications (required for iOS)
+      // Request permission to display notifications (required for iOS)
       await messaging.requestPermission();
-      NotificationSettings settings = await messaging.getNotificationSettings();
+      final NotificationSettings settings =
+          await messaging.getNotificationSettings();
       log('Notification Settings: ${settings.authorizationStatus}');
 
-      // ! Subscribe to a topic for receiving push notifications
+      // Subscribe to a topic for receiving push notifications
       await messaging.subscribeToTopic('topic_name');
       log('Subscribed to topic.');
 
-      // * Handle incoming messages when the app is in the foreground
+      // Handle incoming messages when the app is in the foreground
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         log('....................................');
         log('onMessage: ${message.notification?.title}/${message.notification?.body}');
@@ -179,11 +131,24 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       });
 
-      // ? Handle incoming messages when the app is in the background or terminated
+      // * Handle incoming messages when the app is in the background or terminated
       FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
         log('Received background message: ${message.notification?.body}');
-        // ! Perform custom handling of background messages
-        // ! e.g., update app state, trigger background processing, etc.
+        // * Perform custom handling of background messages
+        // * e.g., update app state, trigger background processing, etc.
+
+        BigTextStyleInformation bigTextStyleInformation =
+            BigTextStyleInformation(
+          message.notification!.body.toString(),
+          htmlFormatBigText: true,
+          contentTitle: message.notification?.title,
+        );
+
+        showLocalNotification(
+          message.notification?.title,
+          message.notification?.body,
+          bigTextStyleInformation,
+        );
       });
     } catch (e) {
       log('Initialization error: $e');
@@ -209,12 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .show(0, title, body, platformChannelSpecifics);
   }
 
-  //dispose
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -222,7 +181,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: const Body(),
       bottomNavigationBar:
           const CustomBottomNavBar(selectedMenu: MenuState.home),
-      // floating btn with support agent icon
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

@@ -82,3 +82,57 @@
 //     }
 //   }
 // }
+
+  // makePayment() async {
+  //   try {
+  //     paymentIntent = await createPaymentIntent();
+  //     await Stripe.instance.initPaymentSheet(
+  //       paymentSheetParameters: SetupPaymentSheetParameters(
+  //         paymentIntentClientSecret: paymentIntent!['client_secret'],
+  //         applePay: const PaymentSheetApplePay(
+  //           merchantCountryCode: 'US',
+  //         ),
+  //         googlePay: const PaymentSheetGooglePay(
+  //           merchantCountryCode: 'US',
+  //         ),
+  //         style: ThemeMode.dark,
+  //         merchantDisplayName: 'SnapCart',
+  //       ),
+  //     );
+  //     displayPaymentSheet();
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //   }
+  // }
+
+  // displayPaymentSheet() async {import '../../utils/enums.dart';
+  //   try {
+  //     await Stripe.instance.presentPaymentSheet();
+  //   } catch (e) {
+  //     debugPrint('faild');
+  //   }
+  // }
+
+  // createPaymentIntent() async {
+  //   try {
+  //     Map<String, dynamic> body = {
+  //       'amount': 100,
+  //       'currency': 'usd',
+  //       'payment_method_types[]': 'card, upi'
+  //     };
+
+  //     http.Response response = await http.post(
+  //       Uri.parse('https://api.stripe.com/v1/payment_intents'),
+  //       body: body,
+  //       headers: {
+  //         "Authorization": "Bearer TEST_TOKEN",
+  //         "Content-Type": "application/x-www-form-urlencoded"
+  //       },
+  //     );
+
+  //     return json.decode(response.body);
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     throw (Exception(e.toString()));
+  //   }
+  // }
