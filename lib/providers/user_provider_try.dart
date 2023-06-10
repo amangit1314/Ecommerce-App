@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 
-import '../models/address.dart';
-import '../models/models.dart';
+import '../models/models.dart' as models;
 
 class UserProviderTry with ChangeNotifier {
-  User? _user;
-  User? get user => _user;
+  models.User? _user;
+  models.User? get user => _user;
 
   String _uid = '';
   String get uid => _uid;
@@ -22,13 +21,13 @@ class UserProviderTry with ChangeNotifier {
       'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
   String get profileImage => _profileImage;
 
-  List<Address>? addresses = [];
-  List<Address>? get address => addresses;
+  List<models.Address>? addresses = [];
+  List<models.Address>? get address => addresses;
 
-  Address? _selectedAddress;
-  Address? get selectedAddress => _selectedAddress;
+  models.Address? _selectedAddress;
+  models.Address? get selectedAddress => _selectedAddress;
 
-  void setUser(User user) {
+  void setUser(models.User user) {
     _user = user;
     notifyListeners();
   }
@@ -53,7 +52,7 @@ class UserProviderTry with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAddress(Address address, String uid) async {
+  void setAddress(models.Address address, String uid) async {
     auth.User? user = auth.FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw Exception('User is Empty');
@@ -69,7 +68,7 @@ class UserProviderTry with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedAddress(Address address) {
+  void setSelectedAddress(models.Address address) {
     _selectedAddress = address;
     notifyListeners();
   }

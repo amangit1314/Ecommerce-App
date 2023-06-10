@@ -47,7 +47,7 @@ class OrderProvider with ChangeNotifier {
       final orderDocs = await ordersCollection.get();
       for (final orderDoc in orderDocs.docs) {
         final orderData = orderDoc.data();
-        if (orderData == null) {
+        if (orderData == {}) {
           continue;
         }
 

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
@@ -24,4 +25,11 @@ Future<void> getProducts() async {
 String generateOrderId() {
   const uuid = Uuid();
   return uuid.v4(); // Generate a random UUID
+}
+
+Color convertStringToColor(String hexColor) {
+  // String hexColor = "#567890";
+  Color color =
+      Color(int.parse(hexColor.substring(1, 7), radix: 16) + 0xFF000000);
+  return color;
 }

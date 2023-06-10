@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:soni_store_app/utils/constants.dart';
+
+import 'models.dart' as models;
+
 class Order {
   final String orderId;
   final String? uid;
@@ -8,8 +13,10 @@ class Order {
   final String orderedDate;
   final int quantity;
   final double amount;
-  // final String address;
+  final Color color;
+  final models.Address address;
   final String orderStatus;
+  final String size;
   // final Payment? paymentInfo;
 
   Order({
@@ -20,8 +27,10 @@ class Order {
     required this.orderedDate,
     required this.quantity,
     required this.amount,
-    // required this.address,
+    required this.address,
     required this.orderStatus,
+    required this.color,
+    required this.size,
     // this.paymentInfo,
   });
 
@@ -34,7 +43,7 @@ class Order {
       'orderedDate': orderedDate,
       'quantity': quantity,
       'amount': amount,
-      // 'address': address,
+      'address': address,
       'orderStatus': orderStatus,
       // 'paymentInfo': paymentInfo!.toMap(),
     };
@@ -42,6 +51,9 @@ class Order {
 
   factory Order.fromMap(Map<String, dynamic> map) {
     return Order(
+      size: map['size'] ?? 'XL',
+      color: map['color'] ?? kPrimaryColor,
+      address: map['address'] ?? '',
       orderId: map['orderId'] ?? '',
       uid: map['uid'] ?? '',
       productId: map['productId'] ?? '',
@@ -49,7 +61,6 @@ class Order {
       orderedDate: map['orderedDate'] ?? DateTime.now().toString(),
       quantity: map['quantity']?.toInt() ?? 0,
       amount: map['amount']?.toDouble() ?? 0.0,
-      // address: map['address'] ?? '',
       orderStatus: map['orderStatus'] ?? '',
       // paymentInfo: Payment.fromMap(
       //   map['paymentInfo'],

@@ -10,10 +10,9 @@ import 'package:uuid/uuid.dart';
 
 import '../../../components/default_button.dart';
 import '../../../providers/address_provider.dart';
-import '../../../utils/size_config.dart';
 
 class AddShippingAddress extends StatefulWidget {
-  const AddShippingAddress({super.key});
+  const AddShippingAddress({Key? key}) : super(key: key);
 
   @override
   State<AddShippingAddress> createState() => _AddShippingAddressState();
@@ -89,139 +88,59 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                     'Add new Address',
                     style: Theme.of(context)
                         .textTheme
-                        .titleMedium!
+                        .titleLarge!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
                 ],
               ),
             ),
-            Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 15, right: 15, left: 15),
-                  child: DefaultButton(
-                    text: 'Pick From Geolocator',
-                    txtColor: Colors.white,
-                    press: () {},
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20.0),
-                  child: Text('OR'),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin:
-                            const EdgeInsets.only(top: 25, right: 15, left: 15),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey.shade200,
-                        ),
-                        child: TextFormField(
-                          controller: addressTypeController,
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(12)),
-                          decoration: InputDecoration(
-                            hintText: 'Enter address type',
-                            border: InputBorder.none,
-                            suffixIcon: const Icon(
-                              FontAwesomeIcons.houseCircleCheck,
-                              size: 16,
-                            ),
-                            hintStyle: TextStyle(
-                                fontSize: getProportionateScreenWidth(12)),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            const EdgeInsets.only(top: 15, right: 15, left: 15),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey.shade200,
-                        ),
-                        child: TextFormField(
-                          controller: addressController,
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(12)),
-                          decoration: InputDecoration(
-                            hintText: 'Enter your address',
-                            border: InputBorder.none,
-                            suffixIcon: const Icon(
-                              FontAwesomeIcons.addressBook,
-                              size: 16,
-                            ),
-                            hintStyle: TextStyle(
-                                fontSize: getProportionateScreenWidth(12)),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            const EdgeInsets.only(top: 15, right: 15, left: 15),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey.shade200,
-                        ),
-                        child: TextFormField(
-                          controller: phoneController,
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(12)),
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                            hintText: 'Enter your phone number',
-                            border: InputBorder.none,
-                            suffixIcon: const Icon(
-                              FontAwesomeIcons.phone,
-                              size: 16,
-                            ),
-                            hintStyle: TextStyle(
-                                fontSize: getProportionateScreenWidth(12)),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            const EdgeInsets.only(top: 15, right: 15, left: 15),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey.shade200,
-                        ),
-                        child: TextFormField(
-                          controller: pinCodeController,
-                          style: TextStyle(
-                            fontSize: getProportionateScreenWidth(12),
-                          ),
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                            hintText: 'Enter your pin code',
-                            border: InputBorder.none,
-                            suffixIcon: const Icon(
-                              FontAwesomeIcons.locationPin,
-                              size: 16,
-                            ),
-                            hintStyle: TextStyle(
-                              fontSize: getProportionateScreenWidth(12),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            const SizedBox(height: 15),
             Container(
-              margin: const EdgeInsets.only(top: 15, right: 15, left: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 15),
+              child: DefaultButton(
+                text: 'Pick From Geolocator',
+                txtColor: Colors.white,
+                press: () {},
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.0),
+              child: Text('OR'),
+            ),
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildTextFormField(
+                    controller: addressTypeController,
+                    hintText: 'Enter address type',
+                    icon: FontAwesomeIcons.houseCircleCheck,
+                  ),
+                  buildTextFormField(
+                    controller: addressController,
+                    hintText: 'Enter your address',
+                    icon: FontAwesomeIcons.addressBook,
+                  ),
+                  buildTextFormField(
+                    controller: phoneController,
+                    hintText: 'Enter your phone number',
+                    icon: FontAwesomeIcons.phone,
+                    keyboardType: TextInputType.phone,
+                  ),
+                  buildTextFormField(
+                    controller: pinCodeController,
+                    hintText: 'Enter your pin code',
+                    icon: FontAwesomeIcons.locationPin,
+                    keyboardType: TextInputType.phone,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15),
               child: DefaultButton(
                 text: 'Add Address',
                 txtColor: Colors.white,
@@ -279,6 +198,36 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
           ],
         ),
       ),
+    );
+  }
+
+  TextFormField buildTextFormField({
+    required TextEditingController controller,
+    required String hintText,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return TextFormField(
+      controller: controller,
+      style: const TextStyle(fontSize: 12),
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        hintText: hintText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        suffixIcon: Icon(
+          icon,
+          size: 16,
+        ),
+        hintStyle: const TextStyle(fontSize: 12),
+      ),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'This field is required';
+        }
+        return null;
+      },
     );
   }
 }

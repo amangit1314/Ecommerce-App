@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:soni_store_app/providers/address_provider.dart';
 import 'package:soni_store_app/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 
@@ -71,8 +72,10 @@ class _CheckoutCardState extends State<CheckoutCard> {
               ],
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
-            Consumer3<CartProvider, AuthProvider, OrderProvider>(
-              builder: (context, cartProvider, authProvider, orderProvider, _) {
+            Consumer4<CartProvider, AuthProvider, OrderProvider,
+                ProductProvider>(
+              builder: (context, cartProvider, authProvider, orderProvider,
+                  productProvider, _) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -102,6 +105,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                             context,
                             authProvider.user.uid,
                             orderProvider,
+                            productProvider,
                           );
                         },
                       ),
@@ -120,6 +124,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
     BuildContext context,
     String userId,
     OrderProvider orderProvider,
+    ProductProvider productProvider,
   ) async {
     bool success = false;
     String orderStatus = 'Processing';
@@ -134,6 +139,8 @@ class _CheckoutCardState extends State<CheckoutCard> {
     // Get the cart items from the cart provider
     CartProvider cartProvider =
         Provider.of<CartProvider>(context, listen: false);
+    AddressProvider addressProvider =
+        Provider.of<AddressProvider>(context, listen: false);
     List<Product> cartItems = cartProvider.cartItems;
 
     log('---------------');
@@ -170,13 +177,16 @@ class _CheckoutCardState extends State<CheckoutCard> {
     log('---------------');
 
     Order order = Order(
+      size: productProvider.selectedSize,
+      color: productProvider.selectedColor,
+      address: addressProvider.selectedAddress,
       orderId: orderId,
       orderedDate: DateTime.now().toString(),
       uid: userId,
       orderStatus: orderStatus,
       amount: totalPrice,
-      productId: '',
-      productImage: '',
+      productId: productProvider.product!.id,
+      productImage: productProvider.product!.images.first,
       quantity: orderItems.length,
     );
 

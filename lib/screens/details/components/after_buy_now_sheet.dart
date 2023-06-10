@@ -264,6 +264,8 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                                 return SingleChildScrollView(
                                   controller: scrollController,
                                   child: CheckoutButtonAlertBox(
+                                    size: productProvider.selectedSize,
+                                    color: productProvider.selectedColor,
                                     price:
                                         productProvider.totalPrice.toString(),
                                     width: MediaQuery.of(context).size.width,

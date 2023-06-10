@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:soni_store_app/utils/constants.dart';
 
 import '../models/product.dart';
 
@@ -17,6 +18,12 @@ class ProductProvider with ChangeNotifier {
 
   int _totalPrice = 0;
   int get totalPrice => _totalPrice;
+
+  String _selectedSize = 'XL';
+  String get selectedSize => _selectedSize;
+
+  Color _selectedColor = kPrimaryColor;
+  Color get selectedColor => _selectedColor;
 
   int get totalAmount => _product?.price ?? 0 * _quantity;
 
@@ -44,6 +51,16 @@ class ProductProvider with ChangeNotifier {
     if (_quantity > 0 && _product != null) {
       _totalPrice = _product!.price * _quantity;
     }
+    notifyListeners();
+  }
+
+  void updateSelectedSize(String selectedSize) {
+    _selectedSize = selectedSize;
+    notifyListeners();
+  }
+
+  void updateSelectedColor(Color selectedColor) {
+    _selectedColor = selectedColor;
     notifyListeners();
   }
 }

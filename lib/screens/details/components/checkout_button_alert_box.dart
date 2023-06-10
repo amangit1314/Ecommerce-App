@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../models/models.dart';
+import '../../../providers/address_provider.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
@@ -24,6 +25,8 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     required this.productId,
     required this.userId,
     required this.productImage,
+    required this.size,
+    required this.color,
   }) : super(key: key);
 
   final double width;
@@ -33,6 +36,8 @@ class CheckoutButtonAlertBox extends StatelessWidget {
   final AfterBuyNowButtonSheet widget;
   final int quantity;
   final String userId;
+  final String size;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +121,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     ),
                     onPressed: () async {
                       await showPaymentDialog(
-                        context,
-                        userId,
-                        productId,
-                        productImage,
-                      );
+                          context, userId, productId, productImage);
                     },
                   );
                 }),
@@ -151,8 +152,6 @@ class CheckoutButtonAlertBox extends StatelessWidget {
         .show(0, title, body, platformChannelSpecifics);
   }
 
-  // ...
-
   Future<void> showPaymentDialog(
     BuildContext context,
     String userId,
@@ -163,6 +162,8 @@ class CheckoutButtonAlertBox extends StatelessWidget {
         Provider.of<CartProvider>(context, listen: false);
     OrderProvider orderProvider =
         Provider.of<OrderProvider>(context, listen: false);
+    AddressProvider addressProvider =
+        Provider.of<AddressProvider>(context, listen: false);
 
     bool success = false;
     String orderStatus = 'Processing';
@@ -185,12 +186,19 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     log('---------------');
     log('PRICE = ${price.toString()}');
     log('---------------');
+    log('SIZE = $size');
+    log('---------------');
+    log('COLOR = $color');
+    log('---------------');
     log('QUANTITY = ${quantity.toString()}');
     log('---------------');
     log('ORDER STATUS = $orderStatus');
     log('---------------');
 
     Order order = Order(
+      size: size,
+      color: color,
+      address: addressProvider.selectedAddress,
       uid: userId,
       orderId: orderId,
       orderedDate: DateTime.now().toString(),
