@@ -98,8 +98,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Retrieve Firebase Messaging token
       final FirebaseMessaging messaging = FirebaseMessaging.instance;
-      // final String? token = await messaging.getToken();
-      log('Firebase Messaging Token: $mtoken');
+      final String? token = await messaging.getToken();
+      log('Firebase Messaging Token: $token');
+
+      // Assign the token to mtoken
+      setState(() {
+        mtoken = token;
+      });
 
       // Request permission to display notifications (required for iOS)
       await messaging.requestPermission();
@@ -132,24 +137,24 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       // * Handle incoming messages when the app is in the background or terminated
-      FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-        log('Received background message: ${message.notification?.body}');
-        // * Perform custom handling of background messages
-        // * e.g., update app state, trigger background processing, etc.
+      // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+      //   log('Received background message: ${message.notification?.body}');
+      //   // * Perform custom handling of background messages
+      //   // * e.g., update app state, trigger background processing, etc.
 
-        BigTextStyleInformation bigTextStyleInformation =
-            BigTextStyleInformation(
-          message.notification!.body.toString(),
-          htmlFormatBigText: true,
-          contentTitle: message.notification?.title,
-        );
+      //   BigTextStyleInformation bigTextStyleInformation =
+      //       BigTextStyleInformation(
+      //     message.notification!.body.toString(),
+      //     htmlFormatBigText: true,
+      //     contentTitle: message.notification?.title,
+      //   );
 
-        showLocalNotification(
-          message.notification?.title,
-          message.notification?.body,
-          bigTextStyleInformation,
-        );
-      });
+      //   showLocalNotification(
+      //     message.notification?.title,
+      //     message.notification?.body,
+      //     bigTextStyleInformation,
+      //   );
+      // });
     } catch (e) {
       log('Initialization error: $e');
     }

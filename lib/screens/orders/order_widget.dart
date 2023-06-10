@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/constants.dart';
@@ -8,7 +9,7 @@ class OrderWidget extends StatelessWidget {
   final int quantity;
   final String orderId;
   final String productName;
-  final double orderPrice;
+  final String orderPrice;
   final String orderDate;
 
   const OrderWidget({
@@ -33,23 +34,19 @@ class OrderWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SizedBox(
+          Container(
             height: getProportionateScreenHeight(100),
             width: getProportionateScreenWidth(100),
-            child: ClipRRect(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
-              child: productImage != null
-                  ? Image.network(
-                      productImage!,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const CircularProgressIndicator();
-                      },
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.error),
-                    )
-                  : const Icon(Icons.shopping_cart),
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(
+                  productImage! != ''
+                      ? productImage!
+                      : 'https://www.getillustrations.com/packs/gradient-marker-vector-illustrations/scenes/_1x/e-commerce%20_%20online,%20shopping,%20buy,%20purchase,%20empty,%20cart,%20order_md.png',
+                ),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(width: 10),
@@ -58,44 +55,60 @@ class OrderWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // * orderid
                 Text(
                   productName,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
+                // * orderId
                 Text(
-                  'Quantity: $quantity',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: kTextColor.withOpacity(0.6),
-                  ),
+                  'OrderID: ${orderId.substring(0, 15)}',
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: kPrimaryColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-                const SizedBox(height: 6),
+                // const SizedBox(height: 4),
+                // * date
                 Text(
-                  'Order ID: $orderId',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: kTextColor.withOpacity(0.6),
-                  ),
+                  '${orderDate.split(' ')[0]} at ${orderDate.substring(10, 16)}',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: kTextColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.normal,
+                      ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  'Order Price: \$$orderPrice',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Ordered Date: $orderDate',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: kTextColor.withOpacity(0.6),
-                  ),
+                const SizedBox(height: 4),
+                // * price and quantity
+                Wrap(
+                  spacing: 30,
+                  children: [
+                    Text(
+                      'Amount: ₹ ${orderPrice.toString()}',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: kPrimaryColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    Text(
+                      'Items (${quantity.toString()})',
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: kPrimaryColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
                 ),
               ],
             ),

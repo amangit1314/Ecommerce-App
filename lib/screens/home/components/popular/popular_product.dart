@@ -189,6 +189,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../components/skelton.dart';
@@ -318,19 +319,14 @@ class LoadingShimmerSkelton extends StatelessWidget {
                     Skelton(height: 10),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Skelton(height: 14),
-                  ],
-                ),
+                const ShimmerBox(child: Skelton(height: 14)),
               ],
             ),
           ),
         ),
         const Padding(
           padding: EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
-          child: Skelton(height: 12),
+          child: ShimmerBox(child: Skelton(height: 12)),
         ),
       ],
     );
@@ -443,6 +439,25 @@ class FashionsCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ShimmerBox extends StatelessWidget {
+  const ShimmerBox({Key? key, required this.child}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      period: const Duration(milliseconds: 1500),
+      direction: ShimmerDirection.ltr,
+      loop: 2,
+      enabled: true,
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey,
+      child: child,
     );
   }
 }
