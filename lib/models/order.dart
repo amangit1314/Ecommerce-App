@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/utils/constants.dart';
 
-import 'models.dart' as models;
-
 class Order {
   final String orderId;
   final String? uid;
@@ -13,13 +11,15 @@ class Order {
   final String orderedDate;
   final int quantity;
   final double amount;
+  final String number;
   final Color color;
-  final models.Address address;
+  final String address;
   final String orderStatus;
   final String size;
   // final Payment? paymentInfo;
 
-  Order({
+  Order(
+    this.number, {
     required this.orderId,
     this.uid,
     required this.productId,
@@ -36,6 +36,7 @@ class Order {
 
   Map<String, dynamic> toMap() {
     return {
+      'number': number,
       'orderId': orderId,
       'uid': uid,
       'productId': productId,
@@ -51,6 +52,7 @@ class Order {
 
   factory Order.fromMap(Map<String, dynamic> map) {
     return Order(
+      map['number'] ?? '+91 1234567890',
       size: map['size'] ?? 'XL',
       color: map['color'] ?? kPrimaryColor,
       address: map['address'] ?? '',

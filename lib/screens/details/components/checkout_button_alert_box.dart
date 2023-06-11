@@ -196,9 +196,11 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     log('---------------');
 
     Order order = Order(
+      addressProvider.selectedAddress.phone,
       size: size,
       color: color,
-      address: addressProvider.selectedAddress,
+      address: addressProvider.selectedAddress.address +
+          addressProvider.selectedAddress.pincode,
       uid: userId,
       orderId: orderId,
       orderedDate: DateTime.now().toString(),
@@ -237,7 +239,10 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                       log(order.toString());
                       log('---------------');
                       await orderProvider
-                          .addOrder(order: order, uid: userId, oid: orderId)
+                          .addOrder(
+                            order: order,
+                            uid: userId,
+                          )
                           .then((value) => success = true);
                       success = true;
                       showLocalNotification(

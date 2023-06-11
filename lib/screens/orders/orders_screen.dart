@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../components/custom_bottom_nav_bar.dart';
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
-import 'order_detail_screen.dart';
+import 'orders_list_of_category_screen.dart';
 import 'subscreens/subscreens.dart';
 
 class RecentsScreen extends StatefulWidget {
@@ -42,6 +42,7 @@ class _RecentsScreenState extends State<RecentsScreen>
           "Orders",
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: kPrimaryColor,
+                fontWeight: FontWeight.w600,
               ),
         ),
         backgroundColor: Colors.white,
@@ -60,7 +61,7 @@ class _RecentsScreenState extends State<RecentsScreen>
             child: Text(
               'Orders history',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
             ),
           ),
@@ -68,7 +69,8 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const OrderDetailScreen(
+                  builder: (context) =>
+                      const OrdersListOfSelectedCategoryScreen(
                     statusName: 'Processing',
                   ),
                 ),
@@ -79,8 +81,9 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const OrderDetailScreen(
-                    statusName: 'Processing',
+                  builder: (context) =>
+                      const OrdersListOfSelectedCategoryScreen(
+                    statusName: 'Awaiting Payments',
                   ),
                 ),
               );
@@ -90,7 +93,8 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const OrderDetailScreen(
+                  builder: (context) =>
+                      const OrdersListOfSelectedCategoryScreen(
                     statusName: 'Delivered',
                   ),
                 ),
@@ -101,8 +105,9 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const OrderDetailScreen(
-                    statusName: 'Returned Orders',
+                  builder: (context) =>
+                      const OrdersListOfSelectedCategoryScreen(
+                    statusName: 'Returned',
                   ),
                 ),
               );
@@ -112,8 +117,9 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const OrderDetailScreen(
-                    statusName: 'Cancled Orders',
+                  builder: (context) =>
+                      const OrdersListOfSelectedCategoryScreen(
+                    statusName: 'Cancled',
                   ),
                 ),
               );

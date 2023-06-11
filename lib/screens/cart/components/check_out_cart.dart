@@ -179,7 +179,9 @@ class _CheckoutCardState extends State<CheckoutCard> {
     Order order = Order(
       size: productProvider.selectedSize,
       color: productProvider.selectedColor,
-      address: addressProvider.selectedAddress,
+      addressProvider.selectedAddress.phone,
+      address: addressProvider.selectedAddress.address +
+          addressProvider.selectedAddress.pincode,
       orderId: orderId,
       orderedDate: DateTime.now().toString(),
       uid: userId,
@@ -217,7 +219,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                       await orderProvider.addOrder(
                         order: order,
                         uid: userId,
-                        oid: orderId,
+                        // oid: orderId,
                       );
                       success = true;
                     } catch (error) {

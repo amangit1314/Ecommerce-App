@@ -68,7 +68,6 @@ class OrderProvider with ChangeNotifier {
   Future<void> addOrder({
     required models.Order order,
     required String uid,
-    required String oid,
   }) async {
     try {
       final orderData = order.toMap();
@@ -77,11 +76,11 @@ class OrderProvider with ChangeNotifier {
       }
 
       final ordersCollection = FirebaseFirestore.instance.collection('orders');
-      final orderDoc = ordersCollection.doc(oid);
+      final orderDoc = ordersCollection.doc();
 
       final orderSnapshot = await orderDoc.get();
       if (!orderSnapshot.exists) {
-        final userOrderDoc = ordersCollection.doc(uid);
+        final userOrderDoc = ordersCollection.doc();
         await userOrderDoc.set(orderData);
         log('New order document created for user');
       } else {
