@@ -8,6 +8,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../../../loading/shimmer_box.dart';
 import '../../../showMore/show_more_screen.dart';
 
 class RecentlyViewd extends StatefulWidget {
@@ -64,8 +65,15 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
             future: fetchProductsFromFirestore(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return SizedBox(
+                  height: 200,
+                  width: getProportionateScreenWidth(150),
+                  child: ShimmerBox(
+                    child: SizedBox(
+                      height: getProportionateScreenHeight(200),
+                      width: getProportionateScreenWidth(150),
+                    ),
+                  ),
                 );
               }
               if (snapshot.hasError) {

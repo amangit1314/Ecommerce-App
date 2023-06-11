@@ -3,10 +3,13 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:soni_store_app/utils/size_config.dart';
 
-import '../../models/product.dart';
+import '../../models/models.dart' as models;
 import '../../providers/auth_provider.dart';
 import '../../utils/constants.dart';
+import '../loading/shimmer_box.dart';
+import 'order_item_detail_screen.dart';
 import 'order_widget.dart';
 
 class OrdersListOfSelectedCategoryScreen extends StatefulWidget {
@@ -26,7 +29,7 @@ class OrdersListOfSelectedCategoryScreen extends StatefulWidget {
 
 class _OrdersListOfSelectedCategoryScreenState
     extends State<OrdersListOfSelectedCategoryScreen> {
-  List<Product> products = []; // List to store fetched products
+  List<models.Product> products = []; // List to store fetched products
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +73,18 @@ class _OrdersListOfSelectedCategoryScreenState
                   }
 
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: SizedBox(
+                        height: 120,
+                        width: MediaQuery.of(context).size.width * .9,
+                        child: ShimmerBox(
+                          child: SizedBox(
+                            height: getProportionateScreenHeight(100),
+                            width: getProportionateScreenWidth(100),
+                          ),
+                        ),
+                      ),
+                    );
                   }
 
                   List<DocumentSnapshot> orderDocuments = snapshot.data!.docs;
@@ -93,46 +107,86 @@ class _OrdersListOfSelectedCategoryScreenState
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              // Show a loading indicator while waiting for the data
-                              return const CircularProgressIndicator();
+                              return Center(
+                                child: SizedBox(
+                                  height: 120,
+                                  width: MediaQuery.of(context).size.width * .9,
+                                  child: ShimmerBox(
+                                    child: SizedBox(
+                                      height: getProportionateScreenHeight(100),
+                                      width: getProportionateScreenWidth(100),
+                                    ),
+                                  ),
+                                ),
+                              );
                             }
                             if (snapshot.hasError) {
-                              // Show an error message if an error occurs
                               return Text('Error: ${snapshot.error}');
                             }
                             final String? productName = snapshot.data;
-                            return Dismissible(
-                              key: Key(orderData['orderId']),
-                              direction: DismissDirection.endToStart,
-                              onDismissed: (direction) async {},
-                              background: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFB1EFD1),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(15),
+                            return GestureDetector(
+                              // on tap naviagtor.push
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  // material page route
+                                  MaterialPageRoute(
+                                    builder: (_) => OrderItemDetailScreen(
+                                      order: models.Order(
+                                        // orderData['number'],
+                                        authProvider.user.number ??
+                                            "+91 7023953453",
+                                        orderId: orderData['orderId'],
+                                        productId: orderData['productId'],
+                                        productImage: orderData['productImage'],
+                                        orderedDate: orderData['orderedDate'],
+                                        quantity: orderData['quantity'],
+                                        amount: orderData['amount'],
+                                        address: orderData['address'],
+                                        orderStatus: orderData['orderStatus'],
+                                        // color: convertStringToColor(
+                                        //     orderData['color']),
+                                        color: Colors.black,
+                                        // size: orderData['size'],
+                                        size: "XL",
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Dismissible(
+                                key: Key(orderData['orderId']),
+                                direction: DismissDirection.endToStart,
+                                onDismissed: (direction) async {},
+                                background: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFB1EFD1),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: const [
+                                      Spacer(),
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                child: Row(
-                                  children: const [
-                                    Spacer(),
-                                    Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    ),
-                                  ],
+                                child: OrderWidget(
+                                  productImage: orderData['productImage'] ??
+                                      'https://www.getillustrations.com/packs/gradient-marker-vector-illustrations/scenes/_1x/e-commerce%20_%20online,%20shopping,%20buy,%20purchase,%20empty,%20cart,%20order_md.png',
+                                  orderId: orderData['orderId'],
+                                  // productName: 'Cart Order',
+                                  productName: productName ?? 'Cart Order',
+                                  quantity: orderData['quantity'],
+                                  orderPrice: orderData['amount'].toString(),
+                                  orderDate: orderData['orderedDate'],
                                 ),
-                              ),
-                              child: OrderWidget(
-                                productImage: orderData['productImage'] ??
-                                    'https://www.getillustrations.com/packs/gradient-marker-vector-illustrations/scenes/_1x/e-commerce%20_%20online,%20shopping,%20buy,%20purchase,%20empty,%20cart,%20order_md.png',
-                                orderId: orderData['orderId'],
-                                // productName: 'Cart Order',
-                                productName: productName ?? 'Cart Order',
-                                quantity: orderData['quantity'],
-                                orderPrice: orderData['amount'].toString(),
-                                orderDate: orderData['orderedDate'],
                               ),
                             );
                           },

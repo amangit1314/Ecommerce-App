@@ -16,7 +16,7 @@ class Skelton extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(.04),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(15),
       ),
     );
   }

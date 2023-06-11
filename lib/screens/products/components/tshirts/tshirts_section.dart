@@ -6,6 +6,7 @@ import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../../../loading/shimmer_box.dart';
 
 class TshirtsSection extends StatefulWidget {
   const TshirtsSection({
@@ -48,8 +49,15 @@ class _TshirtsSectionState extends State<TshirtsSection> {
             future: fetchProductsFromFirestore(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return SizedBox(
+                  height: 150,
+                  width: getProportionateScreenWidth(170),
+                  child: ShimmerBox(
+                    child: SizedBox(
+                      height: getProportionateScreenHeight(150),
+                      width: getProportionateScreenWidth(170),
+                    ),
+                  ),
                 );
               }
               if (snapshot.hasError) {

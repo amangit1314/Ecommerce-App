@@ -6,6 +6,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
+import '../../../loading/shimmer_box.dart';
 import '../../../showMore/show_more_screen.dart';
 
 class Fashionable extends StatefulWidget {
@@ -69,8 +70,15 @@ class _FashionableState extends State<Fashionable> {
             future: fetchProductsFromFirestore(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return SizedBox(
+                  height: 150,
+                  width: getProportionateScreenWidth(170),
+                  child: ShimmerBox(
+                    child: SizedBox(
+                      height: getProportionateScreenHeight(150),
+                      width: getProportionateScreenWidth(170),
+                    ),
+                  ),
                 );
               }
               if (snapshot.hasError) {

@@ -8,7 +8,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
-import '../popular/popular_product.dart';
+import '../../../loading/shimmer_box.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -117,22 +117,30 @@ class _CategoriesState extends State<Categories>
                 final List<Product> products = snapshot.data ?? [];
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: SizedBox(
-                      height: 200, // Provide a specific height for the ListView
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          return const LoadingShimmerSkelton();
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 8);
-                        },
-                      ),
+                  return GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
                     ),
+                    itemCount: products.length < 4 ? products.length : 4,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        height: 200,
+                        width: getProportionateScreenWidth(150),
+                        child: ShimmerBox(
+                          child: SizedBox(
+                            height: getProportionateScreenHeight(200),
+                            width: getProportionateScreenWidth(150),
+                          ),
+                        ),
+                      );
+                    },
                   );
                 }
 
@@ -260,7 +268,7 @@ class CategoryGridItem extends StatelessWidget {
         );
       },
       child: Container(
-        width: 150,
+        width: getProportionateScreenWidth(150),
         margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.only(
           top: 8,
