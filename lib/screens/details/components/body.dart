@@ -1,66 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/details/components/color_dots.dart';
 import 'package:soni_store_app/screens/details/components/product_description.dart';
 import 'package:soni_store_app/screens/details/components/product_images.dart';
+import 'package:soni_store_app/screens/details/components/rating_tile.dart';
 import 'package:soni_store_app/screens/details/components/top_rounded_container.dart';
+import 'package:soni_store_app/screens/details/reviews/reviews_sheet.dart';
+import 'package:soni_store_app/screens/details/similarProducts/similar_products.dart';
 
-import '../../../components/default_button.dart';
 import '../../../models/product.dart';
 import '../../../utils/size_config.dart';
+import 'buy_now_button.dart';
+import 'custom_app_bar.dart';
 
-class Body extends StatelessWidget {
+class DetailFirebaseBody extends StatefulWidget {
+  const DetailFirebaseBody({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
   final Product product;
 
-  const Body({Key? key, required this.product}) : super(key: key);
+  @override
+  State<DetailFirebaseBody> createState() => _DetailFirebaseBodyState();
+}
+
+class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
+    with SingleTickerProviderStateMixin {
+  late AnimationController bottomSheetAnimationController;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    bottomSheetAnimationController.forward();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    bottomSheetAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+      reverseDuration: const Duration(milliseconds: 500),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    final width = MediaQuery.of(context).size.width;
+    return Stack(
       children: [
-        ProductImages(product: product),
-        TopRoundedContainer(
-          color: Colors.white,
-          child: Column(
-            children: [
-              ProductDescription(
-                product: product,
-                pressOnSeeMore: () {},
-              ),
-              TopRoundedContainer(
-                color: const Color(0xFFF6F7F9),
-                child: Column(
+        ListView(
+          children: [
+            Stack(
+              children: [
+                Stack(
                   children: [
-                    ColorDots(product: product),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: SizeConfig.screenWidth * 0.15,
-                        right: SizeConfig.screenWidth * 0.15,
-                        // bottom: getProportionateScreenWidth(20),
-                        top: getProportionateScreenWidth(20),
-                      ),
-                      child: DefaultButton(
-                        text: "Add To Cart",
-                        press: () {},
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: SizeConfig.screenWidth * 0.15,
-                        right: SizeConfig.screenWidth * 0.15,
-                        bottom: getProportionateScreenWidth(20),
-                        top: getProportionateScreenWidth(15),
-                      ),
-                      child: DefaultButton(
-                        btnColor: Colors.pinkAccent,
-                        text: "Buy Now",
-                        press: () {},
-                      ),
+                    ProductImagesFirebase(product: widget.product),
+                    CustomAppBar(
+                      rating: widget.product.rating,
+                      color: Colors.transparent,
                     ),
                   ],
                 ),
+              ],
+            ),
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TopRoundedContainer(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ProductDescription(
+                          product: widget.product,
+                          pressOnSeeMore: () {},
+                        ),
+                        RatingTile(
+                          rating: widget.product.rating.toString(),
+                        ),
+                        ReviewsSheet(
+                          product: widget.product,
+                          image: widget.product.images.first,
+                        ),
+                        SimilarProducts(widget: widget),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: getProportionateScreenHeight(120)),
+          ],
+        ),
+        BuyNowButton(
+          product: widget.product,
+          width: width,
+          widget: widget,
         ),
       ],
     );

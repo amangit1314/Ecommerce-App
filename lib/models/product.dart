@@ -1,28 +1,34 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/category.dart';
+import 'package:soni_store_app/models/review.dart';
 
 class Product {
-  final int id;
+  final String id;
   final String title, description;
   final List<String> images;
-  final List<Color> colors;
-  final double rating, price;
-  final bool isFavourite, isPopular;
-  final List<Category> categories;
+  final List<String> colors;
+  final int price;
+  final double rating;
+  bool isFavourite, isPopular;
+  final List<String> categories;
+  final List<Review> reviews;
+  final List<String>? sizes;
+  int quantity;
 
   Product({
-    required this.categories,
+    this.categories = const [],
     required this.id,
     required this.images,
-    required this.colors,
-    this.rating = 0.0,
+    this.colors = const ["#000000"],
+    this.sizes = const ['M', 'L', 'XL', 'XXL'],
+    this.reviews = const [],
+    this.rating = 0,
     this.isFavourite = false,
     this.isPopular = false,
     required this.title,
     required this.price,
-    required this.description,
+    this.description = 'Default Description string lorem34',
+    this.quantity = 1, // Initialize quantity to 0
   });
 
   static Product fromSnapshot(productData) {
@@ -37,31 +43,37 @@ class Product {
       isFavourite: productData['isFavourite'],
       isPopular: productData['isPopular'],
       categories: productData['categories'],
+      sizes: productData['sizes'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'title': title,
       'description': description,
       'images': images,
-      'colors': colors.map((x) => x.value).toList(),
+      'colors': colors.map((x) => x).toList(),
       'price': price,
       'isPopular': isPopular,
       'categories': categories,
+      'sizes': sizes,
     };
   }
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      categories: map['categories']?.map((x) => Category.fromMap(x)).toList(),
-      id: map['id']?.toInt() ?? 0,
-      title: map['title']?.toString() ?? '',
-      description: map['description']?.toString() ?? '',
-      images: List<String>.from(map['images']),
-      colors: List<Color>.from(map['colors']?.map((x) => Color(x))),
-      price: map['price']?.toDouble() ?? 0.0,
-      rating: map['rating']?.toDouble() ?? 0.0,
+      categories: List<String>.from(map['categories'] ?? []),
+      id: map['id'] as String? ?? '',
+      title: map['title'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      images: List<String>.from(map['images'] ?? []),
+      price: map['price'] ?? 0,
+      rating: map['rating'] ?? 0,
+      isFavourite: map['isFavourite'] as bool? ?? false,
+      isPopular: map['isPopular'] as bool? ?? false,
+      colors: List<String>.from(map['colors'] ?? []),
+      sizes: List<String>.from(map['sizes'] ?? []),
     );
   }
 

@@ -18,11 +18,11 @@ class SplashContent extends StatelessWidget {
       children: [
         const Spacer(),
         Text(
-          "Soni Store",
+          "Snap Cart",
           style: TextStyle(
             fontSize: getProportionateScreenWidth(36),
             color: kPrimaryColor,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 15),
@@ -30,8 +30,8 @@ class SplashContent extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
         ),
-        const Spacer(flex: 2),
-        Image.asset(
+        const Spacer(),
+        Image.network(
           image,
           height: getProportionateScreenHeight(265),
           width: getProportionateScreenWidth(235),

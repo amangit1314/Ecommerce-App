@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/default_button.dart';
-import '../../../utils/constatns.dart';
+import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
 class OtpForm extends StatefulWidget {
@@ -10,7 +10,7 @@ class OtpForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _OtpFormState createState() => _OtpFormState();
+  State<OtpForm> createState() => _OtpFormState();
 }
 
 class _OtpFormState extends State<OtpForm> {
@@ -34,18 +34,19 @@ class _OtpFormState extends State<OtpForm> {
     pin4FocusNode.dispose();
   }
 
-  void nextField(String value, FocusNode focusNode) {
+  void nextField(String value, FocusNode? focusNode) {
     if (value.length == 1) {
-      focusNode.requestFocus();
+      focusNode!.requestFocus();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Form(
       child: Column(
         children: [
-          SizedBox(height: SizeConfig.screenHeight * 0.15),
+          SizedBox(height: height * 0.15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -99,15 +100,15 @@ class _OtpFormState extends State<OtpForm> {
                   onChanged: (value) {
                     if (value.length == 1) {
                       pin4FocusNode.unfocus();
-                      // Then you need to check is the code is correct or not
                     }
                   },
                 ),
               ),
             ],
           ),
-          SizedBox(height: SizeConfig.screenHeight * 0.15),
+          SizedBox(height: height * 0.15),
           DefaultButton(
+            txtColor: Colors.white,
             text: "Continue",
             press: () {},
           )

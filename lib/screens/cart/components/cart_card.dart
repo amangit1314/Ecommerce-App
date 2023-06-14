@@ -1,32 +1,41 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/cart.dart';
+import 'package:soni_store_app/models/models.dart' as models;
+import 'package:soni_store_app/utils/constants.dart';
 import 'package:soni_store_app/utils/size_config.dart';
-
-import '../../../utils/constatns.dart';
 
 class CartCard extends StatelessWidget {
   const CartCard({
     Key? key,
     required this.cart,
+    required this.quantity,
   }) : super(key: key);
 
-  final Cart cart;
+  final models.Product cart;
 
+  final int quantity;
   @override
   Widget build(BuildContext context) {
+    // final cartProvider = Provider.of<CartProvider>(context);
+    // final int quantity = cartProvider.totalCartItemQuantity;
+    // final int quantity = cart.quantity;
+
     return Row(
       children: [
         SizedBox(
-          width: 88,
+          width: getProportionateScreenWidth(85),
           child: AspectRatio(
-            aspectRatio: 0.88,
+            aspectRatio: 1,
             child: Container(
               padding: EdgeInsets.all(getProportionateScreenWidth(10)),
               decoration: BoxDecoration(
                 color: const Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(cart.images[0]),
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Image.asset(cart.products.images[0]),
             ),
           ),
         ),
@@ -35,26 +44,41 @@ class CartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              cart.products.title,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
+              cart.title,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
               maxLines: 2,
             ),
             const SizedBox(height: 10),
             Text.rich(
               TextSpan(
-                text: "\$${cart.products.price}",
+                text: "\$${cart.price}",
                 style: const TextStyle(
-                    fontWeight: FontWeight.w600, color: kPrimaryColor),
+                  fontWeight: FontWeight.w600,
+                  color: kPrimaryColor,
+                ),
                 children: [
                   TextSpan(
-                    text: " x${cart.numOfItems}",
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    text: " x",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge, // Use appropriate text style
+                  ),
+                  TextSpan(
+                    text: " $quantity",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge, // Use appropriate text style
                   ),
                 ],
               ),
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }

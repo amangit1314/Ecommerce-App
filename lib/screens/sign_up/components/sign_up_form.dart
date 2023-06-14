@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:soni_store_app/components/custom_surfix_icon.dart';
-import 'package:soni_store_app/resources/auth_methods.dart';
 import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
+import '../../../providers/auth_provider.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
@@ -42,37 +43,96 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  void register() async {
+  Future register(AuthProvider authProvider) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      await AuthMethods()
-          .registerUser(
-        email: emailController.text,
-        password: passwordController.text,
-        username: emailController.text.substring(6),
-      )
-          .then(
-        (result) {
-          if (result == 'success') {
-            const GetSnackBar(
-              message: "Registration is successful 🎉",
-              backgroundColor: Color.fromARGB(255, 120, 255, 125),
-            );
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => const SignInScreen(),
-                ),
-                (route) => false);
-          }
-          GetSnackBar(message: result.toString());
-        },
-      );
+      try {
+        String uid = await authProvider.registerUser(
+          email: emailController.text,
+          password: passwordController.text,
+          username: emailController.text.substring(0, 5),
+        );
+
+        if (uid.isNotEmpty) {
+          await authProvider.refreshUser(); // Refresh the user information
+
+          const GetSnackBar(
+            message: 'User registered successfully 🎉',
+            backgroundColor: Colors.greenAccent,
+          );
+          if (!mounted) return;
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const SignInScreen(),
+            ),
+          );
+        } else {
+          const GetSnackBar(
+            message: 'User registration unsuccessful ❌',
+            backgroundColor: Colors.redAccent,
+          );
+        }
+      } catch (error) {
+        GetSnackBar(
+          message: error.toString(),
+          backgroundColor: Colors.redAccent,
+        );
+      }
     }
   }
 
+  // void _register(BuildContext context) async {
+  //   final form = _formKey.currentState;
+  //   if (form!.validate()) {
+  //     form.save();
+
+  //     try {
+  //       final userCredential =
+  //           await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //         email: emailController.text,
+  //         password: passwordController.text,
+  //       );
+
+  //       if (emailController.text.isNotEmpty &&
+  //           passwordController.text.isNotEmpty &&
+  //           passwordController.text == confirmPasswordController.text) {
+  //         models.User user = models.User(
+  //           email: userCredential.user!.email!,
+  //           username: userCredential.user!.email!.substring(0, 6),
+  //           uid: userCredential.user!.uid,
+  //         );
+
+  //         FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(user.uid)
+  //             .set(user.toMap(), SetOptions(merge: true));
+
+  //         if (!mounted) return;
+  //         Provider.of<UserProviderTry>(context, listen: false).setUser(user);
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(builder: (_) => const SignInScreen()),
+  //         );
+  //       }
+
+  //       const GetSnackBar(
+  //         message: 'Email and Password is required ❗',
+  //         backgroundColor: Colors.redAccent,
+  //       );
+  //     } catch (e) {
+  //       const GetSnackBar(
+  //         message: 'Registeration error ❌',
+  //         backgroundColor: Colors.redAccent,
+  //       );
+  //     }
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -93,7 +153,7 @@ class _SignUpFormState extends State<SignUpForm> {
             child: DefaultButton(
               txtColor: Colors.white,
               text: "Continue",
-              press: register,
+              press: () => register(authProvider),
             ),
           ),
         ],

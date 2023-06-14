@@ -1,12 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/product.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
-import '../../splash/comonents/dot_indicator.dart';
 
-class ProductImages extends StatefulWidget {
-  const ProductImages({
+class ProductImagesFirebase extends StatefulWidget {
+  const ProductImagesFirebase({
     Key? key,
     required this.product,
   }) : super(key: key);
@@ -14,54 +14,67 @@ class ProductImages extends StatefulWidget {
   final Product product;
 
   @override
-  _ProductImagesState createState() => _ProductImagesState();
+  State<ProductImagesFirebase> createState() => _ProductImagesFirebaseState();
 }
 
-class _ProductImagesState extends State<ProductImages> {
+class _ProductImagesFirebaseState extends State<ProductImagesFirebase> {
   int selectedImage = 0;
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 40.0),
-        child: Stack(
-          children: [
-            SizedBox(
-              width: width,
-              child: Center(
-                child: Hero(
-                  tag: widget.product.id.toString(),
-                  child: Center(
-                      child: Image.asset(widget.product.images[selectedImage])),
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Column(
+                children: [
+                  SizedBox(
+                    width: getProportionateScreenWidth(width),
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: Hero(
+                      tag: widget.product.id.toString(),
+                      child: PageView.builder(
+                        itemCount: widget.product.images.length,
+                        onPageChanged: (index) {
+                          setState(() {
+                            selectedImage = index;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          return CachedNetworkImage(
+                            imageUrl: widget.product.images[index],
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.error,
+                              color: Colors.red,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                top: 80,
+                right: 12,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ...List.generate(
+                      widget.product.images.length,
+                      (index) => buildSmallProductPreview(index),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ...List.generate(widget.product.images.length,
-                          (index) => buildSmallProductPreview(index)),
-                    ],
-                  ),
-                ),
-              ],
-            )
-            // SizedBox(height: getProportionateScreenWidth(20)),
-            ,
-            DotIndicator(
-              index: selectedImage,
-              currentPage: widget.product.images.length,
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -76,16 +89,27 @@ class _ProductImagesState extends State<ProductImages> {
       child: AnimatedContainer(
         duration: defaultDuration,
         margin: const EdgeInsets.only(top: 10),
-        padding: const EdgeInsets.all(8),
         height: getProportionateScreenWidth(48),
         width: getProportionateScreenWidth(48),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 4),
+              blurRadius: 4,
+              color: Colors.black.withOpacity(0.25),
+            ),
+          ],
           border: Border.all(
-              color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
+            width: selectedImage == index ? 2 : 0,
+            color: Colors.white.withOpacity(selectedImage == index ? 1 : 0),
+          ),
+          image: DecorationImage(
+            image: CachedNetworkImageProvider(widget.product.images[index]),
+            fit: BoxFit.cover,
+          ),
         ),
-        child: Image.asset(widget.product.images[index]),
       ),
     );
   }

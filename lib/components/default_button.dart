@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
 import '../utils/size_config.dart';
 
 class DefaultButton extends StatelessWidget {
@@ -11,7 +12,7 @@ class DefaultButton extends StatelessWidget {
 
   const DefaultButton({
     this.txtColor = Colors.black,
-    this.btnColor = Colors.orange,
+    this.btnColor = kPrimaryColor,
     Key? key,
     this.height = 55,
     required this.text,
@@ -20,7 +21,11 @@ class DefaultButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        color: btnColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
       width: double.infinity,
       height: getProportionateScreenHeight(56),
       child: TextButton(

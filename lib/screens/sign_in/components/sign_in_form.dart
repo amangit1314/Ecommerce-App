@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:soni_store_app/components/custom_surfix_icon.dart';
 import 'package:soni_store_app/components/form_error.dart';
-import 'package:soni_store_app/resources/auth_methods.dart';
 import 'package:soni_store_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:soni_store_app/screens/login_success/login_success_screen.dart';
 
 import '../../../components/default_button.dart';
+import '../../../providers/providers.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
@@ -14,16 +15,15 @@ class SignForm extends StatefulWidget {
   const SignForm({Key? key}) : super(key: key);
 
   @override
-  _SignFormState createState() => _SignFormState();
+  State<SignForm> createState() => _SignFormState();
 }
 
 class _SignFormState extends State<SignForm> {
+  bool remember = false;
+
   final _formKey = GlobalKey<FormState>();
-  late String email;
-  late String password;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool remember = false;
   final List<String> errors = [];
 
   void addError({String? error}) {
@@ -42,29 +42,41 @@ class _SignFormState extends State<SignForm> {
     }
   }
 
-  void loginUser() async {
+  Future<void> loginUser(AuthProvider authProvider) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await AuthMethods()
-          .loginUser(
-              context: context,
-              email: emailController.text,
-              password: passwordController.text)
-          .then((result) {
-        if (result == 'success') {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => const LoginSuccessScreen(),
-              ),
-              (route) => false);
-        }
-        GetSnackBar(message: result.toString());
-      });
+      final result = await authProvider.authenticateUser(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      if (result == "success") {
+        Get.snackbar(
+          'Authentication Successful',
+          'Authentication is successful 🥳🎉',
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 3),
+        );
+        if (!mounted) return;
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginSuccessScreen()),
+          (route) => false,
+        );
+      } else {
+        Get.snackbar(
+          'Authentication Error',
+          result.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // final authService = Provider.of<AuthService>(context);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -116,7 +128,13 @@ class _SignFormState extends State<SignForm> {
             child: DefaultButton(
               txtColor: Colors.white,
               text: "Continue",
-              press: loginUser,
+              press: () => loginUser(authProvider),
+              // press: () {
+              //   authService.signInWithEmailAndPassword(
+              //     email: emailController.text,
+              //     password: passwordController.text,
+              //   );
+              // },
             ),
           ),
         ],

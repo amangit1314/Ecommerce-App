@@ -1,131 +1,14 @@
-import 'package:flutter/material.dart';
-
-import '../../models/cart.dart';
-import '../../models/product.dart';
-import '../../models/user.dart';
-
-List<Product> demoProducts = [
-  Product(
-    id: 1,
-    images: [
-      "assets/images/ps4_console_white_1.png",
-      "assets/images/ps4_console_white_2.png",
-      "assets/images/ps4_console_white_3.png",
-      "assets/images/ps4_console_white_4.png",
-    ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    categories: [],
-    title: "Wireless Controller for PS4™",
-    price: 64.99,
-    description: description,
-    rating: 4.8,
-    isFavourite: true,
-    isPopular: true,
-  ),
-  Product(
-    id: 2,
-    images: [
-      "assets/images/Image Popular Product 2.png",
-    ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    categories: [],
-    title: "Nike Sport White - Man Pant",
-    price: 50.5,
-    description: description,
-    rating: 4.1,
-    isPopular: true,
-  ),
-  Product(
-    id: 3,
-    images: [
-      "assets/images/glap.png",
-    ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    categories: [],
-    title: "Gloves XC Omega - Polygon",
-    price: 36.55,
-    description: description,
-    rating: 4.1,
-    isFavourite: true,
-    isPopular: true,
-  ),
-  Product(
-    id: 4,
-    images: [
-      "assets/images/wireless headset.png",
-    ],
-    colors: [
-      const Color(0xFFF6625E),
-      const Color(0xFF836DB8),
-      const Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    categories: [],
-    title: "Logitech Head",
-    price: 20.20,
-    description: description,
-    rating: 4.1,
-    isFavourite: true,
-  ),
+List colors = [
+  '0xFFF6625E',
+  '0xFF836DB8',
+  '0xFFDECB9C',
 ];
 
-const String description =
-    "Wireless Controller for PS4™ gives you what you want in your gaming from over precision control your games to sharing …";
-
-List<Cart> demoCarts = [
-  Cart(
-    id: 1,
-    products: demoProducts[2],
-    user: const User(
-      [],
-      username: 'John Doe',
-      email: '',
-    ), // Provide a User object here    products: demoProducts[0],
-    numOfItems: 2,
-  ),
-  Cart(
-    id: 2,
-    user: const User(
-      [],
-      username: 'John Doe',
-      email: '',
-    ),
-    products: demoProducts[2],
-    numOfItems: 1,
-  ),
-  Cart(
-    id: 3,
-    user: const User(
-      [],
-      username: 'John Doe',
-      email: '',
-    ), // Provide a User object here
-    products: demoProducts[1],
-    numOfItems: 1,
-  ),
-  Cart(
-    id: 4,
-    user: const User(
-      [],
-      username: 'John Doe',
-      email: '',
-    ), // Provide a User object here
-    products: demoProducts[3],
-    numOfItems: 1,
-  ),
+List shoes = [
+  'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2Fsneak_pink.jpg?alt=media&token=761b4fdb-2427-4fce-96af-bda7b64db36c',
+  'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2Fsneakers.jpg?alt=media&token=5a3fc818-f941-49c0-83e3-34dce3714b17',
+  'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2F1.jpg?alt=media&token=d5a36a22-b213-49ca-9a86-9295f51ff610',
+  'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2F2.jpg?alt=media&token=1a85547d-0db6-4313-84a9-7289a81b5090',
+  'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2F3.jpg?alt=media&token=89fb8e5e-1637-4211-b70a-07fff16103a4',
+  'https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/features%2F4.jpg?alt=media&token=5c5a4bbe-4620-4c16-ae8a-7716093e8d12',
 ];
