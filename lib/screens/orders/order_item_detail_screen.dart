@@ -2,10 +2,13 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../components/default_button.dart';
 import '../../models/models.dart' as models;
 import '../../utils/constants.dart';
+import '../../utils/size_config.dart';
+import '../details/reviews/add_review_screen.dart';
 
 class OrderItemDetailScreen extends StatelessWidget {
   final models.Order order;
@@ -18,17 +21,42 @@ class OrderItemDetailScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height * .4,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ),
-              image: DecorationImage(
-                image: NetworkImage(order.productImage),
-                fit: BoxFit.cover,
-              ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * .4,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
+                    image: DecorationImage(
+                      image: NetworkImage(order.productImage),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                FutureBuilder<String>(
+                  future: getProductNameById(order.productId),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return CustomAppBar(
+                        color: Colors.transparent,
+                        image: order.productImage,
+                        name: snapshot.data!,
+                        category: '',
+                      );
+                    } else if (snapshot.hasError) {
+                      log('Failed to retrieve product name: ${snapshot.error}');
+                    }
+                    return const SizedBox();
+                  },
+                ),
+              ],
             ),
           ),
           Column(
@@ -301,6 +329,95 @@ class OrderItemDetailScreen extends StatelessWidget {
       log('Failed to get product name: $error');
     }
     return 'Cart Order';
+  }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Color? color;
+  final String image;
+  final String name;
+  final String category;
+
+  const CustomAppBar({
+    Key? key,
+    this.color,
+    required this.image,
+    required this.name,
+    required this.category,
+  }) : super(key: key);
+
+  @override
+  Size get preferredSize => AppBar().preferredSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(40),
+            bottomRight: Radius.circular(40),
+          ),
+        ),
+        padding: EdgeInsets.only(
+          left: getProportionateScreenWidth(20),
+          top: getProportionateScreenHeight(10),
+          right: getProportionateScreenWidth(10),
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              height: getProportionateScreenWidth(40),
+              width: getProportionateScreenWidth(40),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: kPrimaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  backgroundColor: Colors.white,
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: Center(
+                  child: SvgPicture.asset(
+                    "assets/icons/Back ICon.svg",
+                    height: 15,
+                    // colorFilter  white color
+                  ),
+                ),
+              ),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: () {
+                // add review screen
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => AddReviewScreen(
+                      name: name,
+                      category: category,
+                      image: image,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                // child: SvgPicture.asset("assets/icons/Star Icon.svg"),
+                child: const Icon(Icons.star_border_outlined),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 

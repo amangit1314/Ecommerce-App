@@ -2,18 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:soni_store_app/models/models.dart';
 
 import '../../../utils/constants.dart';
 
 class AddReviewScreen extends StatefulWidget {
-  final Product product;
+  final String category;
+  final String name;
   final String image;
 
   const AddReviewScreen({
     Key? key,
-    required this.product,
     required this.image,
+    required this.category,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -80,13 +81,13 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
               ),
             ),
             subtitle: Text(
-              widget.product.categories.first.toString(),
+              widget.category,
               style: const TextStyle(
                 fontWeight: FontWeight.normal,
               ),
             ),
             title: Text(
-              widget.product.title.toString(),
+              widget.name,
               style: const TextStyle(
                 color: kPrimaryColor,
                 fontWeight: FontWeight.bold,

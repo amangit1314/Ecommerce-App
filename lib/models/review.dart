@@ -2,7 +2,6 @@ import 'dart:convert';
 
 class Review {
   final String rid;
-  final String name;
   final String comment;
   final int stars;
   final String reviewerName;
@@ -10,7 +9,6 @@ class Review {
 
   Review(
     this.rid, {
-    required this.name,
     required this.comment,
     required this.stars,
     required this.reviewerName,
@@ -20,7 +18,6 @@ class Review {
   Map<String, dynamic> toMap() {
     return {
       'rid': rid,
-      'name': name,
       'comment': comment,
       'stars': stars,
       'reviewerName': reviewerName,
@@ -31,7 +28,6 @@ class Review {
   factory Review.fromMap(Map<String, dynamic> map) {
     return Review(
       map['rid'] ?? '',
-      name: map['name'] ?? '',
       comment: map['comment'] ?? '',
       stars: map['stars']?.toInt() ?? 0,
       reviewerName: map['reviewerName'] ?? '',
