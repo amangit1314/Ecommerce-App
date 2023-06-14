@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../components/section_tile.dart';
 import '../../../models/product.dart';
 import '../../../utils/size_config.dart';
-import '../../home/components/popular/popular_product.dart';
+import '../../home/components/fashion/fashions.dart';
+import '../../loading/shimmer_box.dart';
 import '../../showMore/show_more_screen.dart';
 import '../components/body.dart';
 
@@ -75,7 +76,16 @@ class _SimilarProductsState extends State<SimilarProducts> {
                     scrollDirection: Axis.horizontal,
                     itemCount: products.length,
                     itemBuilder: (context, index) {
-                      return const LoadingShimmerSkelton();
+                      return SizedBox(
+                        height: 150,
+                        width: getProportionateScreenWidth(170),
+                        child: ShimmerBox(
+                          child: SizedBox(
+                            height: getProportionateScreenHeight(150),
+                            width: getProportionateScreenWidth(170),
+                          ),
+                        ),
+                      );
                     },
                     separatorBuilder: (context, index) {
                       return const SizedBox(width: 8);

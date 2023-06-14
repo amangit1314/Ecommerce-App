@@ -2,13 +2,14 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:soni_store_app/screens/home/components/recent/recent_show_more.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
-import '../../../showMore/show_more_screen.dart';
+import '../../../loading/shimmer_box.dart';
 
 class RecentlyViewd extends StatefulWidget {
   const RecentlyViewd({super.key});
@@ -48,7 +49,7 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
             press: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const ShowMore(
+                  builder: (_) => const RecentShowMore(
                     keyword: 'Recently Viewed',
                   ),
                 ),
@@ -64,8 +65,15 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
             future: fetchProductsFromFirestore(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return SizedBox(
+                  height: 200,
+                  width: getProportionateScreenWidth(150),
+                  child: ShimmerBox(
+                    child: SizedBox(
+                      height: getProportionateScreenHeight(200),
+                      width: getProportionateScreenWidth(150),
+                    ),
+                  ),
                 );
               }
               if (snapshot.hasError) {

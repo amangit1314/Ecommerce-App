@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/address_provider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
@@ -8,9 +10,10 @@ class AddressTile extends StatelessWidget {
   final bool isSelected;
   final String addressType;
   final String address;
+  final String addressId;
   final String pincode;
   final String number;
-  final void Function(bool?)? onChanged;
+  final String uid;
 
   const AddressTile({
     Key? key,
@@ -19,13 +22,16 @@ class AddressTile extends StatelessWidget {
     required this.address,
     required this.pincode,
     required this.number,
-    this.onChanged,
+    required this.uid,
+    required this.addressId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final addressProvider = context.read<AddressProvider>();
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(top: 10, left: 15, bottom: 10),
+      width: MediaQuery.of(context).size.width * .91,
       margin: const EdgeInsets.only(bottom: 15, right: 15, left: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -34,61 +40,66 @@ class AddressTile extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: kPrimaryColor,
-                        radius: 18,
-                        child: Center(
-                          child: FaIcon(
-                            FontAwesomeIcons.addressCard,
-                            size: 12,
-                            color: Colors.white,
-                          ),
-                        ),
+                  const CircleAvatar(
+                    backgroundColor: kPrimaryColor,
+                    radius: 18,
+                    child: Center(
+                      child: FaIcon(
+                        FontAwesomeIcons.addressCard,
+                        size: 12,
+                        color: Colors.white,
                       ),
-                      SizedBox(width: getProportionateScreenWidth(15)),
-                      Text(
-                        addressType,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: kPrimaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    '$address, $pincode',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(width: getProportionateScreenWidth(15)),
                   Text(
-                    number,
+                    addressType,
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                       color: kPrimaryColor,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
+              const SizedBox(height: 10),
+              Text(
+                '$address, $pincode',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                number,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: kPrimaryColor.withOpacity(.8),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          IconButton(
+            onPressed: () {
+              addressProvider.updateSelectedAddress(addressId, uid);
+            },
+            icon: isSelected
+                ? const Icon(Icons.check_circle, color: Colors.orangeAccent)
+                : const Icon(Icons.circle_outlined),
+          ),
+        ],
       ),
     );
   }

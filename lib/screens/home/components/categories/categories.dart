@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
-import '../popular/popular_product.dart';
+import '../../../loading/shimmer_box.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -23,11 +24,12 @@ class _CategoriesState extends State<Categories>
 
   List iconData = [
     // Icons.flash_on,
-    Icons.shopping_bag,
-    Icons.sports_basketball,
+    FontAwesomeIcons.basketShopping,
+    // Icons.sports_basketball,
+    FontAwesomeIcons.baseball,
     // Icons.card_giftcard,
-    Icons.sports_mma_outlined,
-    Icons.outlined_flag_outlined,
+    FontAwesomeIcons.shoePrints,
+    FontAwesomeIcons.shirt,
   ];
 
   List categoryText = [
@@ -115,22 +117,30 @@ class _CategoriesState extends State<Categories>
                 final List<Product> products = snapshot.data ?? [];
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: SizedBox(
-                      height: 200, // Provide a specific height for the ListView
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          return const LoadingShimmerSkelton();
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 8);
-                        },
-                      ),
+                  return GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
                     ),
+                    itemCount: products.length < 4 ? products.length : 4,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        height: 200,
+                        width: getProportionateScreenWidth(150),
+                        child: ShimmerBox(
+                          child: SizedBox(
+                            height: getProportionateScreenHeight(200),
+                            width: getProportionateScreenWidth(150),
+                          ),
+                        ),
+                      );
+                    },
                   );
                 }
 
@@ -210,11 +220,11 @@ class CategoryCard extends StatelessWidget {
               children: [
                 Icon(
                   iconData,
-                  size: 16,
+                  size: 14,
                   color:
                       bgColor != kPrimaryColor ? kPrimaryColor : Colors.white,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Text(
                   text!,
                   textAlign: TextAlign.center,
@@ -258,7 +268,7 @@ class CategoryGridItem extends StatelessWidget {
         );
       },
       child: Container(
-        width: 150,
+        width: getProportionateScreenWidth(150),
         margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.only(
           top: 8,

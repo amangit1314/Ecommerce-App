@@ -4,21 +4,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Payment {
-  final String id;
+  final String paymentId;
   final String uid;
+  final String oid;
   final double amount;
   final DateTime date;
   final String paymentMethod;
   final String paymentStatus;
   final bool isSuccess;
+  final String signature;
 
-  const Payment({
-    required this.id,
+  const Payment(
+    this.oid,
+    this.signature, {
+    required this.paymentId,
     required this.uid,
     required this.amount,
     required this.date,
     required this.paymentMethod,
-    this.paymentStatus = 'Processing',
+    required this.paymentStatus,
     this.isSuccess = false,
   });
 
@@ -27,19 +31,22 @@ class Payment {
       'paymentMethod': paymentMethod,
       'paymentStatus': paymentStatus,
       'isSuccess': isSuccess,
-      'id': id,
+      'paymentId': paymentId,
       'uid': uid,
       'amount': amount,
       'date': date,
+      'signature': signature,
     };
   }
 
   factory Payment.fromMap(Map<String, dynamic> map, User user) {
     return Payment(
+      map['oid'] as String,
+      map['signature'] as String,
       paymentMethod: map['paymentMethod'] as String,
       paymentStatus: map['paymentStatus'] as String,
       isSuccess: map['isSuccess'] as bool,
-      id: map['id'] as String,
+      paymentId: map['paymentId'] as String,
       uid: map['uid'] as String,
       amount: map['amount'] as double,
       date: (map['date'] as Timestamp).toDate(),

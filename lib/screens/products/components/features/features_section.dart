@@ -85,7 +85,6 @@ class FeaturesSection extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.greenAccent.withOpacity(.3),
-                      // border radius on only left top
                       borderRadius: const BorderRadius.only(
                         bottomRight: Radius.circular(15),
                       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../utils/constants.dart';
 
@@ -23,10 +22,10 @@ class SearchBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(15),
-          bottomLeft: Radius.circular(15),
-          topRight: Radius.circular(15),
-          bottomRight: Radius.circular(15),
+          topLeft: Radius.circular(40),
+          bottomLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+          bottomRight: Radius.circular(40),
         ),
         boxShadow: [
           BoxShadow(
@@ -38,21 +37,6 @@ class SearchBox extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            height: 50,
-            width: 50,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: kPrimaryColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-              child: IconButton(
-                icon: const Icon(Icons.search, color: Colors.white),
-                onPressed: () => onSearch(searchController.text),
-              ),
-            ),
-          ),
           Expanded(
             child: TextField(
               style: const TextStyle(fontSize: 12),
@@ -61,23 +45,28 @@ class SearchBox extends StatelessWidget {
                 hintText: 'Search for products ...',
                 hintStyle: TextStyle(fontSize: 12),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.all(10),
+                contentPadding: EdgeInsets.only(
+                  left: 15,
+                  right: 10,
+                  top: 10,
+                  bottom: 10,
+                ),
               ),
               onSubmitted: onSearch,
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(2),
+            height: 50,
+            width: 50,
+            padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-                color: kPrimaryColor, borderRadius: BorderRadius.circular(15)),
+              color: kPrimaryColor,
+              borderRadius: BorderRadius.circular(40),
+            ),
             child: Center(
               child: IconButton(
-                onPressed: () {},
-                icon: const FaIcon(
-                  FontAwesomeIcons.arrowDownShortWide,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                icon: const Icon(Icons.search, color: Colors.white),
+                onPressed: () => onSearch(searchController.text),
               ),
             ),
           ),

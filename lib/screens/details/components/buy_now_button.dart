@@ -21,17 +21,11 @@ class BuyNowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
+      bottom: 8,
+      left: 8,
+      right: 8,
       child: Container(
         height: getProportionateScreenWidth(65),
-        margin: const EdgeInsets.only(
-          top: 15,
-          left: 15,
-          right: 15,
-          bottom: 25,
-        ),
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(15),
@@ -98,7 +92,7 @@ class BuyNowButton extends StatelessWidget {
                   "Buy Now",
                   style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 onPressed: () {

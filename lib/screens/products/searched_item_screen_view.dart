@@ -1,5 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/product.dart';
+import '../../utils/constants.dart';
+import '../details/detail_screen.dart';
 
 class SearchedItemsScreenView extends StatelessWidget {
   final String item;
@@ -29,12 +34,8 @@ class SearchedItemsScreenView extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: item.isNotEmpty
-                ? FirebaseFirestore.instance
-                    .collection('products')
-                    .where('category', isEqualTo: item)
-                    .snapshots()
-                : FirebaseFirestore.instance.collection('products').snapshots(),
+            stream:
+                FirebaseFirestore.instance.collection('products').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
@@ -46,6 +47,20 @@ class SearchedItemsScreenView extends StatelessWidget {
 
               final products = snapshot.data!.docs;
 
+              List<Product> filteredProducts = [];
+
+              if (item.isNotEmpty) {
+                filteredProducts = products
+                    .map((product) => Product.fromMap(product.data()))
+                    .where((product) =>
+                        product.categories.contains(item.toLowerCase()))
+                    .toList();
+              } else {
+                filteredProducts = products
+                    .map((product) => Product.fromMap(product.data()))
+                    .toList();
+              }
+
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -53,65 +68,94 @@ class SearchedItemsScreenView extends StatelessWidget {
                   crossAxisCount: 2,
                   childAspectRatio: 0.75,
                 ),
-                itemCount: products.length,
+                itemCount: filteredProducts.length,
                 itemBuilder: (context, index) {
-                  final product = products[index];
-                  final name = product['title'] as String;
-                  final category = product['categories'] as List<dynamic>;
-                  final price = product['price'].toString();
-                  final imageUrl = product['images'] as List<dynamic>;
+                  final product = filteredProducts[index];
 
-                  return GridTile(
-                    child: GestureDetector(
-                      onTap: () {
-                        // Handle product tap
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.network(
-                                  imageUrl.first as String,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              category.first as String,
-                              style: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            Text(
-                              price,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  return ProductGridTileItem(
+                    product: product,
                   );
                 },
               );
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProductGridTileItem extends StatelessWidget {
+  final Product product;
+
+  const ProductGridTileItem({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => DetailsScreenFirebase(
+              product: product,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: 150,
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: kPrimaryColor.withOpacity(.2),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 140,
+              width: 170,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(
+                    product.images.isNotEmpty
+                        ? product.images.first
+                        : 'https://picsum.photos/250?image=9',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(16),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              product.title,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              '₹ ${product.price}',
+              style: const TextStyle(
+                fontSize: 12,
+                color: kPrimaryColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

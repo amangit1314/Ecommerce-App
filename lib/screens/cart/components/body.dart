@@ -71,12 +71,12 @@ class _BodyState extends State<Body> {
                   return Dismissible(
                     key: Key(cartItem.id),
                     direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      cartProvider.removeFromCart(
+                    onDismissed: (direction) async {
+                      await cartProvider.removeFromCart(
                           cartItem, authProvider.user.uid);
                       setState(() {
-                        cartProvider.removeFromCart(
-                            cartItem, authProvider.user.uid);
+                        cartItems.removeWhere(
+                            (item) => item.title == cartItem.title);
                         uniqueCartItems.removeAt(index);
                         cartItemQuantities.removeAt(index);
                       });

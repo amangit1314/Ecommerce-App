@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/product.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../providers/product_provider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
-class SizeDots extends StatefulWidget {
+class SizeDots extends StatelessWidget {
   const SizeDots({
-    super.key,
+    Key? key,
     required this.product,
-  });
+    required this.oid,
+  }) : super(key: key);
 
   final Product product;
-
-  @override
-  State<SizeDots> createState() => _SizeDotsState();
-}
-
-class _SizeDotsState extends State<SizeDots> {
-  int selectedSize = 0;
-
-  List<String> sizes = ['M', 'L', 'XL', 'XXL'];
+  final String oid;
 
   @override
   Widget build(BuildContext context) {
-    List<String>? productSizes = widget.product.sizes;
+    final productProvider = Provider.of<ProductProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+    final productSizes = product.sizes;
 
     return Padding(
       padding: const EdgeInsets.only(left: 15.0),
@@ -34,57 +32,63 @@ class _SizeDotsState extends State<SizeDots> {
                       productSizes.length,
                       (index) => GestureDetector(
                         onTap: () {
-                          setState(() {
-                            selectedSize = index;
-                          });
+                          productProvider.updateSelectedSize(
+                              authProvider.user.uid, productSizes[index]);
                         },
                         child: Container(
                           margin: const EdgeInsets.only(right: 10),
                           padding: const EdgeInsets.all(5),
-                          width: getProportionateScreenWidth(40),
-                          height: getProportionateScreenWidth(40),
+                          width: getProportionateScreenWidth(44),
+                          height: getProportionateScreenWidth(44),
                           decoration: BoxDecoration(
-                            color: selectedSize == index
+                            color: productProvider.selectedSize ==
+                                    productSizes[index]
                                 ? kPrimaryColor
                                 : Colors.transparent,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(40),
                             border: Border.all(
-                              color: selectedSize == index
+                              width: productProvider.selectedSize ==
+                                      productSizes[index]
+                                  ? 0
+                                  : 2,
+                              color: productProvider.selectedSize ==
+                                      productSizes[index]
                                   ? Colors.transparent
-                                  : Colors.grey.shade300,
+                                  : kPrimaryColor,
                             ),
                           ),
                           child: Center(
                             child: Text(
                               productSizes[index],
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: selectedSize == index
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: productProvider.selectedSize ==
+                                        productSizes[index]
                                     ? Colors.white
-                                    : Colors.black,
+                                    : kPrimaryColor,
                               ),
                             ),
                           ),
                         ),
                       ),
                     )
-                  : sizes.map(
+                  : productSizes!.map(
                       (size) => GestureDetector(
                         onTap: () {
-                          // Handle size selection
-                          setState(() {
-                            selectedSize = sizes.indexOf(size);
-                          });
+                          productProvider.updateSelectedSize(
+                            authProvider.user.uid,
+                            size,
+                          );
                         },
                         child: Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          padding: const EdgeInsets.all(5),
-                          width: getProportionateScreenWidth(40),
-                          height: getProportionateScreenWidth(40),
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.all(8),
+                          width: getProportionateScreenWidth(44),
+                          height: getProportionateScreenWidth(44),
                           decoration: BoxDecoration(
                             color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(40),
                             border: Border.all(
                               color: Colors.grey.shade300,
                             ),
@@ -93,8 +97,8 @@ class _SizeDotsState extends State<SizeDots> {
                             child: Text(
                               size,
                               style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),

@@ -79,8 +79,6 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
                           rating: widget.product.rating.toString(),
                         ),
                         ReviewsSheet(
-                          bottomSheetAnimationController:
-                              bottomSheetAnimationController,
                           product: widget.product,
                           image: widget.product.images.first,
                         ),

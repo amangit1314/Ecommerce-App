@@ -22,8 +22,6 @@ class ShippingAddressesListScreen extends StatefulWidget {
 
 class _ShippingAddressesListScreenState
     extends State<ShippingAddressesListScreen> {
-  String? selectedAddressId;
-
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -118,34 +116,19 @@ class _ShippingAddressesListScreenState
                   itemCount: addressesList.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 8),
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedAddressId = addressesList[index].addressId;
-                      });
-                      addressProvider.selectAddress(
-                        addressesList[index].addressId,
-                        authProvider.user.uid,
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        AddressTile(
-                          isSelected: addressesList[index].addressId ==
-                              selectedAddressId,
-                          pincode: addressesList[index].pincode,
-                          address: addressesList[index].address,
-                          addressType: addressesList[index].addressType,
-                          number: addressesList[index].phone,
-                          onChanged: (_) {
-                            addressProvider.selectAddress(
-                              addressesList[index].addressId,
-                              authProvider.user.uid,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                  itemBuilder: (context, index) => Row(
+                    children: [
+                      AddressTile(
+                        uid: authProvider.user.uid,
+                        addressId: addressesList[index].addressId,
+                        isSelected: addressesList[index].addressId ==
+                            addressProvider.selectedAddress.addressId,
+                        pincode: addressesList[index].pincode,
+                        address: addressesList[index].address,
+                        addressType: addressesList[index].addressType,
+                        number: addressesList[index].phone,
+                      ),
+                    ],
                   ),
                 );
               },

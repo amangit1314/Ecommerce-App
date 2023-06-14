@@ -5,6 +5,7 @@ import 'package:soni_store_app/utils/size_config.dart';
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
 import '../../../details/detail_screen.dart';
+import '../../../loading/shimmer_box.dart';
 import '../../../showMore/show_more_screen.dart';
 
 class Fashion extends StatefulWidget {
@@ -89,8 +90,15 @@ class _FashionState extends State<Fashion> {
             stream: _streamProducts,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return SizedBox(
+                  height: 150,
+                  width: getProportionateScreenWidth(170),
+                  child: ShimmerBox(
+                    child: SizedBox(
+                      height: getProportionateScreenHeight(150),
+                      width: getProportionateScreenWidth(170),
+                    ),
+                  ),
                 );
               }
 

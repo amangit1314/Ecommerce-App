@@ -1,16 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/components/custom_surfix_icon.dart';
-import 'package:soni_store_app/models/models.dart' as models;
 import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../providers/auth_provider.dart';
-import '../../../providers/user_provider_try.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 
@@ -86,52 +82,52 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  void _register(BuildContext context) async {
-    final form = _formKey.currentState;
-    if (form!.validate()) {
-      form.save();
+  // void _register(BuildContext context) async {
+  //   final form = _formKey.currentState;
+  //   if (form!.validate()) {
+  //     form.save();
 
-      try {
-        final userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
+  //     try {
+  //       final userCredential =
+  //           await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //         email: emailController.text,
+  //         password: passwordController.text,
+  //       );
 
-        if (emailController.text.isNotEmpty &&
-            passwordController.text.isNotEmpty &&
-            passwordController.text == confirmPasswordController.text) {
-          models.User user = models.User(
-            email: userCredential.user!.email!,
-            username: userCredential.user!.email!.substring(0, 6),
-            uid: userCredential.user!.uid,
-          );
+  //       if (emailController.text.isNotEmpty &&
+  //           passwordController.text.isNotEmpty &&
+  //           passwordController.text == confirmPasswordController.text) {
+  //         models.User user = models.User(
+  //           email: userCredential.user!.email!,
+  //           username: userCredential.user!.email!.substring(0, 6),
+  //           uid: userCredential.user!.uid,
+  //         );
 
-          FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .set(user.toMap(), SetOptions(merge: true));
+  //         FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(user.uid)
+  //             .set(user.toMap(), SetOptions(merge: true));
 
-          if (!mounted) return;
-          Provider.of<UserProviderTry>(context, listen: false).setUser(user);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const SignInScreen()),
-          );
-        }
+  //         if (!mounted) return;
+  //         Provider.of<UserProviderTry>(context, listen: false).setUser(user);
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(builder: (_) => const SignInScreen()),
+  //         );
+  //       }
 
-        const GetSnackBar(
-          message: 'Email and Password is required ❗',
-          backgroundColor: Colors.redAccent,
-        );
-      } catch (e) {
-        const GetSnackBar(
-          message: 'Registeration error ❌',
-          backgroundColor: Colors.redAccent,
-        );
-      }
-    }
-  }
+  //       const GetSnackBar(
+  //         message: 'Email and Password is required ❗',
+  //         backgroundColor: Colors.redAccent,
+  //       );
+  //     } catch (e) {
+  //       const GetSnackBar(
+  //         message: 'Registeration error ❌',
+  //         backgroundColor: Colors.redAccent,
+  //       );
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -25,27 +25,40 @@ class ProductDetailsSheet extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           showModalBottomSheet(
-            enableDrag: false,
             context: context,
-            builder: (index) {
-              return BottomSheet(
-                animationController: bottomSheetAnimationController,
-                backgroundColor: Colors.grey[200],
-                onClosing: () {},
-                builder: (index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(20.0),
+            backgroundColor: const Color(0xFFF6F7F9),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(40),
+                topLeft: Radius.circular(40),
+              ),
+            ),
+            builder: (context) {
+              return DraggableScrollableSheet(
+                expand: false,
+                initialChildSize: 0.7,
+                maxChildSize: 1,
+                builder: (context, scrollController) {
+                  return SingleChildScrollView(
+                    controller: scrollController,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: getProportionateScreenHeight(30),
-                        ),
+                        SizedBox(height: getProportionateScreenHeight(30)),
+                        // * title top bar
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Product Details',
-                                style: Theme.of(context).textTheme.titleLarge),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15.0),
+                              child: Text(
+                                'Product Details',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(fontWeight: FontWeight.w600),
+                              ),
+                            ),
                             const Spacer(),
                             IconButton(
                               onPressed: () {
@@ -61,76 +74,136 @@ class ProductDetailsSheet extends StatelessWidget {
                         SizedBox(
                           height: getProportionateScreenHeight(10),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Story',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              widget.product.description,
-                              maxLines: 3,
-                            ),
-                          ],
+
+                        // * Description
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 8, left: 15.0, right: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Description',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                widget.product.description,
+                                maxLines: 7,
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(10),
+
+                        // divider with vertical padding 12
+                        Divider(
+                          color: Colors.grey.shade300,
+                          thickness: 1,
+                          indent: 15,
+                          endIndent: 15,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Details',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: const [
-                                    Text('• '),
-                                    Text(' PS4 Gaming Control'),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(10),
-                        ),
-                        Text(
-                          'Style',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(10),
-                        ),
-                        Text(
-                          'Design',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(10),
-                        ),
-                        Text(
-                          'Fabric',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(fontWeight: FontWeight.bold),
+
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 8, left: 15.0, right: 15.0),
+                          child: Column(
+                            children: [
+                              // * Categories
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Categories',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount:
+                                              widget.product.categories.length,
+                                          itemBuilder: (context, index) {
+                                            return Text(
+                                              '${widget.product.categories[index]}, ',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: getProportionateScreenHeight(10),
+                              ),
+
+                              // * style
+                              Row(
+                                children: [
+                                  Text(
+                                    'Style',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Plain',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: getProportionateScreenHeight(10),
+                              ),
+
+                              // * design
+                              Row(
+                                children: [
+                                  Text(
+                                    'Design',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Simple & Basic',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: getProportionateScreenHeight(10),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

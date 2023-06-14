@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../models/product.dart';
-import '../../../utils/constatns.dart';
+import '../../../models/models.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
+import '../../../utils/utils.dart';
 
 class ColorDots extends StatelessWidget {
   const ColorDots({
@@ -14,53 +18,51 @@ class ColorDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(20),
       ),
-      // child: Row(
-      //   children: [
-      //     StreamBuilder<DocumentSnapshot>(
-      //       stream: FirebaseFirestore.instance
-      //           .collection('products')
-      //           .doc(product.id.toString())
-      //           .snapshots(),
-      //       builder: (context, snapshot) {
-      //         if (snapshot.hasData) {
-      //           Map<String, dynamic> data =
-      //               snapshot.data!.data() as Map<String, dynamic>;
-      //           List<String> colors = List<String>.from(data['colors']);
+      child: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('products')
+            .doc(product.id.toString())
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final data = snapshot.data!.data() as Map<String, dynamic>;
+            final colors = List<String>.from(data['colors']);
 
-      child: Row(
-        children: const [
-          // colors.map((color) {
-          //   int index = colors.indexOf(color);
-          //   bool isSelected = index == 0 ? true : false;
-          //   return
-          ColorDot(
-            // // convert string to Color
-            // color: Color(int.parse(colors[index])),
-            color: Colors.blue,
-            isSelected: true,
-          ),
-        ],
+            return Row(
+              children: [
+                ...(colors.map(
+                  (color) {
+                    // final index = colors.indexOf(color);
+                    return GestureDetector(
+                      onTap: () {
+                        productProvider.updateSelectedColor(
+                            authProvider.user.uid, convertStringToColor(color));
+                      },
+                      child: ColorDot(
+                        color: convertStringToColor(color),
+                        isSelected: productProvider.selectedColor ==
+                            convertStringToColor(color),
+                      ),
+                    );
+                  },
+                )).toList(),
+              ],
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
       ),
     );
-    // }).toList(),
-    // ));
   }
 }
-// } else {
-//   return const CircularProgressIndicator();
-// }
-//       },
-//     ),
-//     const Spacer(),
-//   ],
-// ),
-//     );
-//   }
-// }
 
 class ColorDot extends StatelessWidget {
   const ColorDot({
@@ -75,15 +77,15 @@ class ColorDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 2),
-      padding: EdgeInsets.all(getProportionateScreenWidth(4)),
+      margin: const EdgeInsets.only(right: 8),
+      padding: EdgeInsets.all(getProportionateScreenWidth(3)),
       height: getProportionateScreenWidth(30),
       width: getProportionateScreenWidth(30),
       decoration: BoxDecoration(
         color: Colors.transparent,
         border: Border.all(
-          color: isSelected ? kPrimaryColor : Colors.red,
-          width: 3,
+          color: isSelected ? kPrimaryColor : color,
+          width: 4,
         ),
         shape: BoxShape.circle,
       ),

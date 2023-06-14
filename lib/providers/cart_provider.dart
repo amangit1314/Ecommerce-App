@@ -54,9 +54,21 @@ class CartProvider with ChangeNotifier {
           .doc(uid)
           .collection('cartItems');
 
-      await cartItemsCollection.doc(product.id).delete();
+      // Find the document ID of the product in Firestore
+      final cartItemSnapshot = await cartItemsCollection
+          .where('id', isEqualTo: product.id)
+          .limit(1)
+          .get();
 
-      _cartItems.remove(product);
+      if (cartItemSnapshot.docs.isNotEmpty) {
+        final cartItemId = cartItemSnapshot.docs.first.id;
+
+        // Delete the product document from the cartItems collection
+        await cartItemsCollection.doc(cartItemId).delete();
+      }
+
+      // Remove the product from the _cartItems list
+      _cartItems.removeWhere((item) => item.id == product.id);
 
       notifyListeners();
     } catch (error) {
@@ -101,5 +113,9 @@ class CartProvider with ChangeNotifier {
       total += element.price * element.quantity;
     }
     return total;
+  }
+
+  bool isItemInCart(models.Product product) {
+    return _cartItems.any((item) => item.id == product.id);
   }
 }

@@ -142,7 +142,9 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
-                    child: ColorDots(product: widget.widget.product),
+                    child: ColorDots(
+                      product: widget.widget.product,
+                    ),
                   ),
                 ],
               ),
@@ -169,7 +171,10 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
-                    child: SizeDots(product: widget.widget.product),
+                    child: SizeDots(
+                      product: widget.widget.product, oid: '',
+                      // uid: authProvider.user.uid,
+                    ),
                   ),
                 ],
               ),
@@ -264,6 +269,8 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                                 return SingleChildScrollView(
                                   controller: scrollController,
                                   child: CheckoutButtonAlertBox(
+                                    size: productProvider.selectedSize,
+                                    color: productProvider.selectedColor,
                                     price:
                                         productProvider.totalPrice.toString(),
                                     width: MediaQuery.of(context).size.width,

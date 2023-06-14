@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:soni_store_app/providers/review_provider.dart';
 import 'package:soni_store_app/screens/details/components/rating_tile.dart';
+import 'package:soni_store_app/screens/details/reviews/review_item_tile.dart';
 
+import '../../../helper/locator.dart';
 import '../../../models/models.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
-import 'add_review_screen.dart';
 
 class ReviewsSheet extends StatelessWidget {
   const ReviewsSheet({
-    super.key,
-    required this.bottomSheetAnimationController,
+    Key? key,
     required this.product,
     required this.image,
-  });
+  }) : super(key: key);
 
-  final AnimationController bottomSheetAnimationController;
   final Product product;
   final String image;
 
@@ -28,130 +29,12 @@ class ReviewsSheet extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          showBottomSheet(
-            enableDrag: false,
-            context: context,
-            builder: (index) {
-              return BottomSheet(
-                // radius 16
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
-                ),
-                animationController: bottomSheetAnimationController,
-                backgroundColor: Colors.grey[900],
-                onClosing: () {},
-                builder: (index) {
-                  return SafeArea(
-                    child: Scaffold(
-                      backgroundColor: Colors.grey[900],
-                      body: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // * rating tile
-                            RatingTile(
-                              rating: product.rating.toString(),
-                            ),
-
-                            // divider
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: 20.0,
-                                left: 5,
-                                right: 5,
-                              ),
-                              child: Divider(
-                                height: 1,
-                                color: kPrimaryColor.withOpacity(.3),
-                              ),
-                            ),
-
-                            // * add review tile
-                            GestureDetector(
-                              onTap: () {
-                                // navigate to add review screen
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => AddReviewScreen(
-                                      product: product,
-                                      image: image,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const ListTile(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 15),
-                                leading: FaIcon(
-                                  FontAwesomeIcons.comments,
-                                  size: 20,
-                                  color: kPrimaryColor,
-                                ),
-                                title: Text(
-                                  "Add a review",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: kPrimaryColor,
-                                  ),
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 20,
-                                  color: kPrimaryColor,
-                                ),
-                              ),
-                            ),
-
-                            // divider
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: 5,
-                                left: 5,
-                                right: 5,
-                              ),
-                              child: Divider(
-                                height: 1,
-                                color: kPrimaryColor.withOpacity(.3),
-                              ),
-                            ),
-
-                            // * reviews list section header
-                            const Padding(
-                              padding: EdgeInsets.all(15.0),
-                              child: Text(
-                                "Reviews",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: kPrimaryColor,
-                                ),
-                              ),
-                            ),
-
-                            // * reviews list
-                            SizedBox(
-                              // expand size
-                              height: MediaQuery.of(context).size.height,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.all(15),
-                                itemCount: 5,
-                                itemBuilder: (context, index) {
-                                  return const ReviewItemTile();
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ReviewsScreen(
+                product: product,
+              ),
+            ),
           );
         },
         child: Container(
@@ -203,104 +86,100 @@ class ReviewsSheet extends StatelessWidget {
   }
 }
 
-class ReviewItemTile extends StatelessWidget {
-  const ReviewItemTile({super.key});
+class ReviewsScreen extends StatefulWidget {
+  const ReviewsScreen({Key? key, required this.product}) : super(key: key);
+
+  final Product product;
+
+  @override
+  State<ReviewsScreen> createState() => _ReviewsScreenState();
+}
+
+class _ReviewsScreenState extends State<ReviewsScreen> {
+  List<Review> reviews = []; // List to store the fetched reviews
+  final reviewProvider = locator<ReviewProvider>();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReviews();
+  }
+
+  Future<void> fetchReviews() async {
+    try {
+      final reviewsData =
+          await reviewProvider.getReviewsForProduct(widget.product.id);
+      setState(() {
+        reviews = reviewsData;
+      });
+    } catch (error) {
+      // Handle the error appropriately (e.g., show an error message) GetSnackbar
+      GetSnackBar(
+        title: 'Error',
+        message: error.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(5.0),
-      height: 165,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade800,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        children: [
-          // row with circleavatr, name, time, stars
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.grey.shade600,
-                  child: const CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage('assets/images/1.jpg'),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "John Doe",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "2 days",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Row(
-                  children: [
-                    FaIcon(
-                      FontAwesomeIcons.star,
-                      size: 15,
-                      color: Colors.yellow.shade500,
-                    ),
-                    FaIcon(
-                      FontAwesomeIcons.star,
-                      size: 15,
-                      color: Colors.yellow.shade500,
-                    ),
-                    FaIcon(
-                      FontAwesomeIcons.star,
-                      size: 15,
-                      color: Colors.yellow.shade500,
-                    ),
-                    FaIcon(
-                      FontAwesomeIcons.star,
-                      size: 15,
-                      color: Colors.yellow.shade500,
-                    ),
-                    FaIcon(
-                      FontAwesomeIcons.star,
-                      size: 15,
-                      color: Colors.yellow.shade500,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Reviews',
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: kPrimaryColor,
           ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Rating tile
+            RatingTile(
+              rating: widget.product.rating.toString(),
+            ),
 
-          // quoted text 4 line
-          const Padding(
-            padding: EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0),
-            child: Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae nisi eget nunc ultricies aliquet. Sed vitae nisi eget nunc ultricies aliquet.",
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: Colors.grey,
-                fontSize: 12,
+            // Reviews list section header
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+              child: Text(
+                "Reviews",
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: kPrimaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ),
-          ),
-        ],
+
+            // Reviews list
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+              itemCount: reviews.length,
+              itemBuilder: (context, index) {
+                final review = reviews[index];
+                return ReviewItemTile(review: review);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

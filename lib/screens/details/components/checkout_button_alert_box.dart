@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
-import '../../../models/models.dart';
+import '../../../providers/address_provider.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
@@ -23,6 +23,8 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     required this.productId,
     required this.userId,
     required this.productImage,
+    required this.size,
+    required this.color,
   }) : super(key: key);
 
   final double width;
@@ -32,6 +34,8 @@ class CheckoutButtonAlertBox extends StatelessWidget {
   final AfterBuyNowButtonSheet widget;
   final int quantity;
   final String userId;
+  final String size;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +119,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     ),
                     onPressed: () async {
                       await showPaymentDialog(
-                        context,
-                        userId,
-                        productId,
-                        productImage,
-                      );
+                          context, userId, productId, productImage);
                     },
                   );
                 }),
@@ -131,7 +131,28 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     );
   }
 
-  // ...
+  void showLocalNotification(String? title, String? body,
+      BigTextStyleInformation? bigTextStyleInformation) {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'channel_description',
+      importance: Importance.high,
+      priority: Priority.high,
+      showWhen: false,
+      playSound: true,
+      styleInformation: bigTextStyleInformation,
+    );
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    FlutterLocalNotificationsPlugin().show(
+      0,
+      title,
+      body,
+      platformChannelSpecifics,
+    );
+  }
 
   Future<void> showPaymentDialog(
     BuildContext context,
@@ -143,19 +164,16 @@ class CheckoutButtonAlertBox extends StatelessWidget {
         Provider.of<CartProvider>(context, listen: false);
     OrderProvider orderProvider =
         Provider.of<OrderProvider>(context, listen: false);
+    AddressProvider addressProvider =
+        Provider.of<AddressProvider>(context, listen: false);
+    ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
 
     bool success = false;
     String orderStatus = 'Processing';
 
-    String generateOrderId() {
-      const uuid = Uuid();
-      return uuid.v4();
-    }
+    String? orderId;
 
-    String orderId = generateOrderId();
-
-    log('---------------');
-    log('ORDER_ID = $orderId');
     log('---------------');
     log('USER_ID = $userId');
     log('---------------');
@@ -165,21 +183,35 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     log('---------------');
     log('PRICE = ${price.toString()}');
     log('---------------');
+    log('SIZE = $size');
+    log('---------------');
+    log('COLOR = $color');
+    log('---------------');
     log('QUANTITY = ${quantity.toString()}');
     log('---------------');
     log('ORDER STATUS = $orderStatus');
     log('---------------');
+    log('---------------');
+    log('ORDER ID = $orderId');
+    log('---------------');
 
-    Order order = Order(
-      uid: userId,
-      orderId: orderId,
-      orderedDate: DateTime.now().toString(),
-      productId: productId,
-      amount: double.parse(price),
-      productImage: productImage,
-      quantity: quantity,
-      orderStatus: orderStatus,
-    );
+    final orderData = {
+      'number': addressProvider.selectedAddress.phone,
+      'size': productProvider.selectedSize,
+      'color': productProvider.selectedColor.value
+          .toRadixString(16)
+          .padLeft(8, '0')
+          .toUpperCase(),
+      'address': addressProvider.selectedAddress.address +
+          addressProvider.selectedAddress.pincode,
+      'uid': userId,
+      'orderedDate': DateTime.now().toString(),
+      'productId': productId,
+      'amount': double.parse(price),
+      'productImage': productImage,
+      'quantity': quantity,
+      'orderStatus': orderStatus,
+    };
 
     try {
       await showDialog(
@@ -192,7 +224,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
             title: Center(
               child: Text(
                 'Checkout With',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: kPrimaryColor,
@@ -206,12 +238,32 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   onTap: () async {
                     try {
                       log('---------------');
-                      log(order.toString());
+                      log(orderData.toString());
                       log('---------------');
+
                       await orderProvider
-                          .addOrder(order: order, uid: userId, oid: orderId)
-                          .then((value) => success = true);
+                          .addOrder(
+                        orderData: orderData,
+                        uid: userId,
+                      )
+                          .then((value) {
+                        success = true;
+                        log('---------------');
+                        log('ORDER_ID = $value');
+                        orderId = value;
+                      });
+
                       success = true;
+
+                      showLocalNotification(
+                        'Order Placed Successfully ✔🎉',
+                        'Your order is placed successfully',
+                        BigTextStyleInformation(
+                          'Your order of ${orderData['amount'] as double} is placed, \n estimated delivery in next 2 hours.',
+                          htmlFormatBigText: true,
+                          contentTitle: 'Order Placed Successfully ✔🎉',
+                        ),
+                      );
                     } catch (error) {
                       log('---------------');
                       log(error.toString());
@@ -236,11 +288,12 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Cash',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                       ),
                     ),
                   ),
@@ -270,11 +323,12 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Online Payment',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                       ),
                     ),
                   ),
@@ -303,11 +357,12 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Go to Cart',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                       ),
                     ),
                   ),
@@ -331,11 +386,12 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Cancel',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                       ),
                     ),
                   ),
@@ -365,10 +421,14 @@ class CheckoutButtonAlertBox extends StatelessWidget {
       log('---------------');
       log('QUANTITY = ${quantity.toString()}');
       log('---------------');
+      log('ORDER STATUS = $orderStatus');
+      log('---------------');
+      log('ORDER ID = $orderId');
+      log('---------------');
     } else {
       Get.snackbar(
         'Error',
-        'Failed to add order! ❗⚠',
+        'Failed to add order. Please try again! 😕',
         backgroundColor: Colors.red,
         snackPosition: SnackPosition.BOTTOM,
         colorText: Colors.white,

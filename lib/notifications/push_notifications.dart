@@ -223,7 +223,7 @@ class PushNotificationsManager {
     log('_processNotificationMessage, payloadMap: ${payloadMap?.toString()}, appActive: $appActive');
     final uid = authProvider.user.uid;
 
-    if (uid != null) {
+    if (uid.isNotEmpty) {
       try {
         if (methodFrom == 'myBackgroundMessageHandler' ||
             methodFrom == 'getInitialMessage') {

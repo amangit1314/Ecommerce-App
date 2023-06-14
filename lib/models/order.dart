@@ -1,40 +1,50 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:soni_store_app/utils/constants.dart';
+
 class Order {
-  final String orderId;
+  // final String orderId;
   final String? uid;
   final String productId;
   final String productImage;
   final String orderedDate;
   final int quantity;
   final double amount;
-  // final String address;
+  final String number;
+  final Color color;
+  final String address;
   final String orderStatus;
+  final String size;
   // final Payment? paymentInfo;
 
-  Order({
-    required this.orderId,
+  Order(
+    this.number, {
+    // required this.orderId,
     this.uid,
     required this.productId,
     required this.productImage,
     required this.orderedDate,
     required this.quantity,
     required this.amount,
-    // required this.address,
+    required this.address,
     required this.orderStatus,
+    required this.color,
+    required this.size,
     // this.paymentInfo,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'orderId': orderId,
+      'number': number,
+      // 'orderId': orderId,
       'uid': uid,
       'productId': productId,
       'productImage': productImage,
       'orderedDate': orderedDate,
       'quantity': quantity,
       'amount': amount,
-      // 'address': address,
+      'address': address,
       'orderStatus': orderStatus,
       // 'paymentInfo': paymentInfo!.toMap(),
     };
@@ -42,14 +52,17 @@ class Order {
 
   factory Order.fromMap(Map<String, dynamic> map) {
     return Order(
-      orderId: map['orderId'] ?? '',
+      map['number'] ?? '+91 1234567890',
+      size: map['size'] ?? 'XL',
+      color: map['color'] ?? kPrimaryColor,
+      address: map['address'] ?? '',
+      // orderId: map['orderId'] ?? '',
       uid: map['uid'] ?? '',
       productId: map['productId'] ?? '',
       productImage: map['productImage'] ?? '',
       orderedDate: map['orderedDate'] ?? DateTime.now().toString(),
       quantity: map['quantity']?.toInt() ?? 0,
       amount: map['amount']?.toDouble() ?? 0.0,
-      // address: map['address'] ?? '',
       orderStatus: map['orderStatus'] ?? '',
       // paymentInfo: Payment.fromMap(
       //   map['paymentInfo'],

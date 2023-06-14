@@ -7,7 +7,6 @@ import 'package:soni_store_app/screens/sign_in/components/sign_in_form.dart';
 
 import '../../../components/social_card.dart';
 import '../../../providers/providers.dart';
-import '../../otp/enter_mobile_number.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -63,16 +62,16 @@ class Body extends StatelessWidget {
                       }
                     },
                   ),
-                  SocialCard(
-                    icon: "assets/icons/Phone.svg",
-                    press: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MobileNumberScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                  // SocialCard(
+                  //   icon: "assets/icons/Phone.svg",
+                  //   press: () {
+                  //     Navigator.of(context).push(
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const MobileNumberScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   // SocialCard(
                   //   icon: "assets/icons/facebook-2.svg",
                   //   press: () {},
