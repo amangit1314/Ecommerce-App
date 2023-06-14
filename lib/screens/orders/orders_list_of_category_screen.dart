@@ -136,7 +136,7 @@ class _OrdersListOfSelectedCategoryScreenState
                                         // orderData['number'],
                                         authProvider.user.number ??
                                             "+91 7023953453",
-                                        orderId: orderData['orderId'],
+                                        // orderId: orderData['orderId'],
                                         productId: orderData['productId'],
                                         productImage: orderData['productImage'],
                                         orderedDate: orderData['orderedDate'],
@@ -155,9 +155,17 @@ class _OrdersListOfSelectedCategoryScreenState
                                 );
                               },
                               child: Dismissible(
-                                key: Key(orderData['orderId']),
+                                key: Key(orderDocuments[index].id),
                                 direction: DismissDirection.endToStart,
-                                onDismissed: (direction) async {},
+                                onDismissed: (direction) async {
+                                  // mark ordeStatus as Delivered
+                                  await FirebaseFirestore.instance
+                                      .collection('orders')
+                                      .doc(orderDocuments[index].id)
+                                      .update({
+                                    'orderStatus': 'Delivered',
+                                  });
+                                },
                                 background: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
@@ -180,8 +188,9 @@ class _OrdersListOfSelectedCategoryScreenState
                                 child: OrderWidget(
                                   productImage: orderData['productImage'] ??
                                       'https://www.getillustrations.com/packs/gradient-marker-vector-illustrations/scenes/_1x/e-commerce%20_%20online,%20shopping,%20buy,%20purchase,%20empty,%20cart,%20order_md.png',
-                                  orderId: orderData['orderId'],
-                                  // productName: 'Cart Order',
+                                  orderId: orderData['orderId'] != ''
+                                      ? orderData['orderId']
+                                      : 'order_xxxxxx$index',
                                   productName: productName ?? 'Cart Order',
                                   quantity: orderData['quantity'],
                                   orderPrice: orderData['amount'].toString(),

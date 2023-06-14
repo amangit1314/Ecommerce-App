@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/utils/utils.dart';
 
-import '../../../models/product.dart';
-import '../../../providers/product_provider.dart';
+import '../../../models/models.dart';
+import '../../../providers/providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
+import '../../../utils/utils.dart';
 
-class ColorDots extends StatefulWidget {
+class ColorDots extends StatelessWidget {
   const ColorDots({
     Key? key,
     required this.product,
@@ -17,58 +17,48 @@ class ColorDots extends StatefulWidget {
   final Product product;
 
   @override
-  State<ColorDots> createState() => _ColorDotsState();
-}
-
-class _ColorDotsState extends State<ColorDots> {
-  @override
   Widget build(BuildContext context) {
-    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(20),
       ),
-      child: Row(
-        children: [
-          StreamBuilder<DocumentSnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('products')
-                .doc(widget.product.id.toString())
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                Map<String, dynamic> data =
-                    snapshot.data!.data() as Map<String, dynamic>;
-                List<String> colors = List<String>.from(data['colors']);
+      child: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('products')
+            .doc(product.id.toString())
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final data = snapshot.data!.data() as Map<String, dynamic>;
+            final colors = List<String>.from(data['colors']);
 
-                return Row(
-                  children: [
-                    ...(colors.map(
-                      (color) {
-                        int index = colors.indexOf(color);
-                        return GestureDetector(
-                          onTap: () {
-                            productProvider.updateSelectedColor(
-                              convertStringToColor(color),
-                            );
-                          },
-                          child: ColorDot(
-                            color: convertStringToColor(color),
-                            isSelected: productProvider.selectedColor ==
-                                convertStringToColor(color),
-                          ),
-                        );
+            return Row(
+              children: [
+                ...(colors.map(
+                  (color) {
+                    // final index = colors.indexOf(color);
+                    return GestureDetector(
+                      onTap: () {
+                        productProvider.updateSelectedColor(
+                            authProvider.user.uid, convertStringToColor(color));
                       },
-                    )).toList(),
-                  ],
-                );
-              } else {
-                return const CircularProgressIndicator();
-              }
-            },
-          ),
-        ],
+                      child: ColorDot(
+                        color: convertStringToColor(color),
+                        isSelected: productProvider.selectedColor ==
+                            convertStringToColor(color),
+                      ),
+                    );
+                  },
+                )).toList(),
+              ],
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
       ),
     );
   }

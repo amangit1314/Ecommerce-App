@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:soni_store_app/providers/address_provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
 import 'package:soni_store_app/resources/services/auth/auth_service.dart';
@@ -22,32 +22,32 @@ class EcommerceApp extends StatefulWidget {
 }
 
 class _EcommerceAppState extends State<EcommerceApp> {
-  final _razorpay = Razorpay();
+  // final _razorpay = Razorpay();
 
   @override
   void initState() {
     super.initState();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    // Do something when payment succeeds
-  }
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   // Do something when payment succeeds
+  // }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    // Do something when payment fails
-  }
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   // Do something when payment fails
+  // }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    // Do something when an external wallet is selected
-  }
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   // Do something when an external wallet is selected
+  // }
 
   @override
   void dispose() {
     super.dispose();
-    _razorpay.clear(); // Removes all listeners
+    // _razorpay.clear(); // Removes all listeners
   }
 
   var options = {

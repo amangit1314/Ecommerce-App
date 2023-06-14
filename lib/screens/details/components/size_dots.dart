@@ -2,27 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/product.dart';
+import '../../../providers/auth_provider.dart';
 import '../../../providers/product_provider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
-class SizeDots extends StatefulWidget {
+class SizeDots extends StatelessWidget {
   const SizeDots({
     Key? key,
     required this.product,
+    required this.oid,
   }) : super(key: key);
 
   final Product product;
+  final String oid;
 
-  @override
-  State<SizeDots> createState() => _SizeDotsState();
-}
-
-class _SizeDotsState extends State<SizeDots> {
   @override
   Widget build(BuildContext context) {
-    ProductProvider productProvider = Provider.of<ProductProvider>(context);
-    List<String>? productSizes = widget.product.sizes;
+    final productProvider = Provider.of<ProductProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+    final productSizes = product.sizes;
 
     return Padding(
       padding: const EdgeInsets.only(left: 15.0),
@@ -33,8 +32,8 @@ class _SizeDotsState extends State<SizeDots> {
                       productSizes.length,
                       (index) => GestureDetector(
                         onTap: () {
-                          productProvider
-                              .updateSelectedSize(productSizes[index]);
+                          productProvider.updateSelectedSize(
+                              authProvider.user.uid, productSizes[index]);
                         },
                         child: Container(
                           margin: const EdgeInsets.only(right: 10),
@@ -77,7 +76,10 @@ class _SizeDotsState extends State<SizeDots> {
                   : productSizes!.map(
                       (size) => GestureDetector(
                         onTap: () {
-                          productProvider.updateSelectedSize(size);
+                          productProvider.updateSelectedSize(
+                            authProvider.user.uid,
+                            size,
+                          );
                         },
                         child: Container(
                           margin: const EdgeInsets.only(right: 8),

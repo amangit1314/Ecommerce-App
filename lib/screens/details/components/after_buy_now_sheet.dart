@@ -142,7 +142,9 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
-                    child: ColorDots(product: widget.widget.product),
+                    child: ColorDots(
+                      product: widget.widget.product,
+                    ),
                   ),
                 ],
               ),
@@ -169,7 +171,10 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
-                    child: SizeDots(product: widget.widget.product),
+                    child: SizeDots(
+                      product: widget.widget.product, oid: '',
+                      // uid: authProvider.user.uid,
+                    ),
                   ),
                 ],
               ),

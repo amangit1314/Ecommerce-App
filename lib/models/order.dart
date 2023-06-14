@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:soni_store_app/utils/constants.dart';
 
 class Order {
-  final String orderId;
+  // final String orderId;
   final String? uid;
   final String productId;
   final String productImage;
@@ -20,7 +20,7 @@ class Order {
 
   Order(
     this.number, {
-    required this.orderId,
+    // required this.orderId,
     this.uid,
     required this.productId,
     required this.productImage,
@@ -37,7 +37,7 @@ class Order {
   Map<String, dynamic> toMap() {
     return {
       'number': number,
-      'orderId': orderId,
+      // 'orderId': orderId,
       'uid': uid,
       'productId': productId,
       'productImage': productImage,
@@ -56,7 +56,7 @@ class Order {
       size: map['size'] ?? 'XL',
       color: map['color'] ?? kPrimaryColor,
       address: map['address'] ?? '',
-      orderId: map['orderId'] ?? '',
+      // orderId: map['orderId'] ?? '',
       uid: map['uid'] ?? '',
       productId: map['productId'] ?? '',
       productImage: map['productImage'] ?? '',

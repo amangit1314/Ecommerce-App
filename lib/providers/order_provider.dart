@@ -65,12 +65,13 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addOrder({
-    required models.Order order,
+  Future addOrder({
+    // required models.Order order,
+    required Map<String, dynamic> orderData,
     required String uid,
   }) async {
     try {
-      final orderData = order.toMap();
+      // final orderData = order.toMap();
       if (orderData.isEmpty) {
         throw Exception('Order data is null');
       }
@@ -82,14 +83,15 @@ class OrderProvider with ChangeNotifier {
       if (!orderSnapshot.exists) {
         final userOrderDoc = ordersCollection.doc();
         await userOrderDoc.set(orderData);
-        log('New order document created for user');
+        log('Order added successfully ✨🎉🥳');
+        notifyListeners();
+        return orderDoc.id;
       } else {
         await orderDoc.set(orderData);
         log('Existing order document updated');
+        notifyListeners();
+        return orderDoc.id;
       }
-
-      log('Order added successfully ✨🎉🥳');
-      notifyListeners();
     } catch (error) {
       log('Failed to add order: $error');
       throw Exception('Failed to add order: $error');

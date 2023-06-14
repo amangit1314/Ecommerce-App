@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -120,6 +121,32 @@ class _CheckoutCardState extends State<CheckoutCard> {
     );
   }
 
+  void showLocalNotification(
+    String? title,
+    String? body,
+    BigTextStyleInformation? bigTextStyleInformation,
+  ) {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'channel_description',
+      importance: Importance.high,
+      priority: Priority.high,
+      showWhen: false,
+      playSound: true,
+      styleInformation: bigTextStyleInformation,
+    );
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    FlutterLocalNotificationsPlugin().show(
+      0,
+      title,
+      body,
+      platformChannelSpecifics,
+    );
+  }
+
   Future<void> showPaymentDialog(
     BuildContext context,
     String userId,
@@ -182,13 +209,12 @@ class _CheckoutCardState extends State<CheckoutCard> {
       addressProvider.selectedAddress.phone,
       address: addressProvider.selectedAddress.address +
           addressProvider.selectedAddress.pincode,
-      orderId: orderId,
       orderedDate: DateTime.now().toString(),
       uid: userId,
       orderStatus: orderStatus,
       amount: totalPrice,
-      productId: productProvider.product!.id,
-      productImage: productProvider.product!.images.first,
+      productId: 'cart_order_${generateOrderId().substring(0, 8)}',
+      productImage: cartItems.isNotEmpty ? cartItems.first.images.first : '',
       quantity: orderItems.length,
     );
 
@@ -203,7 +229,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
             title: Center(
               child: Text(
                 'Checkout With',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: kPrimaryColor,
@@ -216,12 +242,23 @@ class _CheckoutCardState extends State<CheckoutCard> {
                 GestureDetector(
                   onTap: () async {
                     try {
+                      log('---------------');
+                      log(order.toString());
+                      log('---------------');
                       await orderProvider.addOrder(
-                        order: order,
+                        orderData: order.toMap(),
                         uid: userId,
-                        // oid: orderId,
                       );
                       success = true;
+                      showLocalNotification(
+                        'Order Placed Successfully ✔🎉',
+                        'Your order is placed successfully',
+                        BigTextStyleInformation(
+                          'Your order of ${order.amount} is placed, \n estimated delivery in next 2 hours.',
+                          htmlFormatBigText: true,
+                          contentTitle: 'Order Placed Successfully ✔🎉',
+                        ),
+                      );
                     } catch (error) {
                       log('---------------');
                       log(error.toString());
@@ -246,7 +283,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     child: Center(
                       child: Text(
                         'Cash',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -280,7 +317,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     child: Center(
                       child: Text(
                         'Online Payment',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -308,7 +345,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     child: Center(
                       child: Text(
                         'Cancel',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
