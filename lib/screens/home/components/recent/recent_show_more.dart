@@ -1,35 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/models.dart';
-import '../../../utils/constants.dart';
-import '../../utils/size_config.dart';
-import '../products/searched_item_screen_view.dart';
+import '../../../../models/product.dart';
+import '../../../../utils/constants.dart';
+import '../../../../utils/size_config.dart';
+import '../../../products/searched_item_screen_view.dart';
 
-class ShowMore extends StatefulWidget {
+class RecentShowMore extends StatefulWidget {
   final String keyword;
 
-  const ShowMore({Key? key, required this.keyword}) : super(key: key);
+  const RecentShowMore({Key? key, required this.keyword}) : super(key: key);
 
   @override
-  State<ShowMore> createState() => _ShowMoreState();
+  State<RecentShowMore> createState() => _ShowMoreState();
 }
 
-class _ShowMoreState extends State<ShowMore> {
+class _ShowMoreState extends State<RecentShowMore> {
   final CollectionReference _refProducts =
       FirebaseFirestore.instance.collection('products');
 
-  Future<List<Product>> fetchProductsFromFirestore(String category) async {
+  Future<List<Product>> fetchProductsFromFirestore() async {
     final List<Product> products = [];
-    Query query = _refProducts;
-
-    if (category == "Popular Products") {
-      query = query.where('isPopular', isEqualTo: true);
-    } else {
-      query = query.where('categories', arrayContains: widget.keyword);
-    }
-
-    final QuerySnapshot snapshot = await query.get();
+    final QuerySnapshot snapshot = await _refProducts
+        .where('recentlyViewed', arrayContains: widget.keyword)
+        .get();
 
     for (var element in snapshot.docs) {
       products.add(Product.fromMap(element.data() as Map<String, dynamic>));
@@ -44,7 +38,7 @@ class _ShowMoreState extends State<ShowMore> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "${widget.keyword} Products",
+          "Recently Viewed Products",
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: kPrimaryColor,
                 fontWeight: FontWeight.w600,
@@ -68,10 +62,7 @@ class _ShowMoreState extends State<ShowMore> {
             height: getProportionateScreenHeight(
                 MediaQuery.of(context).size.height * .85),
             child: FutureBuilder<List<Product>>(
-              future: fetchProductsFromFirestore(
-                  widget.keyword == "Popular Products"
-                      ? "Popular Products"
-                      : widget.keyword),
+              future: fetchProductsFromFirestore(),
               builder: (context, snapshot) {
                 final List<Product> products = snapshot.data ?? [];
 

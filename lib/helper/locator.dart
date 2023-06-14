@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:soni_store_app/providers/review_provider.dart';
 
 import '../providers/address_provider.dart';
 import '../providers/providers.dart';
@@ -21,4 +22,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => ProfileProvider());
   locator.registerLazySingleton(() => UserProviderTry());
   locator.registerLazySingleton(() => AddressProvider());
+  locator.registerLazySingleton(() => ReviewProvider());
 }

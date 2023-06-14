@@ -1,37 +1,41 @@
 import 'dart:convert';
 
 class Review {
-  final String rid;
   final String comment;
-  final int stars;
+  final double stars;
   final String reviewerName;
   final String when;
+  final bool isRecommend;
+  final String reviewerPic;
 
-  Review(
-    this.rid, {
+  Review({
     required this.comment,
     required this.stars,
     required this.reviewerName,
     required this.when,
+    required this.isRecommend,
+    required this.reviewerPic,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'rid': rid,
       'comment': comment,
       'stars': stars,
       'reviewerName': reviewerName,
       'when': when,
+      'isRecommend': isRecommend,
+      'reviewerPic': reviewerPic,
     };
   }
 
   factory Review.fromMap(Map<String, dynamic> map) {
     return Review(
-      map['rid'] ?? '',
       comment: map['comment'] ?? '',
-      stars: map['stars']?.toInt() ?? 0,
+      stars: (map['stars'] as num?)?.toDouble() ?? 0,
       reviewerName: map['reviewerName'] ?? '',
       when: map['when'] ?? '',
+      isRecommend: map['isRecommend'] ?? false,
+      reviewerPic: map['reviewerPic'] ?? '',
     );
   }
 

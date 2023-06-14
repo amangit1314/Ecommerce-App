@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:soni_store_app/screens/home/components/recent/recent_show_more.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
@@ -9,7 +10,6 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
 import '../../../loading/shimmer_box.dart';
-import '../../../showMore/show_more_screen.dart';
 
 class RecentlyViewd extends StatefulWidget {
   const RecentlyViewd({super.key});
@@ -49,7 +49,7 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
             press: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const ShowMore(
+                  builder: (_) => const RecentShowMore(
                     keyword: 'Recently Viewed',
                   ),
                 ),

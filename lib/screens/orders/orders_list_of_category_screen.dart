@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
@@ -125,18 +126,14 @@ class _OrdersListOfSelectedCategoryScreenState
                             }
                             final String? productName = snapshot.data;
                             return GestureDetector(
-                              // on tap naviagtor.push
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  // material page route
                                   MaterialPageRoute(
                                     builder: (_) => OrderItemDetailScreen(
                                       order: models.Order(
-                                        // orderData['number'],
                                         authProvider.user.number ??
                                             "+91 7023953453",
-                                        // orderId: orderData['orderId'],
                                         productId: orderData['productId'],
                                         productImage: orderData['productImage'],
                                         orderedDate: orderData['orderedDate'],
@@ -144,10 +141,7 @@ class _OrdersListOfSelectedCategoryScreenState
                                         amount: orderData['amount'],
                                         address: orderData['address'],
                                         orderStatus: orderData['orderStatus'],
-                                        // color: convertStringToColor(
-                                        //     orderData['color']),
                                         color: Colors.black,
-                                        // size: orderData['size'],
                                         size: "XL",
                                       ),
                                     ),
@@ -156,8 +150,18 @@ class _OrdersListOfSelectedCategoryScreenState
                               },
                               child: Dismissible(
                                 key: Key(orderDocuments[index].id),
-                                direction: DismissDirection.endToStart,
+                                // direction: DismissDirection.endToStart,
                                 onDismissed: (direction) async {
+                                  if (direction ==
+                                      DismissDirection.endToStart) {
+                                    // mark orderStatus as Cancelled
+                                    await FirebaseFirestore.instance
+                                        .collection('orders')
+                                        .doc(orderDocuments[index].id)
+                                        .update({
+                                      'orderStatus': 'Cancled',
+                                    });
+                                  }
                                   // mark ordeStatus as Delivered
                                   await FirebaseFirestore.instance
                                       .collection('orders')
@@ -166,7 +170,7 @@ class _OrdersListOfSelectedCategoryScreenState
                                     'orderStatus': 'Delivered',
                                   });
                                 },
-                                background: Container(
+                                secondaryBackground: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
                                   decoration: const BoxDecoration(
@@ -185,12 +189,27 @@ class _OrdersListOfSelectedCategoryScreenState
                                     ],
                                   ),
                                 ),
+                                background: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFFFE6E6),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                          "assets/icons/Trash.svg"),
+                                      const Spacer(),
+                                    ],
+                                  ),
+                                ),
                                 child: OrderWidget(
                                   productImage: orderData['productImage'] ??
                                       'https://www.getillustrations.com/packs/gradient-marker-vector-illustrations/scenes/_1x/e-commerce%20_%20online,%20shopping,%20buy,%20purchase,%20empty,%20cart,%20order_md.png',
-                                  orderId: orderData['orderId'] != ''
-                                      ? orderData['orderId']
-                                      : 'order_xxxxxx$index',
+                                  orderId: orderData['productId'],
                                   productName: productName ?? 'Cart Order',
                                   quantity: orderData['quantity'],
                                   orderPrice: orderData['amount'].toString(),

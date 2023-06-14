@@ -49,6 +49,7 @@ class OrderItemDetailScreen extends StatelessWidget {
                         image: order.productImage,
                         name: snapshot.data!,
                         category: '',
+                        productId: order.productId,
                       );
                     } else if (snapshot.hasError) {
                       log('Failed to retrieve product name: ${snapshot.error}');
@@ -337,6 +338,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String image;
   final String name;
   final String category;
+  final String productId;
 
   const CustomAppBar({
     Key? key,
@@ -344,6 +346,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.image,
     required this.name,
     required this.category,
+    required this.productId,
   }) : super(key: key);
 
   @override
@@ -399,6 +402,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       name: name,
                       category: category,
                       image: image,
+                      productId: productId,
                     ),
                   ),
                 );

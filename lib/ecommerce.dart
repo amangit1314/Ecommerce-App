@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 // import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:soni_store_app/providers/address_provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
+import 'package:soni_store_app/providers/review_provider.dart';
 import 'package:soni_store_app/resources/services/auth/auth_service.dart';
 import 'package:soni_store_app/screens/home/home_screen.dart';
 import 'package:soni_store_app/screens/splash/splash_screen.dart';
@@ -72,6 +73,7 @@ class _EcommerceAppState extends State<EcommerceApp> {
         ChangeNotifierProvider(create: (_) => locator<PaymentProvider>()),
         ChangeNotifierProvider(create: (_) => locator<ProfileProvider>()),
         ChangeNotifierProvider(create: (_) => locator<AddressProvider>()),
+        ChangeNotifierProvider(create: (_) => locator<ReviewProvider>()),
       ],
       child: GetMaterialApp(
         title: 'SnapCart Ecommerce App',

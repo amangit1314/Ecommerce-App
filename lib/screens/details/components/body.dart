@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/screens/details/components/product_description.dart';
+import 'package:soni_store_app/screens/details/components/product_images.dart';
 import 'package:soni_store_app/screens/details/components/rating_tile.dart';
 import 'package:soni_store_app/screens/details/components/top_rounded_container.dart';
+import 'package:soni_store_app/screens/details/reviews/reviews_sheet.dart';
+import 'package:soni_store_app/screens/details/similarProducts/similar_products.dart';
 
-import '../../../models/models.dart';
+import '../../../models/product.dart';
 import '../../../utils/size_config.dart';
-import '../reviews/reviews_sheet.dart';
-import '../similarProducts/similar_products.dart';
 import 'buy_now_button.dart';
 import 'custom_app_bar.dart';
-import 'product_images.dart';
 
 class DetailFirebaseBody extends StatefulWidget {
   const DetailFirebaseBody({
@@ -48,49 +48,45 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
     final width = MediaQuery.of(context).size.width;
     return Stack(
       children: [
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Stack(
-            children: [
-              ProductImagesFirebase(product: widget.product),
-              CustomAppBar(
-                rating: widget.product.rating,
-                color: Colors.transparent,
-              ),
-            ],
-          ),
-        ),
-        Column(
+        ListView(
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+            Stack(
+              children: [
+                Stack(
                   children: [
-                    const SizedBox(height: 200), // Adjust the height as needed
-                    TopRoundedContainer(
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          ProductDescription(
-                            product: widget.product,
-                            pressOnSeeMore: () {},
-                          ),
-                          RatingTile(
-                            rating: widget.product.rating.toString(),
-                          ),
-                          ReviewsSheet(
-                            product: widget.product,
-                            image: widget.product.images.first,
-                          ),
-                          SimilarProducts(widget: widget),
-                        ],
-                      ),
+                    ProductImagesFirebase(product: widget.product),
+                    CustomAppBar(
+                      rating: widget.product.rating,
+                      color: Colors.transparent,
                     ),
                   ],
                 ),
+              ],
+            ),
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TopRoundedContainer(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ProductDescription(
+                          product: widget.product,
+                          pressOnSeeMore: () {},
+                        ),
+                        RatingTile(
+                          rating: widget.product.rating.toString(),
+                        ),
+                        ReviewsSheet(
+                          product: widget.product,
+                          image: widget.product.images.first,
+                        ),
+                        SimilarProducts(widget: widget),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: getProportionateScreenHeight(120)),
