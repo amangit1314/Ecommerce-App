@@ -30,8 +30,6 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // final authService = Provider.of<AuthService>(context);
-
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 20),
       children: [

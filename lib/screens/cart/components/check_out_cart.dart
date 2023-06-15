@@ -5,12 +5,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/address_provider.dart';
 import 'package:soni_store_app/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../components/default_button.dart';
+import '../../../helper/locator.dart';
 import '../../../models/models.dart';
+import '../../../providers/address_provider.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/size_config.dart';
 
@@ -23,6 +24,11 @@ class CheckoutCard extends StatefulWidget {
 
 class _CheckoutCardState extends State<CheckoutCard> {
   Map<String, dynamic>? paymentIntent;
+  final AddressProvider addressProvider = locator<AddressProvider>();
+  final CartProvider cartProvider = locator<CartProvider>();
+  final AuthProvider authProvider = locator<AuthProvider>();
+  final OrderProvider orderProvider = locator<OrderProvider>();
+  final ProductProvider productProvider = locator<ProductProvider>();
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +237,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                 'Checkout With',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: kPrimaryColor,
                     ),
               ),
@@ -282,10 +288,10 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     ),
                     child: Center(
                       child: Text(
-                        'Cash',
+                        'Cash on Delivery',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
                       ),
@@ -319,7 +325,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                         'Online Payment',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
                       ),
@@ -347,7 +353,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                         'Cancel',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
                       ),

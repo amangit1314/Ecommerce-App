@@ -53,26 +53,25 @@ class CartCard extends StatelessWidget {
               ),
               maxLines: 2,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 6),
             Text.rich(
               TextSpan(
                 text: "\$${cart.price}",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: kPrimaryColor,
-                ),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: kPrimaryColor,
+                    ),
                 children: [
                   TextSpan(
                     text: " x",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge, // Use appropriate text style
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   TextSpan(
                     text: " $quantity",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge, // Use appropriate text style
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: kPrimaryColor,
+                        ),
                   ),
                 ],
               ),

@@ -52,14 +52,10 @@ class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
           children: [
             Stack(
               children: [
-                Stack(
-                  children: [
-                    ProductImagesFirebase(product: widget.product),
-                    CustomAppBar(
-                      rating: widget.product.rating,
-                      color: Colors.transparent,
-                    ),
-                  ],
+                ProductImagesFirebase(product: widget.product),
+                CustomAppBar(
+                  rating: widget.product.rating,
+                  color: Colors.transparent,
                 ),
               ],
             ),

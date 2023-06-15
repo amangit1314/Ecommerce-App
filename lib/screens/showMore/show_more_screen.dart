@@ -45,7 +45,7 @@ class _ShowMoreState extends State<ShowMore> {
       appBar: AppBar(
         title: Text(
           "${widget.keyword} Products",
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: kPrimaryColor,
                 fontWeight: FontWeight.w600,
               ),
@@ -54,7 +54,7 @@ class _ShowMoreState extends State<ShowMore> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
-            color: Colors.black,
+            color: kPrimaryColor,
           ),
           onPressed: () => Navigator.pop(context),
         ),

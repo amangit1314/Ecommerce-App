@@ -50,11 +50,11 @@ class _SignFormState extends State<SignForm> {
         password: passwordController.text,
       );
       if (result == "success") {
-        Get.snackbar(
-          'Authentication Successful',
-          'Authentication is successful 🥳🎉',
+        const GetSnackBar(
+          title: 'Authentication Successful',
+          message: 'Authentication is successful 🥳🎉',
           snackPosition: SnackPosition.TOP,
-          duration: const Duration(seconds: 3),
+          duration: Duration(seconds: 3),
         );
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
@@ -62,9 +62,9 @@ class _SignFormState extends State<SignForm> {
           (route) => false,
         );
       } else {
-        Get.snackbar(
-          'Authentication Error',
-          result.toString(),
+        GetSnackBar(
+          title: 'Authentication Error',
+          message: result.toString(),
           snackPosition: SnackPosition.BOTTOM,
           duration: const Duration(seconds: 3),
         );

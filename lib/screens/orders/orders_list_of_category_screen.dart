@@ -152,23 +152,32 @@ class _OrdersListOfSelectedCategoryScreenState
                                 key: Key(orderDocuments[index].id),
                                 // direction: DismissDirection.endToStart,
                                 onDismissed: (direction) async {
-                                  if (direction ==
-                                      DismissDirection.endToStart) {
-                                    // mark orderStatus as Cancelled
-                                    await FirebaseFirestore.instance
-                                        .collection('orders')
-                                        .doc(orderDocuments[index].id)
-                                        .update({
-                                      'orderStatus': 'Cancled',
-                                    });
+                                  if (orderData['orderStatus'] != 'Delivered' ||
+                                      orderData['orderStatus'] != 'Cancled' ||
+                                      orderData['orderStatus'] != 'Returned') {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      // mark orderStatus as Cancelled
+                                      await FirebaseFirestore.instance
+                                          .collection('orders')
+                                          .doc(orderDocuments[index].id)
+                                          .update({
+                                        'orderStatus': 'Delivered',
+                                      });
+                                      log('Delivered');
+                                    }
+                                    if (direction ==
+                                        DismissDirection.startToEnd) {
+                                      // mark ordeStatus as Delivered
+                                      await FirebaseFirestore.instance
+                                          .collection('orders')
+                                          .doc(orderDocuments[index].id)
+                                          .update({
+                                        'orderStatus': 'Cancled',
+                                      });
+                                      log('Cancled');
+                                    }
                                   }
-                                  // mark ordeStatus as Delivered
-                                  await FirebaseFirestore.instance
-                                      .collection('orders')
-                                      .doc(orderDocuments[index].id)
-                                      .update({
-                                    'orderStatus': 'Delivered',
-                                  });
                                 },
                                 secondaryBackground: Container(
                                   padding: const EdgeInsets.symmetric(

@@ -107,22 +107,19 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   color: Colors.deepOrange,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child:
-                    Consumer<AuthProvider>(builder: (context, authProvider, _) {
-                  return TextButton(
-                    child: const Text(
-                      "Checkout",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                child: TextButton(
+                  child: const Text(
+                    "Checkout",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
-                    onPressed: () async {
-                      await showPaymentDialog(
-                          context, userId, productId, productImage);
-                    },
-                  );
-                }),
+                  ),
+                  onPressed: () async {
+                    await showPaymentDialog(
+                        context, userId, productId, productImage);
+                  },
+                ),
               ),
             ),
           ],

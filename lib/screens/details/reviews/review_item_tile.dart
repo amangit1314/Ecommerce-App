@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../models/review.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/size_config.dart';
 
 class ReviewItemTile extends StatelessWidget {
   final Review review;
@@ -13,13 +14,13 @@ class ReviewItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final yellowStarIcon = FaIcon(
       FontAwesomeIcons.solidStar,
-      size: 15,
+      size: getProportionateScreenHeight(15),
       color: Colors.yellow.shade500,
     );
 
-    const grayStarIcon = FaIcon(
+    final grayStarIcon = FaIcon(
       FontAwesomeIcons.star,
-      size: 15,
+      size: getProportionateScreenHeight(15),
       color: Colors.grey,
     );
 
@@ -30,21 +31,21 @@ class ReviewItemTile extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.all(5.0),
-      height: 167,
+      height: getProportionateScreenHeight(167),
       decoration: BoxDecoration(
         color: Colors.white70,
         borderRadius: BorderRadius.circular(15),
         // border
         border: Border.all(
           color: kPrimaryColor.withOpacity(0.7),
-          width: 1,
+          width: getProportionateScreenWidth(1),
         ),
         // shadow
         boxShadow: [
           BoxShadow(
             color: Colors.white.withOpacity(0.7),
-            spreadRadius: 1,
-            blurRadius: 5,
+            spreadRadius: getProportionateScreenWidth(1),
+            blurRadius: getProportionateScreenWidth(1),
           ),
         ],
       ),
@@ -52,14 +53,16 @@ class ReviewItemTile extends StatelessWidget {
         children: [
           // row with circle avatar, name, time, stars
           Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(
+              getProportionateScreenWidth(15),
+            ),
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 20,
+                  radius: getProportionateScreenWidth(20),
                   backgroundColor: Colors.white54,
                   child: CircleAvatar(
-                    radius: 20,
+                    radius: getProportionateScreenWidth(20),
                     backgroundImage: NetworkImage(
                       review.reviewerPic.isNotEmpty
                           ? review.reviewerPic
@@ -67,7 +70,7 @@ class ReviewItemTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: getProportionateScreenWidth(10)),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +79,7 @@ class ReviewItemTile extends StatelessWidget {
                       review.reviewerName,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: getProportionateScreenWidth(5)),
                     Text(
                       review.when.substring(0, 4),
                       style: Theme.of(context).textTheme.bodySmall,
@@ -91,8 +94,11 @@ class ReviewItemTile extends StatelessWidget {
 
           // quoted text 4 line
           Padding(
-            padding:
-                const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0),
+            padding: EdgeInsets.only(
+              left: getProportionateScreenWidth(15),
+              right: getProportionateScreenWidth(15),
+              bottom: getProportionateScreenHeight(15),
+            ),
             child: Text(
               review.comment,
               maxLines: 4,

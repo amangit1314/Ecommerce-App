@@ -156,8 +156,10 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
             // Reviews list section header
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+              padding: EdgeInsets.only(
+                  left: getProportionateScreenWidth(15),
+                  right: getProportionateScreenWidth(15),
+                  top: getProportionateScreenHeight(15)),
               child: Text(
                 "Reviews",
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -171,7 +173,11 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+              padding: EdgeInsets.only(
+                left: getProportionateScreenWidth(15),
+                right: getProportionateScreenWidth(15),
+                top: getProportionateScreenHeight(5),
+              ),
               itemCount: reviews.length,
               itemBuilder: (context, index) {
                 final review = reviews[index];

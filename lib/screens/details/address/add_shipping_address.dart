@@ -89,7 +89,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
+                        .copyWith(fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                 ],
@@ -147,6 +147,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                 press: () {
                   final addressProvider = context.read<AddressProvider>();
                   final authProvider = context.read<AuthProvider>();
+
                   String generateAddressId() {
                     const uuid = Uuid();
                     return uuid.v4();

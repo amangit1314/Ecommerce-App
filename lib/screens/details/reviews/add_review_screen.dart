@@ -9,6 +9,7 @@ import 'package:soni_store_app/providers/review_provider.dart';
 import '../../../helper/locator.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/size_config.dart';
 
 class AddReviewScreen extends StatefulWidget {
   final String category;
@@ -55,11 +56,11 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Add Review',
           style: TextStyle(
             color: kPrimaryColor,
-            fontSize: 16,
+            fontSize: getProportionateScreenHeight(16),
           ),
         ),
         leading: IconButton(
@@ -79,10 +80,11 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
             children: [
               ListTile(
                 leading: Container(
-                  height: 80,
-                  width: 80,
+                  height: getProportionateScreenHeight(80),
+                  width: getProportionateScreenWidth(80),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius:
+                        BorderRadius.circular(getProportionateScreenWidth(16)),
                     image: DecorationImage(
                       image: NetworkImage(widget.image),
                       fit: BoxFit.cover,
@@ -99,28 +101,30 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   widget.name,
                   style: const TextStyle(
                     color: kPrimaryColor,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: getProportionateScreenHeight(20)),
               Padding(
-                padding: const EdgeInsets.only(left: 20.0),
+                padding:
+                    EdgeInsets.only(left: getProportionateScreenHeight(20)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 12.0),
-                      child: Divider(height: 1, color: kPrimaryColor),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: getProportionateScreenHeight(12)),
+                      child: const Divider(height: 1, color: kPrimaryColor),
                     ),
-                    const Text(
+                    Text(
                       'Rate this product',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        fontSize: getProportionateScreenHeight(12),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: getProportionateScreenHeight(10)),
                     RatingBar.builder(
                       initialRating: _rating,
                       minRating: 1,
@@ -139,29 +143,31 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                         });
                       },
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 12.0, bottom: 12),
-                      child: Divider(height: 1, color: kPrimaryColor),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: getProportionateScreenHeight(12),
+                          bottom: getProportionateScreenHeight(12)),
+                      child: const Divider(height: 1, color: kPrimaryColor),
                     ),
                     const SizedBox(height: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Set a Rating for this product',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: getProportionateScreenHeight(12),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: getProportionateScreenHeight(12)),
                         const ReviewRatingInputField(),
-                        const SizedBox(height: 2),
+                        SizedBox(height: getProportionateScreenHeight(2)),
                         Text(
                           '100 Character max',
                           style: TextStyle(
-                            fontSize: 8,
-                            wordSpacing: 1.2,
+                            fontSize: getProportionateScreenHeight(8),
+                            wordSpacing: getProportionateScreenWidth(1.2),
                             color: kPrimaryColor.withOpacity(.7),
                             fontWeight: FontWeight.normal,
                           ),
@@ -171,27 +177,28 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: getProportionateScreenHeight(20)),
               Padding(
-                padding: const EdgeInsets.only(left: 20.0),
+                padding:
+                    EdgeInsets.only(left: getProportionateScreenHeight(20)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'What did you like or dislike?',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 12,
+                        fontSize: getProportionateScreenHeight(12),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: getProportionateScreenHeight(10)),
                     ReviewCommentInputField(controller: commentController),
-                    const SizedBox(height: 2),
+                    SizedBox(height: getProportionateScreenHeight(2)),
                     Text(
                       '3000 Character max',
                       style: TextStyle(
-                        fontSize: 8,
-                        wordSpacing: 1.2,
+                        fontSize: getProportionateScreenHeight(8),
+                        wordSpacing: getProportionateScreenWidth(1.2),
                         color: kPrimaryColor.withOpacity(.7),
                         fontWeight: FontWeight.normal,
                       ),
@@ -199,20 +206,26 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: Divider(height: 1, color: kPrimaryColor),
-              ),
-              const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                padding: EdgeInsets.only(
+                    top: getProportionateScreenHeight(20),
+                    left: getProportionateScreenHeight(20),
+                    right: getProportionateScreenHeight(20)),
+                child: const Divider(height: 1, color: kPrimaryColor),
+              ),
+              SizedBox(height: getProportionateScreenHeight(20)),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: getProportionateScreenWidth(20),
+                  right: getProportionateScreenWidth(20),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Would you recommend this product?',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: getProportionateScreenHeight(12),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -220,13 +233,13 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: getProportionateScreenHeight(20)),
               GestureDetector(
                 onTap: () async {
                   final review = Review(
                     comment: commentController.text,
                     stars: _rating,
-                    reviewerName: '',
+                    reviewerName: authProvider.user.username ?? 'SnapCart User',
                     when: DateTime.now().toString(),
                     isRecommend: turnedOn,
                     reviewerPic: authProvider.user.profImage!,
@@ -238,10 +251,11 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  height: 50,
+                  height: getProportionateScreenHeight(50),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius:
+                        BorderRadius.circular(getProportionateScreenWidth(10)),
                     color: kPrimaryColor,
                   ),
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -250,7 +264,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                       'Submit Review',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -264,7 +278,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
   }
 
   Widget buildIOSSwitch() => Transform.scale(
-        scale: 1.1,
+        scale: getProportionateScreenHeight(1.1),
         child: CupertinoSwitch(
           activeColor: kPrimaryColor.withOpacity(.5),
           trackColor: Colors.black,
@@ -282,17 +296,20 @@ class ReviewRatingInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(getProportionateScreenWidth(10)),
         color: Colors.grey.withOpacity(.2),
       ),
-      child: const TextField(
+      child: TextField(
         keyboardType: TextInputType.number,
         maxLength: 3,
-        style: TextStyle(fontSize: 14),
+        style: TextStyle(fontSize: getProportionateScreenHeight(14)),
         decoration: InputDecoration(
           counterText: '',
           hintText: 'Enter a rating',
-          contentPadding: EdgeInsets.only(left: 10, top: 10),
+          contentPadding: EdgeInsets.only(
+            left: getProportionateScreenWidth(10),
+            top: getProportionateScreenWidth(10),
+          ),
           border: InputBorder.none,
         ),
       ),
@@ -319,11 +336,14 @@ class ReviewCommentInputField extends StatelessWidget {
         controller: controller,
         maxLines: 6,
         maxLength: 3000,
-        style: const TextStyle(fontSize: 14),
-        decoration: const InputDecoration(
+        style: TextStyle(fontSize: getProportionateScreenHeight(14)),
+        decoration: InputDecoration(
           counterText: '',
           hintText: 'Write your review here...',
-          contentPadding: EdgeInsets.only(left: 10, top: 10),
+          contentPadding: EdgeInsets.only(
+            left: getProportionateScreenWidth(10),
+            top: getProportionateScreenWidth(10),
+          ),
           border: InputBorder.none,
         ),
       ),
