@@ -1,8 +1,8 @@
 
 # E-Commerce Complete Application ->
 
-A complete ecommerce application build with HardWork 😐, Screams 😭, Patience, Flutter 🤘, Dart 📝and Firebase 🔥.
-\n Some of functionalities and used packages are mentioned below 👇
+A complete ecommerce application build with HardWork 😐, Screams 😭, Patience, Flutter 🤘, Dart 📝and Firebase 🔥. **\n
+Some of functionalities and used packages are mentioned below 👇
 
 ## Functionalities ->
 
