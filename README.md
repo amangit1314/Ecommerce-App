@@ -34,6 +34,35 @@ Some of functionalities and used packages are mentioned below 👇
 5. Google Maps product tracking (Backend with TS).
 6. ShipRocket Shipping Service (Backend with TS).
 
+## Screens it contains -
+
+- [x] Onboarding
+- [x] Login
+- [x] Forgot Password
+- [x] OTP Screen
+- [x] Register
+- [x] Login Success
+- [x] Complete Profile
+- [x] OTP Verification
+- [x] Home Page
+- [x] Categories Section(Dynamic Tabs)
+- [x] Product Details Views
+- [x] Product Description Screen
+- [x] Shipping Addresses List + Select Address
+- [x] Add Shipping Address Screen  
+- [x] Show More
+- [x] Filtered Show More Functionality
+- [x] Reviews
+- [x] Add Review Screen  
+- [x] Orders
+- [x] Order Item Detail
+- [x] Profile (added)
+- [x] Edit Profile Screen
+- [x] Notifications
+- [x] Settings
+- [x] Support Chat 
+- [x] Bottom Navigation Bar (added)
+
 ## Packages used -
 
 - [x]  firebase_auth: ^3.3.13
@@ -66,35 +95,6 @@ Some of functionalities and used packages are mentioned below 👇
 - [x]  shared_preferences: ^2.1.1
 - [x]  uuid: ^3.0.7
 
-## Screens it contains -
-
-- [x] Onboarding
-- [x] Login
-- [x] Forgot Password
-- [x] OTP Screen
-- [x] Register
-- [x] Login Success
-- [x] Complete Profile
-- [x] OTP Verification
-- [x] Home Page
-- [x] Categories Section(Dynamic Tabs)
-- [x] Product Details Views
-- [x] Product Description Screen
-- [x] Shipping Addresses List + Select Address
-- [x] Add Shipping Address Screen  
-- [x] Show More
-- [x] Filtered Show More Functionality
-- [x] Reviews
-- [x] Add Review Screen  
-- [x] Orders
-- [x] Order Item Detail
-- [x] Profile (added)
-- [x] Edit Profile Screen
-- [x] Notifications
-- [x] Settings
-- [x] Support Chat 
-- [x] Bottom Navigation Bar (added)
-
 ## Design CREDITS -
 
 - I have used the Splash, Login, Cart and Description Screen Design From Flutter way project, mentioned as below 👇
@@ -102,10 +102,10 @@ Some of functionalities and used packages are mentioned below 👇
   1. REPOSITORY - [E-Commerce Complete App - Flutter UI](https://github.com/abuanwar072/E-commerce-Complete-Flutter-UI) --  
   2. VIDEO - ![Preview](/intro.gif)
   3. PHOTOS -
-  - ![Preview](/photos/1.png)
-  - ![Preview](/photos/2.png)
-  - ![Preview](/photos/3.png)
-  - ![Preview](/photos/4.png)
-  - ![Preview](/photos/5.png)
-  - ![Preview](/photos/6.png)
-  - ![Preview](/photos/7.png)
+    - ![Preview](/photos/1.png)
+    - ![Preview](/photos/2.png)
+    - ![Preview](/photos/3.png)
+    - ![Preview](/photos/4.png)
+    - ![Preview](/photos/5.png)
+    - ![Preview](/photos/6.png)
+    - ![Preview](/photos/7.png)
