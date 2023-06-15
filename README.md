@@ -1,25 +1,38 @@
 
 # E-Commerce Complete Application ->
 
-A complete ecommerce application build with HardWork, Patience, Flutter, Dart and Firebase.
+A complete ecommerce application build with HardWork 😐, Screams 😭, Patience, Flutter 🤘, Dart 📝and Firebase 🔥.
 Some of functionalities and used packages are mentioned below 👇
 
 ## Functionalities ->
 
 0. Kick Ass UI + Smooth UX
-1. Authentication
-2. Fetch Products From Firebase
-3. Filter Products on basis of Categories
-4. Cart
-5. Order Product with Cash
-6. Support Chat with Tawk.to
+1. Onboarding
+2. Authentication
+3. Notification when Lands on Home Screen
+4. Fetch Products From Firebase
+5. Filter Products on basis of Categories
+6. Add to Cart
+7. Show Cart Items
+8. Order Product with Cash On Delivery
+9. Order from Cart
+10. Add Shipping Address
+11. Select Shipping Address
+12. Select Size
+13. Select color
+14. Edit User Profile
+15. Support Chat with Tawk.to
+16. LocalNotifications for Order Placed, New Deals and Products.
+17. Add Review when Order Status is Delivered.
 
 ## Future Plans ->
 
-1. Node.js(Backend with TS).
-2. GPT 4.0 + Allen Voice Integration.
-3. Google Maps product tracking.
-4. ShipRocket Shipping Service.
+1. Bring Real Products Data.
+2. Create Custom Backend.
+3. Payments (Backend with TS).
+4. GPT 4.0 + Allen Voice Integration (Backend with TS).
+5. Google Maps product tracking (Backend with TS).
+6. ShipRocket Shipping Service (Backend with TS).
 
 ## Packages used ->
 
@@ -58,13 +71,28 @@ Some of functionalities and used packages are mentioned below 👇
 - [x] Onboarding
 - [x] Login
 - [x] Forgot Password
-- [x] Sign Up
+- [x] OTP Screen
+- [x] Register
+- [x] Login Success
 - [x] Complete Profile
 - [x] OTP Verification
 - [x] Home Page
-- [x] Product Details
-- [x] Order
+- [x] Categories Section(Dynamic Tabs)
+- [x] Product Details Views
+- [x] Product Description Screen
+- [x] Shipping Addresses List + Select Address
+- [x] Add Shipping Address Screen  
+- [x] Show More
+- [x] Filtered Show More Functionality
+- [x] Reviews
+- [x] Add Review Screen  
+- [x] Orders
+- [x] Order Item Detail
 - [x] Profile (added)
+- [x] Edit Profile Screen
+- [x] Notifications
+- [x] Settings
+- [x] Support Chat 
 - [x] Bottom Navigation Bar (added)
 
 ## Design CREDITS ->
