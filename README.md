@@ -1,10 +1,10 @@
 
-# E-Commerce Complete Application ->
+# E-Commerce Complete Application -
 
 A complete ecommerce application build with HardWork 😐, Screams 😭, Patience, Flutter 🤘, Dart 📝and Firebase 🔥.
 Some of functionalities and used packages are mentioned below 👇
 
-## Functionalities ->
+## Functionalities -
 
 0. Kick Ass UI + Smooth UX
 1. Onboarding
@@ -25,7 +25,7 @@ Some of functionalities and used packages are mentioned below 👇
 16. LocalNotifications for Order Placed, New Deals and Products.
 17. Add Review when Order Status is Delivered.
 
-## Future Plans ->
+## Future Plans -
 
 1. Bring Real Products Data.
 2. Create Custom Backend.
@@ -34,7 +34,7 @@ Some of functionalities and used packages are mentioned below 👇
 5. Google Maps product tracking (Backend with TS).
 6. ShipRocket Shipping Service (Backend with TS).
 
-## Packages used ->
+## Packages used -
 
 - [x]  firebase_auth: ^3.3.13
 - [x]  firebase_core: ^1.14.0
@@ -66,7 +66,7 @@ Some of functionalities and used packages are mentioned below 👇
 - [x]  shared_preferences: ^2.1.1
 - [x]  uuid: ^3.0.7
 
-## Screens it contains
+## Screens it contains -
 
 - [x] Onboarding
 - [x] Login
@@ -95,7 +95,7 @@ Some of functionalities and used packages are mentioned below 👇
 - [x] Support Chat 
 - [x] Bottom Navigation Bar (added)
 
-## Design CREDITS ->
+## Design CREDITS -
 
 - I have used the Splash, Login, Cart and Description Screen Design From Flutter way project, mentioned as below 👇
 - Flutter Way Give the author a ⭐
