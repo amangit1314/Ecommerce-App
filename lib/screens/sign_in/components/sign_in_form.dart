@@ -42,7 +42,7 @@ class _SignFormState extends State<SignForm> {
     }
   }
 
-  Future<void> loginUser(AuthProvider authProvider) async {
+  Future loginUser(AuthProvider authProvider) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final result = await authProvider.authenticateUser(
@@ -74,7 +74,6 @@ class _SignFormState extends State<SignForm> {
 
   @override
   Widget build(BuildContext context) {
-    // final authService = Provider.of<AuthService>(context);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Form(
@@ -129,12 +128,6 @@ class _SignFormState extends State<SignForm> {
               txtColor: Colors.white,
               text: "Continue",
               press: () => loginUser(authProvider),
-              // press: () {
-              //   authService.signInWithEmailAndPassword(
-              //     email: emailController.text,
-              //     password: passwordController.text,
-              //   );
-              // },
             ),
           ),
         ],

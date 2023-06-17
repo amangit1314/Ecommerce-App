@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:soni_store_app/screens/orders/subscreens/delivered/list_of_delivered_orders_screen.dart';
 
 import '../../components/custom_bottom_nav_bar.dart';
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
 import 'orders_list_of_category_screen.dart';
+import 'subscreens/cancled/list_of_cancled_orders_screen.dart';
 import 'subscreens/subscreens.dart';
 
 class RecentsScreen extends StatefulWidget {
@@ -83,7 +85,7 @@ class _RecentsScreenState extends State<RecentsScreen>
                 MaterialPageRoute(
                   builder: (context) =>
                       const OrdersListOfSelectedCategoryScreen(
-                    statusName: 'Awaiting Payments',
+                    statusName: 'Processing',
                   ),
                 ),
               );
@@ -93,8 +95,7 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      const OrdersListOfSelectedCategoryScreen(
+                  builder: (context) => const ListOfDeliveredOrdersScreen(
                     statusName: 'Delivered',
                   ),
                 ),
@@ -117,8 +118,7 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      const OrdersListOfSelectedCategoryScreen(
+                  builder: (context) => const ListOfCancledOrdersScreen(
                     statusName: 'Cancled',
                   ),
                 ),

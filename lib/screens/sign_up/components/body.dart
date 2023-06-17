@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/social_card.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
+import '../../login_success/login_success_screen.dart';
 import 'sign_up_form.dart';
 
 class Body extends StatelessWidget {
@@ -48,23 +50,38 @@ class Body extends StatelessWidget {
                         AuthProvider authProvider =
                             Provider.of<AuthProvider>(context, listen: false);
                         try {
-                          await authProvider.authenticateWithGoogle();
-                          // Authentication successful, perform necessary actions or navigate to next screen
+                          await authProvider.authenticateWithGoogle().then(
+                                (value) => value == "success"
+                                    ? Navigator.of(context)
+                                        .push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginSuccessScreen(),
+                                          ),
+                                        )
+                                        .then((value) => const GetSnackBar(
+                                              backgroundColor: Colors.green,
+                                              title:
+                                                  'Authentication Successful',
+                                              message:
+                                                  'Authentication is successful 🥳🎉',
+                                              snackPosition: SnackPosition.TOP,
+                                              duration: Duration(seconds: 3),
+                                            ))
+                                    : const GetSnackBar(
+                                        backgroundColor: Colors.red,
+                                        title: 'Authentication Failed ❌',
+                                        message: 'Faild to Auth with Google',
+                                        snackPosition: SnackPosition.TOP,
+                                        duration: Duration(seconds: 3),
+                                      ),
+                              );
+                          log("Google authentication Successfull 🎉");
                         } catch (error) {
-                          // Handle authentication error
                           log("Google authentication error: $error");
                         }
                       },
                     ),
-
-                    // SocialCard(
-                    //   icon: "assets/icons/facebook-2.svg",
-                    //   press: () {},
-                    // ),
-                    // SocialCard(
-                    //   icon: "assets/icons/twitter.svg",
-                    //   press: () {},
-                    // ),
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),

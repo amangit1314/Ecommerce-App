@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:soni_store_app/screens/home/components/popular/popular_show_more.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
 import '../../../../utils/size_config.dart';
 import '../../../loading/shimmer_box.dart';
-import '../../../showMore/show_more_screen.dart';
 import '../fashions_card.dart';
 
 class PopularProducts extends StatefulWidget {
@@ -44,8 +44,8 @@ class _PopularProductsState extends State<PopularProducts> {
               // navigate to ShowMore
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const ShowMore(
-                    keyword: 'isPopular',
+                  builder: (_) => const PopularShowMore(
+                    keyword: 'Popular',
                   ),
                 ),
               );

@@ -19,7 +19,7 @@ class ProfileProvider with ChangeNotifier {
   TextEditingController get numberController => _numberController;
 
   XFile _image = XFile(
-      'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000');
+      'https://media.sketchfab.com/models/296f9f80c4ac431aa3d354f7ef955605/thumbnails/1d824d70f65e441a8f81162ff8bac094/281cbed7656443ffb04d2e38f928ab14.jpeg');
   XFile get image => _image;
 
   bool loading = false;
@@ -124,7 +124,7 @@ class ProfileProvider with ChangeNotifier {
       });
     } catch (error) {
       setLoading(false);
-      throw Exception('Failed to update profile: $error');
+      throw Exception('Failed to update password: $error');
     }
 
     setLoading(false);
@@ -135,6 +135,7 @@ class ProfileProvider with ChangeNotifier {
     _nameController.dispose();
     _emailController.dispose();
     _numberController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 }

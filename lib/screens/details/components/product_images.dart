@@ -46,11 +46,13 @@ class _ProductImagesFirebaseState extends State<ProductImagesFirebase> {
                           return CachedNetworkImage(
                             imageUrl: widget.product.images[index],
                             fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.error,
-                              color: Colors.red,
+                            placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => const Center(
+                              child: Icon(
+                                Icons.error,
+                                color: Colors.red,
+                              ),
                             ),
                           );
                         },

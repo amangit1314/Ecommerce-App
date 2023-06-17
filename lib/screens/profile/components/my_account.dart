@@ -2,29 +2,22 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/providers/providers.dart';
-import 'package:soni_store_app/utils/size_config.dart';
+import 'package:soni_store_app/utils/constants.dart';
 
-import '../../../../utils/constants.dart';
 import '../../../components/custom_surfix_icon.dart';
+import '../../../utils/size_config.dart';
 import 'edit_profile_screen.dart';
 
-class MyAccount extends StatefulWidget {
+class MyAccount extends StatelessWidget {
   const MyAccount({Key? key}) : super(key: key);
 
   @override
-  State<MyAccount> createState() => _MyAccountState();
-}
-
-class _MyAccountState extends State<MyAccount> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    authProvider.user;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    const TextStyle kPrimaryBoldTextStyle = TextStyle(
+      fontSize: 18,
+      color: kPrimaryColor,
+      fontWeight: FontWeight.w600,
+    );
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -75,14 +68,14 @@ class _MyAccountState extends State<MyAccount> {
                               radius: 30,
                               backgroundImage: CachedNetworkImageProvider(
                                 authProvider.user.profImage!,
-                              ), // Cast AssetImage to ImageProvider
+                              ),
                               backgroundColor: kPrimaryColor,
                             )
                           : const CircleAvatar(
                               radius: 30,
                               backgroundImage: CachedNetworkImageProvider(
                                 'https://media.sketchfab.com/models/296f9f80c4ac431aa3d354f7ef955605/thumbnails/1d824d70f65e441a8f81162ff8bac094/281cbed7656443ffb04d2e38f928ab14.jpeg',
-                              ), // Cast AssetImage to ImageProvider
+                              ),
                               backgroundColor: kPrimaryColor,
                             ),
                       const SizedBox(width: 10),
@@ -91,117 +84,86 @@ class _MyAccountState extends State<MyAccount> {
                         children: [
                           Text(
                             authProvider.user.username ?? 'Aman Soni',
-                            style: const TextStyle(
-                              color: kPrimaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: kPrimaryBoldTextStyle,
                           ),
-                          Text(authProvider.user.email),
+                          Text(
+                            authProvider.user.email,
+                            style: Theme.of(context).textTheme.bodySmall!,
+                          ),
                         ],
                       ),
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 40.0),
+                  padding: const EdgeInsets.only(top: 25.0),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Username',
+                      buildInfoRow(
+                        context,
+                        'Username',
+                        authProvider.user.username ?? 'Aman Soni',
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        child: Divider(
+                          color: kPrimaryColor.withOpacity(.3),
+                          height: 1,
+                        ),
+                      ),
+                      buildInfoRow(
+                        context,
+                        'Phone number',
+                        authProvider.user.number ?? '+91 1234567890',
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        child: Divider(
+                          color: kPrimaryColor.withOpacity(.3),
+                          height: 1,
+                        ),
+                      ),
+                      buildInfoRow(
+                        context,
+                        'Gender',
+                        authProvider.user.gender ?? 'Not Specified',
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        child: Divider(
+                          color: kPrimaryColor.withOpacity(.3),
+                          height: 1,
+                        ),
+                      ),
+                      buildInfoRow(
+                        context,
+                        'Email',
+                        authProvider.user.email,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        child: Divider(
+                          color: kPrimaryColor.withOpacity(.3),
+                          height: 1,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: getProportionateScreenHeight(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Password',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w500,
-                              )),
-                          Text(
-                            authProvider.user.username ?? 'Aman Soni',
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w500,
+                                color: kPrimaryColor.withOpacity(.8),
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 15.0),
-                        child: Divider(
-                          color: kPrimaryColor,
-                          height: 1,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Phone number'),
-                          Text(
-                            authProvider.user.number ?? '+91 1234567890',
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 15.0),
-                        child: Divider(
-                          color: kPrimaryColor,
-                          height: 1,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Gender'),
-                          Text(
-                            authProvider.user.gender ?? 'Not Specified',
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 15.0),
-                        child: Divider(
-                          color: kPrimaryColor,
-                          height: 1,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Email',
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                          Text(
-                            authProvider.user.email,
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 12.0),
-                        child: Divider(
-                          color: kPrimaryColor,
-                          height: 1,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Password'),
-                          SizedBox(
-                            width: getProportionateScreenWidth(190),
-                            child: TextButton(
-                              onPressed: () {
+                            GestureDetector(
+                              onTap: () {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -217,7 +179,7 @@ class _MyAccountState extends State<MyAccount> {
                                               .titleSmall!
                                               .copyWith(
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.bold,
+                                                fontWeight: FontWeight.w600,
                                                 color: kPrimaryColor,
                                               ),
                                         ),
@@ -244,7 +206,8 @@ class _MyAccountState extends State<MyAccount> {
                                           floatingLabelBehavior:
                                               FloatingLabelBehavior.always,
                                           suffixIcon: const CustomSurffixIcon(
-                                              svgIcon: "assets/icons/Lock.svg"),
+                                            svgIcon: "assets/icons/Lock.svg",
+                                          ),
                                         ),
                                         onChanged: (String newPassword) =>
                                             profileProvider.updatePassword(
@@ -269,10 +232,32 @@ class _MyAccountState extends State<MyAccount> {
                                   },
                                 );
                               },
-                              child: const Text('Change password'),
+                              child: Container(
+                                // padding 8
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                  horizontal: 16,
+                                ),
+                                // decoration color kPrimary border radius 12
+                                decoration: BoxDecoration(
+                                  color: kPrimaryColor.withOpacity(.1),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  'Change password',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: kPrimaryColor,
+                                      ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -281,6 +266,34 @@ class _MyAccountState extends State<MyAccount> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget buildInfoRow(BuildContext context, String title, String value) {
+    TextStyle kInfoTitleTextStyle = TextStyle(
+      fontSize: 14,
+      color: kPrimaryColor.withOpacity(.8),
+      fontWeight: FontWeight.w600,
+    );
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: getProportionateScreenHeight(8)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: kInfoTitleTextStyle,
+          ),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 12,
+                  color: kTextColor,
+                ),
+          ),
+        ],
       ),
     );
   }

@@ -135,26 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
           bigTextStyleInformation,
         );
       });
-
-      // * Handle incoming messages when the app is in the background or terminated
-      // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      //   log('Received background message: ${message.notification?.body}');
-      //   // * Perform custom handling of background messages
-      //   // * e.g., update app state, trigger background processing, etc.
-
-      //   BigTextStyleInformation bigTextStyleInformation =
-      //       BigTextStyleInformation(
-      //     message.notification!.body.toString(),
-      //     htmlFormatBigText: true,
-      //     contentTitle: message.notification?.title,
-      //   );
-
-      //   showLocalNotification(
-      //     message.notification?.title,
-      //     message.notification?.body,
-      //     bigTextStyleInformation,
-      //   );
-      // });
     } catch (e) {
       log('Initialization error: $e');
     }

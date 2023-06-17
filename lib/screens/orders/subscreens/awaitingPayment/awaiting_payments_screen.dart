@@ -83,7 +83,7 @@ class AwaitingPaymentOrder extends StatelessWidget {
                           bottom: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.yellow,
+                          color: Colors.amber,
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Text(

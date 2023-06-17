@@ -77,13 +77,9 @@ class DeliveredOrders extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.only(
-                          left: 12,
-                          right: 12,
-                          top: 2,
-                          bottom: 2,
-                        ),
+                            left: 12, right: 12, top: 2, bottom: 2),
                         decoration: BoxDecoration(
-                          color: Colors.greenAccent,
+                          color: Colors.green,
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Text(

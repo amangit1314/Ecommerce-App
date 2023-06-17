@@ -157,7 +157,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                           'Set a Rating for this product',
                           style: TextStyle(
                             fontSize: getProportionateScreenHeight(12),
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         SizedBox(height: getProportionateScreenHeight(12)),
@@ -187,7 +187,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                     Text(
                       'What did you like or dislike?',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontSize: getProportionateScreenHeight(12),
                       ),
                     ),
@@ -226,7 +226,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                       'Would you recommend this product?',
                       style: TextStyle(
                         fontSize: getProportionateScreenHeight(12),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     buildIOSSwitch(),
@@ -281,7 +281,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
         scale: getProportionateScreenHeight(1.1),
         child: CupertinoSwitch(
           activeColor: kPrimaryColor.withOpacity(.5),
-          trackColor: Colors.black,
+          trackColor: kTextColor,
           thumbColor: kPrimaryColor,
           value: turnedOn,
           onChanged: (value) => setState(() => turnedOn = value),
@@ -301,11 +301,12 @@ class ReviewRatingInputField extends StatelessWidget {
       ),
       child: TextField(
         keyboardType: TextInputType.number,
+        maxLines: 1,
         maxLength: 3,
         style: TextStyle(fontSize: getProportionateScreenHeight(14)),
         decoration: InputDecoration(
           counterText: '',
-          hintText: 'Enter a rating',
+          hintText: 'Enter your rating ...',
           contentPadding: EdgeInsets.only(
             left: getProportionateScreenWidth(10),
             top: getProportionateScreenWidth(10),

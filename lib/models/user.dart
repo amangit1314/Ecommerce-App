@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:soni_store_app/models/product.dart';
-
-import 'address.dart';
 
 class User {
   final String email;
@@ -13,19 +10,15 @@ class User {
   final String? number;
   final String? profImage;
   final String? gender;
-  final List<Address?>? addresses;
-  final List<dynamic>? cartItems;
 
   User({
     required this.email,
     required this.uid,
     this.username,
     this.password,
-    this.cartItems,
     this.number,
     this.profImage,
     this.gender,
-    this.addresses,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,10 +27,8 @@ class User {
       'uid': uid,
       'username': username,
       'password': password,
-      'cartItems': cartItems?.map((e) => e.toMap()).toList(),
       'number': number,
       'profImage': profImage,
-      'addresses': addresses,
       'gender': gender,
     };
   }
@@ -52,10 +43,6 @@ class User {
       number: data['number'] as String?,
       profImage: data['profImage'] as String?,
       gender: data['gender'] as String?,
-      addresses: data['addresses'] as List<Address?>?,
-      cartItems: (data['cartItems'] as List<dynamic>?)
-          ?.map((item) => Product.fromMap(item as Map<String, dynamic>))
-          .toList(),
     );
   }
 

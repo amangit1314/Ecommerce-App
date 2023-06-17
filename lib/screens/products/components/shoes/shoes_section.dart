@@ -6,6 +6,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
 import '../../../loading/shimmer_box.dart';
+import '../../../showMore/show_more_screen.dart';
 import '../products_search_screen_item_card.dart';
 
 class ShoesSection extends StatefulWidget {
@@ -39,7 +40,18 @@ class _ShoesSectionState extends State<ShoesSection> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SectionTitle(title: 'Shoe\'s', press: () {}),
+        SectionTitle(
+          title: 'Shoe\'s',
+          press: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const ShowMore(
+                  keyword: 'shoes',
+                ),
+              ),
+            );
+          },
+        ),
         SizedBox(height: getProportionateScreenHeight(10)),
         SizedBox(
           height: 190,
@@ -83,7 +95,8 @@ class _ShoesSectionState extends State<ShoesSection> {
                       );
                     },
                     child: ProductSearchScreenItemCard(
-                      width: 170,
+                      category: 'shoes',
+                      width: 150,
                       productName: products[index].title,
                       productImage: products[index].images.isNotEmpty
                           ? products[index].images[0]

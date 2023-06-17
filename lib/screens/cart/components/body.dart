@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 import 'package:soni_store_app/providers/providers.dart';
 import 'package:soni_store_app/screens/cart/components/cart_card.dart';
 import 'package:soni_store_app/utils/size_config.dart';
+
+import '../../loading/shimmer_box.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -20,8 +23,8 @@ class _BodyState extends State<Body> {
       padding: EdgeInsets.only(
         left: getProportionateScreenWidth(20),
         right: getProportionateScreenWidth(20),
-        top: getProportionateScreenWidth(20),
-        bottom: getProportionateScreenWidth(20),
+        top: getProportionateScreenHeight(20),
+        bottom: getProportionateScreenHeight(20),
       ),
       child: Consumer2<CartProvider, AuthProvider>(
         builder: (context, cartProvider, authProvider, child) {
@@ -29,7 +32,25 @@ class _BodyState extends State<Body> {
             future: cartProvider.getCartItems(authProvider.user.uid),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return ListView.separated(
+                    itemCount: 5,
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: getProportionateScreenHeight(15));
+                    },
+                    itemBuilder: (context, index) {
+                      return Center(
+                        child: SizedBox(
+                          height: getProportionateScreenHeight(120),
+                          width: MediaQuery.of(context).size.width * .9,
+                          child: ShimmerBox(
+                            child: SizedBox(
+                              height: getProportionateScreenHeight(100),
+                              width: getProportionateScreenWidth(100),
+                            ),
+                          ),
+                        ),
+                      );
+                    });
               }
 
               if (snapshot.hasError) {
@@ -67,39 +88,77 @@ class _BodyState extends State<Body> {
                 },
                 itemBuilder: (context, index) {
                   final cartItem = uniqueCartItems[index];
-                  final quantity = cartItemQuantities[index];
-                  return Dismissible(
-                    key: Key(cartItem.id),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (direction) async {
-                      await cartProvider.removeFromCart(
-                          cartItem, authProvider.user.uid);
-                      setState(() {
-                        cartItems.removeWhere(
-                            (item) => item.title == cartItem.title);
-                        uniqueCartItems.removeAt(index);
-                        cartItemQuantities.removeAt(index);
-                      });
-                    },
-                    background: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFFE6E6),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                  return FutureBuilder<int>(
+                    future: cartProvider.cartItemQuantity(
+                        cartItem, authProvider.user.uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // Loading state code
+
+                        return Center(
+                          child: SizedBox(
+                            height: getProportionateScreenHeight(120),
+                            width: MediaQuery.of(context).size.width * .9,
+                            child: ShimmerBox(
+                              child: SizedBox(
+                                height: getProportionateScreenHeight(100),
+                                width: getProportionateScreenWidth(100),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (snapshot.hasError) {
+                        // Error state code
+                        return const Center(
+                            child: Text('Error fetching quantity'));
+                      }
+
+                      final quantity = snapshot.data ?? 0;
+
+                      return Dismissible(
+                        key: Key(cartItem.id),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (direction) async {
+                          await cartProvider.removeFromCart(
+                              cartItem, authProvider.user.uid);
+                          setState(() {
+                            cartItems.removeWhere(
+                                (item) => item.title == cartItem.title);
+                            uniqueCartItems.removeAt(index);
+                            cartItemQuantities.removeAt(index);
+                          });
+                          const GetSnackBar(
+                            title: 'Item removed from cart',
+                            message: 'Item removed from cart',
+                          );
+                        },
+                        background: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFFFE6E6),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Spacer(),
+                              SvgPicture.asset("assets/icons/Trash.svg"),
+                            ],
+                          ),
                         ),
-                      ),
-                      child: Row(
-                        children: [
-                          const Spacer(),
-                          SvgPicture.asset("assets/icons/Trash.svg"),
-                        ],
-                      ),
-                    ),
-                    child: CartCard(
-                      cart: cartItem,
-                      quantity: quantity,
-                    ),
+                        child: CartCard(
+                          quantity: quantity,
+                          cart: cartItem,
+                          onDecrease: () => cartProvider.decreaseQuantity(
+                              cartItem, authProvider.user.uid),
+                          onIncrease: () => cartProvider.increaseQuantity(
+                              cartItem, authProvider.user.uid),
+                        ),
+                      );
+                    },
                   );
                 },
               );

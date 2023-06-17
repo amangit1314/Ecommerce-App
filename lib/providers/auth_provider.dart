@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,7 +31,7 @@ class AuthProvider with ChangeNotifier {
       'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
   String get profileImage => _profileImage;
 
-  List<Address?>? _addresses = [];
+  final List<Address?> _addresses = [];
   List<Address?>? get addresses => _addresses;
 
   Address? _selectedAddress;
@@ -44,7 +45,6 @@ class AuthProvider with ChangeNotifier {
         _uid = user.uid;
         _email = user.email;
         _username = user.username ?? user.email.split('@')[0];
-        _addresses = user.addresses;
         _profileImage = user.profImage ??
             'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000';
       }
@@ -60,7 +60,6 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> getUserDetails(User user) async {
-    // User? currentUser = _auth.currentUser;
     final DocumentSnapshot<Map<String, dynamic>> snap =
         await _firestore.collection('users').doc(user.uid).get();
     _user = models.User.fromMap(snap);
@@ -74,7 +73,8 @@ class AuthProvider with ChangeNotifier {
           .update({field: value});
       refreshUser();
     } catch (error) {
-      rethrow;
+      log(error.toString());
+      // rethrow;
     }
   }
 
@@ -101,10 +101,11 @@ class AuthProvider with ChangeNotifier {
           uid: uid,
         );
 
-        await _firestore
-            .collection('users')
-            .doc(uid)
-            .set(user.toMap(), SetOptions(merge: true));
+        await _firestore.collection('users').doc(uid).set(
+              user.toMap(),
+              SetOptions(merge: true),
+            );
+
         _user = user;
         notifyListeners();
         return uid;
@@ -156,28 +157,53 @@ class AuthProvider with ChangeNotifier {
     return res;
   }
 
-  Future<UserCredential> authenticateWithGoogle() async {
+  Future<String> authenticateWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
 
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      ) as GoogleAuthCredential;
 
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
 
-      if (_auth.currentUser != null) {
+      if (_auth.currentUser != null && user != null) {
+        final QuerySnapshot result = await _firestore
+            .collection('users')
+            .where('uid', isEqualTo: user.uid)
+            .get();
+
+        final List<DocumentSnapshot> documents = result.docs;
+
+        String uid = user.uid;
+        String profImage = user.photoURL ?? '';
+
+        if (documents.isEmpty) {
+          models.User user = models.User(
+            email: email,
+            username: username,
+            uid: uid,
+            profImage: profImage != '' ? profImage : '',
+          );
+
+          _firestore.collection('users').doc(uid).set(user.toMap());
+        }
+
         await getUserDetails(_auth.currentUser!);
+        await getUserDetails(user);
+
+        notifyListeners();
+        return 'success';
       }
-      notifyListeners();
-      return userCredential;
-    } catch (error) {
-      rethrow;
+    } on FirebaseAuthException {
+      return 'failure';
     }
+    return 'failure';
   }
 
   Future<void> signOut() async {
@@ -195,7 +221,7 @@ class AuthProvider with ChangeNotifier {
       throw Exception('User is Empty');
     }
 
-    _addresses!.add(address);
+    _addresses.add(address);
 
     await _firestore
         .collection('users')

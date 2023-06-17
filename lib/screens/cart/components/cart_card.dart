@@ -4,22 +4,24 @@ import 'package:soni_store_app/models/models.dart' as models;
 import 'package:soni_store_app/utils/constants.dart';
 import 'package:soni_store_app/utils/size_config.dart';
 
+import '../../../components/rounded_icon_button.dart';
+
 class CartCard extends StatelessWidget {
   const CartCard({
     Key? key,
     required this.cart,
     required this.quantity,
+    required this.onDecrease,
+    required this.onIncrease,
   }) : super(key: key);
 
   final models.Product cart;
-
   final int quantity;
+  final VoidCallback onDecrease;
+  final VoidCallback onIncrease;
+
   @override
   Widget build(BuildContext context) {
-    // final cartProvider = Provider.of<CartProvider>(context);
-    // final int quantity = cartProvider.totalCartItemQuantity;
-    // final int quantity = cart.quantity;
-
     return Row(
       children: [
         SizedBox(
@@ -39,8 +41,9 @@ class CartCard extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 20),
+        const SizedBox(width: 12),
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -70,11 +73,35 @@ class CartCard extends StatelessWidget {
                     text: " $quantity",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: kPrimaryColor,
+                          color: kTextColor,
                         ),
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+        const Spacer(),
+        Row(
+          children: [
+            RoundedIconBtn(
+              icon: Icons.remove,
+              showShadow: quantity == 1 ? false : true,
+              press: onDecrease,
+            ),
+            SizedBox(width: getProportionateScreenWidth(8)),
+            Text(
+              quantity.toString(),
+              style: const TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(width: getProportionateScreenWidth(8)),
+            RoundedIconBtn(
+              icon: Icons.add,
+              showShadow: true,
+              press: onIncrease,
             ),
           ],
         ),

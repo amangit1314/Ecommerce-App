@@ -5,7 +5,7 @@ import '../utils/size_config.dart';
 
 class DefaultButton extends StatelessWidget {
   final String text;
-  final VoidCallback press;
+  final VoidCallback? press;
   final Color txtColor;
   final Color btnColor;
   final double height;

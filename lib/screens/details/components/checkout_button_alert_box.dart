@@ -1,9 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../providers/address_provider.dart';
 import '../../../providers/providers.dart';
@@ -60,7 +63,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   top: getProportionateScreenHeight(2),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.deepOrange,
+                  color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextButton(
@@ -68,7 +71,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     "Continue Shopping",
                     style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   onPressed: () {
@@ -87,11 +90,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
               width: double.infinity,
               height: getProportionateScreenHeight(50),
               margin: const EdgeInsets.only(
-                top: 15,
-                left: 15,
-                right: 15,
-                bottom: 25,
-              ),
+                  top: 15, left: 15, right: 15, bottom: 25),
               decoration: BoxDecoration(
                 color: kPrimaryColor,
                 borderRadius: BorderRadius.circular(15),
@@ -104,7 +103,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   top: getProportionateScreenHeight(2),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.deepOrange,
+                  color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextButton(
@@ -112,12 +111,12 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     "Checkout",
                     style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   onPressed: () async {
                     await showPaymentDialog(
-                        context, userId, productId, productImage);
+                        context, userId, productId, productImage, quantity);
                   },
                 ),
               ),
@@ -151,12 +150,8 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     );
   }
 
-  Future<void> showPaymentDialog(
-    BuildContext context,
-    String userId,
-    String productId,
-    String productImage,
-  ) async {
+  Future<void> showPaymentDialog(BuildContext context, String userId,
+      String productId, String productImage, int quantity) async {
     CartProvider cartProvider =
         Provider.of<CartProvider>(context, listen: false);
     OrderProvider orderProvider =
@@ -170,6 +165,13 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     String orderStatus = 'Processing';
 
     String? orderId;
+
+    String generateOrderId() {
+      const uuid = Uuid();
+      return uuid.v4();
+    }
+
+    orderId = generateOrderId();
 
     log('---------------');
     log('USER_ID = $userId');
@@ -193,6 +195,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     log('---------------');
 
     final orderData = {
+      'orderId': orderId,
       'number': addressProvider.selectedAddress.phone,
       'size': productProvider.selectedSize,
       'color': productProvider.selectedColor.value
@@ -210,6 +213,21 @@ class CheckoutButtonAlertBox extends StatelessWidget {
       'orderStatus': orderStatus,
     };
 
+    final productData = {
+      'categories': widget.widget.product.categories,
+      'id': productId,
+      'title': widget.widget.product.title,
+      'description': widget.widget.product.description,
+      'images': widget.widget.product.images,
+      'price': int.parse(price),
+      'rating': widget.widget.product.rating,
+      'isFavourite': widget.widget.product.isFavourite,
+      'isPopular': widget.widget.product.isFavourite,
+      'colors': widget.widget.product.colors,
+      'sizes': widget.widget.product.sizes,
+      'quantity': quantity,
+    };
+
     try {
       await showDialog(
         context: context,
@@ -223,7 +241,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                 'Checkout With',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: kPrimaryColor,
                     ),
               ),
@@ -239,10 +257,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                       log('---------------');
 
                       await orderProvider
-                          .addOrder(
-                        orderData: orderData,
-                        uid: userId,
-                      )
+                          .addOrder(orderData: orderData, uid: userId)
                           .then((value) {
                         success = true;
                         log('---------------');
@@ -273,22 +288,18 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   child: Container(
                     width: double.infinity,
                     height: getProportionateScreenHeight(50),
-                    margin: const EdgeInsets.only(
-                      top: 15,
-                      left: 15,
-                      right: 15,
-                    ),
+                    margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
                     decoration: BoxDecoration(
                       color: kPrimaryColor,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
                       child: Text(
-                        'Cash',
+                        'Cash on Delivery',
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
                       ),
@@ -323,7 +334,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
                       ),
@@ -332,7 +343,10 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    cartProvider.addToCart(widget.widget.product, userId);
+                    cartProvider.addToCartFromDetails(
+                      productData,
+                      userId,
+                    );
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const CartScreen(),
@@ -342,11 +356,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   child: Container(
                     width: double.infinity,
                     height: getProportionateScreenHeight(50),
-                    margin: const EdgeInsets.only(
-                      top: 15,
-                      left: 15,
-                      right: 15,
-                    ),
+                    margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
                     decoration: BoxDecoration(
                       color: kPrimaryColor,
                       borderRadius: BorderRadius.circular(20),
@@ -357,7 +367,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
                       ),
@@ -386,7 +396,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
                       ),
@@ -410,6 +420,13 @@ class CheckoutButtonAlertBox extends StatelessWidget {
         backgroundColor: Colors.green,
         snackPosition: SnackPosition.BOTTOM,
         colorText: Colors.white,
+      );
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+        (route) => false, // Remove all existing routes from the stack
       );
       log('---------------');
       log('USER_ID = $userId');

@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/home/components/recent/recent_show_more.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
@@ -44,17 +43,8 @@ class _RecentlyViewdState extends State<RecentlyViewd> {
           padding: EdgeInsets.symmetric(
             horizontal: getProportionateScreenWidth(20),
           ),
-          child: SectionTitle(
+          child: const CategorySectionTitle(
             title: "Recently Viewed",
-            press: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const RecentShowMore(
-                    keyword: 'Recently Viewed',
-                  ),
-                ),
-              );
-            },
           ),
         ),
         SizedBox(height: getProportionateScreenWidth(20)),

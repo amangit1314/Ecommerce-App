@@ -125,8 +125,16 @@ class _ProductDescriptionState extends State<ProductDescription>
                       bool itemExists =
                           cartProvider.isItemInCart(widget.product);
 
+                      // if (itemExists) {
+                      //   cartProvider
+                      //       .increaseQuantityOfSpecificCartItem(widget.product);
+                      //   setState(() {
+                      //     isCartButtonActive = true;
+                      //     widget.product.isFavourite = true;
+                      //   });
+                      //   log('Increased quantity in cart, marked active');
+                      // }
                       if (itemExists) {
-                        // Remove item from cart
                         await cartProvider.removeFromCart(
                             widget.product, authProvider.user.uid);
                         setState(() {
@@ -135,13 +143,11 @@ class _ProductDescriptionState extends State<ProductDescription>
                         });
                         log('Removed from cart, marked inactive');
                       } else {
-                        // Add item to cart
                         await cartProvider.addToCart(
-                            widget.product, authProvider.user.uid);
+                            widget.product, authProvider.user.uid, 1);
                         setState(() {
                           isCartButtonActive = true;
                           widget.product.isFavourite = true;
-                          // !widget.product.isFavourite;
                         });
                         log('Added to cart, marked active');
                       }

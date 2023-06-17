@@ -28,8 +28,8 @@ class AuthService {
             profImage: userData['profImage'],
             gender: userData['gender'],
             number: userData['number'],
-            cartItems: userData['cartItems'],
-            addresses: userData['addresses'],
+            // cartItems: userData['cartItems'],
+            // addresses: userData['addresses'],
           );
         }
       }
@@ -69,8 +69,8 @@ class AuthService {
               profImage: userData['profImage'],
               gender: userData['gender'],
               number: userData['number'],
-              cartItems: userData['cartItems'],
-              addresses: userData['addresses'],
+              // cartItems: userData['cartItems'],
+              // addresses: userData['addresses'],
             );
           }
         }
@@ -107,8 +107,8 @@ class AuthService {
               'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000',
           gender: 'Not Defined',
           number: 'Not Defined',
-          cartItems: [],
-          addresses: [],
+          // cartItems: [],
+          // addresses: [],
         );
 
         await _firestore.collection('users').doc(user.uid).set(user.toMap());
@@ -157,8 +157,8 @@ class AuthService {
                 profImage: userData['profImage'],
                 gender: userData['gender'],
                 number: userData['number'],
-                cartItems: userData['cartItems'],
-                addresses: userData['addresses'],
+                // cartItems: userData['cartItems'],
+                // addresses: userData['addresses'],
               );
             }
           }
@@ -173,8 +173,8 @@ class AuthService {
                 'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000',
             gender: 'Not Defined',
             number: 'Not Defined',
-            cartItems: [],
-            addresses: [],
+            // cartItems: [],
+            // addresses: [],
           );
 
           await _firestore.collection('users').doc(uid).set(user.toMap());

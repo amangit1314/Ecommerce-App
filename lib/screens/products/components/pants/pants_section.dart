@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/screens/details/detail_screen.dart';
 import 'package:soni_store_app/screens/products/components/products_search_screen_item_card.dart';
+import 'package:soni_store_app/screens/showMore/show_more_screen.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
@@ -38,8 +39,21 @@ class _PantsSectionsState extends State<PantsSections> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(title: 'Pant\'s', press: () {}),
+        SectionTitle(
+          title: 'Pant\'s',
+          press: () {
+            // navigate to show more
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const ShowMore(
+                  keyword: 'pants',
+                ),
+              ),
+            );
+          },
+        ),
         SizedBox(height: getProportionateScreenHeight(10)),
         SizedBox(
           height: 190,
@@ -83,7 +97,8 @@ class _PantsSectionsState extends State<PantsSections> {
                       );
                     },
                     child: ProductSearchScreenItemCard(
-                      width: 170,
+                      category: 'pants',
+                      width: 150,
                       productName: products[index].title,
                       productImage: products[index].images.isNotEmpty
                           ? products[index].images[0]

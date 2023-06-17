@@ -33,7 +33,7 @@ class HelpCenter extends StatelessWidget {
           IconButton(
             onPressed: () {},
             icon: const Icon(
-              Icons.logout,
+              Icons.info_outline_rounded,
               color: kPrimaryColor,
             ),
           ),

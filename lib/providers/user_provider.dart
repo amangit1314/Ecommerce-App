@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:soni_store_app/models/models.dart' as models;
 import 'package:soni_store_app/providers/auth_provider.dart';
@@ -100,14 +99,12 @@ class UserProvider with ChangeNotifier {
     return uid;
   }
 
-  Future<UserCredential> authenticateWithGoogle() async {
+  Future<String> authenticateWithGoogle() async {
     final AuthProvider authDataProvider = AuthProvider();
-    final UserCredential credential =
-        await authDataProvider.authenticateWithGoogle();
-
+    final result = await authDataProvider.authenticateWithGoogle();
     await getCurrentUserDetails();
     notifyListeners();
-    return credential;
+    return result;
   }
 
   Future<void> signOut() async {

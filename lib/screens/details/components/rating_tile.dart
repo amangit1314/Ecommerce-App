@@ -3,22 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../utils/size_config.dart';
 
-class RatingTile extends StatefulWidget {
+class RatingTile extends StatelessWidget {
   final String rating;
+
   const RatingTile({Key? key, required this.rating}) : super(key: key);
-
-  @override
-  State<RatingTile> createState() => _RatingTileState();
-}
-
-class _RatingTileState extends State<RatingTile> {
-  late double averageRating;
-
-  @override
-  void initState() {
-    super.initState();
-    averageRating = double.parse(widget.rating);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,32 +23,27 @@ class _RatingTileState extends State<RatingTile> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                height: 30,
-                alignment: Alignment.centerLeft,
-                child: Text.rich(
-                  TextSpan(
-                    text: averageRating.toStringAsFixed(1),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    children: const [
-                      TextSpan(
-                        text: '/5',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+              Text.rich(
+                TextSpan(
+                  text: rating,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
+                  children: const [
+                    TextSpan(
+                      text: '/5',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              const SizedBox(height: 12),
               const Text(
                 'Based on 250 reviews',
                 style: TextStyle(
@@ -70,86 +53,117 @@ class _RatingTileState extends State<RatingTile> {
                 ),
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  for (int i = 1; i <= 5; i++)
-                    FaIcon(
-                      FontAwesomeIcons.solidStar,
-                      color: i <= averageRating ? Colors.amber : Colors.grey,
-                      size: 18,
-                    ),
-                  if (averageRating.floor() < averageRating)
-                    const FaIcon(
-                      FontAwesomeIcons.solidStarHalf,
-                      color: Colors.amber,
-                      size: 18,
-                    ),
-                ],
+              buildStarRatings(),
+            ],
+          ),
+          buildRatingBars(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildStarRatings() {
+    return Row(
+      children: const [
+        FaIcon(
+          FontAwesomeIcons.solidStar,
+          color: Colors.amber,
+          size: 18,
+        ),
+        FaIcon(
+          FontAwesomeIcons.solidStar,
+          color: Colors.amber,
+          size: 18,
+        ),
+        FaIcon(
+          FontAwesomeIcons.solidStar,
+          color: Colors.amber,
+          size: 18,
+        ),
+        FaIcon(
+          FontAwesomeIcons.solidStar,
+          color: Colors.amber,
+          size: 18,
+        ),
+        FaIcon(
+          FontAwesomeIcons.solidStarHalf,
+          color: Colors.amber,
+          size: 18,
+        ),
+      ],
+    );
+  }
+
+  Widget buildRatingBars() {
+    return Column(
+      children: [
+        buildRatingBar('5', 50),
+        const SizedBox(height: 5),
+        buildRatingBar('4', 35),
+        const SizedBox(height: 5),
+        buildRatingBar('3', 0),
+        const SizedBox(height: 5),
+        buildRatingBar('2', 5),
+        const SizedBox(height: 5),
+        buildRatingBar('1', 5),
+      ],
+    );
+  }
+
+  Widget buildRatingBar(String stars, double filledPercentage) {
+    return Row(
+      children: [
+        buildRatingText(stars),
+        SizedBox(width: getProportionateScreenWidth(10)),
+        Container(
+          height: 5,
+          width: getProportionateScreenWidth(100),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade700,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 5,
+                width: getProportionateScreenWidth(filledPercentage),
+                decoration: const BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                ),
               ),
             ],
           ),
-          Column(
-            children: [
-              for (int i = 5; i >= 1; i--)
-                Row(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          i.toString(),
-                          style: const TextStyle(
-                            letterSpacing: 5,
-                            fontSize: 8,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const Text(
-                          'Star',
-                          style: TextStyle(
-                            fontSize: 8,
-                            letterSpacing: 1.2,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: getProportionateScreenWidth(10)),
-                    Container(
-                      height: 5,
-                      width: getProportionateScreenWidth(100),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade700,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                            height: 5,
-                            width: getProportionateScreenWidth(
-                              i <= averageRating ? 100 : 0,
-                            ),
-                            decoration: const BoxDecoration(
-                              color: Colors.amber,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              const SizedBox(height: 5),
-            ],
+        ),
+      ],
+    );
+  }
+
+  Widget buildRatingText(String text) {
+    return Row(
+      children: [
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 8,
+            fontWeight: FontWeight.normal,
+            color: Colors.grey,
+            letterSpacing: 5,
           ),
-        ],
-      ),
+        ),
+        const Text(
+          'Star',
+          style: TextStyle(
+            fontSize: 8,
+            letterSpacing: 1.2,
+            fontWeight: FontWeight.normal,
+            color: Colors.grey,
+          ),
+        ),
+      ],
     );
   }
 }

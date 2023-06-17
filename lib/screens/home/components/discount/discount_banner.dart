@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../resources/data/static_data.dart';
+import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
 import '../../../splash/comonents/dot_indicator.dart';
 
@@ -35,7 +36,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
                 margin: const EdgeInsets.only(bottom: 5),
                 height: 200,
                 decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
+                  color: kPrimaryColor,
                   image: DecorationImage(
                     image: CachedNetworkImageProvider(
                       shoes[index],
@@ -117,19 +118,19 @@ class _DiscountBannerState extends State<DiscountBanner> {
                         ],
                       ),
                     ),
-                    Flexible(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        margin: EdgeInsets.all(getProportionateScreenWidth(10)),
-                        child: Image.network(
-                          shoes[index],
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                    // Flexible(
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.transparent,
+                    //       borderRadius: BorderRadius.circular(20),
+                    //     ),
+                    //     margin: EdgeInsets.all(getProportionateScreenWidth(10)),
+                    //     child: Image.network(
+                    //       shoes[index],
+                    //       fit: BoxFit.cover,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               );

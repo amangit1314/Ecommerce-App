@@ -12,7 +12,7 @@ class FeaturesSection extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        SectionTitle(title: 'Feature\'s', press: () {}),
+        const CategorySectionTitle(title: 'Feature\'s'),
         SizedBox(height: getProportionateScreenHeight(15)),
         Container(
           decoration: BoxDecoration(

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:soni_store_app/models/address.dart';
 import 'package:soni_store_app/providers/auth_provider.dart';
+import 'package:soni_store_app/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../components/default_button.dart';
@@ -113,27 +114,43 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildTextFormField(
-                    controller: addressTypeController,
-                    hintText: 'Enter address type',
-                    icon: FontAwesomeIcons.houseCircleCheck,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 7.5),
+                    child: buildTextFormField(
+                      controller: addressTypeController,
+                      hintText: 'Enter address type',
+                      icon: FontAwesomeIcons.houseCircleCheck,
+                    ),
                   ),
-                  buildTextFormField(
-                    controller: addressController,
-                    hintText: 'Enter your address',
-                    icon: FontAwesomeIcons.addressBook,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 7.5),
+                    child: buildTextFormField(
+                      controller: addressController,
+                      hintText: 'Enter your address',
+                      icon: FontAwesomeIcons.addressBook,
+                    ),
                   ),
-                  buildTextFormField(
-                    controller: phoneController,
-                    hintText: 'Enter your phone number',
-                    icon: FontAwesomeIcons.phone,
-                    keyboardType: TextInputType.phone,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 7.5),
+                    child: buildTextFormField(
+                      controller: phoneController,
+                      hintText: 'Enter your phone number',
+                      icon: FontAwesomeIcons.phone,
+                      keyboardType: TextInputType.phone,
+                    ),
                   ),
-                  buildTextFormField(
-                    controller: pinCodeController,
-                    hintText: 'Enter your pin code',
-                    icon: FontAwesomeIcons.locationPin,
-                    keyboardType: TextInputType.phone,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 7.5),
+                    child: buildTextFormField(
+                      controller: pinCodeController,
+                      hintText: 'Enter your pin code',
+                      icon: FontAwesomeIcons.locationPin,
+                      keyboardType: TextInputType.phone,
+                    ),
                   ),
                 ],
               ),
@@ -220,6 +237,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
         suffixIcon: Icon(
           icon,
           size: 16,
+          color: kPrimaryColor,
         ),
         hintStyle: const TextStyle(fontSize: 12),
       ),

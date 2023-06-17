@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -9,29 +11,25 @@ import 'package:soni_store_app/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../components/default_button.dart';
-import '../../../helper/locator.dart';
 import '../../../models/models.dart';
 import '../../../providers/address_provider.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/size_config.dart';
+import '../../home/home_screen.dart';
+import '../../loading/shimmer_box.dart';
 
-class CheckoutCard extends StatefulWidget {
+class CheckoutCard extends StatelessWidget {
   const CheckoutCard({Key? key}) : super(key: key);
 
   @override
-  State<CheckoutCard> createState() => _CheckoutCardState();
-}
-
-class _CheckoutCardState extends State<CheckoutCard> {
-  Map<String, dynamic>? paymentIntent;
-  final AddressProvider addressProvider = locator<AddressProvider>();
-  final CartProvider cartProvider = locator<CartProvider>();
-  final AuthProvider authProvider = locator<AuthProvider>();
-  final OrderProvider orderProvider = locator<OrderProvider>();
-  final ProductProvider productProvider = locator<ProductProvider>();
-
-  @override
   Widget build(BuildContext context) {
+    final AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    final OrderProvider orderProvider =
+        Provider.of<OrderProvider>(context, listen: false);
+    final ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: getProportionateScreenWidth(15),
@@ -39,9 +37,9 @@ class _CheckoutCardState extends State<CheckoutCard> {
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(getProportionateScreenWidth(30)),
+          topRight: Radius.circular(getProportionateScreenWidth(30)),
         ),
         boxShadow: [
           BoxShadow(
@@ -69,7 +67,10 @@ class _CheckoutCardState extends State<CheckoutCard> {
                   child: SvgPicture.asset("assets/icons/receipt.svg"),
                 ),
                 const Spacer(),
-                const Text("Add voucher code"),
+                GestureDetector(
+                  child: const Text("Add voucher code"),
+                  onTap: () {},
+                ),
                 const SizedBox(width: 10),
                 const Icon(
                   Icons.arrow_forward_ios,
@@ -79,46 +80,74 @@ class _CheckoutCardState extends State<CheckoutCard> {
               ],
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
-            Consumer4<CartProvider, AuthProvider, OrderProvider,
-                ProductProvider>(
-              builder: (context, cartProvider, authProvider, orderProvider,
-                  productProvider, _) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        text: "Total:\n",
+            Consumer<CartProvider>(
+              builder: (context, cartProvider, _) {
+                return FutureBuilder<double>(
+                    future: cartProvider.totalPriceFunc(authProvider.user.uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // Loading state code
+
+                        return Center(
+                          child: SizedBox(
+                            height: getProportionateScreenHeight(120),
+                            width: MediaQuery.of(context).size.width * .9,
+                            child: ShimmerBox(
+                              child: SizedBox(
+                                height: getProportionateScreenHeight(100),
+                                width: getProportionateScreenWidth(100),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (snapshot.hasError) {
+                        // Error state code
+                        return const Center(
+                            child: Text('Error fetching quantity'));
+                      }
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextSpan(
-                            text: "₹ ${cartProvider.totalPrice}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: kPrimaryColor,
-                              fontWeight: FontWeight.w600,
+                          Text.rich(
+                            TextSpan(
+                              text: "Total:\n",
+                              children: [
+                                TextSpan(
+                                  text: "₹ ${snapshot.data ?? 0.0}",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: getProportionateScreenWidth(190),
+                            child: DefaultButton(
+                              btnColor: kPrimaryColor,
+                              txtColor: Colors.white,
+                              text: "Check Out",
+                              press: cartProvider.cartItems.isNotEmpty
+                                  ? () {
+                                      showPaymentDialog(
+                                        context,
+                                        authProvider.user.uid,
+                                        orderProvider,
+                                        productProvider,
+                                        cartProvider,
+                                      );
+                                    }
+                                  : () {},
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: getProportionateScreenWidth(190),
-                      child: DefaultButton(
-                        btnColor: kPrimaryColor,
-                        txtColor: Colors.white,
-                        text: "Check Out",
-                        press: () {
-                          showPaymentDialog(
-                            context,
-                            authProvider.user.uid,
-                            orderProvider,
-                            productProvider,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                );
+                      );
+                    });
               },
             ),
           ],
@@ -158,6 +187,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
     String userId,
     OrderProvider orderProvider,
     ProductProvider productProvider,
+    CartProvider cartProvider,
   ) async {
     bool success = false;
     String orderStatus = 'Processing';
@@ -169,9 +199,6 @@ class _CheckoutCardState extends State<CheckoutCard> {
 
     String orderId = generateOrderId();
 
-    // Get the cart items from the cart provider
-    CartProvider cartProvider =
-        Provider.of<CartProvider>(context, listen: false);
     AddressProvider addressProvider =
         Provider.of<AddressProvider>(context, listen: false);
     List<Product> cartItems = cartProvider.cartItems;
@@ -210,18 +237,22 @@ class _CheckoutCardState extends State<CheckoutCard> {
     log('---------------');
 
     Order order = Order(
+      orderId: orderId,
       size: productProvider.selectedSize,
-      color: productProvider.selectedColor,
+      color: productProvider.selectedColor.value
+          .toRadixString(16)
+          .padLeft(8, '0')
+          .toString(),
       addressProvider.selectedAddress.phone,
-      address: addressProvider.selectedAddress.address +
-          addressProvider.selectedAddress.pincode,
+      address:
+          '${addressProvider.selectedAddress.address} ${addressProvider.selectedAddress.pincode}',
       orderedDate: DateTime.now().toString(),
       uid: userId,
       orderStatus: orderStatus,
       amount: totalPrice,
       productId: 'cart_order_${generateOrderId().substring(0, 8)}',
       productImage: cartItems.isNotEmpty ? cartItems.first.images.first : '',
-      quantity: orderItems.length,
+      quantity: cartItems.length,
     );
 
     try {
@@ -236,9 +267,8 @@ class _CheckoutCardState extends State<CheckoutCard> {
               child: Text(
                 'Checkout With',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
                       color: kPrimaryColor,
+                      fontWeight: FontWeight.w600,
                     ),
               ),
             ),
@@ -289,11 +319,11 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     child: Center(
                       child: Text(
                         'Cash on Delivery',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                       ),
                     ),
                   ),
@@ -323,11 +353,11 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     child: Center(
                       child: Text(
                         'Online Payment',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                       ),
                     ),
                   ),
@@ -339,11 +369,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                   child: Container(
                     width: double.infinity,
                     height: getProportionateScreenHeight(50),
-                    margin: const EdgeInsets.only(
-                      top: 15,
-                      left: 15,
-                      right: 15,
-                    ),
+                    margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
                     decoration: BoxDecoration(
                       color: kPrimaryColor,
                       borderRadius: BorderRadius.circular(20),
@@ -351,11 +377,11 @@ class _CheckoutCardState extends State<CheckoutCard> {
                     child: Center(
                       child: Text(
                         'Cancel',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                       ),
                     ),
                   ),
@@ -378,6 +404,10 @@ class _CheckoutCardState extends State<CheckoutCard> {
         snackPosition: SnackPosition.BOTTOM,
         colorText: Colors.white,
       );
+      cartProvider.clearCartItems(userId);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          (route) => false);
     } else {
       Get.snackbar(
         'Error',

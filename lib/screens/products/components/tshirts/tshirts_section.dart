@@ -7,6 +7,7 @@ import '../../../../models/product.dart';
 import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
 import '../../../loading/shimmer_box.dart';
+import '../../../showMore/show_more_screen.dart';
 
 class TshirtsSection extends StatefulWidget {
   const TshirtsSection({
@@ -40,8 +41,20 @@ class _TshirtsSectionState extends State<TshirtsSection> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(title: 'Tshirt\'s', press: () {}),
+        SectionTitle(
+          title: 'Tshirt\'s',
+          press: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const ShowMore(
+                  keyword: 'tshirts',
+                ),
+              ),
+            );
+          },
+        ),
         SizedBox(height: getProportionateScreenHeight(10)),
         SizedBox(
           height: 190,
@@ -85,7 +98,8 @@ class _TshirtsSectionState extends State<TshirtsSection> {
                       );
                     },
                     child: ProductSearchScreenItemCard(
-                      width: 170,
+                      category: 'tshirts',
+                      width: 150,
                       productName: products[index].title,
                       productImage: products[index].images.isNotEmpty
                           ? products[index].images[0]

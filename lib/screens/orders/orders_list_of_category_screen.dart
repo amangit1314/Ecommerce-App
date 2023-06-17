@@ -30,11 +30,22 @@ class OrdersListOfSelectedCategoryScreen extends StatefulWidget {
 
 class _OrdersListOfSelectedCategoryScreenState
     extends State<OrdersListOfSelectedCategoryScreen> {
-  List<models.Product> products = []; // List to store fetched products
+  late AuthProvider authProvider;
+  late Stream<QuerySnapshot> orderStream;
+
+  @override
+  void initState() {
+    super.initState();
+    authProvider = context.read<AuthProvider>();
+    orderStream = FirebaseFirestore.instance
+        .collection('orders')
+        .where('uid', isEqualTo: authProvider.user.uid)
+        .where('orderStatus', isEqualTo: widget.statusName)
+        .snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = context.read<AuthProvider>();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -58,16 +69,12 @@ class _OrdersListOfSelectedCategoryScreenState
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(getProportionateScreenHeight(15)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('orders')
-                    .where('uid', isEqualTo: authProvider.user.uid)
-                    .where('orderStatus', isEqualTo: widget.statusName)
-                    .snapshots(),
+                stream: orderStream,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
@@ -76,7 +83,7 @@ class _OrdersListOfSelectedCategoryScreenState
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: SizedBox(
-                        height: 120,
+                        height: getProportionateScreenHeight(120),
                         width: MediaQuery.of(context).size.width * .9,
                         child: ShimmerBox(
                           child: SizedBox(
@@ -88,29 +95,28 @@ class _OrdersListOfSelectedCategoryScreenState
                     );
                   }
 
-                  List<DocumentSnapshot> orderDocuments = snapshot.data!.docs;
-                  int orderCount = orderDocuments.length;
+                  final orderDocuments = snapshot.data!.docs;
+                  final orderCount = orderDocuments.length;
 
                   return Expanded(
                     child: ListView.separated(
                       itemCount: orderCount,
                       separatorBuilder: (context, index) {
-                        return const SizedBox(height: 8);
+                        return SizedBox(
+                            height: getProportionateScreenHeight(8));
                       },
                       itemBuilder: (context, index) {
-                        DocumentSnapshot orderSnapshot = orderDocuments[index];
-                        Map<String, dynamic> orderData =
+                        final orderSnapshot = orderDocuments[index];
+                        final orderData =
                             orderSnapshot.data() as Map<String, dynamic>;
-                        final Future<String?> productName =
-                            getProductName(orderData['productId']);
                         return FutureBuilder<String?>(
-                          future: productName,
+                          future: getProductName(orderData['productId']),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return Center(
                                 child: SizedBox(
-                                  height: 120,
+                                  height: getProportionateScreenHeight(120),
                                   width: MediaQuery.of(context).size.width * .9,
                                   child: ShimmerBox(
                                     child: SizedBox(
@@ -124,7 +130,7 @@ class _OrdersListOfSelectedCategoryScreenState
                             if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             }
-                            final String? productName = snapshot.data;
+                            final productName = snapshot.data;
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -132,6 +138,7 @@ class _OrdersListOfSelectedCategoryScreenState
                                   MaterialPageRoute(
                                     builder: (_) => OrderItemDetailScreen(
                                       order: models.Order(
+                                        orderId: orderData['orderId'],
                                         authProvider.user.number ??
                                             "+91 7023953453",
                                         productId: orderData['productId'],
@@ -141,42 +148,154 @@ class _OrdersListOfSelectedCategoryScreenState
                                         amount: orderData['amount'],
                                         address: orderData['address'],
                                         orderStatus: orderData['orderStatus'],
-                                        color: Colors.black,
-                                        size: "XL",
+                                        color: Colors.black.value
+                                            .toRadixString(16)
+                                            .padLeft(8, '0')
+                                            .toString(),
+                                        size: orderData['size'] == ''
+                                            ? orderData['size']
+                                            : "XL",
                                       ),
                                     ),
                                   ),
                                 );
                               },
                               child: Dismissible(
-                                key: Key(orderDocuments[index].id),
-                                // direction: DismissDirection.endToStart,
+                                key: Key(orderData['orderId']),
                                 onDismissed: (direction) async {
-                                  if (orderData['orderStatus'] != 'Delivered' ||
-                                      orderData['orderStatus'] != 'Cancled' ||
-                                      orderData['orderStatus'] != 'Returned') {
-                                    if (direction ==
-                                        DismissDirection.endToStart) {
-                                      // mark orderStatus as Cancelled
-                                      await FirebaseFirestore.instance
-                                          .collection('orders')
-                                          .doc(orderDocuments[index].id)
-                                          .update({
-                                        'orderStatus': 'Delivered',
-                                      });
-                                      log('Delivered');
-                                    }
-                                    if (direction ==
-                                        DismissDirection.startToEnd) {
-                                      // mark ordeStatus as Delivered
-                                      await FirebaseFirestore.instance
-                                          .collection('orders')
-                                          .doc(orderDocuments[index].id)
-                                          .update({
-                                        'orderStatus': 'Cancled',
-                                      });
-                                      log('Cancled');
-                                    }
+                                  if (direction ==
+                                      DismissDirection.endToStart) {
+                                    await FirebaseFirestore.instance
+                                        .collection('orders')
+                                        .doc(orderDocuments[index].id)
+                                        .update({
+                                      'orderStatus': 'Delivered',
+                                    });
+                                    log('Delivered');
+                                  }
+                                  if (direction ==
+                                      DismissDirection.startToEnd) {
+                                    if (!mounted) return;
+                                    await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        String? cancellationReason;
+                                        return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          title: Center(
+                                            child: Text(
+                                              'Cancel Reason 😮 ?',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: kPrimaryColor,
+                                                  ),
+                                            ),
+                                          ),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              RadioListTile<String>(
+                                                title: Text(
+                                                  'Wrong Address',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                                value: 'Wrong Address',
+                                                groupValue: cancellationReason,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    cancellationReason = value;
+                                                  });
+                                                },
+                                              ),
+                                              RadioListTile<String>(
+                                                title: Text(
+                                                  'Change the number',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                                value: 'Reason 2',
+                                                groupValue: cancellationReason,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    cancellationReason = value;
+                                                  });
+                                                },
+                                              ),
+                                              RadioListTile<String>(
+                                                title: Text(
+                                                  'Other Reason',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                                value: 'Reason 3',
+                                                groupValue: cancellationReason,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    cancellationReason = value;
+                                                  });
+                                                },
+                                              ),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection('orders')
+                                                      .doc(orderDocuments[index]
+                                                          .id)
+                                                      .update({
+                                                    'orderStatus': 'Cancled'
+                                                  }).then((value) =>
+                                                          Navigator.pop(
+                                                              context));
+                                                  log('Cancled');
+                                                },
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          50),
+                                                  margin: const EdgeInsets.only(
+                                                    top: 15,
+                                                    left: 15,
+                                                    right: 15,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: kPrimaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Cancel Order',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Colors.white,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
                                   }
                                 },
                                 secondaryBackground: Container(
@@ -242,17 +361,17 @@ class _OrdersListOfSelectedCategoryScreenState
 
   Future<String?> getProductName(String productId) async {
     try {
-      var productDoc = await FirebaseFirestore.instance
+      final productDoc = await FirebaseFirestore.instance
           .collection('products')
           .doc(productId)
           .get();
-      var productData = productDoc.data();
+      final productData = productDoc.data();
       if (productData != null) {
         return productData['title'] as String?;
       }
     } catch (error) {
       log('Failed to get product name: $error');
     }
-    return null; // Return null if the product is not found or if an error occurs.
+    return null;
   }
 }

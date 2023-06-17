@@ -48,7 +48,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 top: 30,
                 left: 15.0,
                 right: 15.0,
-                bottom: 15.0,
+                bottom: 11.0,
               ),
               child: Row(
                 children: [

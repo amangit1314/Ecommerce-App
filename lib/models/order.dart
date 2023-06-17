@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:soni_store_app/utils/constants.dart';
 
 class Order {
-  // final String orderId;
+  final String orderId;
   final String? uid;
   final String productId;
   final String productImage;
@@ -12,7 +11,7 @@ class Order {
   final int quantity;
   final double amount;
   final String number;
-  final Color color;
+  final String color;
   final String address;
   final String orderStatus;
   final String size;
@@ -20,7 +19,7 @@ class Order {
 
   Order(
     this.number, {
-    // required this.orderId,
+    required this.orderId,
     this.uid,
     required this.productId,
     required this.productImage,
@@ -37,7 +36,7 @@ class Order {
   Map<String, dynamic> toMap() {
     return {
       'number': number,
-      // 'orderId': orderId,
+      'orderId': orderId,
       'uid': uid,
       'productId': productId,
       'productImage': productImage,
@@ -54,9 +53,10 @@ class Order {
     return Order(
       map['number'] ?? '+91 1234567890',
       size: map['size'] ?? 'XL',
-      color: map['color'] ?? kPrimaryColor,
+      color: map['color'] ??
+          kPrimaryColor.value.toRadixString(16).padLeft(8, '0').toString(),
       address: map['address'] ?? '',
-      // orderId: map['orderId'] ?? '',
+      orderId: map['orderId'] ?? '',
       uid: map['uid'] ?? '',
       productId: map['productId'] ?? '',
       productImage: map['productImage'] ?? '',

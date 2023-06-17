@@ -7,7 +7,7 @@ class Product {
   final String title, description;
   final List<String> images;
   final List<String> colors;
-  final int price;
+  int price;
   final double rating;
   bool isFavourite, isPopular;
   final List<String> categories;

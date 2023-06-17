@@ -17,7 +17,6 @@ class SignInScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Colors.black87,
                 fontWeight: FontWeight.w600,
-                // 16 size
                 fontSize: 16,
               ),
         ),

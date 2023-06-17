@@ -37,8 +37,8 @@ class _ShowMoreState extends State<PopularShowMore> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Popular Products",
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          "${widget.keyword} Products",
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: kPrimaryColor,
                 fontWeight: FontWeight.w600,
               ),
@@ -47,7 +47,7 @@ class _ShowMoreState extends State<PopularShowMore> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
-            color: Colors.black,
+            color: kPrimaryColor,
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -63,8 +63,6 @@ class _ShowMoreState extends State<PopularShowMore> {
             child: FutureBuilder<List<Product>>(
               future: fetchProductsFromFirestore(),
               builder: (context, snapshot) {
-                final List<Product> products = snapshot.data ?? [];
-
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(color: kPrimaryColor),
@@ -77,8 +75,10 @@ class _ShowMoreState extends State<PopularShowMore> {
                   );
                 }
 
+                final List<Product> products = snapshot.data ?? [];
+
                 return GridView.builder(
-                  // physics: const NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
