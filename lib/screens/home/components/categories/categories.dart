@@ -204,7 +204,7 @@ class CategoryCard extends StatelessWidget {
       onTap: press,
       child: Container(
         margin: EdgeInsets.only(right: getProportionateScreenWidth(15)),
-        width: getProportionateScreenWidth(115),
+        width: getProportionateScreenWidth(120),
         child: Container(
           padding: EdgeInsets.all(getProportionateScreenWidth(15)),
           height: getProportionateScreenWidth(55),

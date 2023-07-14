@@ -196,7 +196,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                 children: [
                   Container(
                     width: getProportionateScreenWidth(widget.width * .4),
-                    height: getProportionateScreenWidth(65),
+                    height: getProportionateScreenWidth(70),
                     decoration: const BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.only(
@@ -248,7 +248,10 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                     child: TextButton(
                       child: const Text(
                         "Checkout",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       onPressed: () {
                         showModalBottomSheet(

@@ -68,7 +68,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(2),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade400,
                             ),
@@ -89,7 +89,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
                                 .bodyMedium!
                                 .copyWith(
                                   height: 1.5,
-                                  fontSize: getProportionateScreenWidth(26),
+                                  fontSize: getProportionateScreenWidth(24),
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -101,12 +101,12 @@ class _DiscountBannerState extends State<DiscountBanner> {
                                 .bodyMedium!
                                 .copyWith(
                                   height: 1,
-                                  fontSize: getProportionateScreenWidth(26),
+                                  fontSize: getProportionateScreenWidth(24),
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                           ),
-                          SizedBox(height: getProportionateScreenHeight(7)),
+                          SizedBox(height: getProportionateScreenHeight(6)),
                           Text(
                             "up to 20% off".toUpperCase(),
                             style: TextStyle(
