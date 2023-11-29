@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:soni_store_app/ecommerce.dart';
 import 'package:soni_store_app/firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'helper/locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   setupLocator();

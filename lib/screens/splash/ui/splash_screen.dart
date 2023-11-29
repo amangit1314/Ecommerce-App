@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/splash/comonents/body.dart';
+
+import 'components/body.dart';
 
 class SplashScreen extends StatelessWidget {
   static String routeName = "/splash";
@@ -10,7 +11,7 @@ class SplashScreen extends StatelessWidget {
     // SizeConfig().init(context);
     return const Scaffold(
       backgroundColor: Colors.white,
-      body: Body(),
+      body: SplashBody(),
     );
   }
 }

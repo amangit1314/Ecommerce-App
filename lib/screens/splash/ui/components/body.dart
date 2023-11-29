@@ -1,35 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/splash/comonents/dot_indicator.dart';
-import 'package:soni_store_app/screens/splash/comonents/splash_content.dart';
+
 import 'package:soni_store_app/utils/size_config.dart';
 
-import '../../../components/default_button.dart';
-import '../../../models/splash.dart';
-import '../../sign_in/sign_in_screen.dart';
+import '../../../../components/default_button.dart';
+import '../../../sign_in/sign_in_screen.dart';
+import '../../data/data.dart';
 
-class Body extends StatefulWidget {
-  const Body({Key? key}) : super(key: key);
+import 'dot_indicator.dart';
+import 'splash_content.dart';
+
+class SplashBody extends StatefulWidget {
+  const SplashBody({Key? key}) : super(key: key);
 
   @override
-  State<Body> createState() => _BodyState();
+  State<SplashBody> createState() => _SplashBodyState();
 }
 
-class _BodyState extends State<Body> {
-  int currentPage = 0;
-  List<Splash> splashData = [
-    Splash(
-        text: "Get Ready to Snap and Shop \n Where Convenience Meets Quality.",
-        image:
-            "https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/illustrationsAndSplash%2Fsplash_1.png?alt=media&token=fd816a87-08da-4349-a64c-7e6571d2c957"),
-    Splash(
-        text: "We help people conect with store \naround Rajasthan India",
-        image:
-            "https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/illustrationsAndSplash%2Fsplash_2.png?alt=media&token=b85a04fa-f2d6-4b43-9ac6-093b008d26e5"),
-    Splash(
-        text: "We show the easy way to shop. \nJust stay at home with us",
-        image:
-            "https://firebasestorage.googleapis.com/v0/b/tokoto-ecommerce-app.appspot.com/o/illustrationsAndSplash%2Fsplash_3.png?alt=media&token=029169aa-1977-4346-85ca-ea96f9d8040e"),
-  ];
+class _SplashBodyState extends State<SplashBody> {
+  // int currentPage = 0;
+  final ValueNotifier<int> currentPageNotifier = ValueNotifier<int>(0);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -43,7 +33,8 @@ class _BodyState extends State<Body> {
               child: PageView.builder(
                 onPageChanged: (value) {
                   setState(() {
-                    currentPage = value;
+                    // currentPage = value;
+                    currentPageNotifier.value = value;
                   });
                 },
                 itemCount: splashData.length,
@@ -67,7 +58,8 @@ class _BodyState extends State<Body> {
                       children: List.generate(
                         splashData.length,
                         (index) => DotIndicator(
-                          currentPage: currentPage,
+                          // currentPage: currentPage,
+                          currentPage: currentPageNotifier.value,
                           index: index,
                         ),
                       ),

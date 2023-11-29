@@ -4,7 +4,7 @@ import 'package:soni_store_app/screens/profile/components/my_account.dart';
 import 'package:soni_store_app/screens/profile/settings.dart';
 
 import '../../../providers/auth_provider.dart';
-import '../../splash/splash_screen.dart';
+import '../../splash/ui/splash_screen.dart';
 import '../help_center.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -84,14 +84,12 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                   text: "Log Out",
                   icon: "assets/icons/Log out.svg",
                   press: () async {
-                    AuthProvider authProvider =
-                        Provider.of<AuthProvider>(context, listen: false);
+                    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
                     await authProvider.signOut().then(
                       (value) {
                         if (!mounted) return;
                         Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => const SplashScreen()),
+                          MaterialPageRoute(builder: (context) => const SplashScreen()),
                           (route) => false,
                         );
                       },

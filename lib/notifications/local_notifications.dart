@@ -16,10 +16,8 @@ const String featuresCategory = "Features";
 const String fashionCategory = "Fashion";
 
 class LocalNotifications {
-  static final LocalNotifications _localNotifications =
-      LocalNotifications._internal();
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  static final LocalNotifications _localNotifications = LocalNotifications._internal();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   factory LocalNotifications() {
     return _localNotifications;
@@ -32,9 +30,8 @@ class LocalNotifications {
   late InitializationSettings initializationSettings;
 
   Future<void> init(selectNotification) async {
-    var androidSpcImp =
-        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()!;
+    var androidSpcImp = flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!;
     getCheckOrGetNotificationPermission(androidSpcImp);
     androidSpcImp.createNotificationChannel(createAndroidNotificationChannel());
     // log runtime type using log of dart:developer
@@ -46,15 +43,13 @@ class LocalNotifications {
   }
 
   @pragma('vm:entry-point')
-  static void notificationTapBackground(
-      NotificationResponse notificationResponse) {
+  static void notificationTapBackground(NotificationResponse notificationResponse) {
     log('notification(${notificationResponse.id}) action tapped: '
         '${notificationResponse.actionId} with'
         ' payload: ${notificationResponse.payload}');
     if (notificationResponse.input?.isNotEmpty ?? false) {
       // ignore: avoid_print
-      print(
-          'notification action tapped with input: ${notificationResponse.input}');
+      print('notification action tapped with input: ${notificationResponse.input}');
     }
   }
 
@@ -99,8 +94,7 @@ class LocalNotifications {
   }
 
   void showNotification(RecieveNotification message,
-      {NotificationChannel notificationChannel =
-          const NotificationChannel.general()}) async {
+      {NotificationChannel notificationChannel = const NotificationChannel.general()}) async {
     /***
        * 
        * Logger
@@ -116,8 +110,7 @@ class LocalNotifications {
     ***/
 
     NotificationDetails? notificationDetails =
-        await getPlatformChannelSpecifics(
-            message, '', 'thread_id', notificationChannel);
+        await getPlatformChannelSpecifics(message, '', 'thread_id', notificationChannel);
 
     await flutterLocalNotificationsPlugin.show(
       message.id.hashCode,
@@ -141,8 +134,7 @@ class LocalNotifications {
         bigPicture = await _base64EncodedImage(message.imageUrl ?? '');
       }
 
-      BigPictureStyleInformation bigPictureStyleInformation =
-          BigPictureStyleInformation(
+      BigPictureStyleInformation bigPictureStyleInformation = BigPictureStyleInformation(
         ByteArrayAndroidBitmap.fromBase64String(bigPicture),
       );
 
@@ -159,8 +151,8 @@ class LocalNotifications {
     return null;
   }
 
-  DarwinNotificationDetails _darwinNotificationDetails(String iosSubTitle,
-      String threadIdentifier, NotificationChannel channel) {
+  DarwinNotificationDetails _darwinNotificationDetails(
+      String iosSubTitle, String threadIdentifier, NotificationChannel channel) {
     return const DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
@@ -169,8 +161,7 @@ class LocalNotifications {
   }
 
   Future<String> _base64EncodedImage(String url) async {
-    final response = await Dio().get<List<int>>(url,
-        options: Options(responseType: ResponseType.bytes));
+    final response = await Dio().get<List<int>>(url, options: Options(responseType: ResponseType.bytes));
     final String base64Data = base64Encode(response.data ?? []);
     return base64Data;
   }
@@ -199,12 +190,10 @@ class LocalNotifications {
     await flutterLocalNotificationsPlugin.cancel(payload.hashCode);
   }
 
-  Future<NotificationAppLaunchDetails?>
-      getNotificationAppLaunchDetails() async {
+  Future<NotificationAppLaunchDetails?> getNotificationAppLaunchDetails() async {
     log('className: $runtimeType');
     log('getNotificationAppLaunchDetails');
-    return await flutterLocalNotificationsPlugin
-        .getNotificationAppLaunchDetails();
+    return await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   }
 
   void cancelAllNotifications() async {
@@ -220,25 +209,20 @@ class LocalNotifications {
     log('handleApplicationWasLaunchedFromNotification : ${notificationAppLaunchDetails?.notificationResponse?.payload} --> '
         '${notificationAppLaunchDetails?.didNotificationLaunchApp}');
 
-    if (notificationAppLaunchDetails != null &&
-        notificationAppLaunchDetails.didNotificationLaunchApp) {
+    if (notificationAppLaunchDetails != null && notificationAppLaunchDetails.didNotificationLaunchApp) {
       log('className: $runtimeType');
       log('handleApplicationWasLaunchedFromNotification cancelling');
-      cancelNotification(
-          notificationAppLaunchDetails.notificationResponse!.payload!);
+      cancelNotification(notificationAppLaunchDetails.notificationResponse!.payload!);
     }
   }
 
-  getCheckOrGetNotificationPermission(
-      AndroidFlutterLocalNotificationsPlugin androidSpcImp) async {
-    bool? notificationPermission =
-        await androidSpcImp.areNotificationsEnabled();
-    if (notificationPermission!) androidSpcImp.requestPermission();
+  getCheckOrGetNotificationPermission(AndroidFlutterLocalNotificationsPlugin androidSpcImp) async {
+    bool? notificationPermission = await androidSpcImp.areNotificationsEnabled();
+    if (notificationPermission!) androidSpcImp.requestNotificationsPermission();
   }
 
   initizePlatformSettings() {
-    initializationSettingsAndroid =
-        const AndroidInitializationSettings('res_notification_tempo_icon');
+    initializationSettingsAndroid = const AndroidInitializationSettings('res_notification_tempo_icon');
     iosInitializationSettings = const DarwinInitializationSettings();
     initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
@@ -265,8 +249,7 @@ class NotificationChannel {
   const NotificationChannel.general()
       : channelId = '123123',
         channelName = 'Tempo General Notification',
-        channelDescription =
-            'Notifications when tempo wants to communicate with you',
+        channelDescription = 'Notifications when tempo wants to communicate with you',
         importance = Importance.defaultImportance,
         category = generalCategory,
         priority = Priority.defaultPriority;

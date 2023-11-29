@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../resources/data/static_data.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/size_config.dart';
-import '../../../splash/comonents/dot_indicator.dart';
+import '../../../splash/ui/components/dot_indicator.dart';
 
 class DiscountBanner extends StatefulWidget {
   const DiscountBanner({Key? key}) : super(key: key);
@@ -84,10 +84,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
                           SizedBox(height: getProportionateScreenHeight(7)),
                           Text(
                             "Summer".toUpperCase(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   height: 1.5,
                                   fontSize: getProportionateScreenWidth(24),
                                   fontWeight: FontWeight.bold,
@@ -96,10 +93,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
                           ),
                           Text(
                             "Sale".toUpperCase(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   height: 1,
                                   fontSize: getProportionateScreenWidth(24),
                                   fontWeight: FontWeight.bold,
