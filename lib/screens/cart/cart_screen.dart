@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/cart_provider.dart';
-import 'package:soni_store_app/screens/cart/components/body.dart';
-import 'package:soni_store_app/screens/cart/components/check_out_cart.dart';
 
+import '../../providers/cart_provider.dart';
 import '../../utils/constants.dart';
+import 'components/body.dart';
+import 'components/check_out_cart.dart';
 
 class CartScreen extends StatelessWidget {
   static String routeName = "/cart";

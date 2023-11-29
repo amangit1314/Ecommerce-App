@@ -5,12 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:soni_store_app/components/custom_bottom_nav_bar.dart';
-import 'package:soni_store_app/screens/home/components/body.dart';
 
+import '../../components/custom_bottom_nav_bar.dart';
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
 import '../support_chat/support_chat.dart';
+import 'components/body.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -47,8 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       debugPrint('User granted permission');
-    } else if (settings.authorizationStatus ==
-        AuthorizationStatus.provisional) {
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
       debugPrint('User granted provisional permission');
     } else {
       debugPrint('User declined or has not accepted permission');
@@ -70,10 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void saveToken(String token) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .set({'token': token}, SetOptions(merge: true));
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({'token': token}, SetOptions(merge: true));
 
     showLocalNotification(
       '',
@@ -89,12 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initInfo() async {
     try {
       // Initialize Flutter Local Notifications
-      const AndroidInitializationSettings androidInitialize =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
-      const InitializationSettings initializationSettings =
-          InitializationSettings(android: androidInitialize);
-      await FlutterLocalNotificationsPlugin()
-          .initialize(initializationSettings);
+      const AndroidInitializationSettings androidInitialize = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const InitializationSettings initializationSettings = InitializationSettings(android: androidInitialize);
+      await FlutterLocalNotificationsPlugin().initialize(initializationSettings);
 
       // Retrieve Firebase Messaging token
       final FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -108,8 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Request permission to display notifications (required for iOS)
       await messaging.requestPermission();
-      final NotificationSettings settings =
-          await messaging.getNotificationSettings();
+      final NotificationSettings settings = await messaging.getNotificationSettings();
       log('Notification Settings: ${settings.authorizationStatus}');
 
       // Subscribe to a topic for receiving push notifications
@@ -122,8 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
         log('onMessage: ${message.notification?.title}/${message.notification?.body}');
         log('....................................');
 
-        BigTextStyleInformation bigTextStyleInformation =
-            BigTextStyleInformation(
+        BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
           message.notification!.body.toString(),
           htmlFormatBigText: true,
           contentTitle: message.notification?.title,
@@ -140,10 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void showLocalNotification(String? title, String? body,
-      BigTextStyleInformation? bigTextStyleInformation) {
-    AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
+  void showLocalNotification(String? title, String? body, BigTextStyleInformation? bigTextStyleInformation) {
+    AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'channel_id',
       'channel_name',
       channelDescription: 'channel_description',
@@ -153,10 +142,8 @@ class _HomeScreenState extends State<HomeScreen> {
       playSound: true,
       styleInformation: bigTextStyleInformation,
     );
-    NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    FlutterLocalNotificationsPlugin()
-        .show(0, title, body, platformChannelSpecifics);
+    NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+    FlutterLocalNotificationsPlugin().show(0, title, body, platformChannelSpecifics);
   }
 
   @override
@@ -164,8 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: const Body(),
-      bottomNavigationBar:
-          const CustomBottomNavBar(selectedMenu: MenuState.home),
+      bottomNavigationBar: const CustomBottomNavBar(selectedMenu: MenuState.home),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

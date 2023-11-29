@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/products/components/products_search_screen_item_card.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
@@ -8,6 +7,7 @@ import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
 import '../../../loading/shimmer_box.dart';
 import '../../../showMore/show_more_screen.dart';
+import '../products_search_screen_item_card.dart';
 
 class TshirtsSection extends StatefulWidget {
   const TshirtsSection({
@@ -19,8 +19,7 @@ class TshirtsSection extends StatefulWidget {
 }
 
 class _TshirtsSectionState extends State<TshirtsSection> {
-  final CollectionReference _refProducts =
-      FirebaseFirestore.instance.collection('products');
+  final CollectionReference _refProducts = FirebaseFirestore.instance.collection('products');
 
   Future<List<Product>> fetchProductsFromFirestore() async {
     final List<Product> products = [];
@@ -101,9 +100,7 @@ class _TshirtsSectionState extends State<TshirtsSection> {
                       category: 'tshirts',
                       width: 150,
                       productName: products[index].title,
-                      productImage: products[index].images.isNotEmpty
-                          ? products[index].images[0]
-                          : '',
+                      productImage: products[index].images.isNotEmpty ? products[index].images[0] : '',
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(

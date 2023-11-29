@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/utils/constants.dart';
+import '/utils/constants.dart';
 
 import '../models/models.dart' as models;
 
@@ -62,8 +62,7 @@ class ProductProvider with ChangeNotifier {
 
     try {
       final ordersCollection = FirebaseFirestore.instance.collection('orders');
-      final querySnapshot =
-          await ordersCollection.where('uid', isEqualTo: uid).get();
+      final querySnapshot = await ordersCollection.where('uid', isEqualTo: uid).get();
 
       if (querySnapshot.docs.isNotEmpty) {
         final orderDoc = querySnapshot.docs.first;
@@ -89,8 +88,7 @@ class ProductProvider with ChangeNotifier {
 
     try {
       final ordersCollection = FirebaseFirestore.instance.collection('orders');
-      final querySnapshot =
-          await ordersCollection.where('uid', isEqualTo: uid).get();
+      final querySnapshot = await ordersCollection.where('uid', isEqualTo: uid).get();
 
       if (querySnapshot.docs.isNotEmpty) {
         final orderDoc = querySnapshot.docs.first;
@@ -98,8 +96,7 @@ class ProductProvider with ChangeNotifier {
 
         if (orderDoc.data().containsKey('color')) {
           // If the 'color' field already exists, update the color using SetOption({merge: true})
-          await orderRef.set(
-              {'color': selectedColor.toString()}, SetOptions(merge: true));
+          await orderRef.set({'color': selectedColor.toString()}, SetOptions(merge: true));
         } else {
           // If the 'color' field doesn't exist, create a new 'color' field in the order
           await orderRef.update({'color': selectedColor.toString()});

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/models/models.dart' as models;
-import 'package:soni_store_app/providers/providers.dart';
-import 'package:soni_store_app/screens/cart/components/cart_card.dart';
-import 'package:soni_store_app/utils/size_config.dart';
+import '/models/models.dart' as models;
 
+import '../../../providers/providers.dart';
+import '../../../utils/size_config.dart';
 import '../../loading/shimmer_box.dart';
+import 'cart_card.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -75,8 +75,7 @@ class _BodyState extends State<Body> {
                   uniqueCartItems.add(cartItem);
                   cartItemQuantities.add(1);
                 } else {
-                  final index = uniqueCartItems
-                      .indexWhere((item) => item.title == cartItem.title);
+                  final index = uniqueCartItems.indexWhere((item) => item.title == cartItem.title);
                   cartItemQuantities[index] += 1;
                 }
               }
@@ -89,8 +88,7 @@ class _BodyState extends State<Body> {
                 itemBuilder: (context, index) {
                   final cartItem = uniqueCartItems[index];
                   return FutureBuilder<int>(
-                    future: cartProvider.cartItemQuantity(
-                        cartItem, authProvider.user.uid),
+                    future: cartProvider.cartItemQuantity(cartItem, authProvider.user.uid),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         // Loading state code
@@ -111,8 +109,7 @@ class _BodyState extends State<Body> {
 
                       if (snapshot.hasError) {
                         // Error state code
-                        return const Center(
-                            child: Text('Error fetching quantity'));
+                        return const Center(child: Text('Error fetching quantity'));
                       }
 
                       final quantity = snapshot.data ?? 0;
@@ -121,11 +118,9 @@ class _BodyState extends State<Body> {
                         key: Key(cartItem.id),
                         direction: DismissDirection.endToStart,
                         onDismissed: (direction) async {
-                          await cartProvider.removeFromCart(
-                              cartItem, authProvider.user.uid);
+                          await cartProvider.removeFromCart(cartItem, authProvider.user.uid);
                           setState(() {
-                            cartItems.removeWhere(
-                                (item) => item.title == cartItem.title);
+                            cartItems.removeWhere((item) => item.title == cartItem.title);
                             uniqueCartItems.removeAt(index);
                             cartItemQuantities.removeAt(index);
                           });
@@ -152,10 +147,8 @@ class _BodyState extends State<Body> {
                         child: CartCard(
                           quantity: quantity,
                           cart: cartItem,
-                          onDecrease: () => cartProvider.decreaseQuantity(
-                              cartItem, authProvider.user.uid),
-                          onIncrease: () => cartProvider.increaseQuantity(
-                              cartItem, authProvider.user.uid),
+                          onDecrease: () => cartProvider.decreaseQuantity(cartItem, authProvider.user.uid),
+                          onIncrease: () => cartProvider.increaseQuantity(cartItem, authProvider.user.uid),
                         ),
                       );
                     },

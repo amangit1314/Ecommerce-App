@@ -3,13 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/cart_provider.dart';
-import 'package:soni_store_app/screens/details/components/product_details_sheet.dart';
 
 import '../../../models/product.dart';
-import '../../../providers/auth_provider.dart';
+import '../../../providers/providers.dart';
 import '../../../utils/size_config.dart';
 import '../address/shipping_address_sheet.dart';
+import 'product_details_sheet.dart';
 
 class ProductDescription extends StatefulWidget {
   const ProductDescription({
@@ -27,8 +26,7 @@ class ProductDescription extends StatefulWidget {
   State<ProductDescription> createState() => _ProductDescriptionState();
 }
 
-class _ProductDescriptionState extends State<ProductDescription>
-    with SingleTickerProviderStateMixin {
+class _ProductDescriptionState extends State<ProductDescription> with SingleTickerProviderStateMixin {
   late AnimationController bottomSheetAnimationController;
   bool isCartButtonActive = false;
 
@@ -113,8 +111,7 @@ class _ProductDescriptionState extends State<ProductDescription>
 
                     if (isCartButtonActive) {
                       // Remove item from cart
-                      await cartProvider.removeFromCart(
-                          widget.product, authProvider.user.uid);
+                      await cartProvider.removeFromCart(widget.product, authProvider.user.uid);
                       setState(() {
                         isCartButtonActive = false;
                         widget.product.isFavourite = false;
@@ -122,8 +119,7 @@ class _ProductDescriptionState extends State<ProductDescription>
                       log('Removed from cart, marked inactive');
                     } else {
                       // Check if item already exists in cart
-                      bool itemExists =
-                          cartProvider.isItemInCart(widget.product);
+                      bool itemExists = cartProvider.isItemInCart(widget.product);
 
                       // if (itemExists) {
                       //   cartProvider
@@ -135,16 +131,14 @@ class _ProductDescriptionState extends State<ProductDescription>
                       //   log('Increased quantity in cart, marked active');
                       // }
                       if (itemExists) {
-                        await cartProvider.removeFromCart(
-                            widget.product, authProvider.user.uid);
+                        await cartProvider.removeFromCart(widget.product, authProvider.user.uid);
                         setState(() {
                           isCartButtonActive = false;
                           widget.product.isFavourite = false;
                         });
                         log('Removed from cart, marked inactive');
                       } else {
-                        await cartProvider.addToCart(
-                            widget.product, authProvider.user.uid, 1);
+                        await cartProvider.addToCart(widget.product, authProvider.user.uid, 1);
                         setState(() {
                           isCartButtonActive = true;
                           widget.product.isFavourite = true;
@@ -157,9 +151,7 @@ class _ProductDescriptionState extends State<ProductDescription>
                     padding: EdgeInsets.all(getProportionateScreenWidth(15)),
                     width: getProportionateScreenWidth(64),
                     decoration: BoxDecoration(
-                      color: widget.product.isFavourite
-                          ? const Color(0xFFFFE6E6)
-                          : const Color(0xFFF5F6F9),
+                      color: widget.product.isFavourite ? const Color(0xFFFFE6E6) : const Color(0xFFF5F6F9),
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         bottomLeft: Radius.circular(20),
@@ -168,9 +160,7 @@ class _ProductDescriptionState extends State<ProductDescription>
                     child: SvgPicture.asset(
                       "assets/icons/Cart Icon.svg",
                       colorFilter: ColorFilter.mode(
-                        widget.product.isFavourite
-                            ? const Color(0xFFFF4848)
-                            : const Color(0xFFDBDEE4),
+                        widget.product.isFavourite ? const Color(0xFFFF4848) : const Color(0xFFDBDEE4),
                         BlendMode.srcIn,
                       ),
                       height: getProportionateScreenWidth(16),

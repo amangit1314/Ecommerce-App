@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/models/models.dart';
-import 'package:soni_store_app/providers/providers.dart';
-import 'package:soni_store_app/utils/constants.dart';
-import 'package:soni_store_app/utils/size_config.dart';
 
-import 'profile_pic.dart';
+import '../../models/user.dart';
+import '../../providers/providers.dart';
+import '../../utils/constants.dart';
+import '../../utils/size_config.dart';
+import 'components/profile_pic.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -21,8 +21,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
 
     final currentUser = authProvider.user;
 
@@ -111,8 +110,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  TextFormField buildEditUsernameFormField(AuthProvider authProvider,
-      ProfileProvider profileProvider, User currentUser) {
+  TextFormField buildEditUsernameFormField(
+      AuthProvider authProvider, ProfileProvider profileProvider, User currentUser) {
     return TextFormField(
       style: TextStyle(
         fontSize: getProportionateScreenHeight(14),
@@ -139,8 +138,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  TextFormField buildEditEmailFormField(AuthProvider authProvider,
-      ProfileProvider profileProvider, User currentUser) {
+  TextFormField buildEditEmailFormField(AuthProvider authProvider, ProfileProvider profileProvider, User currentUser) {
     return TextFormField(
       style: TextStyle(
         fontSize: getProportionateScreenHeight(14),
@@ -167,8 +165,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  TextFormField buildEditNumberFormField(AuthProvider authProvider,
-      ProfileProvider profileProvider, User currentUser) {
+  TextFormField buildEditNumberFormField(AuthProvider authProvider, ProfileProvider profileProvider, User currentUser) {
     return TextFormField(
       style: TextStyle(
         fontSize: getProportionateScreenHeight(14),

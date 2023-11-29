@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/home/components/discount/discount_banner.dart';
-import 'package:soni_store_app/screens/home/components/home_header.dart';
-import 'package:soni_store_app/screens/home/components/popular/popular_product.dart';
-import 'package:soni_store_app/screens/home/components/recent/recently_viewed.dart';
-import 'package:soni_store_app/screens/home/components/sports/sports.dart';
 
 import '../../../utils/size_config.dart';
 import 'categories/categories.dart';
 import 'commercials/commercials.dart';
+import 'discount/discount_banner.dart';
 import 'fashion/fashion.dart';
 import 'fashion/fashions.dart';
 import 'groceries/grocery_screen.dart';
+import 'home_header.dart';
+import 'popular/popular_product.dart';
+import 'recent/recently_viewed.dart';
+import 'sports/sports.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);

@@ -1,15 +1,15 @@
 import 'dart:developer';
-import 'helper/locator.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:soni_store_app/providers/providers.dart' as providers;
-import 'package:soni_store_app/screens/home/home_screen.dart';
-import 'package:soni_store_app/screens/splash/ui/splash_screen.dart';
-import 'package:soni_store_app/resources/services/auth/auth_service.dart';
+import 'helper/locator.dart';
+import 'screens/home/home_screen.dart';
+import 'screens/splash/ui/splash_screen.dart';
+import 'providers/providers.dart' as providers;
+import 'resources/services/auth/auth_service.dart';
 
 class EcommerceApp extends StatefulWidget {
   const EcommerceApp({Key? key}) : super(key: key);

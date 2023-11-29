@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/profile/components/body.dart';
+import 'components/profile_body.dart';
 
 import '../../components/custom_bottom_nav_bar.dart';
 import '../../utils/constants.dart';
@@ -16,10 +16,7 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Profile",
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(color: kPrimaryColor),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(color: kPrimaryColor),
         ),
         backgroundColor: Colors.white,
         leading: const Icon(
@@ -29,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
       ),
-      body: const Body(),
+      body: const ProfileBody(),
       bottomNavigationBar: const CustomBottomNavBar(
         selectedMenu: MenuState.profile,
       ),

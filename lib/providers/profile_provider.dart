@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:soni_store_app/resources/services/firebase/firestore_methods.dart';
+import '/resources/services/firebase/firestore_methods.dart';
 
 import '../models/user.dart';
 

@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:soni_store_app/models/user.dart' as models;
+import '/models/user.dart' as models;
 
 import '../models/address.dart';
 
@@ -60,17 +60,13 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> getUserDetails(User user) async {
-    final DocumentSnapshot<Map<String, dynamic>> snap =
-        await _firestore.collection('users').doc(user.uid).get();
+    final DocumentSnapshot<Map<String, dynamic>> snap = await _firestore.collection('users').doc(user.uid).get();
     _user = models.User.fromMap(snap);
   }
 
   Future<void> updateUserField(String uid, String field, dynamic value) async {
     try {
-      await _firestore
-          .collection('users')
-          .doc(_user.uid)
-          .update({field: value});
+      await _firestore.collection('users').doc(_user.uid).update({field: value});
       refreshUser();
     } catch (error) {
       log(error.toString());
@@ -160,23 +156,18 @@ class AuthProvider with ChangeNotifier {
   Future<String> authenticateWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser!.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       ) as GoogleAuthCredential;
 
-      UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
+      UserCredential userCredential = await _auth.signInWithCredential(credential);
       final User? user = userCredential.user;
 
       if (_auth.currentUser != null && user != null) {
-        final QuerySnapshot result = await _firestore
-            .collection('users')
-            .where('uid', isEqualTo: user.uid)
-            .get();
+        final QuerySnapshot result = await _firestore.collection('users').where('uid', isEqualTo: user.uid).get();
 
         final List<DocumentSnapshot> documents = result.docs;
 
@@ -223,10 +214,7 @@ class AuthProvider with ChangeNotifier {
 
     _addresses.add(address);
 
-    await _firestore
-        .collection('users')
-        .doc(uid)
-        .update({'addresses': _addresses});
+    await _firestore.collection('users').doc(uid).update({'addresses': _addresses});
 
     refreshUser();
   }

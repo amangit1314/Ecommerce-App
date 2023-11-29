@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/products/default_search_screen_view.dart';
-import 'package:soni_store_app/screens/products/searched_item_screen_view.dart';
 
 import '../../components/custom_bottom_nav_bar.dart';
 import '../../utils/enums.dart';
 import '../../utils/size_config.dart';
 import '../home/components/home_header.dart';
 import 'components/search_box.dart';
+import 'default_search_screen_view.dart';
+import 'searched_item_screen_view.dart';
 
 class ProductSearchPage extends StatefulWidget {
   const ProductSearchPage({Key? key}) : super(key: key);
@@ -38,9 +38,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height -
-              MediaQuery.of(context).padding.top -
-              kToolbarHeight,
+          height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight,
           child: ListView(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,

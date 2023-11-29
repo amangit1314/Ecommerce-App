@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/home/components/popular/popular_show_more.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
 import '../../../../utils/size_config.dart';
 import '../../../loading/shimmer_box.dart';
 import '../fashions_card.dart';
+import 'popular_show_more.dart';
 
 class PopularProducts extends StatefulWidget {
   const PopularProducts({Key? key}) : super(key: key);
@@ -16,14 +16,12 @@ class PopularProducts extends StatefulWidget {
 }
 
 class _PopularProductsState extends State<PopularProducts> {
-  final CollectionReference _refProducts =
-      FirebaseFirestore.instance.collection('products');
+  final CollectionReference _refProducts = FirebaseFirestore.instance.collection('products');
 
   Future<List<Product>> fetchProductsFromFirestore() async {
     final List<Product> products = [];
     // filtering if isPopular
-    final QuerySnapshot snapshot =
-        await _refProducts.where('isPopular', isEqualTo: true).get();
+    final QuerySnapshot snapshot = await _refProducts.where('isPopular', isEqualTo: true).get();
     for (var element in snapshot.docs) {
       products.add(Product.fromMap(element.data() as Map<String, dynamic>));
     }
@@ -96,13 +94,9 @@ class _PopularProductsState extends State<PopularProducts> {
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   return FashionsCard(
-                    image: products[index].images.isNotEmpty
-                        ? products[index].images[0]
-                        : '',
+                    image: products[index].images.isNotEmpty ? products[index].images[0] : '',
                     product: products[index],
-                    category: products[index].categories.isNotEmpty
-                        ? products[index].categories[0]
-                        : '',
+                    category: products[index].categories.isNotEmpty ? products[index].categories[0] : '',
                   );
                 },
               );

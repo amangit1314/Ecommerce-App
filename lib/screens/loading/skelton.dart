@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/utils/size_config.dart';
+
+import '../../utils/size_config.dart';
 
 class Skelton extends StatelessWidget {
   final double? height, width;

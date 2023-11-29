@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:soni_store_app/utils/size_config.dart';
-
 import '../../../../components/default_button.dart';
+import '../../../../utils/size_config.dart';
 import '../../../sign_in/sign_in_screen.dart';
 import '../../data/data.dart';
 

@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/components/no_account_text.dart';
-import 'package:soni_store_app/screens/login_success/login_success_screen.dart';
-import 'package:soni_store_app/screens/sign_in/components/sign_in_form.dart';
 
+import '../../../components/no_account_text.dart';
 import '../../../components/social_card.dart';
 import '../../../providers/providers.dart';
+import '../../login_success/login_success_screen.dart';
+import 'sign_in_form.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -50,23 +50,20 @@ class Body extends StatelessWidget {
                   SocialCard(
                     icon: "assets/icons/google-icon.svg",
                     press: () async {
-                      AuthProvider authProvider =
-                          Provider.of<AuthProvider>(context, listen: false);
+                      AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
                       try {
                         await authProvider.authenticateWithGoogle().then(
                               (value) => value == "success"
                                   ? Navigator.of(context)
                                       .push(
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginSuccessScreen(),
+                                          builder: (context) => const LoginSuccessScreen(),
                                         ),
                                       )
                                       .then((value) => const GetSnackBar(
                                             backgroundColor: Colors.green,
                                             title: 'Authentication Successful',
-                                            message:
-                                                'Authentication is successful 🥳🎉',
+                                            message: 'Authentication is successful 🥳🎉',
                                             snackPosition: SnackPosition.TOP,
                                             duration: Duration(seconds: 3),
                                           ))

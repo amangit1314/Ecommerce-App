@@ -2,8 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:soni_store_app/models/address.dart';
-import 'package:soni_store_app/models/models.dart' as models;
+import '/models/models.dart' as models;
 
 class AddressProvider with ChangeNotifier {
   final List<models.Address> _addressesList = [];
@@ -11,7 +10,7 @@ class AddressProvider with ChangeNotifier {
 
   int get length => addressesList.length;
 
-  models.Address _selectedAddress = const Address(
+  models.Address _selectedAddress = const models.Address(
     uid: '',
     addressId: '',
     pincode: '',
@@ -29,10 +28,7 @@ class AddressProvider with ChangeNotifier {
         throw Exception('Addresses data is null');
       }
 
-      final addressCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection("addresses");
+      final addressCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection("addresses");
 
       // Generate a new unique document ID for the address
       final newAddressDoc = addressCollection.doc();
@@ -54,10 +50,7 @@ class AddressProvider with ChangeNotifier {
 
   Future<List<models.Address>> fetchAddresses(String uid) async {
     try {
-      final addressCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection("addresses");
+      final addressCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection("addresses");
 
       final addressesSnapshot = await addressCollection.get();
 
@@ -65,7 +58,7 @@ class AddressProvider with ChangeNotifier {
 
       for (var doc in addressesSnapshot.docs) {
         var addressData = doc.data();
-        _addressesList.add(Address.fromMap(addressData));
+        _addressesList.add(models.Address.fromMap(addressData));
       }
 
       return _addressesList;
@@ -81,8 +74,7 @@ class AddressProvider with ChangeNotifier {
         (address) => address.addressId == addressId,
       );
 
-      final userDocRef =
-          FirebaseFirestore.instance.collection('users').doc(uid);
+      final userDocRef = FirebaseFirestore.instance.collection('users').doc(uid);
       final userDocSnapshot = await userDocRef.get();
 
       if (userDocSnapshot.exists) {
@@ -95,8 +87,7 @@ class AddressProvider with ChangeNotifier {
         }
 
         if (userData != null && selectedAddressData != {}) {
-          await userDocRef.set({'selectedAddress': selectedAddressData},
-              SetOptions(merge: true));
+          await userDocRef.set({'selectedAddress': selectedAddressData}, SetOptions(merge: true));
           log('Selected address added to the user document');
         }
       }

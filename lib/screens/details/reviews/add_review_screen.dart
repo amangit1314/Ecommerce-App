@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/models/review.dart';
-import 'package:soni_store_app/providers/review_provider.dart';
 
 import '../../../helper/locator.dart';
-import '../../../providers/auth_provider.dart';
+import '../../../models/models.dart';
+import '../../../providers/providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 
@@ -83,8 +82,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   height: getProportionateScreenHeight(80),
                   width: getProportionateScreenWidth(80),
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(getProportionateScreenWidth(16)),
+                    borderRadius: BorderRadius.circular(getProportionateScreenWidth(16)),
                     image: DecorationImage(
                       image: NetworkImage(widget.image),
                       fit: BoxFit.cover,
@@ -107,14 +105,12 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
               ),
               SizedBox(height: getProportionateScreenHeight(20)),
               Padding(
-                padding:
-                    EdgeInsets.only(left: getProportionateScreenHeight(20)),
+                padding: EdgeInsets.only(left: getProportionateScreenHeight(20)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(
-                          bottom: getProportionateScreenHeight(12)),
+                      padding: EdgeInsets.only(bottom: getProportionateScreenHeight(12)),
                       child: const Divider(height: 1, color: kPrimaryColor),
                     ),
                     Text(
@@ -145,8 +141,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: getProportionateScreenHeight(12),
-                          bottom: getProportionateScreenHeight(12)),
+                          top: getProportionateScreenHeight(12), bottom: getProportionateScreenHeight(12)),
                       child: const Divider(height: 1, color: kPrimaryColor),
                     ),
                     const SizedBox(height: 10),
@@ -179,8 +174,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
               ),
               SizedBox(height: getProportionateScreenHeight(20)),
               Padding(
-                padding:
-                    EdgeInsets.only(left: getProportionateScreenHeight(20)),
+                padding: EdgeInsets.only(left: getProportionateScreenHeight(20)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -245,8 +239,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                     reviewerPic: authProvider.user.profImage!,
                   );
 
-                  await reviewProvider.addReviewToProduct(
-                      review, widget.productId);
+                  await reviewProvider.addReviewToProduct(review, widget.productId);
                   if (!mounted) return;
                   Navigator.of(context).pop();
                 },
@@ -254,8 +247,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   height: getProportionateScreenHeight(50),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(getProportionateScreenWidth(10)),
+                    borderRadius: BorderRadius.circular(getProportionateScreenWidth(10)),
                     color: kPrimaryColor,
                   ),
                   margin: const EdgeInsets.symmetric(horizontal: 20),

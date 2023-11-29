@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/models/address.dart';
-import 'package:soni_store_app/providers/auth_provider.dart';
-import 'package:soni_store_app/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../components/default_button.dart';
-import '../../../providers/address_provider.dart';
+import '../../../models/models.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/constants.dart';
 
 class AddShippingAddress extends StatefulWidget {
   const AddShippingAddress({Key? key}) : super(key: key);
@@ -87,10 +86,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                   const Spacer(),
                   Text(
                     'Add new Address',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                 ],
@@ -115,8 +111,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 7.5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                     child: buildTextFormField(
                       controller: addressTypeController,
                       hintText: 'Enter address type',
@@ -124,8 +119,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 7.5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                     child: buildTextFormField(
                       controller: addressController,
                       hintText: 'Enter your address',
@@ -133,8 +127,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 7.5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                     child: buildTextFormField(
                       controller: phoneController,
                       hintText: 'Enter your phone number',
@@ -143,8 +136,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 7.5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                     child: buildTextFormField(
                       controller: pinCodeController,
                       hintText: 'Enter your pin code',
@@ -184,8 +176,7 @@ class _AddShippingAddressState extends State<AddShippingAddress> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    if (authProvider.user.uid != '' &&
-                        authProvider.user.uid.isNotEmpty) {
+                    if (authProvider.user.uid != '' && authProvider.user.uid.isNotEmpty) {
                       addressProvider
                           .addAddress(
                         address,

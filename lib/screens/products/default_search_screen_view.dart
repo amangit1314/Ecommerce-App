@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/products/components/pants/pants_section.dart';
-import 'package:soni_store_app/screens/products/components/shoes/shoes_section.dart';
-import 'package:soni_store_app/screens/products/components/tshirts/tshirts_section.dart';
 
 import '../../utils/size_config.dart';
 import 'components/features/features_section.dart';
+import 'components/pants/pants_section.dart';
+import 'components/shoes/shoes_section.dart';
+import 'components/tshirts/tshirts_section.dart';
 
 class DefaultSearchScreenView extends StatelessWidget {
   const DefaultSearchScreenView({super.key});

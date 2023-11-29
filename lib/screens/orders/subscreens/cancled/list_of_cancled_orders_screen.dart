@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../../providers/providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/size_config.dart';
 import '../../../loading/shimmer_box.dart';
 import '../../order_widget.dart';
 
@@ -21,8 +21,7 @@ class ListOfCancledOrdersScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ListOfCancledOrdersScreen> createState() =>
-      _ListOfCancledOrdersScreenState();
+  State<ListOfCancledOrdersScreen> createState() => _ListOfCancledOrdersScreenState();
 }
 
 class _ListOfCancledOrdersScreenState extends State<ListOfCancledOrdersScreen> {
@@ -98,18 +97,15 @@ class _ListOfCancledOrdersScreenState extends State<ListOfCancledOrdersScreen> {
                     child: ListView.separated(
                       itemCount: orderCount,
                       separatorBuilder: (context, index) {
-                        return SizedBox(
-                            height: getProportionateScreenHeight(8));
+                        return SizedBox(height: getProportionateScreenHeight(8));
                       },
                       itemBuilder: (context, index) {
                         final orderSnapshot = orderDocuments[index];
-                        final orderData =
-                            orderSnapshot.data() as Map<String, dynamic>;
+                        final orderData = orderSnapshot.data() as Map<String, dynamic>;
                         return FutureBuilder<String?>(
                           future: getProductName(orderData['productId']),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
                               return Center(
                                 child: SizedBox(
                                   height: getProportionateScreenHeight(120),
@@ -152,10 +148,7 @@ class _ListOfCancledOrdersScreenState extends State<ListOfCancledOrdersScreen> {
 
   Future<String?> getProductName(String productId) async {
     try {
-      final productDoc = await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productId)
-          .get();
+      final productDoc = await FirebaseFirestore.instance.collection('products').doc(productId).get();
       final productData = productDoc.data();
       if (productData != null) {
         return productData['title'] as String?;

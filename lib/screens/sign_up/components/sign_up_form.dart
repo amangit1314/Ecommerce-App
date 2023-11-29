@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/components/custom_surfix_icon.dart';
-import 'package:soni_store_app/screens/sign_in/sign_in_screen.dart';
 
+import '../../../components/custom_surfix_icon.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
+import '../../sign_in/sign_in_screen.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
@@ -21,8 +21,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   bool remember = false;
   final List<String> errors = [];
@@ -171,8 +170,7 @@ class _SignUpFormState extends State<SignUpForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.isNotEmpty &&
-            passwordController.text == confirmPasswordController.text) {
+        } else if (value.isNotEmpty && passwordController.text == confirmPasswordController.text) {
           removeError(error: kMatchPassError);
         }
         confirmPasswordController.text = value;

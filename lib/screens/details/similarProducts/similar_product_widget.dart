@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/product.dart';
+import '/models/product.dart';
 
 import '../../../utils/constants.dart';
 import '../detail_screen.dart';

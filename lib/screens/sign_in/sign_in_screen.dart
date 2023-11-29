@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/sign_in/components/body.dart';
+import 'package:snap_cart/screens/sign_in/components/signin_body.dart';
 
 class SignInScreen extends StatelessWidget {
   static const routeName = '/sign-in';

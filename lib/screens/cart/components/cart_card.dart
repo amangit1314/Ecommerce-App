@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/models.dart' as models;
-import 'package:soni_store_app/utils/constants.dart';
-import 'package:soni_store_app/utils/size_config.dart';
+import '/models/models.dart' as models;
+import '/utils/constants.dart';
+import '/utils/size_config.dart';
 
 import '../../../components/rounded_icon_button.dart';
 

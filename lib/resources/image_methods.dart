@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:soni_store_app/providers/user_provider.dart';
+import '/providers/user_provider.dart';
 
 class ImageMethods {
   Future<XFile?> pickImage(ImageSource source) async {
@@ -28,8 +28,7 @@ class ImageMethods {
     if (imageBytes.isEmpty) return;
 
     String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('profile_images').child(imageName);
+    Reference storageReference = FirebaseStorage.instance.ref().child('profile_images').child(imageName);
 
     try {
       UploadTask uploadTask = storageReference.putData(imageBytes);

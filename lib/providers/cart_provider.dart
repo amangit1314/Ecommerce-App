@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:soni_store_app/models/models.dart' as models;
+import '/models/models.dart' as models;
 
 class CartProvider with ChangeNotifier {
   final List<models.Product> _cartItems = [];
@@ -20,15 +20,9 @@ class CartProvider with ChangeNotifier {
   void increaseQuantity(models.Product product, String uid) async {
     _quantity++;
 
-    final cartItemsCollection = FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('cartItems');
+    final cartItemsCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection('cartItems');
 
-    final cartItemSnapshot = await cartItemsCollection
-        .where('id', isEqualTo: product.id)
-        .limit(1)
-        .get();
+    final cartItemSnapshot = await cartItemsCollection.where('id', isEqualTo: product.id).limit(1).get();
 
     if (cartItemSnapshot.docs.isNotEmpty) {
       final cartItemId = cartItemSnapshot.docs.first.id;
@@ -42,38 +36,24 @@ class CartProvider with ChangeNotifier {
     if (_quantity > 1) {
       _quantity--;
 
-      final cartItemsCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('cartItems');
+      final cartItemsCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection('cartItems');
 
-      final cartItemSnapshot = await cartItemsCollection
-          .where('id', isEqualTo: product.id)
-          .limit(1)
-          .get();
+      final cartItemSnapshot = await cartItemsCollection.where('id', isEqualTo: product.id).limit(1).get();
 
       if (cartItemSnapshot.docs.isNotEmpty) {
         final cartItemId = cartItemSnapshot.docs.first.id;
 
         // Update the quantity of the cart item
-        await cartItemsCollection
-            .doc(cartItemId)
-            .update({'quantity': _quantity});
+        await cartItemsCollection.doc(cartItemId).update({'quantity': _quantity});
       }
 // Update the total price after decreasing the quantity
     }
   }
 
   Future<int> cartItemQuantity(models.Product product, String uid) async {
-    final cartItemsCollection = FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('cartItems');
+    final cartItemsCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection('cartItems');
 
-    final cartItemSnapshot = await cartItemsCollection
-        .where('id', isEqualTo: product.id)
-        .limit(1)
-        .get();
+    final cartItemSnapshot = await cartItemsCollection.where('id', isEqualTo: product.id).limit(1).get();
 
     if (cartItemSnapshot.docs.isNotEmpty) {
       final cartItemId = cartItemSnapshot.docs.first.id;
@@ -98,10 +78,7 @@ class CartProvider with ChangeNotifier {
 
   void clearCartItems(String uid) {
     try {
-      final cartItemsCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('cartItems');
+      final cartItemsCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection('cartItems');
 
       // Delete all cart items from the cartItems collection
       cartItemsCollection.get().then((snapshot) {
@@ -117,19 +94,14 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addToCart(
-      models.Product product, String uid, int quantity) async {
+  Future<void> addToCart(models.Product product, String uid, int quantity) async {
     try {
       final productsData = product.toMap();
 
-      final cartItemsCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('cartItems');
+      final cartItemsCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection('cartItems');
 
       // Check if the product already exists in the cart
-      final existingProductIndex =
-          _cartItems.indexWhere((item) => item.id == product.id);
+      final existingProductIndex = _cartItems.indexWhere((item) => item.id == product.id);
 
       if (existingProductIndex != -1) {
         // If the product already exists, delete the existing document
@@ -156,15 +128,11 @@ class CartProvider with ChangeNotifier {
 
   Future<void> addToCartFromDetails(dynamic productsData, String uid) async {
     try {
-      final cartItemsCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('cartItems');
+      final cartItemsCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection('cartItems');
       final cartItemDoc = cartItemsCollection.doc();
       final cartSnapshot = await cartItemDoc.get();
 
-      final existingProductIndex =
-          _cartItems.indexWhere((item) => item.id == cartSnapshot.id);
+      final existingProductIndex = _cartItems.indexWhere((item) => item.id == cartSnapshot.id);
 
       if (existingProductIndex != -1) {
         final existingProduct = _cartItems[existingProductIndex];
@@ -188,16 +156,10 @@ class CartProvider with ChangeNotifier {
 
   Future<void> removeFromCart(models.Product product, String uid) async {
     try {
-      final cartItemsCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('cartItems');
+      final cartItemsCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection('cartItems');
 
       // Find the document ID of the product in Firestore
-      final cartItemSnapshot = await cartItemsCollection
-          .where('id', isEqualTo: product.id)
-          .limit(1)
-          .get();
+      final cartItemSnapshot = await cartItemsCollection.where('id', isEqualTo: product.id).limit(1).get();
 
       if (cartItemSnapshot.docs.isNotEmpty) {
         final cartItemId = cartItemSnapshot.docs.first.id;
@@ -216,10 +178,7 @@ class CartProvider with ChangeNotifier {
 
   Future<List<models.Product>> getCartItems(String uid) async {
     try {
-      final cartItemsCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('cartItems');
+      final cartItemsCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection('cartItems');
 
       final cartItemsSnapshot = await cartItemsCollection.get();
 

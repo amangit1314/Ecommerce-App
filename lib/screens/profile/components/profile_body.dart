@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/screens/profile/components/my_account.dart';
-import 'package:soni_store_app/screens/profile/settings.dart';
 
 import '../../../providers/auth_provider.dart';
 import '../../splash/ui/splash_screen.dart';
-import '../help_center.dart';
+import '../help_center_screen.dart';
+import '../my_account_screen.dart';
+import '../settings_screen.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
-class Body extends StatefulWidget {
-  const Body({Key? key}) : super(key: key);
+class ProfileBody extends StatefulWidget {
+  const ProfileBody({Key? key}) : super(key: key);
 
   @override
-  State<Body> createState() => _BodyState();
+  State<ProfileBody> createState() => _ProfileBodyState();
 }
 
-class _BodyState extends State<Body> with TickerProviderStateMixin {
+class _ProfileBodyState extends State<ProfileBody> with TickerProviderStateMixin {
   late AnimationController bottomSheetAnimationController;
 
   @override
@@ -60,7 +60,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                   press: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const Settings(),
+                        builder: (context) => const SettingsScreen(),
                       ),
                     );
                   },
@@ -73,7 +73,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                   press: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const HelpCenter(),
+                        builder: (context) => const HelpCenterScreen(),
                       ),
                     );
                   },
@@ -95,9 +95,6 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                       },
                     );
                   },
-                  // press: () async {
-                  //   await authService.signOut();
-                  // },
                 ),
               ],
             ),

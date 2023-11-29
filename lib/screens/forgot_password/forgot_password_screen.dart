@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/forgot_password/components/body.dart';
+
+import 'components/body.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   static String routeName = "/forgot_password";

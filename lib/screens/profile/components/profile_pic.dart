@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/auth_provider.dart';
 
+import '../../../providers/providers.dart';
 import '../../../utils/constants.dart';
 
 class ProfilePic extends StatefulWidget {
@@ -51,8 +51,7 @@ class _ProfilePicState extends State<ProfilePic> {
     if (imageBytes.isEmpty) return;
 
     String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('profile_images').child(imageName);
+    Reference storageReference = FirebaseStorage.instance.ref().child('profile_images').child(imageName);
 
     UploadTask uploadTask = storageReference.putData(imageBytes);
     TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {
@@ -120,8 +119,7 @@ class _ProfilePicState extends State<ProfilePic> {
                   },
                   child: SvgPicture.asset(
                     "assets/icons/Camera Icon.svg",
-                    colorFilter:
-                        const ColorFilter.mode(Colors.black87, BlendMode.srcIn),
+                    colorFilter: const ColorFilter.mode(Colors.black87, BlendMode.srcIn),
                   ),
                 ),
               ),

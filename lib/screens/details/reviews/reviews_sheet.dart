@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:soni_store_app/providers/review_provider.dart';
-import 'package:soni_store_app/screens/details/components/rating_tile.dart';
-import 'package:soni_store_app/screens/details/reviews/review_item_tile.dart';
+import '/providers/providers.dart';
+import '/screens/details/components/rating_tile.dart';
+import '/screens/details/reviews/review_item_tile.dart';
 
 import '../../../helper/locator.dart';
 import '../../../models/models.dart';
@@ -107,8 +107,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   Future<void> fetchReviews() async {
     try {
-      final reviewsData =
-          await reviewProvider.getReviewsForProduct(widget.product.id);
+      final reviewsData = await reviewProvider.getReviewsForProduct(widget.product.id);
       setState(() {
         reviews = reviewsData;
       });

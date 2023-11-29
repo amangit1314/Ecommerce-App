@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:soni_store_app/models/product.dart';
-import 'package:soni_store_app/models/user.dart';
+import 'models.dart';
 
 class Cart {
   final int id;
@@ -29,8 +28,7 @@ class Cart {
     return Cart(
       id: map['id'],
       user: User.fromMap(map['user']),
-      products: Product.fromMap(
-          map['products'].map((product) => Product.fromMap(product))),
+      products: Product.fromMap(map['products'].map((product) => Product.fromMap(product))),
       numOfItems: map['numOfItems']?.toInt() ?? 0,
     );
   }

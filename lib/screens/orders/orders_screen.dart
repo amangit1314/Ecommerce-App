@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/orders/subscreens/delivered/list_of_delivered_orders_screen.dart';
 
 import '../../components/custom_bottom_nav_bar.dart';
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
 import 'orders_list_of_category_screen.dart';
+import 'subscreens/awaitingPayment/awaiting_payments_screen.dart';
+import 'subscreens/cancled/cancled_orders_screen.dart';
 import 'subscreens/cancled/list_of_cancled_orders_screen.dart';
-import 'subscreens/subscreens.dart';
+import 'subscreens/delivered/delivered_orders.dart';
+import 'subscreens/delivered/list_of_delivered_orders_screen.dart';
+import 'subscreens/processing/processing_orders.dart';
 
 class RecentsScreen extends StatefulWidget {
   const RecentsScreen({super.key});
@@ -15,8 +18,7 @@ class RecentsScreen extends StatefulWidget {
   State<RecentsScreen> createState() => _RecentsScreenState();
 }
 
-class _RecentsScreenState extends State<RecentsScreen>
-    with TickerProviderStateMixin {
+class _RecentsScreenState extends State<RecentsScreen> with TickerProviderStateMixin {
   late AnimationController bottomSheetAnimationController;
 
   @override
@@ -71,8 +73,7 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      const OrdersListOfSelectedCategoryScreen(
+                  builder: (context) => const OrdersListOfSelectedCategoryScreen(
                     statusName: 'Processing',
                   ),
                 ),
@@ -83,8 +84,7 @@ class _RecentsScreenState extends State<RecentsScreen>
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      const OrdersListOfSelectedCategoryScreen(
+                  builder: (context) => const OrdersListOfSelectedCategoryScreen(
                     statusName: 'Processing',
                   ),
                 ),

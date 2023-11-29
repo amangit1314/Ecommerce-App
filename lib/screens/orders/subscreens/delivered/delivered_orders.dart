@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/utils/constants.dart';
-import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../../providers/providers.dart';
+import '../../../../utils/constants.dart';
+import '../../../../utils/size_config.dart';
 
 class DeliveredOrders extends StatelessWidget {
   final void Function()? onTap;
@@ -76,18 +76,16 @@ class DeliveredOrders extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.only(
-                            left: 12, right: 12, top: 2, bottom: 2),
+                        padding: const EdgeInsets.only(left: 12, right: 12, top: 2, bottom: 2),
                         decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Text(
                           orderCount.toString(),
-                          style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    color: Colors.white,
-                                  ),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                color: Colors.white,
+                              ),
                         ),
                       ),
                       const SizedBox(width: 5),

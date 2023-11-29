@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../components/custom_surfix_icon.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
 import '../../../components/no_account_text.dart';
 import '../../../utils/constatns.dart';
+import '../../../utils/size_config.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -16,8 +16,7 @@ class Body extends StatelessWidget {
       width: double.infinity,
       child: SingleChildScrollView(
         child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
           child: Column(
             children: [
               SizedBox(height: SizeConfig.screenHeight * 0.04),
@@ -68,8 +67,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                 setState(() {
                   errors.remove(kEmailNullError);
                 });
-              } else if (emailValidatorRegExp.hasMatch(value) &&
-                  errors.contains(kInvalidEmailError)) {
+              } else if (emailValidatorRegExp.hasMatch(value) && errors.contains(kInvalidEmailError)) {
                 setState(() {
                   errors.remove(kInvalidEmailError);
                 });
@@ -80,8 +78,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                 setState(() {
                   errors.add(kEmailNullError);
                 });
-              } else if (!emailValidatorRegExp.hasMatch(value) &&
-                  !errors.contains(kInvalidEmailError)) {
+              } else if (!emailValidatorRegExp.hasMatch(value) && !errors.contains(kInvalidEmailError)) {
                 setState(() {
                   errors.add(kInvalidEmailError);
                 });

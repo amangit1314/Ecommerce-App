@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/providers.dart';
-import 'package:soni_store_app/utils/constants.dart';
 
-import '../../../components/custom_surfix_icon.dart';
-import '../../../utils/size_config.dart';
+import '../../components/custom_surfix_icon.dart';
+import '../../providers/providers.dart';
+import '../../utils/constants.dart';
+import '../../utils/size_config.dart';
 import 'edit_profile_screen.dart';
 
 class MyAccount extends StatelessWidget {
@@ -174,10 +174,7 @@ class MyAccount extends StatelessWidget {
                                       title: Center(
                                         child: Text(
                                           'Change Password',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleSmall!
-                                              .copyWith(
+                                          style: Theme.of(context).textTheme.titleSmall!.copyWith(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w600,
                                                 color: kPrimaryColor,
@@ -187,30 +184,25 @@ class MyAccount extends StatelessWidget {
                                       content: TextFormField(
                                         obscureText: true,
                                         decoration: InputDecoration(
-                                          hintStyle:
-                                              const TextStyle(fontSize: 14),
+                                          hintStyle: const TextStyle(fontSize: 14),
                                           hintText: "Enter new password",
                                           border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
+                                            borderRadius: BorderRadius.circular(50),
                                             borderSide: const BorderSide(
                                               color: Colors.orange,
                                               width: 1.0,
                                             ),
                                           ),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
+                                          contentPadding: const EdgeInsets.symmetric(
                                             vertical: 2,
                                             horizontal: 16,
                                           ),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
+                                          floatingLabelBehavior: FloatingLabelBehavior.always,
                                           suffixIcon: const CustomSurffixIcon(
                                             svgIcon: "assets/icons/Lock.svg",
                                           ),
                                         ),
-                                        onChanged: (String newPassword) =>
-                                            profileProvider.updatePassword(
+                                        onChanged: (String newPassword) => profileProvider.updatePassword(
                                           authProvider.user.uid,
                                         ),
                                       ),
@@ -245,10 +237,7 @@ class MyAccount extends StatelessWidget {
                                 ),
                                 child: Text(
                                   'Change password',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
                                         color: kPrimaryColor,

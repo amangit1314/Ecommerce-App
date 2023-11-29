@@ -1,7 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:soni_store_app/providers/review_provider.dart';
 
-import '../providers/address_provider.dart';
 import '../providers/providers.dart';
 import '../providers/user_provider_try.dart';
 import '../resources/services/api/api_service.dart';

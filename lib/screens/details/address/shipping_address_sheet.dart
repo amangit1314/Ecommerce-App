@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:soni_store_app/screens/details/address/shipping_addresses_list_screen.dart';
-import 'package:soni_store_app/utils/constants.dart';
 
+import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
+import 'shipping_addresses_list_screen.dart';
 
 class ShippingAddressSheet extends StatelessWidget {
   const ShippingAddressSheet({

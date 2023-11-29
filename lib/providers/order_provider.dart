@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/models.dart' as models;
+import '/models/models.dart' as models;
 
 class OrderProvider with ChangeNotifier {
   List<models.Order> _orders = [];
@@ -124,10 +124,7 @@ class OrderProvider with ChangeNotifier {
 
   Future<String?> getProductName(String productId) async {
     try {
-      final productDoc = await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productId)
-          .get();
+      final productDoc = await FirebaseFirestore.instance.collection('products').doc(productId).get();
       final productData = productDoc.data();
 
       if (productData != null) {

@@ -5,8 +5,9 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:soni_store_app/notifications/push_notification_response.dart';
-import 'package:soni_store_app/notifications/recieve_notification.dart';
+
+import 'push_notification_response.dart';
+import 'recieve_notification.dart';
 
 const String applicationName = "SnapCart";
 const String generalCategory = "Products";

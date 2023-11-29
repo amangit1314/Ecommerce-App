@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/components/default_button.dart';
-import 'package:soni_store_app/utils/size_config.dart';
 
+import '../../../components/default_button.dart';
+import '../../../utils/size_config.dart';
 import '../../home/home_screen.dart';
 
 class Body extends StatelessWidget {
@@ -29,8 +29,7 @@ class Body extends StatelessWidget {
         ),
         SizedBox(height: screenHeight * 0.01),
         Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: getProportionateScreenWidth(screenWidth * 0.01)),
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(screenWidth * 0.01)),
           child: Text(
             "Welcome we are thrilled with your presence \n You are successfully loged in 🎉",
             textAlign: TextAlign.center,

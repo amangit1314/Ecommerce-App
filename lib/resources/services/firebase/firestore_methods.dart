@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:soni_store_app/resources/services/firebase/storage_methods.dart';
+import '/resources/services/firebase/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../models/product.dart';

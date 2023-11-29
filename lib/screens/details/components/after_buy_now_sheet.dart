@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/screens/details/components/body.dart';
-import 'package:soni_store_app/screens/details/components/color_dots.dart';
-import 'package:soni_store_app/screens/details/components/size_dots.dart';
 
 import '../../../components/rounded_icon_button.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/size_config.dart';
-import 'checkout_button_alert_box.dart';
+import 'components.dart';
 
 class AfterBuyNowButtonSheet extends StatefulWidget {
   const AfterBuyNowButtonSheet({
@@ -29,8 +26,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        final productProvider =
-            Provider.of<ProductProvider>(context, listen: false);
+        final productProvider = Provider.of<ProductProvider>(context, listen: false);
         productProvider.setProduct(widget.widget.product);
       },
     );
@@ -58,10 +54,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                     children: [
                       Text(
                         "Unit price",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontSize: 12),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 12),
                       ),
                       Text(
                         '₹ ${widget.widget.product.price}',
@@ -76,10 +69,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                     children: [
                       Text(
                         "Quantity",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontSize: 12),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 12),
                       ),
                       Row(
                         children: [
@@ -134,10 +124,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
                       "Select Color",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 12),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 12),
                     ),
                   ),
                   Padding(
@@ -163,10 +150,7 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
                       "Select Size",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 12),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 12),
                     ),
                   ),
                   Padding(
@@ -274,15 +258,13 @@ class _AfterBuyNowButtonSheetState extends State<AfterBuyNowButtonSheet> {
                                   child: CheckoutButtonAlertBox(
                                     size: productProvider.selectedSize,
                                     color: productProvider.selectedColor,
-                                    price:
-                                        productProvider.totalPrice.toString(),
+                                    price: productProvider.totalPrice.toString(),
                                     width: MediaQuery.of(context).size.width,
                                     widget: widget,
                                     productId: productProvider.id,
                                     quantity: productProvider.quantity,
                                     userId: authProvider.user.uid,
-                                    productImage:
-                                        widget.widget.product.images.first,
+                                    productImage: widget.widget.product.images.first,
                                   ),
                                 );
                               },

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/providers.dart';
 
 import '../../../components/icon_btn_with_counter.dart';
+import '../../../providers/providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
 import '../../cart/cart_screen.dart';
@@ -14,8 +14,7 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
       child: Consumer<CartProvider>(
         builder: (context, cartProvider, _) {
           return Row(

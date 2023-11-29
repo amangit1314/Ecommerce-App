@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:soni_store_app/utils/constatns.dart';
+
+import 'constatns.dart';
 
 ThemeData theme() {
   return ThemeData(

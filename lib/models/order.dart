@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:soni_store_app/utils/constants.dart';
+import '../utils/constatns.dart';
 
 class Order {
   final String orderId;
@@ -53,8 +53,7 @@ class Order {
     return Order(
       map['number'] ?? '+91 1234567890',
       size: map['size'] ?? 'XL',
-      color: map['color'] ??
-          kPrimaryColor.value.toRadixString(16).padLeft(8, '0').toString(),
+      color: map['color'] ?? kPrimaryColor.value.toRadixString(16).padLeft(8, '0').toString(),
       address: map['address'] ?? '',
       orderId: map['orderId'] ?? '',
       uid: map['uid'] ?? '',

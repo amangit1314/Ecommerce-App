@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_tawk/flutter_tawk.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/providers/auth_provider.dart';
+
+import '../../providers/providers.dart';
 
 class SupportChat extends StatelessWidget {
   const SupportChat({super.key});
@@ -16,8 +17,7 @@ class SupportChat extends StatelessWidget {
       body: SafeArea(
         child: Consumer<AuthProvider>(builder: (context, authProvider, _) {
           return Tawk(
-            directChatLink:
-                'https://tawk.to/chat/647783acad80445890f04277/1h1pdkn04',
+            directChatLink: 'https://tawk.to/chat/647783acad80445890f04277/1h1pdkn04',
             visitor: TawkVisitor(
               name: authProvider.user.username ?? 'SnapCart User',
               email: authProvider.user.email,

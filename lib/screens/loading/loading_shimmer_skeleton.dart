@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/loading/shimmer_box.dart';
-import 'package:soni_store_app/screens/loading/skelton.dart';
+
+import 'shimmer_box.dart';
+import 'skelton.dart';
 
 class LoadingShimmerSkelton extends StatelessWidget {
   const LoadingShimmerSkelton({
@@ -9,28 +10,28 @@ class LoadingShimmerSkelton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    return const Wrap(
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
-        const Skelton(),
-        const SizedBox(height: 8),
+        Skelton(),
+        SizedBox(height: 8),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+          padding: EdgeInsets.symmetric(horizontal: 2.0),
           child: Flexible(
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
+                  children: [
                     Skelton(height: 10),
                   ],
                 ),
-                const ShimmerBox(child: Skelton(height: 14)),
+                ShimmerBox(child: Skelton(height: 14)),
               ],
             ),
           ),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(right: 8.0, top: 4, bottom: 8),
           child: ShimmerBox(child: Skelton(height: 12)),
         ),

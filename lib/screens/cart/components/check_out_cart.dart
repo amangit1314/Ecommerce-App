@@ -7,13 +7,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../components/default_button.dart';
 import '../../../models/models.dart';
-import '../../../providers/address_provider.dart';
 import '../../../providers/providers.dart';
+import '../../../utils/constatns.dart';
 import '../../../utils/size_config.dart';
 import '../../home/home_screen.dart';
 import '../../loading/shimmer_box.dart';
@@ -23,12 +22,9 @@ class CheckoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-    final OrderProvider orderProvider =
-        Provider.of<OrderProvider>(context, listen: false);
-    final ProductProvider productProvider =
-        Provider.of<ProductProvider>(context, listen: false);
+    final AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final OrderProvider orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    final ProductProvider productProvider = Provider.of<ProductProvider>(context, listen: false);
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -104,8 +100,7 @@ class CheckoutCard extends StatelessWidget {
 
                       if (snapshot.hasError) {
                         // Error state code
-                        return const Center(
-                            child: Text('Error fetching quantity'));
+                        return const Center(child: Text('Error fetching quantity'));
                       }
 
                       return Row(
@@ -161,8 +156,7 @@ class CheckoutCard extends StatelessWidget {
     String? body,
     BigTextStyleInformation? bigTextStyleInformation,
   ) {
-    AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
+    AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'channel_id',
       'channel_name',
       channelDescription: 'channel_description',
@@ -172,8 +166,7 @@ class CheckoutCard extends StatelessWidget {
       playSound: true,
       styleInformation: bigTextStyleInformation,
     );
-    NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     FlutterLocalNotificationsPlugin().show(
       0,
       title,
@@ -199,8 +192,7 @@ class CheckoutCard extends StatelessWidget {
 
     String orderId = generateOrderId();
 
-    AddressProvider addressProvider =
-        Provider.of<AddressProvider>(context, listen: false);
+    AddressProvider addressProvider = Provider.of<AddressProvider>(context, listen: false);
     List<Product> cartItems = cartProvider.cartItems;
 
     log('---------------');
@@ -239,13 +231,9 @@ class CheckoutCard extends StatelessWidget {
     Order order = Order(
       orderId: orderId,
       size: productProvider.selectedSize,
-      color: productProvider.selectedColor.value
-          .toRadixString(16)
-          .padLeft(8, '0')
-          .toString(),
+      color: productProvider.selectedColor.value.toRadixString(16).padLeft(8, '0').toString(),
       addressProvider.selectedAddress.phone,
-      address:
-          '${addressProvider.selectedAddress.address} ${addressProvider.selectedAddress.pincode}',
+      address: '${addressProvider.selectedAddress.address} ${addressProvider.selectedAddress.pincode}',
       orderedDate: DateTime.now().toString(),
       uid: userId,
       orderStatus: orderStatus,
@@ -319,11 +307,10 @@ class CheckoutCard extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Cash on Delivery',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   ),
@@ -353,11 +340,10 @@ class CheckoutCard extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Online Payment',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   ),
@@ -377,11 +363,10 @@ class CheckoutCard extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Cancel',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   ),
@@ -405,9 +390,7 @@ class CheckoutCard extends StatelessWidget {
         colorText: Colors.white,
       );
       cartProvider.clearCartItems(userId);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-          (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false);
     } else {
       Get.snackbar(
         'Error',

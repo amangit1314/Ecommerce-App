@@ -5,14 +5,14 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../utils/constants.dart';
 import '../../utils/size_config.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationPermissionEnabled = false;
 
   @override
@@ -70,7 +70,6 @@ class _SettingsState extends State<Settings> {
           'Settings',
           style: TextStyle(color: kPrimaryColor),
         ),
-        // centerTitle: true,
       ),
       body: Column(
         children: [
@@ -95,19 +94,17 @@ class _SettingsState extends State<Settings> {
                       children: [
                         Text(
                           'Notifications',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontSize: getProportionateScreenHeight(16),
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontSize: getProportionateScreenHeight(16),
+                                fontWeight: FontWeight.w600,
+                              ),
                         ),
                         Text(
                           'Turn on & off notifications',
-                          style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    // fontSize: getProportionateScreenHeight(16),
-                                    fontWeight: FontWeight.normal,
-                                  ),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                // fontSize: getProportionateScreenHeight(16),
+                                fontWeight: FontWeight.normal,
+                              ),
                         ),
                       ],
                     ),

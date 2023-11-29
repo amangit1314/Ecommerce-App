@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/details/components/after_buy_now_sheet.dart';
 
 import '../../../models/models.dart';
 import '../../../utils/size_config.dart';
+import 'after_buy_now_sheet.dart';
 import 'body.dart';
 
 class BuyNowButton extends StatelessWidget {

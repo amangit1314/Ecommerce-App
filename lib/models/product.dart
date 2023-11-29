@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:soni_store_app/models/review.dart';
+import 'models.dart';
 
 class Product {
   final String id;
@@ -79,6 +79,5 @@ class Product {
 
   String toJson() => json.encode(toMap());
 
-  factory Product.fromJson(String source) =>
-      Product.fromMap(json.decode(source));
+  factory Product.fromJson(String source) => Product.fromMap(json.decode(source));
 }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/models/models.dart' as models;
-import 'package:soni_store_app/providers/auth_provider.dart';
+import '/models/models.dart' as models;
+import '/providers/auth_provider.dart';
 
 import '../models/address.dart';
 
@@ -33,8 +33,7 @@ class UserProvider with ChangeNotifier {
       await Future.delayed(Duration.zero); // Add this line
 
       final FirebaseFirestore firestore = FirebaseFirestore.instance;
-      final DocumentSnapshot<Map<String, dynamic>> snap =
-          await firestore.collection('users').doc(uid).get();
+      final DocumentSnapshot<Map<String, dynamic>> snap = await firestore.collection('users').doc(uid).get();
       _currentUser = models.User.fromMap(snap);
 
       _username = _currentUser.username!;
@@ -53,10 +52,7 @@ class UserProvider with ChangeNotifier {
 
     try {
       final FirebaseFirestore firestore = FirebaseFirestore.instance;
-      await firestore
-          .collection('users')
-          .doc(uid)
-          .update({'profImage': profileImage});
+      await firestore.collection('users').doc(uid).update({'profImage': profileImage});
     } catch (err) {
       throw Exception(err);
     }

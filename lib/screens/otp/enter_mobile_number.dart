@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/otp/otp_screen.dart';
 
 import '../../components/custom_surfix_icon.dart';
 import '../../components/default_button.dart';
 import '../../utils/constants.dart';
 import '../../utils/size_config.dart';
+import 'otp_screen.dart';
 
 class MobileNumberScreen extends StatefulWidget {
   const MobileNumberScreen({super.key});
@@ -39,8 +39,7 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
   }
 
   Future<void> _sendOTP() async {
-    String phoneNumber =
-        '+91${_mobileNumberController.text}'; // Customize the country code if needed
+    String phoneNumber = '+91${_mobileNumberController.text}'; // Customize the country code if needed
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) {

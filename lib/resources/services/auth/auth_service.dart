@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:soni_store_app/models/models.dart' as models;
+import '/models/models.dart' as models;
 
 class AuthService {
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
@@ -44,11 +44,9 @@ class AuthService {
     return _firebaseAuth.authStateChanges().asyncMap(_userFromFirebase);
   }
 
-  Future<models.User?> signInWithEmailAndPassword(
-      {required String email, required String password}) async {
+  Future<models.User?> signInWithEmailAndPassword({required String email, required String password}) async {
     try {
-      final auth.UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
+      final auth.UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -88,12 +86,10 @@ class AuthService {
     return null;
   }
 
-  Future<models.User?> createUserWithEmailAndPassword(
-      {required String email, required String password}) async {
+  Future<models.User?> createUserWithEmailAndPassword({required String email, required String password}) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
-        final auth.UserCredential userCredential =
-            await _firebaseAuth.createUserWithEmailAndPassword(
+        final auth.UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -103,8 +99,7 @@ class AuthService {
           email: email,
           username: email.split('@')[0],
           password: password,
-          profImage:
-              'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000',
+          profImage: 'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436200.jpg?w=2000',
           gender: 'Not Defined',
           number: 'Not Defined',
           // cartItems: [],
@@ -124,21 +119,17 @@ class AuthService {
 
   Future<models.User?> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
 
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuth =
-            await googleSignInAccount.authentication;
+        final GoogleSignInAuthentication googleSignInAuth = await googleSignInAccount.authentication;
 
-        final auth.AuthCredential credential =
-            auth.GoogleAuthProvider.credential(
+        final auth.AuthCredential credential = auth.GoogleAuthProvider.credential(
           idToken: googleSignInAuth.idToken,
           accessToken: googleSignInAuth.accessToken,
         );
 
-        final auth.UserCredential userCredential =
-            await _firebaseAuth.signInWithCredential(credential);
+        final auth.UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
 
         if (userCredential.user != null) {
           final uid = userCredential.user!.uid;

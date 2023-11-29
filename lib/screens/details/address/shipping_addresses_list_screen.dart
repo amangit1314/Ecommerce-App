@@ -5,28 +5,25 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:soni_store_app/models/models.dart' as models;
-import 'package:soni_store_app/providers/address_provider.dart';
-import 'package:soni_store_app/providers/auth_provider.dart';
-import 'package:soni_store_app/screens/details/address/add_shipping_address.dart';
-import 'package:soni_store_app/screens/details/address/address_tile.dart';
-import 'package:soni_store_app/utils/constants.dart';
+import '../../../providers/providers.dart';
+import '/models/models.dart' as models;
+
+import '/screens/details/address/add_shipping_address.dart';
+import '/screens/details/address/address_tile.dart';
+import '/utils/constants.dart';
 
 class ShippingAddressesListScreen extends StatefulWidget {
   const ShippingAddressesListScreen({Key? key}) : super(key: key);
 
   @override
-  State<ShippingAddressesListScreen> createState() =>
-      _ShippingAddressesListScreenState();
+  State<ShippingAddressesListScreen> createState() => _ShippingAddressesListScreenState();
 }
 
-class _ShippingAddressesListScreenState
-    extends State<ShippingAddressesListScreen> {
+class _ShippingAddressesListScreenState extends State<ShippingAddressesListScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final addressProvider =
-        Provider.of<AddressProvider>(context, listen: false);
+    final addressProvider = Provider.of<AddressProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -72,9 +69,9 @@ class _ShippingAddressesListScreenState
                 borderRadius: BorderRadius.circular(12),
                 color: kPrimaryColor,
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   FaIcon(
                     FontAwesomeIcons.locationCrosshairs,
                     color: Colors.white,
@@ -114,15 +111,13 @@ class _ShippingAddressesListScreenState
                 return ListView.separated(
                   scrollDirection: Axis.vertical,
                   itemCount: addressesList.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 8),
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) => Row(
                     children: [
                       AddressTile(
                         uid: authProvider.user.uid,
                         addressId: addressesList[index].addressId,
-                        isSelected: addressesList[index].addressId ==
-                            addressProvider.selectedAddress.addressId,
+                        isSelected: addressesList[index].addressId == addressProvider.selectedAddress.addressId,
                         pincode: addressesList[index].pincode,
                         address: addressesList[index].address,
                         addressType: addressesList[index].addressType,

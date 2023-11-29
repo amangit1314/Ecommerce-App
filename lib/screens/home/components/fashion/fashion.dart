@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../../components/section_tile.dart';
 import '../../../../models/product.dart';
+import '../../../../utils/size_config.dart';
 import '../../../details/detail_screen.dart';
 import '../../../loading/shimmer_box.dart';
 import '../../../showMore/show_more_screen.dart';
@@ -25,15 +25,12 @@ class _FashionState extends State<Fashion> {
   }
 
   Stream<List<Product>> fetchFashionProducts() {
-    final CollectionReference productsRef =
-        FirebaseFirestore.instance.collection('products');
+    final CollectionReference productsRef = FirebaseFirestore.instance.collection('products');
 
     return productsRef
         .where('categories', arrayContains: 'Fashion')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Product.fromMap(doc.data() as Map<String, dynamic>))
-            .toList());
+        .map((snapshot) => snapshot.docs.map((doc) => Product.fromMap(doc.data() as Map<String, dynamic>)).toList());
   }
 
   @override
@@ -130,8 +127,7 @@ class _FashionState extends State<Fashion> {
                       child: Container(
                         height: 180,
                         width: 153,
-                        padding:
-                            const EdgeInsets.only(top: 8, bottom: 8, left: 8),
+                        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
                         margin: const EdgeInsets.only(right: 10),
                         decoration: BoxDecoration(
                           color: Colors.deepPurpleAccent.withOpacity(.3),
@@ -152,9 +148,7 @@ class _FashionState extends State<Fashion> {
                                 ),
                           image: DecorationImage(
                             image: NetworkImage(
-                              products[index].images.isNotEmpty
-                                  ? products[index].images[0]
-                                  : '',
+                              products[index].images.isNotEmpty ? products[index].images[0] : '',
                             ),
                             fit: BoxFit.cover,
                           ),

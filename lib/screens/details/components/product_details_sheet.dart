@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:soni_store_app/screens/details/components/product_description.dart';
-import 'package:soni_store_app/utils/constants.dart';
-import 'package:soni_store_app/utils/size_config.dart';
+
+import '../../../utils/constants.dart';
+import '../../../utils/size_config.dart';
+import 'product_description.dart';
 
 class ProductDetailsSheet extends StatelessWidget {
   const ProductDetailsSheet({
@@ -53,10 +54,7 @@ class ProductDetailsSheet extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 15.0),
                               child: Text(
                                 'Product Details',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(fontWeight: FontWeight.w600),
+                                style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
                               ),
                             ),
                             const Spacer(),
@@ -77,17 +75,13 @@ class ProductDetailsSheet extends StatelessWidget {
 
                         // * Description
                         Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 8, left: 15.0, right: 15),
+                          padding: const EdgeInsets.only(bottom: 8, left: 15.0, right: 15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Description',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(fontWeight: FontWeight.w600),
+                                style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 widget.product.description,
@@ -106,8 +100,7 @@ class ProductDetailsSheet extends StatelessWidget {
                         ),
 
                         Padding(
-                          padding: const EdgeInsets.only(
-                              top: 8, left: 15.0, right: 15.0),
+                          padding: const EdgeInsets.only(top: 8, left: 15.0, right: 15.0),
                           child: Column(
                             children: [
                               // * Categories
@@ -116,10 +109,8 @@ class ProductDetailsSheet extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Categories',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(fontWeight: FontWeight.w600),
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                                   ),
                                   const SizedBox(width: 10),
                                   Row(
@@ -129,17 +120,12 @@ class ProductDetailsSheet extends StatelessWidget {
                                         child: ListView.builder(
                                           shrinkWrap: true,
                                           scrollDirection: Axis.horizontal,
-                                          itemCount:
-                                              widget.product.categories.length,
+                                          itemCount: widget.product.categories.length,
                                           itemBuilder: (context, index) {
                                             return Text(
                                               '${widget.product.categories[index]}, ',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .copyWith(
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                                    fontWeight: FontWeight.normal,
                                                   ),
                                             );
                                           },
@@ -158,19 +144,14 @@ class ProductDetailsSheet extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Style',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(fontWeight: FontWeight.w600),
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
                                     'Plain',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                            fontWeight: FontWeight.normal),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.normal),
                                   ),
                                 ],
                               ),
@@ -183,19 +164,14 @@ class ProductDetailsSheet extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Design',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(fontWeight: FontWeight.w600),
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
                                     'Simple & Basic',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                            fontWeight: FontWeight.normal),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.normal),
                                   ),
                                 ],
                               ),

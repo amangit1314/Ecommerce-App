@@ -2,16 +2,13 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:soni_store_app/models/models.dart' as models;
+import '/models/models.dart' as models;
 
 class ReviewProvider with ChangeNotifier {
   Future<List<models.Review>> getReviewsForProduct(String productId) async {
     try {
-      final reviewsSnapshot = await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productId)
-          .collection('reviews')
-          .get();
+      final reviewsSnapshot =
+          await FirebaseFirestore.instance.collection('products').doc(productId).collection('reviews').get();
 
       final reviews = reviewsSnapshot.docs.map((doc) {
         final reviewData = doc.data();
@@ -25,8 +22,7 @@ class ReviewProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addReviewToProduct(
-      models.Review review, String productId) async {
+  Future<void> addReviewToProduct(models.Review review, String productId) async {
     try {
       final reviewData = review.toMap();
 
@@ -34,11 +30,7 @@ class ReviewProvider with ChangeNotifier {
         throw Exception('Review data is null');
       }
 
-      await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productId)
-          .collection('reviews')
-          .add(reviewData);
+      await FirebaseFirestore.instance.collection('products').doc(productId).collection('reviews').add(reviewData);
 
       notifyListeners();
     } catch (error) {

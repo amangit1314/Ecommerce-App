@@ -5,9 +5,9 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:soni_store_app/notifications/push_notification_response.dart';
-import 'package:soni_store_app/notifications/recieve_notification.dart';
-import 'package:soni_store_app/providers/auth_provider.dart';
+import '/notifications/push_notification_response.dart';
+import '/notifications/recieve_notification.dart';
+import '/providers/auth_provider.dart';
 
 import 'local_notifications.dart';
 
@@ -49,8 +49,7 @@ class PushNotificationsManager {
 
   factory PushNotificationsManager() => _instance;
 
-  static final PushNotificationsManager _instance =
-      PushNotificationsManager._();
+  static final PushNotificationsManager _instance = PushNotificationsManager._();
 
   FutureOr<String?> get token async => FirebaseMessaging.instance.getToken();
 
@@ -64,14 +63,12 @@ class PushNotificationsManager {
 
   Future<void> init() async {
     FirebaseMessaging.instance.setAutoInitEnabled(false);
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
     );
-    NotificationSettings result =
-        await FirebaseMessaging.instance.requestPermission();
+    NotificationSettings result = await FirebaseMessaging.instance.requestPermission();
 
     if (result.authorizationStatus == AuthorizationStatus.authorized) {
       _getInitialMessage();
@@ -90,12 +87,10 @@ class PushNotificationsManager {
   void _getInitialMessage() async {
     await FirebaseMessaging.instance.getInitialMessage().then((event) async {
       if (Platform.isAndroid) {
-        final notificationAppLaunchDetails =
-            await LocalNotifications().getNotificationAppLaunchDetails();
+        final notificationAppLaunchDetails = await LocalNotifications().getNotificationAppLaunchDetails();
 
         if (notificationAppLaunchDetails?.didNotificationLaunchApp == true) {
-          if (notificationAppLaunchDetails?.notificationResponse?.payload !=
-              null) {
+          if (notificationAppLaunchDetails?.notificationResponse?.payload != null) {
             parsePayloadToModel(
               notificationAppLaunchDetails!.notificationResponse!.payload!,
               terminated: true,
@@ -105,8 +100,7 @@ class PushNotificationsManager {
       }
 
       if (event != null) {
-        processNotificationMessage(
-            event.data, event.messageId!, AuthProvider(), 'getInitialMessage');
+        processNotificationMessage(event.data, event.messageId!, AuthProvider(), 'getInitialMessage');
       }
     });
   }
@@ -130,8 +124,7 @@ class PushNotificationsManager {
 
   void _onMessageOpenedApp() {
     FirebaseMessaging.onMessageOpenedApp.listen((event) async {
-      processNotificationMessage(
-          event.data, event.messageId!, AuthProvider(), 'onMessageOpenedApp');
+      processNotificationMessage(event.data, event.messageId!, AuthProvider(), 'onMessageOpenedApp');
     });
   }
 
@@ -143,9 +136,7 @@ class PushNotificationsManager {
     return FirebaseMessaging.instance.deleteToken();
   }
 
-  static initNotification(
-      {required PushNotificationSuccess success,
-      required PushNotificationFailure failure}) {
+  static initNotification({required PushNotificationSuccess success, required PushNotificationFailure failure}) {
     log('className: PushNotificationsManager');
     log('initNotification');
     PushNotificationsManager().init().then((value) {
@@ -158,11 +149,8 @@ class PushNotificationsManager {
   }
 
   @pragma('vm:entry-point')
-  static Future<dynamic> selectNotification(
-      NotificationResponse? notificationResponse,
-      {bool? isTerminated}) async {
-    final notificationAppLaunchDetails =
-        await LocalNotifications().getNotificationAppLaunchDetails();
+  static Future<dynamic> selectNotification(NotificationResponse? notificationResponse, {bool? isTerminated}) async {
+    final notificationAppLaunchDetails = await LocalNotifications().getNotificationAppLaunchDetails();
 
     log('className: PushNotificationsManager');
     log(
@@ -171,16 +159,14 @@ class PushNotificationsManager {
 
     if (notificationAppLaunchDetails?.didNotificationLaunchApp == true) {
       if (notificationAppLaunchDetails?.notificationResponse?.payload != null) {
-        parsePayloadToModel(
-            notificationAppLaunchDetails!.notificationResponse!.payload!);
+        parsePayloadToModel(notificationAppLaunchDetails!.notificationResponse!.payload!);
       }
     } else {
       parsePayloadToModel(notificationResponse!.payload!);
     }
   }
 
-  static PushNotificationResponse? parsePayloadToModel(dynamic payload,
-      {bool terminated = false}) {
+  static PushNotificationResponse? parsePayloadToModel(dynamic payload, {bool terminated = false}) {
     PushNotificationResponse? pushData;
     try {
       final response = jsonDecode(payload);
@@ -225,10 +211,8 @@ class PushNotificationsManager {
 
     if (uid.isNotEmpty) {
       try {
-        if (methodFrom == 'myBackgroundMessageHandler' ||
-            methodFrom == 'getInitialMessage') {
-          RemoteMessage? terminatedMessage =
-              await FirebaseMessaging.instance.getInitialMessage();
+        if (methodFrom == 'myBackgroundMessageHandler' || methodFrom == 'getInitialMessage') {
+          RemoteMessage? terminatedMessage = await FirebaseMessaging.instance.getInitialMessage();
 
           if (terminatedMessage != null) {
             var payload = terminatedMessage.data;
@@ -238,8 +222,7 @@ class PushNotificationsManager {
 
             PushNotificationsManager.selectNotification(
               NotificationResponse(
-                notificationResponseType:
-                    NotificationResponseType.selectedNotification,
+                notificationResponseType: NotificationResponseType.selectedNotification,
                 payload: jsonEncode(payload),
               ),
             );
@@ -250,8 +233,7 @@ class PushNotificationsManager {
             payload['isTerminated'] = true;
             PushNotificationsManager.selectNotification(
               NotificationResponse(
-                notificationResponseType:
-                    NotificationResponseType.selectedNotification,
+                notificationResponseType: NotificationResponseType.selectedNotification,
                 payload: jsonEncode(payload),
               ),
             );
@@ -261,8 +243,7 @@ class PushNotificationsManager {
           payload['messageID'] = messageID;
           PushNotificationsManager.selectNotification(
             NotificationResponse(
-              notificationResponseType:
-                  NotificationResponseType.selectedNotification,
+              notificationResponseType: NotificationResponseType.selectedNotification,
               payload: jsonEncode(payloadMap),
             ),
           );
@@ -283,8 +264,7 @@ class PushNotificationsManager {
     String body, {
     String? imageUrl,
     String? payload,
-    NotificationChannel notificationChannel =
-        const NotificationChannel.general(),
+    NotificationChannel notificationChannel = const NotificationChannel.general(),
   }) async {
     log('className: PushNotificationsManager');
     log(

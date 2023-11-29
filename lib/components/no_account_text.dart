@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:soni_store_app/screens/sign_up/sign_up_screen.dart';
-import 'package:soni_store_app/utils/constants.dart';
 
+import '../screens/sign_up/sign_up_screen.dart';
+import '../utils/constants.dart';
 import '../utils/size_config.dart';
 
 class NoAccountText extends StatelessWidget {

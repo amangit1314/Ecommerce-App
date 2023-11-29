@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/utils/size_config.dart';
 
 import '../../../../components/section_tile.dart';
+import '../../../../utils/size_config.dart';
 import '../../../showMore/show_more_screen.dart';
 
 class Grocery extends StatelessWidget {

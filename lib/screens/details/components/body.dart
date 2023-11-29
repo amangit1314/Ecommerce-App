@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:soni_store_app/screens/details/components/product_description.dart';
-import 'package:soni_store_app/screens/details/components/product_images.dart';
-import 'package:soni_store_app/screens/details/components/rating_tile.dart';
-import 'package:soni_store_app/screens/details/components/top_rounded_container.dart';
-import 'package:soni_store_app/screens/details/reviews/reviews_sheet.dart';
-import 'package:soni_store_app/screens/details/similarProducts/similar_products.dart';
 
 import '../../../models/product.dart';
 import '../../../utils/size_config.dart';
+import '../similarProducts/similar_products.dart';
 import 'buy_now_button.dart';
+import 'components.dart';
 import 'custom_app_bar.dart';
 
 class DetailFirebaseBody extends StatefulWidget {
@@ -23,8 +19,7 @@ class DetailFirebaseBody extends StatefulWidget {
   State<DetailFirebaseBody> createState() => _DetailFirebaseBodyState();
 }
 
-class _DetailFirebaseBodyState extends State<DetailFirebaseBody>
-    with SingleTickerProviderStateMixin {
+class _DetailFirebaseBodyState extends State<DetailFirebaseBody> with SingleTickerProviderStateMixin {
   late AnimationController bottomSheetAnimationController;
 
   @override
