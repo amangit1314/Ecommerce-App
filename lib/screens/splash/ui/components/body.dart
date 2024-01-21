@@ -8,15 +8,8 @@ import '../../data/data.dart';
 import 'dot_indicator.dart';
 import 'splash_content.dart';
 
-class SplashBody extends StatefulWidget {
-  const SplashBody({Key? key}) : super(key: key);
-
-  @override
-  State<SplashBody> createState() => _SplashBodyState();
-}
-
-class _SplashBodyState extends State<SplashBody> {
-  // int currentPage = 0;
+class SplashBody extends StatelessWidget {
+  SplashBody({Key? key}) : super(key: key);
   final ValueNotifier<int> currentPageNotifier = ValueNotifier<int>(0);
 
   @override
@@ -31,10 +24,7 @@ class _SplashBodyState extends State<SplashBody> {
               flex: 4,
               child: PageView.builder(
                 onPageChanged: (value) {
-                  setState(() {
-                    // currentPage = value;
-                    currentPageNotifier.value = value;
-                  });
+                  currentPageNotifier.value = value;
                 },
                 itemCount: splashData.length,
                 itemBuilder: (context, index) => SplashContent(
@@ -57,7 +47,6 @@ class _SplashBodyState extends State<SplashBody> {
                       children: List.generate(
                         splashData.length,
                         (index) => DotIndicator(
-                          // currentPage: currentPage,
                           currentPage: currentPageNotifier.value,
                           index: index,
                         ),
