@@ -1,14 +1,14 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_local_variable
 
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../providers/address_provider.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
@@ -16,7 +16,7 @@ import '../../cart/cart_screen.dart';
 import '../../home/home_screen.dart';
 import 'components.dart';
 
-class CheckoutButtonAlertBox extends StatelessWidget {
+class CheckoutButtonAlertBox extends StatefulWidget {
   const CheckoutButtonAlertBox({
     Key? key,
     required this.widget,
@@ -41,6 +41,15 @@ class CheckoutButtonAlertBox extends StatelessWidget {
   final Color color;
 
   @override
+  State<CheckoutButtonAlertBox> createState() => _CheckoutButtonAlertBoxState();
+}
+
+class _CheckoutButtonAlertBoxState extends State<CheckoutButtonAlertBox> {
+  void initStripe() async {
+    await Stripe.instance.applySettings();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
@@ -57,7 +66,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
               ),
               child: Container(
                 height: getProportionateScreenWidth(65),
-                width: getProportionateScreenWidth(width),
+                width: getProportionateScreenWidth(widget.width),
                 padding: EdgeInsets.only(
                   bottom: getProportionateScreenHeight(2),
                   top: getProportionateScreenHeight(2),
@@ -89,15 +98,14 @@ class CheckoutButtonAlertBox extends StatelessWidget {
             Container(
               width: double.infinity,
               height: getProportionateScreenHeight(50),
-              margin: const EdgeInsets.only(
-                  top: 15, left: 15, right: 15, bottom: 25),
+              margin: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 25),
               decoration: BoxDecoration(
                 color: kPrimaryColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Container(
                 height: getProportionateScreenWidth(65),
-                width: getProportionateScreenWidth(width),
+                width: getProportionateScreenWidth(widget.width),
                 padding: EdgeInsets.only(
                   bottom: getProportionateScreenHeight(2),
                   top: getProportionateScreenHeight(2),
@@ -116,7 +124,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                   ),
                   onPressed: () async {
                     await showPaymentDialog(
-                        context, userId, productId, productImage, quantity);
+                        context, widget.userId, widget.productId, widget.productImage, widget.quantity);
                   },
                 ),
               ),
@@ -127,10 +135,8 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     );
   }
 
-  void showLocalNotification(String? title, String? body,
-      BigTextStyleInformation? bigTextStyleInformation) {
-    AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
+  void showLocalNotification(String? title, String? body, BigTextStyleInformation? bigTextStyleInformation) {
+    AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'channel_id',
       'channel_name',
       channelDescription: 'channel_description',
@@ -140,8 +146,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
       playSound: true,
       styleInformation: bigTextStyleInformation,
     );
-    NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     FlutterLocalNotificationsPlugin().show(
       0,
       title,
@@ -150,16 +155,12 @@ class CheckoutButtonAlertBox extends StatelessWidget {
     );
   }
 
-  Future<void> showPaymentDialog(BuildContext context, String userId,
-      String productId, String productImage, int quantity) async {
-    CartProvider cartProvider =
-        Provider.of<CartProvider>(context, listen: false);
-    OrderProvider orderProvider =
-        Provider.of<OrderProvider>(context, listen: false);
-    AddressProvider addressProvider =
-        Provider.of<AddressProvider>(context, listen: false);
-    ProductProvider productProvider =
-        Provider.of<ProductProvider>(context, listen: false);
+  Future<void> showPaymentDialog(
+      BuildContext context, String userId, String productId, String productImage, int quantity) async {
+    CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
+    OrderProvider orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    AddressProvider addressProvider = Provider.of<AddressProvider>(context, listen: false);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context, listen: false);
 
     bool success = false;
     String orderStatus = 'Processing';
@@ -173,58 +174,54 @@ class CheckoutButtonAlertBox extends StatelessWidget {
 
     orderId = generateOrderId();
 
-    log('---------------');
-    log('USER_ID = $userId');
-    log('---------------');
-    log('PRODUCT_ID = $productId');
-    log('---------------');
-    log('PRODUCT_IMAGE = $productImage');
-    log('---------------');
-    log('PRICE = ${price.toString()}');
-    log('---------------');
-    log('SIZE = $size');
-    log('---------------');
-    log('COLOR = $color');
-    log('---------------');
-    log('QUANTITY = ${quantity.toString()}');
-    log('---------------');
-    log('ORDER STATUS = $orderStatus');
-    log('---------------');
-    log('---------------');
-    log('ORDER ID = $orderId');
-    log('---------------');
+    // log('---------------');
+    // log('USER_ID = $userId');
+    // log('---------------');
+    // log('PRODUCT_ID = $productId');
+    // log('---------------');
+    // log('PRODUCT_IMAGE = $productImage');
+    // log('---------------');
+    // log('PRICE = ${widget.price.toString()}');
+    // log('---------------');
+    // log('SIZE = ${widget.size}');
+    // log('---------------');
+    // log('COLOR = ${widget.color}');
+    // log('---------------');
+    // log('QUANTITY = ${quantity.toString()}');
+    // log('---------------');
+    // log('ORDER STATUS = $orderStatus');
+    // log('---------------');
+    // log('---------------');
+    // log('ORDER ID = $orderId');
+    // log('---------------');
 
     final orderData = {
       'orderId': orderId,
       'number': addressProvider.selectedAddress.phone,
       'size': productProvider.selectedSize,
-      'color': productProvider.selectedColor.value
-          .toRadixString(16)
-          .padLeft(8, '0')
-          .toUpperCase(),
-      'address': addressProvider.selectedAddress.address +
-          addressProvider.selectedAddress.pincode,
+      'color': productProvider.selectedColor.value.toRadixString(16).padLeft(8, '0').toUpperCase(),
+      'address': addressProvider.selectedAddress.address + addressProvider.selectedAddress.pincode,
       'uid': userId,
       'orderedDate': DateTime.now().toString(),
       'productId': productId,
-      'amount': double.parse(price),
+      'amount': double.parse(widget.price),
       'productImage': productImage,
       'quantity': quantity,
       'orderStatus': orderStatus,
     };
 
     final productData = {
-      'categories': widget.widget.product.categories,
+      'categories': widget.widget.widget.product.categories,
       'id': productId,
-      'title': widget.widget.product.title,
-      'description': widget.widget.product.description,
-      'images': widget.widget.product.images,
-      'price': int.parse(price),
-      'rating': widget.widget.product.rating,
-      'isFavourite': widget.widget.product.isFavourite,
-      'isPopular': widget.widget.product.isFavourite,
-      'colors': widget.widget.product.colors,
-      'sizes': widget.widget.product.sizes,
+      'title': widget.widget.widget.product.title,
+      'description': widget.widget.widget.product.description,
+      'images': widget.widget.widget.product.images,
+      'price': int.parse(widget.price),
+      'rating': widget.widget.widget.product.rating,
+      'isFavourite': widget.widget.widget.product.isFavourite,
+      'isPopular': widget.widget.widget.product.isFavourite,
+      'colors': widget.widget.widget.product.colors,
+      'sizes': widget.widget.widget.product.sizes,
       'quantity': quantity,
     };
 
@@ -249,6 +246,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                //* CASH ON DELIVERY
                 GestureDetector(
                   onTap: () async {
                     try {
@@ -256,9 +254,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                       log(orderData.toString());
                       log('---------------');
 
-                      await orderProvider
-                          .addOrder(orderData: orderData, uid: userId)
-                          .then((value) {
+                      await orderProvider.addOrder(orderData: orderData, uid: userId).then((value) {
                         success = true;
                         log('---------------');
                         log('ORDER_ID = $value');
@@ -296,25 +292,44 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Cash on Delivery',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   ),
                 ),
+
+                //* ONLINE PAYMENT
                 GestureDetector(
-                  onTap: () {
-                    Get.snackbar(
-                      'Information ℹ',
-                      'This functionality is yet to be implemented! 🙏',
-                      backgroundColor: Colors.yellow,
-                      colorText: Colors.black,
-                      snackPosition: SnackPosition.BOTTOM,
-                    );
+                  onTap: () async {
+                    try {
+                      // ! 1 -> Initialize Stripe
+                      initStripe();
+
+                      //! 2 -> create the payment method
+                      final paymentMethod = await Stripe.instance.createPaymentMethod(
+                        params: PaymentMethodParams.card(paymentMethodData: PaymentMethodData()),
+                      );
+
+                      //! 3 -> Use paymentMethod.id to create a PaymentIntent on your server
+
+                      //! 4 -> Handle server response and update UI accordingly
+
+                      //? If not implemented
+                      Get.snackbar(
+                        'Information ℹ',
+                        'This functionality is yet to be implemented! 🙏',
+                        backgroundColor: Colors.yellow,
+                        colorText: Colors.black,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    } catch (error) {
+                      success = false;
+                      // log('Error occurred while payment: $error');
+                    }
                   },
                   child: Container(
                     width: double.infinity,
@@ -331,16 +346,17 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Online Payment',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   ),
                 ),
+
+                //* GO TO CART
                 GestureDetector(
                   onTap: () {
                     cartProvider.addToCartFromDetails(
@@ -364,16 +380,17 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Go to Cart',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   ),
                 ),
+
+                //* CANCEL BUTTON
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
@@ -393,12 +410,11 @@ class CheckoutButtonAlertBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Cancel',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   ),
@@ -410,7 +426,7 @@ class CheckoutButtonAlertBox extends StatelessWidget {
       );
     } catch (e) {
       success = false;
-      log('Error occurred while adding the order: $e');
+      // log('Error occurred while adding the order: $e');
     }
 
     if (success) {
@@ -428,21 +444,22 @@ class CheckoutButtonAlertBox extends StatelessWidget {
         ),
         (route) => false, // Remove all existing routes from the stack
       );
-      log('---------------');
-      log('USER_ID = $userId');
-      log('---------------');
-      log('PRICE = ${price.toString()}');
-      log('---------------');
-      log('QUANTITY = ${quantity.toString()}');
-      log('---------------');
-      log('ORDER STATUS = $orderStatus');
-      log('---------------');
-      log('ORDER ID = $orderId');
-      log('---------------');
+
+      // log('---------------');
+      // log('USER_ID = $userId');
+      // log('---------------');
+      // log('PRICE = ${widget.price.toString()}');
+      // log('---------------');
+      // log('QUANTITY = ${quantity.toString()}');
+      // log('---------------');
+      // log('ORDER STATUS = $orderStatus');
+      // log('---------------');
+      // log('ORDER ID = $orderId');
+      // log('---------------');
     } else {
       Get.snackbar(
         'Error',
-        'Failed to add order. Please try again! 😕',
+        'Failed to add order or process. Please try again! 😕',
         backgroundColor: Colors.red,
         snackPosition: SnackPosition.BOTTOM,
         colorText: Colors.white,

@@ -22,12 +22,12 @@ dependencies:
   flutter_dotenv: ^5.1.0
   flutter_local_notifications: any
   flutter_rating_bar: ^4.0.1
-  flutter_stripe: ^9.5.0+1
+  flutter_stripe: ^11.0.0
   flutter_svg: ^2.0.5
   flutter_tawk: ^0.1.0
   font_awesome_flutter: ^10.4.0
-  geocoding: ^2.1.0
-  geolocator: ^10.1.0
+  geocoding: ^3.0.0
+  geolocator: ^13.0.1
   get: ^4.6.1
   get_it: ^7.6.0
   google_fonts: ^6.1.0
@@ -42,7 +42,7 @@ dependencies:
   uuid: ^4.2.2
 
 dev_dependencies:
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
 
