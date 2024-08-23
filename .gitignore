@@ -13,8 +13,8 @@
 # *.ipr
 # *.iws
 # .idea/
-# lib/firebase_options.dart
-# lib/config/secret_keys.dart
+lib/firebase_options.dart
+lib/config/secret_keys.dart
 # android/app/google-services.json
 
 # # The .vscode folder contains launch configuration and tasks you configure in
@@ -26,12 +26,13 @@
 # **/doc/api/
 # **/ios/Flutter/.last_build_id
 # .dart_tool/
-# .flutter-plugins
-# .flutter-plugins-dependencies
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
 # .packages
 # .pub-cache/
 # .pub/
-# .vscode/
+.vscode/
 # build/
 
 # # /secret/
